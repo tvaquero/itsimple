@@ -1,0 +1,3839 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+	<name>Logistic Domain v1</name>
+	<description>This is the Logistic Domain using itSIMPLE v2.0</description>
+	<generalInformation>
+		<tool>itSIMPLE</tool>
+		<version>2.0.22</version>
+	</generalInformation>
+	<elements>
+		<classes>
+			<class id="1">
+				<name>Boolean</name>
+				<type>Primitive</type>
+			</class>
+			<class id="2">
+				<name>Int</name>
+				<type>Primitive</type>
+			</class>
+			<class id="3">
+				<name>Float</name>
+				<type>Primitive</type>
+			</class>
+			<class id="4">
+				<name>String</name>
+				<type>Primitive</type>
+			</class>
+			<class id="5">
+				<name>Vehicle</name>
+				<description>This is the class Vehicle</description>
+				<type />
+				<stereotype />
+				<attributes>
+					<attribute id="1">
+						<name>capacity</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability>frozen</changeability>
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+				</attributes>
+				<operators />
+				<generalization element="" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>GlobalSystem.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="6">
+				<name>Truck</name>
+				<description>This is the class Truck</description>
+				<type />
+				<stereotype>agent</stereotype>
+				<attributes>
+					<attribute id="1">
+						<name>currentTruckLoad</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue>0</initialValue>
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+				</attributes>
+				<operators>
+					<operator id="1">
+						<name>drive</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration>10</duration>
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>truck</name>
+								<type>6</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>from</name>
+								<type>7</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>to</name>
+								<type>7</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="4">
+								<name>city</name>
+								<type>12</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+					<operator id="2">
+						<name>loadTruck</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>truck</name>
+								<type>6</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>pkg</name>
+								<type>10</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>loc</name>
+								<type>7</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+					<operator id="3">
+						<name>unloadTruck</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>truck</name>
+								<type>6</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>pkg</name>
+								<type>10</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>loc</name>
+								<type>7</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+				</operators>
+				<generalization element="class" id="5">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Truck4.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="7">
+				<name>Place</name>
+				<description>This is the class Place</description>
+				<type />
+				<stereotype />
+				<attributes />
+				<operators />
+				<generalization element="" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>World1.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="8">
+				<name>Location</name>
+				<description>This is the class Location</description>
+				<type />
+				<stereotype />
+				<attributes />
+				<operators />
+				<generalization element="class" id="7">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Home1.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="9">
+				<name>Airplane</name>
+				<description>This is the class Airplane</description>
+				<type />
+				<stereotype>agent</stereotype>
+				<attributes>
+					<attribute id="1">
+						<name>currentPlaneLoad</name>
+						<type>2</type>
+						<multiplicity />
+						<initialValue>0</initialValue>
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+				</attributes>
+				<operators>
+					<operator id="1">
+						<name>fly</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration>10</duration>
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>plane</name>
+								<type>9</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>from</name>
+								<type>11</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>to</name>
+								<type>11</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+					<operator id="2">
+						<name>loadAirplane</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>plane</name>
+								<type>9</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>pkg</name>
+								<type>10</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>loc</name>
+								<type>11</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+					<operator id="3">
+						<name>unloadAirplane</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>plane</name>
+								<type>9</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>pkg</name>
+								<type>10</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>loc</name>
+								<type>11</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+				</operators>
+				<generalization element="class" id="5">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Plane1.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="10">
+				<name>Package</name>
+				<description>This is the class Package</description>
+				<type />
+				<stereotype />
+				<attributes />
+				<operators />
+				<generalization element="" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Package2.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="11">
+				<name>Airport</name>
+				<description>This is the class Airport</description>
+				<type />
+				<stereotype />
+				<attributes />
+				<operators />
+				<generalization element="class" id="7">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Plane2.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="12">
+				<name>City</name>
+				<description>This is the class City</description>
+				<type />
+				<stereotype />
+				<attributes />
+				<operators />
+				<generalization element="" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Charts1.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+		</classes>
+		<classAssociations>
+			<classAssociation id="1">
+				<name>at</name>
+				<description />
+				<associationEnds>
+					<associationEnd navigation="false" element="class" element-id="5" id="1">
+						<type>none</type>
+						<rolename>
+							<value />
+						</rolename>
+						<multiplicity>
+							<value>0..*</value>
+						</multiplicity>
+					</associationEnd>
+					<associationEnd navigation="true" element="class" element-id="7" id="2">
+						<type>simple</type>
+						<rolename>
+							<value>at</value>
+						</rolename>
+						<multiplicity>
+							<value>1</value>
+						</multiplicity>
+					</associationEnd>
+				</associationEnds>
+				<changeability>
+					<value />
+				</changeability>
+				<constraints />
+			</classAssociation>
+			<classAssociation id="2">
+				<name>isIn</name>
+				<description />
+				<associationEnds>
+					<associationEnd navigation="false" element="class" element-id="10" id="1">
+						<type>none</type>
+						<rolename>
+							<value />
+						</rolename>
+						<multiplicity>
+							<value>0..*</value>
+						</multiplicity>
+					</associationEnd>
+					<associationEnd navigation="true" element="class" element-id="5" id="2">
+						<type>simple</type>
+						<rolename>
+							<value>isIn</value>
+						</rolename>
+						<multiplicity>
+							<value>0..1</value>
+						</multiplicity>
+					</associationEnd>
+				</associationEnds>
+				<changeability>
+					<value />
+				</changeability>
+				<constraints />
+			</classAssociation>
+			<classAssociation id="3">
+				<name>isAt</name>
+				<description />
+				<associationEnds>
+					<associationEnd navigation="false" element="class" element-id="10" id="1">
+						<type>none</type>
+						<rolename>
+							<value />
+						</rolename>
+						<multiplicity>
+							<value>0..*</value>
+						</multiplicity>
+					</associationEnd>
+					<associationEnd navigation="true" element="class" element-id="7" id="2">
+						<type>simple</type>
+						<rolename>
+							<value>isAt</value>
+						</rolename>
+						<multiplicity>
+							<value>0..1</value>
+						</multiplicity>
+					</associationEnd>
+				</associationEnds>
+				<changeability>
+					<value />
+				</changeability>
+				<constraints />
+			</classAssociation>
+			<classAssociation id="4">
+				<name>inCity</name>
+				<description>This agent is responsible for transporting packages by ground.</description>
+				<associationEnds>
+					<associationEnd navigation="false" element="class" element-id="7" id="1">
+						<type>none</type>
+						<rolename>
+							<value />
+						</rolename>
+						<multiplicity>
+							<value>1..*</value>
+						</multiplicity>
+					</associationEnd>
+					<associationEnd navigation="true" element="class" element-id="12" id="2">
+						<type>composition</type>
+						<rolename>
+							<value>inCity</value>
+						</rolename>
+						<multiplicity>
+							<value>1</value>
+						</multiplicity>
+					</associationEnd>
+				</associationEnds>
+				<changeability>
+					<value>frozen</value>
+				</changeability>
+				<constraints />
+			</classAssociation>
+		</classAssociations>
+	</elements>
+	<diagrams>
+		<useCaseDiagrams>
+			<useCaseDiagram id="1">
+				<name>Use Case Diagram</name>
+				<description>This is a diagram.</description>
+				<actors>
+					<actor id="1">
+						<name>Truck</name>
+						<description>This agent is responsible for transporting packages by ground at a city.</description>
+						<graphics>
+							<icon>Truck4Large.png</icon>
+							<position x="45" y="233" />
+							<size width="70" height="80" />
+							<color />
+						</graphics>
+					</actor>
+					<actor id="3">
+						<name>Airplane</name>
+						<description>This agent is responsible for transporting packages by air, from one airport to another.</description>
+						<graphics>
+							<icon>Plane1.png</icon>
+							<position x="652" y="230" />
+							<size width="70" height="80" />
+							<color />
+						</graphics>
+					</actor>
+				</actors>
+				<useCases>
+					<useCase id="1">
+						<name>Drive a Truck</name>
+						<description>The agent truck moves from an origin place to a desination place, in a city.</description>
+						<graphics>
+							<icon />
+							<position x="187" y="130" />
+							<size width="150" height="80" />
+							<color />
+						</graphics>
+						<definition>
+							<precondition>- the truck must be at the origin place;
+- both places must be in the city.</precondition>
+							<postcondition>- the truck is at the destination place.</postcondition>
+							<invariants>- the truck load doesn't change.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+					</useCase>
+					<useCase id="2">
+						<name>Truck loads a Package</name>
+						<description>The agent truck loads a package at a place, which can be either a location or an airport.</description>
+						<graphics>
+							<icon />
+							<position x="183" y="233" />
+							<size width="150" height="80" />
+							<color />
+						</graphics>
+						<definition>
+							<precondition>- the truck and the package must at the same place;&#xD;
+- there must be space for the package in the truck;</precondition>
+							<postcondition>- the package is in the truck;&#xD;
+- the truck load is increased.</postcondition>
+							<invariants>- the truck remains at the same place.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+					</useCase>
+					<useCase id="3">
+						<name>Truck unloads a Package</name>
+						<description>The agent truck unloads a package at a place, which can be either a location or an airport.</description>
+						<graphics>
+							<icon />
+							<position x="173" y="352" />
+							<size width="183" height="75" />
+							<color />
+						</graphics>
+						<definition>
+							<precondition>- the truck must be at the place;&#xD;
+- the package must be in the truck.</precondition>
+							<postcondition>- the package is at the place;&#xD;
+- the truck load is decreased.</postcondition>
+							<invariants>- the truck remains at the same place.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+					</useCase>
+					<useCase id="4">
+						<name>Fly an Airplane</name>
+						<description>The agent airplane flies from an origin airport to a destination airport.</description>
+						<graphics>
+							<icon />
+							<position x="422" y="122" />
+							<size width="150" height="80" />
+							<color />
+						</graphics>
+						<definition>
+							<precondition>- the airplane must be at the origin airport;</precondition>
+							<postcondition>- the airplane is at the destination airport.</postcondition>
+							<invariants>- the airplane load doesn't change.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+					</useCase>
+					<useCase id="5">
+						<name>Airplane loads a Package</name>
+						<description>The agent airplane loads a package at an airport.</description>
+						<graphics>
+							<icon />
+							<position x="413" y="231" />
+							<size width="164" height="80" />
+							<color />
+						</graphics>
+						<definition>
+							<precondition>- the airplane and the package must at the airport;&#xD;
+- there must be enough space in the airplane.</precondition>
+							<postcondition>- the package is in the airplane;&#xD;
+- the airplane load is increased.</postcondition>
+							<invariants>- the airplane remains at the airport.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+					</useCase>
+					<useCase id="6">
+						<name>Airplane unloads a Package</name>
+						<description>The agent airplane unloads a package at an airport.</description>
+						<graphics>
+							<icon />
+							<position x="411" y="351" />
+							<size width="181" height="75" />
+							<color />
+						</graphics>
+						<definition>
+							<precondition>- the airplane must be at the airport;&#xD;
+- the package must be in the airplane.</precondition>
+							<postcondition>- the package is at the airport;&#xD;
+- the airplane load is decreased.</postcondition>
+							<invariants>- the airplane remains at the same place.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+					</useCase>
+				</useCases>
+				<associations>
+					<useCaseAssociation id="1">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="1" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="1" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="2">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="1" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="2" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="3">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="1" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="3" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="4">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="3" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="4" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="5">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="3" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="5" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="6">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="3" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="6" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+				</associations>
+				<constraints />
+			</useCaseDiagram>
+		</useCaseDiagrams>
+		<classDiagrams>
+			<classDiagram id="1">
+				<name>Class Diagram</name>
+				<description />
+				<classes>
+					<class id="5">
+						<graphics>
+							<icon />
+							<position x="545" y="195" />
+							<size width="154" height="139" />
+							<color />
+						</graphics>
+					</class>
+					<class id="6">
+						<graphics>
+							<icon />
+							<position x="315" y="364" />
+							<size width="317" height="159" />
+							<color />
+						</graphics>
+					</class>
+					<class id="7">
+						<graphics>
+							<icon />
+							<position x="110" y="210" />
+							<size width="138" height="110" />
+							<color />
+						</graphics>
+					</class>
+					<class id="8">
+						<graphics>
+							<icon />
+							<position x="39" y="376" />
+							<size width="118" height="114" />
+							<color />
+						</graphics>
+					</class>
+					<class id="9">
+						<graphics>
+							<icon />
+							<position x="637" y="363" />
+							<size width="352" height="157" />
+							<color />
+						</graphics>
+					</class>
+					<class id="10">
+						<graphics>
+							<icon />
+							<position x="298" y="29" />
+							<size width="184" height="121" />
+							<color />
+						</graphics>
+					</class>
+					<class id="11">
+						<graphics>
+							<icon />
+							<position x="176" y="376" />
+							<size width="123" height="118" />
+							<color />
+						</graphics>
+					</class>
+					<class id="12">
+						<graphics>
+							<icon />
+							<position x="19" y="21" />
+							<size width="123" height="107" />
+							<color />
+						</graphics>
+					</class>
+				</classes>
+				<associations>
+					<classAssociation id="1">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="100" y="15" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="900" y="15" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="100" y="-15" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="900" y="-15" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="500" y="15" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+					<classAssociation id="2">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+					<classAssociation id="3">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+					<classAssociation id="4">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="529" y="-24" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="100" y="15" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="750" y="20" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="100" y="-15" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="900" y="-15" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="500" y="15" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+				</associations>
+				<constraints />
+			</classDiagram>
+		</classDiagrams>
+		<stateMachineDiagrams>
+			<stateMachineDiagram id="1">
+				<class>9</class>
+				<name>State Machine Diagram - Airplane</name>
+				<description />
+				<states>
+					<state id="5">
+						<name>Airplane ready at an airport</name>
+						<description />
+						<condition />
+						<graphics>
+							<icon />
+							<position x="385" y="157" />
+							<size width="181" height="60" />
+							<color />
+						</graphics>
+					</state>
+					<initialState id="6">
+						<name />
+						<description />
+						<graphics>
+							<icon>initialState.png</icon>
+							<position x="599" y="172" />
+							<size width="24" height="28" />
+						</graphics>
+					</initialState>
+				</states>
+				<associations>
+					<action id="4">
+						<reference class="9" operator="2" />
+						<name />
+						<description />
+						<precondition>plane.at = loc and pkg.isAt = loc and plane.capacity &gt; plane.currentPlaneLoad</precondition>
+						<postcondition>plane.currentPlaneLoad = plane.currentPlaneLoad + 1</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="5" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="566" y="-36" />
+								</label>
+							</labels>
+							<points>
+								<point x="445" y="132" />
+								<point x="505" y="132" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="5">
+						<reference class="9" operator="3" />
+						<name />
+						<description />
+						<precondition>plane.at = loc</precondition>
+						<postcondition>plane.currentPlaneLoad = plane.currentPlaneLoad - 1</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="5" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="716" y="41" />
+								</label>
+							</labels>
+							<points>
+								<point x="447" y="248" />
+								<point x="507" y="248" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="6">
+						<reference class="9" operator="1" />
+						<name />
+						<description />
+						<precondition>plane.at = from</precondition>
+						<postcondition>plane.at = to</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="5" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="-833" y="157" />
+								</label>
+							</labels>
+							<points>
+								<point x="340" y="172" />
+								<point x="340" y="202" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="7">
+						<reference class="" operator="" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="initialState" element-id="6" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+				</associations>
+				<constraints />
+			</stateMachineDiagram>
+			<stateMachineDiagram id="2">
+				<class>6</class>
+				<name>State Machine Diagram - Truck</name>
+				<description />
+				<states>
+					<state id="5">
+						<name>Truck ready at a place</name>
+						<description />
+						<condition />
+						<graphics>
+							<icon />
+							<position x="389" y="118" />
+							<size width="194" height="60" />
+							<color />
+						</graphics>
+					</state>
+					<initialState id="6">
+						<name />
+						<description />
+						<graphics>
+							<icon>initialState.png</icon>
+							<position x="618" y="134" />
+							<size width="24" height="28" />
+						</graphics>
+					</initialState>
+				</states>
+				<associations>
+					<action id="4">
+						<reference class="" operator="" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="initialState" element-id="6" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="5">
+						<reference class="6" operator="2" />
+						<name />
+						<description />
+						<precondition>truck.at = loc and truck.capacity &gt; truck.currentTruckLoad</precondition>
+						<postcondition>truck.currentTruckLoad = truck.currentTruckLoad + 1</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="5" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="307" y="-35" />
+								</label>
+							</labels>
+							<points>
+								<point x="453" y="93" />
+								<point x="518" y="93" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="6">
+						<reference class="6" operator="3" />
+						<name />
+						<description />
+						<precondition>truck.at = loc</precondition>
+						<postcondition>truck.currentTruckLoad = truck.currentTruckLoad - 1</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="5" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="430" y="40" />
+								</label>
+							</labels>
+							<points>
+								<point x="454" y="207" />
+								<point x="519" y="207" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="7">
+						<reference class="6" operator="1" />
+						<name />
+						<description />
+						<precondition>truck.at = from and from.inCity = city and to.inCity = city</precondition>
+						<postcondition>truck.at = to</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="5" id="1" />
+							<actionEnd navigation="true" element="state" element-id="5" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="-468" y="186" />
+								</label>
+							</labels>
+							<points>
+								<point x="342" y="128" />
+								<point x="342" y="160" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+				</associations>
+				<constraints />
+			</stateMachineDiagram>
+			<stateMachineDiagram id="3">
+				<class>10</class>
+				<name>State Machine Diagram - Package</name>
+				<description />
+				<states>
+					<state id="1">
+						<name>Package is at Place</name>
+						<description />
+						<condition>pkg.isIn = null and pkg.isAt = loc</condition>
+						<graphics>
+							<icon />
+							<position x="347" y="239" />
+							<size width="222" height="60" />
+							<color />
+						</graphics>
+					</state>
+					<state id="2">
+						<name>Package in Airplane</name>
+						<description />
+						<condition>pkg.isIn = plane and pkg.isAt = null</condition>
+						<graphics>
+							<icon />
+							<position x="619" y="89" />
+							<size width="243" height="60" />
+							<color />
+						</graphics>
+					</state>
+					<state id="3">
+						<name>Package in Truck</name>
+						<description />
+						<condition>pkg.isIn = truck and pkg.isAt = null</condition>
+						<graphics>
+							<icon />
+							<position x="91" y="375" />
+							<size width="233" height="60" />
+							<color />
+						</graphics>
+					</state>
+					<initialState id="4">
+						<name />
+						<description />
+						<graphics>
+							<icon>initialState.png</icon>
+							<position x="281" y="204" />
+							<size width="24" height="28" />
+						</graphics>
+					</initialState>
+				</states>
+				<associations>
+					<action id="1">
+						<reference class="9" operator="2" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="1" id="1" />
+							<actionEnd navigation="true" element="state" element-id="2" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="403" y="-99" />
+								</label>
+							</labels>
+							<points>
+								<point x="443" y="122" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="2">
+						<reference class="9" operator="3" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="2" id="1" />
+							<actionEnd navigation="true" element="state" element-id="1" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+							</labels>
+							<points>
+								<point x="732" y="266" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="3">
+						<reference class="6" operator="2" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="1" id="1" />
+							<actionEnd navigation="true" element="state" element-id="3" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="213" y="-96" />
+								</label>
+							</labels>
+							<points>
+								<point x="447" y="405" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="4">
+						<reference class="6" operator="3" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="3" id="1" />
+							<actionEnd navigation="true" element="state" element-id="1" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="485" y="-78" />
+								</label>
+							</labels>
+							<points>
+								<point x="150" y="271" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="5">
+						<reference class="" operator="" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="initialState" element-id="4" id="1" />
+							<actionEnd navigation="true" element="state" element-id="1" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+							</labels>
+							<points>
+								<point x="325" y="217" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+				</associations>
+				<constraints />
+			</stateMachineDiagram>
+		</stateMachineDiagrams>
+		<activityDiagrams />
+		<planningDomains>
+			<domain id="1">
+				<name>Logistic Domain 1</name>
+				<description />
+				<elements>
+					<objects>
+						<object id="1">
+							<name>Truck1</name>
+							<class>6</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="100" y="100" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="2">
+							<name>Truck2</name>
+							<class>6</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="300" y="100" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="3">
+							<name>LocationSP1</name>
+							<class>8</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="4">
+							<name>Airplane1</name>
+							<class>9</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="5">
+							<name>Airplane2</name>
+							<class>9</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="6">
+							<name>LocationRJ1</name>
+							<class>8</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="7">
+							<name>AirportSP1</name>
+							<class>11</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="8">
+							<name>AirportRJ1</name>
+							<class>11</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="9">
+							<name>SaoPaulo</name>
+							<class>12</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="10">
+							<name>RiodeJaneiro</name>
+							<class>12</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="11">
+							<name>Pkg1</name>
+							<class>10</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="12">
+							<name>Pkg2</name>
+							<class>10</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+					</objects>
+				</elements>
+				<repositoryDiagrams>
+					<repositoryDiagram id="1">
+						<name>Object Repository</name>
+						<description />
+						<objects>
+							<object id="1">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="6" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="24" y="292" />
+									<size width="160" height="96" />
+									<color />
+								</graphics>
+							</object>
+							<object id="2">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="6" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="609" y="292" />
+									<size width="160" height="98" />
+									<color />
+								</graphics>
+							</object>
+							<object id="3">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="77" y="174" />
+									<size width="140" height="71" />
+									<color />
+								</graphics>
+							</object>
+							<object id="4">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="9" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="218" y="291" />
+									<size width="156" height="99" />
+									<color />
+								</graphics>
+							</object>
+							<object id="5">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="9" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="433" y="292" />
+									<size width="156" height="99" />
+									<color />
+								</graphics>
+							</object>
+							<object id="6">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="583" y="173" />
+									<size width="143" height="72" />
+									<color />
+								</graphics>
+							</object>
+							<object id="7">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="234" y="174" />
+									<size width="134" height="72" />
+									<color />
+								</graphics>
+							</object>
+							<object id="8">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="437" y="176" />
+									<size width="130" height="71" />
+									<color />
+								</graphics>
+							</object>
+							<object id="9">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="236" y="50" />
+									<size width="128" height="64" />
+									<color />
+								</graphics>
+							</object>
+							<object id="10">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="441" y="47" />
+									<size width="116" height="71" />
+									<color />
+								</graphics>
+							</object>
+							<object id="11">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="48" y="11" />
+									<size width="141" height="84" />
+									<color />
+								</graphics>
+							</object>
+							<object id="12">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="612" y="19" />
+									<size width="138" height="83" />
+									<color />
+								</graphics>
+							</object>
+						</objects>
+						<associations />
+						<constraints />
+					</repositoryDiagram>
+				</repositoryDiagrams>
+				<constraints />
+				<planningProblems>
+					<problem id="1">
+						<name>LogisticTwoPackages</name>
+						<description>This problem contains &#xD;
+		 - two cities;&#xD;
+		 - two locations;&#xD;
+		 - two ariports;&#xD;
+		 - two trucks; &#xD;
+		 - two airplanes; and&#xD;
+		 - two packages.&#xD;
+		&#xD;
+		The goal is to deliver the packages</description>
+						<objectDiagrams>
+							<objectDiagram id="1">
+								<name>Snapshot</name>
+								<sequenceReference>init</sequenceReference>
+								<description />
+								<objects>
+									<object id="1">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>20</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="24" y="292" />
+											<size width="160" height="96" />
+											<color />
+										</graphics>
+									</object>
+									<object id="2">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>20</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="609" y="292" />
+											<size width="160" height="98" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="77" y="174" />
+											<size width="140" height="71" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>10</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="218" y="291" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>10</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="433" y="292" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="6">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="583" y="173" />
+											<size width="143" height="72" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="234" y="174" />
+											<size width="134" height="72" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="437" y="176" />
+											<size width="130" height="71" />
+											<color />
+										</graphics>
+									</object>
+									<object id="9">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="236" y="50" />
+											<size width="128" height="64" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="441" y="47" />
+											<size width="116" height="71" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="48" y="11" />
+											<size width="141" height="84" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="612" y="19" />
+											<size width="138" height="83" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="1">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="1" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="2">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="7" id="1" />
+											<objectAssociationEnd element="object" element-id="9" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="3">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="10" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="4">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="3" id="1" />
+											<objectAssociationEnd element="object" element-id="9" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="5">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="6" id="1" />
+											<objectAssociationEnd element="object" element-id="10" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="6">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="4" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="7">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="5" id="1" />
+											<objectAssociationEnd element="object" element-id="8" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="8">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="2" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="9">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="11" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="10">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="12" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+							<objectDiagram id="2">
+								<name>Snapshot</name>
+								<sequenceReference>goal</sequenceReference>
+								<description />
+								<objects>
+									<object id="1">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="24" y="292" />
+											<size width="160" height="96" />
+											<color />
+										</graphics>
+									</object>
+									<object id="2">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="609" y="292" />
+											<size width="160" height="98" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="77" y="174" />
+											<size width="140" height="71" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="218" y="291" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="433" y="292" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="6">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="583" y="173" />
+											<size width="143" height="72" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="234" y="174" />
+											<size width="134" height="72" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="437" y="176" />
+											<size width="130" height="71" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="611" y="18" />
+											<size width="141" height="84" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="50" y="13" />
+											<size width="138" height="83" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="6">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="12" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="7">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="11" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="8">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="1" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="9">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="4" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="10">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="5" id="1" />
+											<objectAssociationEnd element="object" element-id="8" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="11">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="2" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+						</objectDiagrams>
+						<constraints />
+						<metrics>
+							<metric id="1">
+								<name>metric1</name>
+								<enabled>true</enabled>
+								<type>minimize</type>
+								<function>Airplane2.currentPlaneLoad</function>
+							</metric>
+						</metrics>
+					</problem>
+				</planningProblems>
+			</domain>
+			<domain id="2">
+				<name>Logistic Domain 2</name>
+				<description />
+				<elements>
+					<objects>
+						<object id="1">
+							<name>Truck1</name>
+							<class>6</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="100" y="100" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="2">
+							<name>Truck2</name>
+							<class>6</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="300" y="100" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="3">
+							<name>LocationSP1</name>
+							<class>8</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="4">
+							<name>Airplane1</name>
+							<class>9</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="5">
+							<name>Airplane2</name>
+							<class>9</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="6">
+							<name>LocationRJ1</name>
+							<class>8</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="7">
+							<name>AirportSP1</name>
+							<class>11</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="8">
+							<name>AirportRJ1</name>
+							<class>11</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="9">
+							<name>SaoPaulo</name>
+							<class>12</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="10">
+							<name>RiodeJaneiro</name>
+							<class>12</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="100" height="150" />
+								<color />
+							</graphics>
+						</object>
+						<object id="11">
+							<name>Pkg1</name>
+							<class>10</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="12">
+							<name>Pkg2</name>
+							<class>10</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="13">
+							<name>Pkg3</name>
+							<class>10</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+					</objects>
+				</elements>
+				<repositoryDiagrams>
+					<repositoryDiagram id="1">
+						<name>Object Repository</name>
+						<description />
+						<objects>
+							<object id="1">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="6" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="24" y="292" />
+									<size width="160" height="96" />
+									<color />
+								</graphics>
+							</object>
+							<object id="2">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="6" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="600" y="284" />
+									<size width="160" height="98" />
+									<color />
+								</graphics>
+							</object>
+							<object id="3">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="77" y="174" />
+									<size width="140" height="63" />
+									<color />
+								</graphics>
+							</object>
+							<object id="4">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="9" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="218" y="291" />
+									<size width="156" height="99" />
+									<color />
+								</graphics>
+							</object>
+							<object id="5">
+								<attributes>
+									<attribute class="5" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="9" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="433" y="283" />
+									<size width="156" height="99" />
+									<color />
+								</graphics>
+							</object>
+							<object id="6">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="571" y="169" />
+									<size width="143" height="64" />
+									<color />
+								</graphics>
+							</object>
+							<object id="7">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="234" y="174" />
+									<size width="134" height="59" />
+									<color />
+								</graphics>
+							</object>
+							<object id="8">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="437" y="170" />
+									<size width="124" height="63" />
+									<color />
+								</graphics>
+							</object>
+							<object id="9">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="236" y="50" />
+									<size width="128" height="64" />
+									<color />
+								</graphics>
+							</object>
+							<object id="10">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="441" y="47" />
+									<size width="116" height="71" />
+									<color />
+								</graphics>
+							</object>
+							<object id="11">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="17" y="37" />
+									<size width="141" height="84" />
+									<color />
+								</graphics>
+							</object>
+							<object id="12">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="627" y="38" />
+									<size width="138" height="83" />
+									<color />
+								</graphics>
+							</object>
+							<object id="13">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="561" y="457" />
+									<size width="131" height="80" />
+									<color />
+								</graphics>
+							</object>
+						</objects>
+						<associations />
+						<constraints />
+					</repositoryDiagram>
+				</repositoryDiagrams>
+				<constraints />
+				<planningProblems>
+					<problem id="1">
+						<name>LogisticThreePackages</name>
+						<description />
+						<objectDiagrams>
+							<objectDiagram id="1">
+								<name>Snapshot</name>
+								<sequenceReference>init</sequenceReference>
+								<description />
+								<objects>
+									<object id="1">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>20</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="24" y="292" />
+											<size width="160" height="96" />
+											<color />
+										</graphics>
+									</object>
+									<object id="2">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>20</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="600" y="284" />
+											<size width="160" height="98" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="77" y="174" />
+											<size width="140" height="63" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>10</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="218" y="291" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="5" id="1">
+												<value>10</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="433" y="283" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="6">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="571" y="169" />
+											<size width="143" height="64" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="234" y="174" />
+											<size width="134" height="59" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="437" y="170" />
+											<size width="124" height="63" />
+											<color />
+										</graphics>
+									</object>
+									<object id="9">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="236" y="50" />
+											<size width="128" height="64" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="441" y="47" />
+											<size width="116" height="71" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="17" y="37" />
+											<size width="141" height="84" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="627" y="38" />
+											<size width="138" height="83" />
+											<color />
+										</graphics>
+									</object>
+									<object id="13">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="561" y="457" />
+											<size width="131" height="80" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="1">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="1" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="2">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="7" id="1" />
+											<objectAssociationEnd element="object" element-id="9" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="3">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="10" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="4">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="3" id="1" />
+											<objectAssociationEnd element="object" element-id="9" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="5">
+										<classAssociation>4</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="6" id="1" />
+											<objectAssociationEnd element="object" element-id="10" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="6">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="4" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="7">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="5" id="1" />
+											<objectAssociationEnd element="object" element-id="8" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="8">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="2" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="9">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="11" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="10">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="12" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="11">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="13" id="1" />
+											<objectAssociationEnd element="object" element-id="2" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+							<objectDiagram id="2">
+								<name>Snapshot</name>
+								<sequenceReference>goal</sequenceReference>
+								<description />
+								<objects>
+									<object id="1">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="24" y="292" />
+											<size width="158" height="96" />
+											<color />
+										</graphics>
+									</object>
+									<object id="2">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="6" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="600" y="284" />
+											<size width="158" height="98" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="77" y="174" />
+											<size width="140" height="63" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="218" y="291" />
+											<size width="157" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="433" y="283" />
+											<size width="155" height="100" />
+											<color />
+										</graphics>
+									</object>
+									<object id="6">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="571" y="169" />
+											<size width="143" height="64" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="234" y="174" />
+											<size width="134" height="59" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="437" y="170" />
+											<size width="124" height="63" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="639" y="43" />
+											<size width="141" height="84" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="11" y="43" />
+											<size width="139" height="83" />
+											<color />
+										</graphics>
+									</object>
+									<object id="13">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="35" y="454" />
+											<size width="131" height="80" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="1">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="1" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="6">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="4" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="7">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="5" id="1" />
+											<objectAssociationEnd element="object" element-id="8" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="8">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="2" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="9">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="12" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="10">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="11" id="1" />
+											<objectAssociationEnd element="object" element-id="6" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="11">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="13" id="1" />
+											<objectAssociationEnd element="object" element-id="1" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+							<objectDiagram id="3">
+								<name>Snapshot</name>
+								<sequenceReference>sometime</sequenceReference>
+								<description />
+								<objects>
+									<object id="4">
+										<attributes>
+											<attribute class="5" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="9" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="253" y="24" />
+											<size width="156" height="99" />
+											<color />
+										</graphics>
+									</object>
+									<object id="13">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="116" y="198" />
+											<size width="131" height="80" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="1">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="4" id="2" />
+											<objectAssociationEnd element="object" element-id="13" id="1" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+						</objectDiagrams>
+						<constraints />
+						<metrics />
+					</problem>
+				</planningProblems>
+			</domain>
+		</planningDomains>
+	</diagrams>
+</project>
+
