@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xmlPlan>
+	<toolInformation>
+		<name>itSIMPLE</name>
+		<version>2.1.10</version>
+		<message/>
+	</toolInformation>
+	<name/>
+	<description/>
+	<domain/>
+	<problem/>
+	<planner id="">
+		<name/>
+		<version/>
+		<consoleOutput/>
+	</planner>
+	<statistics>
+		<toolTime/>
+		<time/>
+		<parsingTime/>
+		<nrActions/>
+		<makeSpan/>
+		<metricValue/>
+		<planningTechnique/>
+		<additional/>
+	</statistics>
+	<plan/>
+</xmlPlan>

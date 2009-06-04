@@ -1,0 +1,70 @@
+﻿itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
+ 
+Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+ 
+
+This file is part of itSIMPLE 2.1.10.
+
+itSIMPLE is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version. Other licenses might be available
+upon written agreement.
+
+itSIMPLE is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with itSIMPLE.  If not, see <http://www.gnu.org/licenses/>.
+
+Authors:	Tiago S. Vaquero, 
+			Jose Reinaldo Silva,
+		 	Victor Romero,
+		 	Fernando Sette,
+		 	Flavio Tonidandel.
+
+
+Contact the authors:  
+			http://dlab.poli.usp.br/itSIMPLE
+			itsimple@dlab.poli.usp.br
+                        tiago.vaquero@gmail.com
+
+			Design Lab - Escola Polit�cnica - Universidade de Sao Paulo
+			Av. Prof. Mello Moraes, 2231, sala MS-32
+			Sao Paulo, SP, 05508-030
+			Brazil
+			
+
+			
+Connecting planners to itSIMPLE.
+-------------------------------
+
+itSIMPLE can communicate with most available planners. The source comes already
+with metric-ff (both windows and linux). For the others planners it is necessary to
+download them from the authors website and make a copy of the executable file 
+(and all required files) an put it in folder myPlanners/. The name of the executable 
+files must correspond to what is specified in a file use by itSIMPLE. The file 
+itPlanners.xml (resources/planners/itPlanners.xml) holds information about each 
+planners that itSIMPLE can communicate with. The following list show the name of 
+files treated by itSIMPLE2.1:
+- metric-ff.exe  http://members.deri.at/~joergh/ff.html
+- metric-ff      http://members.deri.at/~joergh/ff.html
+- sgplan522      http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
+- mips-xxl       (2006 version) http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
+- satplan        (2006 version) http://www.cs.rochester.edu/u/kautz/satplan/index.htm
+- lpg-td-1.0     http://zeus.ing.unibs.it/lpg/
+- lpg-td-1.0.exe http://zeus.ing.unibs.it/lpg/
+- mips-xxl2008   (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
+- sgplan6        (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
+- lpg            (version 1.2) http://zeus.ing.unibs.it/lpg/
+- hspsp          (2008 version from IPC-6)http://ipc.informatik.uni-freiburg.de/Planners/
+
+Some of them it is necessary to compile the source.
+
+For more information check our website dlab.poli.usp.br.
+
+Have fun.
+
+
