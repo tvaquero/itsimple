@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
-* 
-
+* Copyright (C) 2007,2008, 2009 Universidade de Sao Paulo
+*
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -47,6 +47,7 @@ import itGraph.UMLElements.UseCaseAssociation;
 import itGraph.UMLElements.UseCaseCell;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -63,13 +64,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -227,6 +228,16 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private JTable objectAttributeTable = null;
 	private ArrayList<Element> currentObjectAttributes = new ArrayList<Element>();
 	private EachRowEditor objectAttributeValue = null;
+
+    // Timing diagram
+    private JPanel mainTimingPanel = null;
+    private JPanel actionTimingPanel = null;
+    private ItComboBox typeTimingDiagramComboBox = null;
+    private ItComboBox contextTimingDiagramComboBox = null;
+    private ItComboBox actionTimingDiagramComboBox = null;
+    private List<Element> actionTimingDiagramList = null;
+	private JTextField durationTimingDiagramField = null;
+
 	
 	// Constraints panel
 	private JPanel constraintsPanel = null;
@@ -236,7 +247,12 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private JPanel metricsPanel = null;
 	private JCheckBoxList metricsList = null;
 	private DefaultListModel metricsListModel = null;
-	
+        
+    //Metrics and Criteria Panel - Quality metrics for analysis
+	private JPanel metricsAndCriteriaPanel = null;
+	private JCheckBoxList metricsAndCriteriaList = null;
+	private DefaultListModel metricsAndCriteriaListModel = null;
+        
 	// Common Data
 	private Element data = null;
 	private Element reference = null;
@@ -296,6 +312,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			JLabel descriptionLabel = new JLabel("Description");
 			descriptionTextPane = new JTextPane();			
 			descriptionTextPane.addKeyListener(this);
+            descriptionTextPane.setBackground(Color.WHITE);
 			JScrollPane scrollText = new JScrollPane();
 			scrollText.setViewportView(descriptionTextPane);
 			
@@ -379,7 +396,202 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			topBasePanel.add(classPanel, BorderLayout.CENTER);
 			
 		}
-}	
+        else if (data.getName().equals("timingDiagram")){
+
+            mainTimingPanel = new JPanel(new BorderLayout());
+
+            //Type (condition timeline or state tileline)
+            JPanel typeTimingpanel = new JPanel(new BorderLayout());
+            typeTimingpanel.add(new JLabel("Type "), BorderLayout.WEST);
+            typeTimingDiagramComboBox = new ItComboBox();
+            typeTimingDiagramComboBox.setToolTipText("Select the type of the diagram (condition/attribute timeline or state timeline.");
+            typeTimingDiagramComboBox.addItem("Unspecified...", null);
+            typeTimingDiagramComboBox.addItem("condition timeline", "condition");
+            //typeTimingDiagramComboBox.addItem("state timeline", "state");
+            typeTimingDiagramComboBox.addItemListener(new ItemListener(){
+                public void itemStateChanged(ItemEvent e) {
+                    String selected = null;
+                     //System.out.println(attributesComboBox.getSelectedIndex());
+                    if(typeTimingDiagramComboBox.getSelectedIndex() > -1) {
+                        selected = (String) typeTimingDiagramComboBox.getDataItem(typeTimingDiagramComboBox.getSelectedIndex());
+                    }
+                    if (selected!=null){
+                        //System.out.println(selected);
+                        //set context
+                        data.getChild("type").setText(selected);
+                    }
+                    else{
+                        data.getChild("type").setText("");
+                    }
+                }
+            });
+            typeTimingpanel.add(typeTimingDiagramComboBox, BorderLayout.CENTER);
+            //initial selection
+            if (!data.getChildText("type").equals("")){
+                if (data.getChildText("type").equals("condition"))
+                    typeTimingDiagramComboBox.setSelectedIndex(1);
+                else if (data.getChildText("type").equals("state"))
+                    typeTimingDiagramComboBox.setSelectedIndex(2);                
+            }
+
+
+            
+
+            //Context (action specific or general)
+            JPanel contTimingPanel = new JPanel(new BorderLayout());
+
+                //Action/Operator context
+            actionTimingPanel = new JPanel(new BorderLayout());
+            actionTimingPanel.add(new JLabel("Operator "), BorderLayout.WEST);
+            actionTimingDiagramComboBox = new ItComboBox();
+            actionTimingDiagramList = new ArrayList<Element>();
+            actionTimingDiagramComboBox.addItem("Unspecified...", null);
+            actionTimingDiagramList.add(null);
+            actionTimingDiagramComboBox.addItemListener(new ItemListener(){
+                public void itemStateChanged(ItemEvent e) {
+                    Element selected = null;
+                    //System.out.println(actionTimingDiagramComboBox.getSelectedIndex());
+                    if(actionTimingDiagramComboBox.getSelectedIndex() > -1 && actionTimingDiagramList.size() > 0) {
+                        selected = (Element) actionTimingDiagramComboBox.getDataItem(actionTimingDiagramComboBox.getSelectedIndex());
+                    }
+                    if (selected!=null){
+                        //set action
+                        Element operatorRef = data.getChild("action");
+                        operatorRef.setAttribute("class", selected.getParentElement().getParentElement().getAttributeValue("id"));
+                        operatorRef.setAttribute("id", selected.getAttributeValue("id"));
+                    }
+
+                    else if (actionTimingDiagramComboBox.getSelectedIndex() == 0 && actionTimingDiagramList.size() > 0) {
+                        Element operatorRef = data.getChild("action");
+                        operatorRef.setAttribute("class", "");
+                        operatorRef.setAttribute("id", "");
+                    }
+                }
+            });
+            actionTimingPanel.add(actionTimingDiagramComboBox, BorderLayout.CENTER);
+            actionTimingPanel.setVisible(false);
+
+
+            JPanel contextTimingpanel = new JPanel(new BorderLayout());
+            contextTimingpanel.add(new JLabel("Context "), BorderLayout.WEST);
+            contextTimingDiagramComboBox = new ItComboBox();
+            contextTimingDiagramComboBox.setToolTipText("Select the context of the diagram (operator/action or a possible sequence of action - general.");
+            contextTimingDiagramComboBox.addItem("Unspecified...", null);
+            contextTimingDiagramComboBox.addItem("operator/action", "action");
+            //contextTimingDiagramComboBox.addItem("general", "general");
+            contextTimingDiagramComboBox.addItemListener(new ItemListener(){
+                public void itemStateChanged(ItemEvent e) {
+                    String selected = null;
+                     //System.out.println(attributesComboBox.getSelectedIndex());
+                    if(contextTimingDiagramComboBox.getSelectedIndex() > -1) {
+                        selected = (String) contextTimingDiagramComboBox.getDataItem(contextTimingDiagramComboBox.getSelectedIndex());
+                    }
+                    if (selected!=null){
+                        //System.out.println(selected);
+                        //set context
+                        data.getChild("context").setText(selected);
+                        actionTimingDiagramList.clear();
+                        actionTimingDiagramComboBox.removeAllItems();
+                        actionTimingDiagramComboBox.addItem("Unspecified...", null);
+                        actionTimingDiagramList.add(null);
+                        //fill out actions combobox
+                        List<?> result = null;
+                        try {
+                            XPath path = new JDOMXPath("project/elements/classes/class/operators/operator");
+                            result = path.selectNodes(data.getDocument());
+                        } catch (JaxenException e2) {			
+                            e2.printStackTrace();
+                        }
+
+                        for (int i = 0; i < result.size(); i++){
+                            Element operator = (Element)result.get(i);
+                            actionTimingDiagramComboBox.addItem(operator.getChildText("name"),operator);
+                            actionTimingDiagramList.add(operator);
+                        }
+                        actionTimingPanel.setVisible(true);
+                        //initial selection
+                        if (!data.getChild("action").getAttributeValue("class").equals("") && !data.getChild("action").getAttributeValue("id").equals("")){
+                            //find operator
+                            Element resultOp = null;
+                            try {
+                                XPath path = new JDOMXPath("project/elements/classes/class[@id='"+data.getChild("action").getAttributeValue("class")
+                                        +"']/operators/operator[@id='"+data.getChild("action").getAttributeValue("id")+"']");
+                                resultOp = (Element)path.selectSingleNode(data.getDocument());
+                            } catch (JaxenException e2) {
+                                e2.printStackTrace();
+                            }
+                            if(resultOp!=null){
+                                actionTimingDiagramComboBox.setSelectedItem(resultOp.getChildText("name"));
+                            }
+                            else{
+                                //clear if it was not find
+                                data.getChild("action").setAttribute("class", "");
+                                data.getChild("action").setAttribute("id", "");
+                            }
+
+                        }
+
+                        
+                    }
+                    else{
+                        data.getChild("context").setText("");
+                        actionTimingPanel.setVisible(false);
+
+
+                    }
+                }
+            });
+            contextTimingpanel.add(contextTimingDiagramComboBox, BorderLayout.CENTER);
+            //initial selection
+            if (!data.getChildText("context").equals("")){
+                if (data.getChildText("context").equals("action"))
+                    contextTimingDiagramComboBox.setSelectedIndex(1);
+                else if (data.getChildText("context").equals("general"))
+                    contextTimingDiagramComboBox.setSelectedIndex(2);
+            }
+
+            //initial selection
+            //XMLUtilities.printXML(data);
+            if (!data.getChild("action").getAttributeValue("class").equals("") && !data.getChild("action").getAttributeValue("id").equals("")){
+                //find operator
+                Element result = null;
+                try {
+                    XPath path = new JDOMXPath("project/elements/classes/class[@id='"+data.getChild("action").getAttributeValue("class")
+                            +"']/operators/operator[@id='"+data.getChild("action").getAttributeValue("id")+"']");
+                    result = (Element)path.selectSingleNode(data.getDocument());
+                } catch (JaxenException e2) {
+                    e2.printStackTrace();
+                }
+                if(result!=null){
+                    actionTimingDiagramComboBox.setSelectedItem(result.getChildText("name"));
+                }
+                else{
+                    //clear if it was not find
+                    data.getChild("action").setAttribute("class", "");
+                    data.getChild("action").setAttribute("id", "");
+                }
+
+            }
+
+
+            JPanel durationTimingDiagramPanel = new JPanel(new BorderLayout());
+            durationTimingDiagramPanel.add(new JLabel("Duration "), BorderLayout.WEST);
+         
+            contTimingPanel.add(contextTimingpanel, BorderLayout.CENTER);
+            contTimingPanel.add(actionTimingPanel, BorderLayout.SOUTH);
+            
+
+            mainTimingPanel.add(typeTimingpanel, BorderLayout.NORTH);
+            //mainTimingPanel.add(contextTimingpanel, BorderLayout.CENTER);
+            //mainTimingPanel.add(actionTimingPanel, BorderLayout.SOUTH);
+            mainTimingPanel.add(contTimingPanel, BorderLayout.CENTER);
+
+            topBasePanel.add(mainTimingPanel, BorderLayout.CENTER);
+
+
+        }
+        
+    }
 	
 	private void getIconComboBox(){
 		if (iconComboBox == null){
@@ -1421,9 +1633,9 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		};		
 		tableModel.addTableModelListener(this);
 		
-        objectAttributeTable = new JTable(tableModel);
-        //set size of all rows
-        objectAttributeTable.setRowHeight(20);
+                objectAttributeTable = new JTable(tableModel);
+                //set size of all rows
+                objectAttributeTable.setRowHeight(20);
 		JScrollPane scrollText = new JScrollPane();
 		scrollText.setViewportView(objectAttributeTable);		
 		
@@ -1654,6 +1866,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		document.setHighlightStyle(ItHilightedDocument.OCL_STYLE);
 		constraintsTextPane = new JTextPane(document);		
 		constraintsTextPane.addKeyListener(this);
+        constraintsTextPane.setBackground(Color.WHITE);
 		JScrollPane scroll = new JScrollPane(constraintsTextPane);		
 		JLabel label = new JLabel("Constraints");
 		
@@ -1682,9 +1895,9 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		
 		// tool bar
 		JToolBar toolBar = new JToolBar();
-		toolBar.add(newMetric);
-		toolBar.add(deleteMetric);
-		toolBar.add(editMetric);		
+		toolBar.add(newMetric).setToolTipText("New metric");
+		toolBar.add(deleteMetric).setToolTipText("delete metric");
+		toolBar.add(editMetric).setToolTipText("Edit metric");		
 		
 		metricsPanel.add(topPanel, BorderLayout.CENTER);
 		metricsPanel.add(toolBar, BorderLayout.SOUTH);
@@ -1694,6 +1907,12 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	
 	private void setMetricsPanel(){		
 		metricsListModel.clear();
+                
+                if (data.getChild("metrics") == null){
+                    Element metricsElement = new Element("metrics");
+                    data.addContent(metricsElement);
+                }
+                
 		List<?> metrics = data.getChild("metrics").getChildren("metric");
 		for (Iterator<?> iterator = metrics.iterator(); iterator.hasNext();) {
 			Element metric = (Element) iterator.next();
@@ -1704,7 +1923,48 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		
 	}
 	
+	private JPanel getMetricsAndCriteriaPanel(){
+		metricsAndCriteriaPanel = new JPanel(new BorderLayout());
+		
+		ItPanel topPanel = new ItPanel(new BorderLayout());
+		metricsAndCriteriaListModel = new DefaultListModel();
+		metricsAndCriteriaList = new JCheckBoxList(false);
+		metricsAndCriteriaList.setModel(metricsAndCriteriaListModel);
+		topPanel.add(new JScrollPane(metricsAndCriteriaList), BorderLayout.CENTER);
+		
+		// tool bar
+		JToolBar toolBar = new JToolBar();
+		toolBar.add(newMetricAndCriterion).setToolTipText("New quality metric");
+		toolBar.add(deleteMetricAndCriterion).setToolTipText("Delete quality metric");
+		toolBar.add(editMetricAndCriterion).setToolTipText("Edit quality metric");
+                
+		
+		metricsAndCriteriaPanel.add(topPanel, BorderLayout.CENTER);
+		metricsAndCriteriaPanel.add(toolBar, BorderLayout.SOUTH);
+		
+		return metricsAndCriteriaPanel;
+	}
 	
+	private void setMetricsAndCriteriaPanel(){		
+		metricsAndCriteriaListModel.clear();
+                
+                if (data.getChild("metrics") == null){
+                    System.out.println("empty");
+                    Element metricsElement = new Element("metrics");
+                    data.addContent(metricsElement);
+                }
+                
+		List<?> metrics = data.getChild("metrics").getChildren("qualityMetric");
+		for (Iterator<?> iterator = metrics.iterator(); iterator.hasNext();) {
+			Element metric = (Element) iterator.next();
+			metricsAndCriteriaListModel.addElement(
+					new JCheckBoxListItem(metric, 
+							Boolean.parseBoolean(metric.getChildText("enabled"))));
+		}
+		
+	}
+        
+        
 	public void showProperties(Object element, Object sender){
 		
 		//get the last selected tab
@@ -1854,7 +2114,9 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			else if(data.getName().equals("objectDiagram")){
 				//Base
 				setObjectDiagramBasePanel();
-				this.addTab("Base", objectDiagramBasePanel);		
+                                setConstraintsPanel();
+				this.addTab("Base", objectDiagramBasePanel);
+                                addTab("Constraints", constraintsPanel);
 			}
 			else if(data.getName().equals("useCase")){
 				getBasePanel();
@@ -1874,18 +2136,34 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			else if(data.getName().equals("problem")){
 				getBasePanel();
 				setBasePanel();
-				getMetricsPanel();
-				setMetricsPanel();
+				//getMetricsPanel();
+				//setMetricsPanel();
+                                setConstraintsPanel();
+                                getMetricsAndCriteriaPanel();
+				setMetricsAndCriteriaPanel();
+                                
 				addTab("Base", basePanel);
-				addTab("Metrics", metricsPanel);
+				//addTab("Metrics", metricsPanel);
+				//addTab("General Metrics & Criteria", metricsAndCriteriaPanel);
+                                addTab("Specific Metrics", metricsAndCriteriaPanel);
+				addTab("Constraints", constraintsPanel);
 			}
-			
+
+                        else if(data.getName().equals("domain")){
+				getBasePanel();
+				setBasePanel();
+				getMetricsAndCriteriaPanel();
+				setMetricsAndCriteriaPanel();
+				addTab("Base", basePanel);
+                                //addTab("General Metrics & Criteria", metricsAndCriteriaPanel);
+                                addTab("General Metrics", metricsAndCriteriaPanel);
+			}
 			else{
 				getBasePanel();
 				setBasePanel();
 				addTab("Base", basePanel);
 			}
-			
+
 			//Select the tab that was already selected if the current selected element is of the same type of the last one
 			if (data.getName().equals(lastSelectTab)){
 				if (lastSelectIndex >= 0){
@@ -2122,6 +2400,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			EditDialog edit = new EditDialog(currentOperators.get(operatorList.getSelectedIndex()), null, operatorList, PropertiesTabbedPane.this);
 			edit.setVisible(true);
 		}
+
 		
 	}
 
@@ -2962,6 +3241,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 					selectedCell.setVisual();
 					graph.repaintElement(selectedCell);
 				}
+
 			}		
 		}
 	};	
@@ -3081,7 +3361,78 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		}
 	};
 	
-	private Action openAttributeParameterValues = 
+	private Action newMetricAndCriterion = new AbstractAction("New", new ImageIcon("resources/images/new.png")){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2820018622516075618L;
+
+		public void actionPerformed(ActionEvent e) {			
+			
+			Element newMetric = (Element)ItSIMPLE.getCommonData().getChild("definedNodes")
+				.getChild("elements").getChild("model").getChild("qualityMetric").clone();
+			
+			String id = String.valueOf(XMLUtilities.getId(data.getChild("metrics")));
+			
+			newMetric.setAttribute("id", id);
+			
+			newMetric.getChild("name").setText("quality metric "+id);
+			newMetric.getChild("enabled").setText(String.valueOf(true));
+                        newMetric.getChild("type").setText("expression"); //default type
+
+			
+			data.getChild("metrics").addContent(newMetric);
+			
+			setMetricsAndCriteriaPanel();
+			
+			// select the recently added item
+			metricsAndCriteriaList.setSelectedIndex(metricsAndCriteriaListModel.getSize()-1);
+			
+			editMetricAndCriterion.actionPerformed(null);
+		}
+	};
+	
+	private Action deleteMetricAndCriterion  = new AbstractAction("Delete", new ImageIcon("resources/images/delete.png")){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -7885426542495703978L;
+
+		public void actionPerformed(ActionEvent e) {			
+			Object listItem = metricsAndCriteriaList.getSelectedValue();
+			
+			if(listItem != null){
+				Element metricData = 
+					((JCheckBoxListItem)listItem).getData();
+				
+				metricsAndCriteriaListModel.removeElement(listItem);
+				metricData.detach();
+			}
+		}
+	};
+	
+	private Action editMetricAndCriterion  = new AbstractAction("Edit", new ImageIcon("resources/images/edit.png")){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 663096847536402295L;
+
+		public void actionPerformed(ActionEvent e) {
+			// get selected metric data
+			Object listItem = metricsAndCriteriaList.getSelectedValue();
+			
+			if(listItem != null){
+				Element metricData = 
+					((JCheckBoxListItem)listItem).getData();
+				EditMetricAndCriteriaDialog dialog =
+					new EditMetricAndCriteriaDialog(metricData, (JCheckBoxListItem)listItem, metricsAndCriteriaList);
+				dialog.setVisible(true);
+			}
+
+		}
+	};
+        
+        private Action openAttributeParameterValues = 
 		new AbstractAction("Save to PDDL", new ImageIcon("resources/images/savePDDL.png")){
 
 

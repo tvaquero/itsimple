@@ -61,6 +61,7 @@ public class PlannersSettingsPanel extends ItPanel
 	private JComboBox plannersCombo;
 	private JCheckBox windowsCheck;
 	private JCheckBox linuxCheck;
+    private JCheckBox macCheck;
 	private JTable paramTable;
 	private DefaultTableModel tableModel;
 	private List<Element> planners;
@@ -173,6 +174,9 @@ public class PlannersSettingsPanel extends ItPanel
 			windowsCheck.setSelected(true);
 		if(selectedPlanner.getChild("platform").getChild("linux") != null)
 			linuxCheck.setSelected(true);
+		if(selectedPlanner.getChild("platform").getChild("mac") != null)
+			macCheck.setSelected(true);        
+
 	}
 	
 	private JPanel getPlatformPanel(){
@@ -188,7 +192,7 @@ public class PlannersSettingsPanel extends ItPanel
 		JLabel linuxLabel = new JLabel("Linux");
 		linuxCheck = new JCheckBox();
 		JLabel macLabel = new JLabel("Mac OS");
-		JCheckBox macCheck = new JCheckBox();
+		macCheck = new JCheckBox();
 		
 		CellConstraints cc = new CellConstraints();
 		
@@ -221,6 +225,7 @@ public class PlannersSettingsPanel extends ItPanel
 			// clear check boxes
 			windowsCheck.setSelected(false);
 			linuxCheck.setSelected(false);
+            macCheck.setSelected(false);
 			
 			int selectedIndex = plannersCombo.getSelectedIndex();
 			if(selectedIndex > 0){// discard "Select" item

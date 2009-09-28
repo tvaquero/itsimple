@@ -4,7 +4,7 @@
 	<description>This domain was modeled for the ICKEPS 2007 and its descrption was extrected from the Graph Transformation category.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.22</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1011,6 +1011,7 @@ c2.next = c1</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Planning Domain with Five cells</name>
@@ -1624,8 +1625,10 @@ c2.next = c1</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

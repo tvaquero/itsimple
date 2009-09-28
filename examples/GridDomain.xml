@@ -7,7 +7,7 @@ The goal is to get keys from various locations to various new locations. This do
 Extracted from IPC-1 (1998)</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.1.10</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -375,7 +375,7 @@ Extracted from IPC-1 (1998)</description>
 							<value />
 						</rolename>
 						<multiplicity>
-							<value />
+							<value>0..*</value>
 						</multiplicity>
 					</associationEnd>
 					<associationEnd navigation="true" element="class" element-id="23" id="2">
@@ -384,7 +384,7 @@ Extracted from IPC-1 (1998)</description>
 							<value>conn</value>
 						</rolename>
 						<multiplicity>
-							<value />
+							<value>0..*</value>
 						</multiplicity>
 					</associationEnd>
 				</associationEnds>
@@ -903,10 +903,10 @@ Extracted from IPC-1 (1998)</description>
 									<position x="1500" y="16" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="100" y="-15" />
+									<position x="-354" y="13" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
+									<position x="708" y="16" />
 								</label>
 								<label type="changeability" identifier="">
 									<position x="500" y="15" />
@@ -5871,8 +5871,10 @@ Extracted from IPC-1 (1998)</description>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

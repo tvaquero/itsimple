@@ -66,6 +66,7 @@
 			</stateMachineDiagram>
 		</stateMachineDiagrams>
 		<activityDiagrams/>
+                <timingDiagrams/>
 		<planningDomains>
 			<domain id="1">
 				<name>Planning Domain</name>
@@ -82,7 +83,6 @@
 						<constraints/>
 					</repositoryDiagram>
 				</repositoryDiagrams>
-				<constraints/>
 				<planningProblems>					
 					<problem id="1">
 						<name>Planning Problem</name>
@@ -108,7 +108,9 @@
 						<constraints/>
 						<metrics />
 					</problem>
-				</planningProblems>																	
+				</planningProblems>
+                                <constraints/>
+                                <metrics/>
 			</domain>		
 		</planningDomains>
 	</diagrams>

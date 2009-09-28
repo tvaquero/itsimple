@@ -3,17 +3,16 @@
 <xmlPlan>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>2.1.10</version>
+		<version>3.0.10</version>
 		<message/>
 	</toolInformation>
 	<name/>
 	<description/>
+        <project/>
 	<domain/>
 	<problem/>
+        <datetime/>
 	<planner id="">
-		<name/>
-		<version/>
-		<consoleOutput/>
 	</planner>
 	<statistics>
 		<toolTime/>

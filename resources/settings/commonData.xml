@@ -3,7 +3,7 @@
 <commonData>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.1.10</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<definedNodes>
 		<elements>
@@ -406,6 +406,61 @@
 					<type />
 					<function />
 				</metric>
+                                <qualityMetric id="">
+                                        <name />
+                                        <description />
+                                        <enabled />
+                                        <type />
+                                        <intention />
+                                        <weight>1</weight>
+                                        <variable>
+                                                <chosenVariable type="">
+                                                        <object class="" id="">
+                                                                <attribute type="" class="" id=""/>
+                                                        </object>
+                                                </chosenVariable>
+                                        </variable>
+                                        <expression>
+                                                <rule />
+                                        </expression>
+                                        <actionCounter>
+                                                <chosenOperator class="" id="">
+                                                    <parameters />
+                                                </chosenOperator >
+                                        </actionCounter>
+                                        <preferenceFunction>
+                                                <function id="1">
+                                                        <domain>
+                                                                <lowerbound value="-inf" included="true" />
+                                                                <upperbound value="+inf" included="true" />
+                                                        </domain>
+                                                        <rule>1</rule>
+                                                </function>
+                                        </preferenceFunction>
+                                </qualityMetric>
+                                <function id="">
+                                    <domain>
+                                        <lowerbound value="" included="true" />
+                                        <upperbound value="" included="true" />
+                                    </domain>
+                                    <rule />
+                                </function>
+                                <lifeline id="">
+                                    <object class="" element="" id=""/>
+                                    <attribute class="" id=""/>
+                                    <timeIntervals/>
+                                    <note/>
+                                </lifeline>
+                                <timeInterval id="">
+                                    <durationConstratint>
+                                        <lowerbound value="" included="true"/>
+                                        <upperbound value="" included="true"/>
+                                        <annotation/>
+                                    </durationConstratint>
+                                    <timeConstraint/>
+                                    <stimulus class="" action=""/>
+                                    <value/>
+                                </timeInterval>
 			</model>
 			<structure>
 				<domain id="">
@@ -423,7 +478,6 @@
 							<constraints/>
 						</repositoryDiagram>
 					</repositoryDiagrams>
-					<constraints/>
 					<planningProblems>
 						<problem id="1">
 							<name>Problem</name>
@@ -450,6 +504,8 @@
 							<metrics />
 						</problem>
 					</planningProblems>
+                                        <constraints/>
+                                        <metrics/>
 				</domain>
 				<problem id="">
 					<name>Problem</name>
@@ -504,9 +560,29 @@
 			<activityDiagram id="">
 				<name>Activity Diagram</name>
 				<description/>
+                                <activities />
+                                <decisions />
+                                <forks />
+                                <objects />
 				<associations/>
 				<constraints/>
 			</activityDiagram>
+			<timingDiagram id="">
+				<name>Timing Diagram</name>
+                <description/>
+                <type/><!-- state lifetime or condition lifetime -->
+                <context/><!-- general or action specific -->
+                <action class="" id=""/>
+                <frame>
+                    <duration>10</duration>
+                    <timingRuler>
+                        <durationObservation/>
+                    </timingRuler>
+                    <lifelines>
+                    </lifelines>
+                </frame>
+                <constraints/>
+			</timingDiagram>
 			<objectDiagram id="">
 				<name>Snapshot</name>
 				<sequenceReference/>

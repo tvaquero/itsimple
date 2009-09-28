@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import java.util.StringTokenizer;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 import org.jaxen.jdom.JDOMXPath;
@@ -106,8 +107,9 @@ public class OCLUtilities {
 			actionNode.getChild("name").setText(operator.getChildText("name")+ "(" + strParameters + ")");
 			actionNode.getChild("parameters").setText(strParameters);
 			
-			//String actionContext = operatorClass.getChildText("name")+ "::" + operator.getChildText("name")+ "(" + strParameters + ")";		
-			
+			//String actionContext = operatorClass.getChildText("name")+ "::" + operator.getChildText("name")+ "(" + strParameters + ")";
+
+
 			//3. Get the pre and post condition in the stateMachine diagrams							
 			
 			//3.1. Find all state machine diagrams with this operator		
@@ -337,7 +339,96 @@ public class OCLUtilities {
 				}				
 				
 				
-			}// End of diagram iteration		
+			}// End of diagram iteration
+
+            //4. get pre and post condition from the ocl constraints (pre: and post:) defined in the operator
+            //Check if there is something at the constraints
+            if (!operator.getChildText("constraints").trim().equals("")){
+                String opExpression = operator.getChildText("constraints").trim();
+                StringTokenizer tokenizer = new StringTokenizer(opExpression);
+                String preconditionString = "";
+                String postconditionString = "";
+                boolean isPrecondition = false;
+                boolean isPostcondition = false;
+                while (tokenizer.hasMoreTokens()) {
+                    String token = tokenizer.nextToken();
+                    boolean consider = true;
+                    ;
+                    if (token.equals("pre:")){//this is either the end or the beggining
+                        isPrecondition = true;
+                        isPostcondition = false;
+                        consider = false;
+                    }
+                    else if (token.equals("post:")){
+                        isPostcondition = true;
+                        isPrecondition = false;
+                        consider = false;
+                    }
+                    if (consider){
+                        if (isPrecondition){
+                            preconditionString += token + " ";
+                        }
+                        else if (isPostcondition){
+                            postconditionString += token + " ";
+                        }
+                    }
+                }
+                if (!preconditionString.trim().equals("")){
+                    //System.out.println("Precondition: " + preconditionString);
+
+                    //find the constraint of the class
+                    Element currentClassConstraints = null;
+                    Element preConditions = null;
+                    try {
+						XPath path = new JDOMXPath("conditions[@class='"+operatorClass.getChildText("name")+"']");
+						currentClassConstraints = (Element)path.selectSingleNode(preconditionNode);
+					} catch (JaxenException e2) {
+						e2.printStackTrace();
+					}
+                    if (currentClassConstraints!=null){
+                        preConditions = currentClassConstraints;
+                    }
+                    else{
+                        preConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
+                        preConditions.setAttribute("class",operatorClass.getChildText("name"));
+                    }
+                
+                    //insert in the preconditions
+                    Element condition = new Element("condition");
+                    condition.setText(preconditionString);
+                    preConditions.addContent(condition);
+                    preconditionNode.addContent(preConditions);
+
+                }
+                if (!postconditionString.trim().equals("")){
+                    //System.out.println("Postcondition: " + postconditionString);
+                    //find the constraint of the class
+                    Element currentClassConstraints = null;
+                    Element postConditions = null;
+                    try {
+						XPath path = new JDOMXPath("conditions[@class='"+operatorClass.getChildText("name")+"']");
+						currentClassConstraints = (Element)path.selectSingleNode(postconditionNode);
+					} catch (JaxenException e2) {
+						e2.printStackTrace();
+					}
+                    if (currentClassConstraints!=null){
+                        postConditions = currentClassConstraints;
+                    }
+                    else{
+                        postConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
+                        postConditions.setAttribute("class",operatorClass.getChildText("name"));
+                    }
+
+                    Element condition = new Element("condition");
+                    condition.setText(postconditionString);
+                    postConditions.addContent(condition);
+                    postconditionNode.addContent(postConditions);
+                }
+	
+            }
+
+
+
 			
 		}
 		

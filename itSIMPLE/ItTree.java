@@ -180,6 +180,19 @@ public class ItTree extends JTree{
 				}				
 				
 			}
+			//Timing Diagrams
+			else if (diagrams.getName().equals("timingDiagrams")){
+				Iterator timingDiagrams = diagrams.getChildren("timingDiagram").iterator();
+				while(timingDiagrams.hasNext()){
+					Element timingDiagram = (Element)timingDiagrams.next();
+					ItTreeNode treeDiagram = new ItTreeNode(timingDiagram.getChildText("name"),
+															timingDiagram, null, null);
+					treeDiagram.setIcon(new ImageIcon("resources/images/activityDiagram.png"));
+					treeModel.insertNodeInto(treeDiagram, treeProject, treeProject.getChildCount());
+
+				}
+
+			}
 
 			//Object Diagrams				
 			else if (diagrams.getName().equals("objectDiagrams")){

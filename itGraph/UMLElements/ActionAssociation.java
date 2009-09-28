@@ -109,7 +109,7 @@ public class ActionAssociation extends BasicAssociation {
 				
 				Element tyClass = null;
 				try {
-					XPath path = new JDOMXPath("project/elements/classes/class[@id='"+parameter.getChildText("type")+"']");
+					XPath path = new JDOMXPath("project/elements/classes/*[@id='"+parameter.getChildText("type")+"']");
 					tyClass = (Element)path.selectSingleNode(data.getDocument());
 				} catch (JaxenException e2) {			
 					e2.printStackTrace();
