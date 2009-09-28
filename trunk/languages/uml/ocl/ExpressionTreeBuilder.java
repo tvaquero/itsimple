@@ -453,7 +453,8 @@ public class ExpressionTreeBuilder{
 				//"hand.at = tablefrom and tableto.available = true and " +
 				//"hand.hasAccessTo->includes(tableto)");
 				//"hand.hasAccessTo->exists(t : Table | t = tableto)");
-				"g1.hasSecret->forAll(s: Secret| g2.hasSecret = g2.hasSecret->including(s))"); 
+				"g1.hasSecret->forAll(s: Secret| g2.hasSecret = g2.hasSecret->including(s))");
+                                //"a.clear = b.clear and c.assoc = d.assoc");
 
 		XMLUtilities.printXML(builder.getExpressionTree());
 		

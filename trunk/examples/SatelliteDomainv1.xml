@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.21</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1181,19 +1181,19 @@
 									<position x="500" y="-15" />
 								</label>
 								<label type="rolename" identifier="1">
-									<position x="" y="" />
+									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="" y="" />
+									<position x="900" y="15" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
+									<position x="100" y="-15" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
+									<position x="900" y="-15" />
 								</label>
 								<label type="changeability" identifier="">
-									<position x="" y="" />
+									<position x="500" y="15" />
 								</label>
 							</labels>
 							<points />
@@ -4660,10 +4660,13 @@ and i.calibrated = true</condition>
 							</objectDiagram>
 						</objectDiagrams>
 						<constraints />
+						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

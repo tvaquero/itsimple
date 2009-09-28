@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007,2008, 2009 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -281,7 +281,8 @@ public class XPDDLToPDDL {
 		}
 		
 		//10.3 Predicate node and function node
-		else if(xpddlNode.getName().equals("predicate") || xpddlNode.getName().equals("function")){
+                //else if(xpddlNode.getName().equals("predicate") || xpddlNode.getName().equals("function")){
+		else if(xpddlNode.getName().equals("predicate")){
 			if(xpddlNode.getAttribute("id") == null){
 				// complete predicate
 				//open predicate/function
@@ -292,6 +293,7 @@ public class XPDDLToPDDL {
 					Element parameter = (Element) iterator.next();					
 					strPredicate += " " + parseXPDDLToPDDL(parameter, "");
 				}
+
 				// close predicate/function
 				strPredicate += ")";
 				
@@ -306,6 +308,41 @@ public class XPDDLToPDDL {
 					pddl += " " + parseXPDDLToPDDL(refParameter, "");
 				}
 				pddl += ")";				
+			}
+		}
+
+                //10.3.1 function node
+		else if(xpddlNode.getName().equals("function")){
+			if(xpddlNode.getAttribute("id") == null){
+				// complete function
+				//open function
+				String strFunction = "(" + xpddlNode.getAttributeValue("name");
+				for (Iterator<?> iterator = xpddlNode.getChildren().iterator(); iterator
+						.hasNext();) {
+					// add each parameter
+					Element parameter = (Element) iterator.next();
+					strFunction += " " + parseXPDDLToPDDL(parameter, "");
+				}
+				// close function
+				strFunction += ")";
+
+                                //check the function (PDDL 3.1)
+                                String ftype = xpddlNode.getAttributeValue("type");
+                                if (ftype != null){
+                                    strFunction += " - "+ ftype;
+                                }
+
+				// add the function to the output string
+				pddl += identation + strFunction;
+			}
+			else{
+				// reference predicate/function
+				pddl = identation + "(" + xpddlNode.getAttributeValue("id");
+				for (Iterator<?> iter = xpddlNode.getChildren().iterator(); iter.hasNext();) {
+					Element refParameter = (Element) iter.next();
+					pddl += " " + parseXPDDLToPDDL(refParameter, "");
+				}
+				pddl += ")";
 			}
 		}
 		
@@ -347,7 +384,17 @@ public class XPDDLToPDDL {
 		
 		// 10.5 Value node
 		else if(xpddlNode.getName().equals("value")){
-			pddl = xpddlNode.getAttributeValue("number");
+                        //pddl = xpddlNode.getAttributeValue("number");
+
+                        //Considering PDDL3.1 <value object=""> where object are also considered in function
+                        String numberValue = xpddlNode.getAttributeValue("number");
+                        String objectValue = xpddlNode.getAttributeValue("object");
+                        
+                        if (numberValue != null){
+                            pddl = numberValue;
+                        }else{
+                            pddl = objectValue;
+                        }
 		}
 		
 		// 10.6 equals node
@@ -547,16 +594,59 @@ public class XPDDLToPDDL {
 		
 		//10.26 at-start
 		else if(xpddlNode.getName().equals("at-start")){
-			pddl = identation + "(at start \n";
-			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-			pddl += identation + ")\n";
+            Element chdNode = (Element)xpddlNode.getChildren().get(0);
+            if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
+    			pddl = identation + "(at start \n";
+    			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
+    			pddl += identation + ")\n";
+            }
+            else{
+                pddl = identation + "(at start ";
+                pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ");
+                pddl += ")";
+            }
+
 		}
 		
 		// 10.27 at-end
 		else if(xpddlNode.getName().equals("at-end")){
-			pddl = identation + "(at end \n";
-			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-			pddl += identation + ")\n";
+            Element chdNode = (Element)xpddlNode.getChildren().get(0);
+            if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
+    			pddl = identation + "(at end \n";
+    			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
+    			pddl += identation + ")\n";
+            }
+            else{
+                pddl = identation + "(at end ";
+                pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ");
+                pddl += ")";
+            }
+
+		}
+		// 10.27.1 over-all
+		else if(xpddlNode.getName().equals("over-all")){
+            Element chdNode = (Element)xpddlNode.getChildren().get(0);
+            if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
+    			pddl = identation + "(over all \n";
+    			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
+    			pddl += identation + ")\n";
+            }
+            else{
+                pddl = identation + "(over all ";
+                pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ") ;
+                pddl += ")";
+            }
+		}
+
+                // 10.28 timed initial literal
+		else if(xpddlNode.getName().equals("at")){
+                        Element literal = xpddlNode.getChild("literal");
+                        Element timespecifier = xpddlNode.getChild("timespecifier");
+
+			pddl = identation + "(at " + timespecifier.getAttributeValue("number");
+
+			pddl += parseXPDDLToPDDL((Element)literal.getChildren().get(0), " ");
+			pddl += identation + ")";
 		}
 		
 		

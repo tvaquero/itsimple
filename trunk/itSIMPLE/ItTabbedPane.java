@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -31,8 +31,13 @@ import itGraph.ItCellViewFactory;
 import itGraph.ItGraph;
 
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Label;
+import java.awt.Paint;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.Iterator;
@@ -41,6 +46,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
@@ -62,6 +68,16 @@ import org.jgraph.graph.GraphModel;
 import languages.pddl.ToXPDDL;
 import languages.pddl.XPDDLToPDDL;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.SymbolAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import sourceEditor.ItHilightedDocument;
 
 public class ItTabbedPane extends JTabbedPane implements
@@ -236,26 +252,286 @@ public class ItTabbedPane extends JTabbedPane implements
 				//Check Language Type
 				if (language.equals("UML")){
 					// Open the tab if not
-					ItToolBar toolBar = new ItToolBar(type,"UML");				
-					toolBar.setName(title);
-					GraphModel model = new DefaultGraphModel();
-					GraphLayoutCache view = new GraphLayoutCache(model, new ItCellViewFactory());
-					ItGraph diagramGraph = new ItGraph(view, toolBar, propertiesPane, project, diagram, commonData, language);
-					toolBar.setGraph(diagramGraph);
-					diagramGraph.setVisible(false);
-					JScrollPane graphScrollPane = new JScrollPane(diagramGraph);
-					panel = new JRootPane();
-					panel.setLayout(new BorderLayout());
-					panel.add(toolBar, BorderLayout.NORTH);
-					panel.add(graphScrollPane, BorderLayout.CENTER);
-										
-					diagramGraph.buildDiagram();
-					diagramGraph.setVisible(true);
+                    if (type.equals("useCaseDiagram") ||
+                            type.equals("classDiagram") ||
+                            type.equals("stateMachineDiagram") ||
+                            type.equals("repositoryDiagram") ||
+                            type.equals("objectDiagram") ||
+                            type.equals("activityDiagram")){
+
+                        //tool bar
+                        ItToolBar toolBar = new ItToolBar(type,"UML");
+                        toolBar.setName(title);
+                        //graph (jgraph)
+                        GraphModel model = new DefaultGraphModel();
+                        GraphLayoutCache view = new GraphLayoutCache(model, new ItCellViewFactory());
+                        ItGraph diagramGraph = new ItGraph(view, toolBar, propertiesPane, project, diagram, commonData, language);
+                        toolBar.setGraph(diagramGraph);
+                        diagramGraph.setVisible(false);
+                        JScrollPane graphScrollPane = new JScrollPane(diagramGraph);
+                        panel = new JRootPane();
+                        panel.setLayout(new BorderLayout());
+                        panel.add(toolBar, BorderLayout.NORTH);
+                        panel.add(graphScrollPane, BorderLayout.CENTER);
+
+                        diagramGraph.buildDiagram();
+                        diagramGraph.setBackground(Color.WHITE);
+                        diagramGraph.setVisible(true);
+
+                    }
+                    else if (type.equals("timingDiagram")){
+
+                        
+
+                        panel = new JRootPane();
+                        panel.setLayout(new BorderLayout());
+
+                        TimingDiagramPanel timingdiagrampanel = new TimingDiagramPanel(diagram, project);
+                        panel.add(timingdiagrampanel, BorderLayout.CENTER);
+                        //JScrollPane listScrollPane = new JScrollPane(timingdiagrampanel);
+                        //panel.add(listScrollPane, BorderLayout.CENTER);
+                        
+
+
+
+                        /*
+                        //1. get type and context
+                        String dtype = diagram.getChildText("type");
+                        String context = diagram.getChildText("context");
+                        //the frame and lifeline nodes
+                        Element frame = diagram.getChild("frame");
+                        Element lifelines = frame.getChild("lifelines");
+                        String durationStr = frame.getChildText("duration");
+                        String lifelineName = "";
+                        String yAxisName = "";
+
+
+                        //condition lifeline
+                        if (dtype.equals("condition")){
+
+                            //check if the context is a action
+                            if (context.equals("action")){
+
+                                //get action/operator
+                                Element operatorRef = diagram.getChild("action");
+                                Element operator = null;
+                                try {
+                                    XPath path = new JDOMXPath("elements/classes/class[@id='"+operatorRef.getAttributeValue("class")+"']/operators/operator[@id='"+ operatorRef.getAttributeValue("id") +"']");
+                                    operator = (Element)path.selectSingleNode(project);
+                                } catch (JaxenException e2) {
+                                    e2.printStackTrace();
+                                }
+
+                                if (operator !=null){
+                                    System.out.println(operator.getChildText("name"));
+
+                                    //check every lifeline
+                                    for (Iterator<Element> it = lifelines.getChildren("lifeline").iterator(); it.hasNext();) {
+                                        Element lifeline = it.next();
+                                        System.out.println("Life line id "+ lifeline.getAttributeValue("id"));
+
+                                        //get the object (can be a parametr. literal, or object)
+                                        Element objRef = lifeline.getChild("object");
+                                        Element attrRef = lifeline.getChild("attribute");
+                                        
+                                        //get object class
+                                        Element objClass = null;
+                                        try {
+                                            XPath path = new JDOMXPath("elements/classes/class[@id='"+objRef.getAttributeValue("class")+"']");
+                                            objClass = (Element)path.selectSingleNode(project);
+                                        } catch (JaxenException e2) {
+                                            e2.printStackTrace();
+                                        }
+                                        
+                                        Element attribute = null;
+                                        try {
+                                            XPath path = new JDOMXPath("elements/classes/class[@id='"+attrRef .getAttributeValue("class")+"']/attributes/attribute[@id='"+ attrRef.getAttributeValue("id") +"']");
+                                            attribute = (Element)path.selectSingleNode(project);
+                                        } catch (JaxenException e2) {
+                                            e2.printStackTrace();
+                                        }
+
+                                        yAxisName = attribute.getChildText("name");
+
+                                        //if (objClass!=null)
+                                        Element object = null;
+
+                                        //check what is this object (parameterof an action, object, literal)
+                                        if (objRef.getAttributeValue("element").equals("parameter")){
+                                            //get parameter in the action
+
+                                            try {
+                                                XPath path = new JDOMXPath("parameters/parameter[@id='"+objRef.getAttributeValue("id")+"']");
+                                                object = (Element)path.selectSingleNode(operator);
+                                            } catch (JaxenException e2) {
+                                                e2.printStackTrace();
+                                            }
+                                            String parameterStr = object.getChildText("name");
+
+                                            lifelineName = parameterStr + ":" + objClass.getChildText("name");
+                                        }
+                                        //
+
+
+                                        //Boolean attribute
+                                        if (attribute.getChildText("type").equals("1")){
+                                            lifelineName += " - " + attribute.getChildText("name");
+
+                                            Element timeIntervals = lifeline.getChild("timeIntervals");
+
+
+                                            XYSeriesCollection dataset = new XYSeriesCollection();
+                                            XYSeries series = new XYSeries("Boolean");
+                                            int stepIndex = 0;
+                                            for (Iterator<Element> it1 = timeIntervals.getChildren().iterator(); it1.hasNext();) {
+                                                Element timeInterval = it1.next();
+                                                boolean insertPoint = true;
+
+                                                Element durationConstratint = timeInterval.getChild("durationConstratint");
+                                                Element lowerbound = durationConstratint.getChild("lowerbound");
+                                                Element upperbound = durationConstratint.getChild("upperbound");
+                                                Element value = timeInterval.getChild("value");
+
+                                                //Add for both lower and upper bound
+
+                                                //lower bound
+                                                float lowerTimePoint = 0;
+                                                try {
+                                                     lowerTimePoint = Float.parseFloat(lowerbound.getAttributeValue("value"));
+                                                } catch (Exception e) {
+                                                    insertPoint = false;
+                                                }
+                                                System.out.println("    > point     x= "+ Float.toString(lowerTimePoint)+ " ,  y= "+ lowerbound.getAttributeValue("value"));
+                                                if (insertPoint){
+                                                    series.add(lowerTimePoint, (value.getText().equals("false") ?0 :1));
+                                                }
+
+                                                //upper bound
+                                                float upperTimePoint = 0;
+                                                try {
+                                                     upperTimePoint = Float.parseFloat(upperbound.getAttributeValue("value"));
+                                                } catch (Exception e) {
+                                                    insertPoint = false;
+                                                }
+                                                System.out.println("    > point     x= "+ Float.toString(upperTimePoint)+ " ,  y= "+ lowerbound.getAttributeValue("value"));
+                                                if (insertPoint){
+                                                    series.add(upperTimePoint, (value.getText().equals("false") ?0 :1));
+                                                }
+                                                
+                                            }
+                                            dataset.addSeries(series);
+
+                                            JFreeChart chart = ChartFactory.createXYStepChart(lifelineName, "time", "value", dataset, PlotOrientation.VERTICAL, false, true, false);
+                                            chart.setBackgroundPaint(Color.WHITE);
+
+                                            XYPlot plot = (XYPlot)chart.getPlot();
+                                            plot.setBackgroundPaint(Color.WHITE);
+
+ 
+                                            NumberAxis domainAxis = new NumberAxis("Time");
+                                            domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+                                            domainAxis.setAutoRangeIncludesZero(false);
+                                            domainAxis.setUpperBound(30.0);
+                                            plot.setDomainAxis(domainAxis);
+                                            
+                                            String[] values = {"false", "true"};
+                                            //SymbolAxis rangeAxis = new SymbolAxis("Values", values);
+                                            SymbolAxis rangeAxis = new SymbolAxis(yAxisName, values);
+                                            plot.setRangeAxis(rangeAxis);
+
+                                            ChartPanel chartPanel = new ChartPanel(chart);
+                                            chartPanel.setPreferredSize(new Dimension(chartPanel.getSize().width, 175));
+                                            
+                                            panel.add(chartPanel, BorderLayout.CENTER);
+
+
+
+
+
+
+
+
+
+
+//                                            XYSeries series = new XYSeries(lifelineName);
+//                                            int stepIndex = 0;
+//
+//                                            for (Iterator<Element> it1 = timeIntervals.getChildren().iterator(); it1.hasNext();) {
+//                                                Element timeInterval = it1.next();
+//
+//                                                Element durationConstratint = timeInterval.getChild("durationConstratint");
+//                                                Element lowerbound = durationConstratint.getChild("lowerbound");
+//                                                Element upperbound = durationConstratint.getChild("upperbound");
+//                                                Element value = timeInterval.getChild("value");
+//
+//
+//                                                series.add(stepIndex++, (value.getText().equals("false") ?0 :1));
+//
+//
+//                                            }
+//
+//                                            XYSeriesCollection dataset = new XYSeriesCollection(series);
+//                                            JFreeChart chart = ChartFactory.createXYLineChart(lifelineName, "Steps",  "Values", dataset, PlotOrientation.VERTICAL, false, true, false);
+//                                            //JFreeChart chart = ChartFactory.createXYStepChart("test", "Values", "Steps", dataset, PlotOrientation.VERTICAL, false, true, false);
+//                                            //JFreeChart chart = ChartFactory.createAreaChart("test", "x", "y", dataset, PlotOrientation.VERTICAL, false, true, false);
+//                                            ChartPanel chartPanel = new ChartPanel(chart);
+//                                            panel.add(chartPanel, BorderLayout.CENTER);
+
+                                            //build graph true/false
+
+
+
+                                        }
+
+
+
+                                    }
+                                }
+
+
+                            }
+                            //if this is a possible sequence of action being modeled to a condition
+                            else if (context.equals("general")){
+
+                            }
+
+
+                        }
+                        else if (dtype.equals("state")){
+
+
+
+
+                        }
+                        */
+
+
+                        /*
+                        panel = new JRootPane();
+                        panel.setLayout(new BorderLayout());
+                        panel.add(new Label("TIMING DIAGRAM"), BorderLayout.NORTH);
+                        String chartTitle = "Timing diagram";
+
+                        XYSeries series = new XYSeries("Average Size");
+                        series.add(20.0, 10.0);
+                        series.add(40.0, 20.0);
+                        series.add(70.0, 50.0);
+                        XYSeriesCollection dataset = new XYSeriesCollection(series);
+                        JFreeChart chart = ChartFactory.createXYLineChart(chartTitle, "Steps",  "Values", dataset, PlotOrientation.VERTICAL, false, true, false);
+                        //JFreeChart chart = ChartFactory.createXYStepChart("test", "Values", "Steps", dataset, PlotOrientation.VERTICAL, false, true, false);
+                        //JFreeChart chart = ChartFactory.createAreaChart("test", "x", "y", dataset, PlotOrientation.VERTICAL, false, true, false);
+                        ChartPanel chartPanel = new ChartPanel(chart);
+                        panel.add(chartPanel, BorderLayout.CENTER);
+                         */
+
+
+                    }
+
+
+
+
 					// Prepare Tab Icon
 					icon = new ImageIcon("resources/images/"+diagram.getName()+".png");
-
-					
-					
 					//Set Tab properties
 					openTab.setAttribute("language", language);
 					openTab.setAttribute("diagramID", id);
@@ -332,6 +608,7 @@ public class ItTabbedPane extends JTabbedPane implements
 					GraphLayoutCache view = new GraphLayoutCache(model, new ItCellViewFactory());
 					ItGraph diagramGraph = new ItGraph(view, toolBar, propertiesPane, project, diagram, commonData, language);
 					toolBar.setGraph(diagramGraph);
+                    diagramGraph.buildDiagram();diagramGraph.setBackground(Color.WHITE);
 					diagramGraph.setVisible(false);
 					diagramGraph.setInfoPane(itSIMPLE.ItSIMPLE.getInstance().getInfoEditorPane());
 					JScrollPane graphScrollPane = new JScrollPane(diagramGraph);

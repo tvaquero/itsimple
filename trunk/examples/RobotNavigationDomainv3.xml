@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.30</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -28797,12 +28797,38 @@ r.at = from and to.southeastlink = from and to.clear = true and to.type = terrai
 						</objectDiagrams>
 						<constraints />
 						<metrics>
-							<metric id="1">
+							<qualityMetric id="1">
 								<name>distance</name>
+								<description />
 								<enabled>true</enabled>
-								<type>minimize</type>
-								<function>totalDistance</function>
-							</metric>
+								<type>expression</type>
+								<intention>minimize</intention>
+								<weight>1</weight>
+								<variable>
+									<chosenVariable type="">
+										<object class="" id="">
+											<attribute type="" class="" id="" />
+										</object>
+									</chosenVariable>
+								</variable>
+								<expression>
+									<rule>totalDistance</rule>
+								</expression>
+								<actionCounter>
+									<chosenOperator class="" id="">
+										<parameters />
+									</chosenOperator>
+								</actionCounter>
+								<preferenceFunction>
+									<function id="1">
+										<domain>
+											<lowerbound value="-inf" included="true" />
+											<upperbound value="+inf" included="true" />
+										</domain>
+										<rule>1</rule>
+									</function>
+								</preferenceFunction>
+							</qualityMetric>
 						</metrics>
 					</problem>
 					<problem id="2">
@@ -29122,8 +29148,10 @@ r.at = from and to.southeastlink = from and to.clear = true and to.type = terrai
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

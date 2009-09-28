@@ -1,9 +1,9 @@
-﻿itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
+itSIMPLE: Integrated Tools Software Interface for Modeling PLanning Environments
  
 Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
  
 
-This file is part of itSIMPLE 2.1.10.
+This file is part of itSIMPLE.
 
 itSIMPLE is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ Authors:	Tiago S. Vaquero,
 			Jose Reinaldo Silva,
 		 	Victor Romero,
 		 	Fernando Sette,
+                        Matheus Haddad,
 		 	Flavio Tonidandel.
 
 
@@ -51,6 +52,7 @@ planners that itSIMPLE can communicate with. The following list show the name of
 files treated by itSIMPLE2.1:
 - metric-ff.exe  http://members.deri.at/~joergh/ff.html
 - metric-ff      http://members.deri.at/~joergh/ff.html
+- ffv-2.3        http://members.deri.at/~joergh/ff.html
 - sgplan522      http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
 - mips-xxl       (2006 version) http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
 - satplan        (2006 version) http://www.cs.rochester.edu/u/kautz/satplan/index.htm
@@ -60,8 +62,9 @@ files treated by itSIMPLE2.1:
 - sgplan6        (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
 - lpg            (version 1.2) http://zeus.ing.unibs.it/lpg/
 - hspsp          (2008 version from IPC-6)http://ipc.informatik.uni-freiburg.de/Planners/
+- Plan-A         (2008 version from IPC-6)http://ipc.informatik.uni-freiburg.de/Planners/
 
-Some of them it is necessary to compile the source.
+It is necessary to compile the source for some of them.
 
 For more information check our website dlab.poli.usp.br.
 

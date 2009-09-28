@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -149,7 +149,7 @@ public class XMLUtilities {
 	
 	
 	/**
-	 * Returns all class ascendents data untill the first class in the hierarchy
+	 * Returns all class ascendents data until the first class in the hierarchy
 	 * 
 	 * @param childClass the class data from which we want the ascendents
 	 * @return a List with all the class ascendents
@@ -179,7 +179,7 @@ public class XMLUtilities {
 	}
 	
 	/**
-	 * Returns all class descendents data untill the first class in the hierarchy
+	 * Returns all class descendents data until the first class in the hierarchy
 	 * 
 	 * @param parentClass the class data from which we want the descendents
 	 * @return a List with all the class descendents

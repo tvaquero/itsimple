@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.22</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -2590,8 +2590,10 @@
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

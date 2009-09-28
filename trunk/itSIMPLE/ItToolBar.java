@@ -574,8 +574,8 @@ public class ItToolBar extends JToolBar {
 	 */
 	private JButton getCloseEditButton() {
 		if (closeEditButton == null) {
-			closeEditButton = new JButton("Close");
-			closeEditButton.setToolTipText("Close editing");
+			closeEditButton = new JButton("Close HERE!");
+			closeEditButton.setToolTipText("Close editing and back to simulation.");
 			closeEditButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// get the edited diagram

@@ -4,7 +4,7 @@
 	<description>This project represents the classical Blocks Wold domain.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.22</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -49,7 +49,7 @@
 						<name>pickUp</name>
 						<description />
 						<timeConstraints timed="false">
-							<duration />
+							<duration>10</duration>
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
@@ -1555,8 +1555,10 @@ x.clear = false</condition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

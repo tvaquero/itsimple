@@ -4,7 +4,7 @@
 	<description>This domain was modeled under the ICKEPS 2007 context</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.22</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1614,6 +1614,7 @@ node = listnode</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Plannning Domain 2</name>
@@ -2554,6 +2555,7 @@ node = listnode</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 			<domain id="3">
 				<name>Planning Domain 3</name>
@@ -3707,6 +3709,7 @@ node = listnode</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 			<domain id="4">
 				<name>Planning Domain4</name>
@@ -5082,8 +5085,10 @@ node = listnode</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

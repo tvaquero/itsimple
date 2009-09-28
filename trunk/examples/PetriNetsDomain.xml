@@ -4,7 +4,7 @@
 	<description>A basic Petri Net domain</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>2.0.22</version>
+		<version>3.0.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -280,7 +280,7 @@
 					<class id="21">
 						<graphics>
 							<icon />
-							<position x="50" y="107" />
+							<position x="80" y="107" />
 							<size width="164" height="132" />
 							<color />
 						</graphics>
@@ -288,7 +288,7 @@
 					<class id="22">
 						<graphics>
 							<icon />
-							<position x="367" y="114" />
+							<position x="471" y="118" />
 							<size width="185" height="117" />
 							<color />
 						</graphics>
@@ -334,7 +334,7 @@
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="900" y="15" />
+									<position x="788" y="14" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -1088,8 +1088,10 @@
 						<metrics />
 					</problem>
 				</planningProblems>
+				<metrics />
 			</domain>
 		</planningDomains>
+		<timingDiagrams />
 	</diagrams>
 </project>
 

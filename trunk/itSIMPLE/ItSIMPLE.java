@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -27,6 +27,13 @@
 
 package itSIMPLE;
 
+import edu.stanford.ejalbert.BrowserLauncher;
+import edu.stanford.ejalbert.exception.BrowserLaunchingInitializingException;
+import edu.stanford.ejalbert.exception.UnsupportedOperatingSystemException;
+import update.VersionUpdater;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import virtualprototyping.VirtualRealityRobotNavigationDomain;
 import languages.xml.XMLUtilities;
 import itGraph.ItCellViewFactory;
 import itGraph.ItGraph;
@@ -87,6 +94,7 @@ import util.filefilter.PDDLFileFilter;
 import util.filefilter.XMLFileFilter;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
@@ -102,17 +110,25 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 //import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JTextArea;
+import javax.swing.SpringLayout;
 import planning.PlanSimulator;
 import languages.pddl.ToXPDDL;
 import languages.pddl.XPDDLToPDDL;
 import languages.petrinets.toPNML;
 import planning.ExecPlanner;
+import planning.PlanAnalyzer;
+import planning.PlannerSuggestion;
 import sourceEditor.ItHilightedDocument;
+import virtualprototyping.VirtualPrototypingBlender;
 
 
 
@@ -153,10 +169,10 @@ public class ItSIMPLE extends JFrame {
 	private JMenuItem motifMenuItem = null;
 	private JMenuItem defaultMenuItem = null;
 	private JMenuItem plannersSettingsMenuItem = null;
-        //Help
-        private JMenu helpMenu = null;
-        private JMenuItem aboutMenuItem = null;
-        //Diagrams
+    //Help
+    private JMenu helpMenu = null;
+    private JMenuItem aboutMenuItem = null;
+    //Diagrams
 	private JMenu newDiagramMenu = null;
 	private JMenu newProblemMenu = null;
 	private JMenu newDomainMenu = null;
@@ -245,6 +261,7 @@ public class ItSIMPLE extends JFrame {
 	private DefaultTreeModel selectedVariablesPlanTreeModel = null;
 	private JComboBox plannersComboBox = null;
 	private JButton solveProblemButton = null;
+        private JButton runAllPlannersButton = null;
 	private JButton setPlannerButton = null;	
 	private ItFramePanel planListFramePanel = null;
 	private JList planList = null;
@@ -258,6 +275,7 @@ public class ItSIMPLE extends JFrame {
 	private JLabel planSimStatusBar = null;
 	private ItFramePanel planInfoFramePanel = null;
 	private JEditorPane planInfoEditorPane = null;
+	private JTextArea outputEditorPane = null;
 	private JPanel chartsPanel = null;
 	private Element xmlPlan = null;
 	private Thread currentThread = null;
@@ -280,10 +298,20 @@ public class ItSIMPLE extends JFrame {
 	private JPanel informationPanel = null;
 	private JEditorPane infoEditorPane = null;
 	private ItFramePanel infoPanel = null;
-        private JMenuBar planNavigationMenuBar = null;
-        JMenu replanMenu = null;
-        private JMenuItem replanMenuItem = null;
-	
+    private JMenuBar planNavigationMenuBar = null;
+    JMenu replanMenu = null;
+    private JMenuItem replanMenuItem = null;
+    
+    //Planning process
+    Element plans = null;
+    Element solveResult = null;
+    Element theSingleChoosenPlanner = null;
+
+    //Planner List
+    private ArrayList<Object> plannersList = new ArrayList<Object>();
+
+    //Planner Suggestion
+    PlannerSuggestion plannerSuggestion = new PlannerSuggestion();
 
 	
 	// ACTIONS	
@@ -642,6 +670,15 @@ public class ItSIMPLE extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			createNewDiagramAction("activityDiagram");
+		}
+	};
+
+    private Action newTimingDiagramAction = new AbstractAction("Timing Diagram",new ImageIcon("resources/images/timingDiagram.png")){
+		/**
+		 *
+		 */
+		public void actionPerformed(ActionEvent e) {
+			createNewDiagramAction("timingDiagram");
 		}
 	};
 	
@@ -1200,6 +1237,7 @@ public class ItSIMPLE extends JFrame {
 				
 				petriDiagramGraph.setProject(selectedPetriNetProject);
 				petriDiagramGraph.setDiagram(ptNET);
+                petriDiagramGraph.setBackground(Color.WHITE);
 				
 				petriDiagramGraph.setVisible(false);
 				petriDiagramGraph.buildDiagram();
@@ -1259,14 +1297,13 @@ public class ItSIMPLE extends JFrame {
                                         // fill out xml data with values to draw the charts and draw it.
 					new Thread(){
 						public void run() {
-							
-                                                        
-                                                        //fill out the analysis xml data
-                                                        PlanSimulator.buildPlanAnalysisDataset(analysis, xmlPlan, problem);                                                      
+							                     
+                            //fill out the analysis xml data
+                            PlanSimulator.buildPlanAnalysisDataset(analysis, xmlPlan, problem);
 
-                                                        //Prepare HTML version of the analysis (incluiding charts).
-                                                        String html = PlanSimulator.createHTMLPlanAnalysis(analysis, xmlPlan, problem);
-                                                        System.out.println(html);
+                            //Prepare HTML version of the analysis (incluiding charts).
+                            //String html = PlanSimulator.createHTMLPlanAnalysis(analysis, xmlPlan, problem);
+                            //System.out.println(html);
                                                         
 							//draw the charts in the iterface 
 							List<ChartPanel> chartPanels = PlanSimulator.drawCharts(analysis, problem);
@@ -1313,6 +1350,12 @@ public class ItSIMPLE extends JFrame {
 					e1.printStackTrace();
 				}
 				setPlanList(xmlPlan);
+                //setPlanInfoPanelText(generateHTMLReport(xmlPlan));
+                //setPlanInfoPanelText(PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan));
+                showHTMLReport(xmlPlan);
+                appendOutputPanelText(">> Plan importerd successfully. Chech the generated Results. \n");
+
+                                //save lst open folder
 				if (lastOpenFolderElement != null){
 					//Holds the last open folder
 					if (!lastOpenFolderElement.getText().equals(file.getParent())){
@@ -1331,7 +1374,13 @@ public class ItSIMPLE extends JFrame {
 		private static final long serialVersionUID = -2250355844729990390L;
 
 		public void actionPerformed(ActionEvent e){
-			JFileChooser fc = new JFileChooser();
+
+			String lastOpenFolder = "";
+			Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+			if (lastOpenFolderElement != null){
+				lastOpenFolder = lastOpenFolderElement.getText();
+			}
+			JFileChooser fc = new JFileChooser(lastOpenFolder);
 			fc.setDialogTitle("Export Plan");
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);					
 			fc.setFileFilter(new XMLFileFilter());
@@ -1345,8 +1394,20 @@ public class ItSIMPLE extends JFrame {
 					filePath = file.getPath();
 				else
 					filePath = file.getPath()+".xml";
-				
-				XMLUtilities.writeToFile(filePath, new Document((Element)xmlPlan.clone()));
+
+                //save the plan file
+                XMLUtilities.writeToFile(filePath, new Document((Element)xmlPlan.clone()));
+                
+                //save last open folder
+                if (lastOpenFolderElement != null){
+					//Holds the last open folder
+					if (!lastOpenFolderElement.getText().equals(file.getParent())){
+						lastOpenFolderElement.setText(file.getParent());
+						XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+					}
+				}
+
+
 			}
 		}
 	};
@@ -1452,6 +1513,141 @@ public class ItSIMPLE extends JFrame {
 			//TODO
 		}
 	};
+
+
+
+
+
+    private Action evaluatePlan = new AbstractAction("Evaluate Plan", new ImageIcon("resources/images/edit.png")){
+		/**
+		 *
+		 */
+
+		public void actionPerformed(ActionEvent e) {
+
+                // the thread is created so the status bar can be refreshed
+				new Thread(){
+					public void run() {
+						ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+						if(selectedNode != null && selectedNode.getLevel() == 3){
+							Element problem = selectedNode.getData();
+                            
+                            if (xmlPlan != null){
+                                XMLUtilities.printXML(xmlPlan);
+                                appendOutputPanelText(">> Plan evaluation process requested. \n");
+                                Element domain = problem.getParentElement().getParentElement();
+                                Element metrics = PlanSimulator.createMetricsNode(problem, domain);
+                                if(metrics.getChildren().size() > 0){
+                                    PlanSimulator.createMetricDatasets(metrics, xmlPlan, problem, domain, null);
+                                }
+                                XMLUtilities.printXML(metrics);
+
+                                appendOutputPanelText("         Creating report (html format)... \n");
+
+                                String html = PlanAnalyzer.generatePlanReport(domain, problem, xmlPlan, metrics);
+
+
+
+
+                                    //EXEPERIMENTS WITH GOOGLE CHARTS API
+                                    /*
+                                    String html = "<html>\n";
+                                    html += "<head>\n";
+                                    html += "    <script type=\"text/javascript\" src=\"http://www.google.com/jsapi\"></script>\n";
+
+                                    html += "  </head> \n";
+                                    html += " \n";
+                                    html += "  <body> \n";
+                                    html += "    <div id=\"chart_div\"></div> \n";
+
+                                    html += "    <script type=\"text/javascript\">\n";
+                                    html += "      google.load(\"visualization\", \"1\", {packages:[\"linechart\"]});\n";
+                                    html += "      google.setOnLoadCallback(drawChart);\n";
+                                    html += "      function drawChart() {\n";
+                                    html += "        var data = new google.visualization.DataTable();\n";
+                                    html += "        data.addColumn('string', 'Year');\n";
+                                    html += "        data.addColumn('number', 'Sales');\n";
+                                    html += "        data.addColumn('number', 'Expenses');\n";
+                                    html += "        data.addRows(4);\n";
+                                    html += "        data.setValue(0, 0, '2004');\n";
+                                    html += "        data.setValue(0, 1, 1000);\n";
+                                    html += "        data.setValue(0, 2, 400);\n";
+                                    html += "        data.setValue(1, 0, '2005');\n";
+                                    html += "        data.setValue(1, 1, 1170);\n";
+                                    html += "        data.setValue(1, 2, 460);\n";
+                                    html += "        data.setValue(2, 0, '2006');\n";
+                                    html += "        data.setValue(2, 1, 860);\n";
+                                    html += "        data.setValue(2, 2, 580); \n";
+                                    html += "        data.setValue(3, 0, '2007'); \n";
+                                    html += "        data.setValue(3, 1, 1030); \n";
+                                    html += "        data.setValue(3, 2, 540); \n";
+                                    html += " \n";
+                                    html += "        var chart = new google.visualization.LineChart(document.getElementById('chart_div')); \n";
+                                    html += "        chart.draw(data, {width: 700, height: 400, legend: 'bottom', title: 'Company Performance'}); \n";
+                                    html += "      } \n";
+                                    html += "    </script> \n";
+
+                                    html += "    <img border='0' alt='Google Chart' src='http://chart.apis.google.com/chart?chxt=x,y&chtt=Test&cht=lc&chxl=&chs=300x200&chd=s:ADjJ2A8&chf=bg,s,' /> \n";
+                                    html += "  </body> \n";
+                                    html += "</html> \n";
+                                    */
+
+
+                                    //EXPREIMENTS WITH GOOGLE CHART API IMAGE - works in basick panel
+                                    //info += "<img border='0' alt='Google Chart' src='http://chart.apis.google.com/chart?chxt=x,y&chtt=Test&cht=lc&chxl=&chs=300x200&chd=s:ADjJ2A8&chf=bg,s,' />";
+
+
+                                System.out.println(html);
+
+                                appendOutputPanelText(">> The Plan Report was generated! Lauching browser. \n");
+
+
+                                //TEST
+                                //Save file
+                                String path = "resources/report/PlanReport.html";
+                                FileWriter file = null;
+                                try {
+                                    file = new FileWriter(path);
+                                    file.write(html);
+                                    file.close();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                //Opens html with defaut browser
+                                File report = new File(path);
+                                path = report.getAbsolutePath();
+                                //System.out.println(path);
+                                try {
+                                    BrowserLauncher launcher = new BrowserLauncher();
+                                    launcher.openURLinBrowser("file://"+path);
+
+                                } catch (BrowserLaunchingInitializingException ex) {
+                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                } catch (UnsupportedOperatingSystemException ex) {
+                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                }
+
+
+
+                            }
+
+                            //XMLUtilities.printXML(xmlPlan);
+						}
+					}
+				}.start();
+
+
+
+		}
+	};
+
+
+
+
+
+
 	
 	public void openProjectFromPath(String path){
 		
@@ -1624,6 +1820,7 @@ public class ItSIMPLE extends JFrame {
 	private void createNewDiagramAction(String diagramType){
 		ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
 		Element diagram = (Element)commonData.getChild("definedNodes").getChild("diagrams").getChild(diagramType).clone();
+                
 		if (selectedNode.getData().getName().equals("problem")){
 			String id = String.valueOf(XMLUtilities.getId(selectedNode.getData().getChild("objectDiagrams")));
 			diagram.setAttribute("id", id);
@@ -1881,7 +2078,8 @@ public class ItSIMPLE extends JFrame {
 					try{
 						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 						SwingUtilities.updateComponentTreeUI(instance);
-						
+                        itSettings.getChild("generalSettings").getChild("graphics").getChild("appearence").setText("Windows");
+                        XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
 					}
 					catch(Exception e1) {
 				          e1.printStackTrace();
@@ -1907,6 +2105,8 @@ public class ItSIMPLE extends JFrame {
  						UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 						SwingUtilities.updateComponentTreeUI(instance);
 						instance.pack();
+                        itSettings.getChild("generalSettings").getChild("graphics").getChild("appearence").setText("Metal");
+                        XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
 					}
 					catch(Exception e1) {
 				          e1.printStackTrace();
@@ -1931,6 +2131,8 @@ public class ItSIMPLE extends JFrame {
 					try{
 						UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 						SwingUtilities.updateComponentTreeUI(instance);
+                        itSettings.getChild("generalSettings").getChild("graphics").getChild("appearence").setText("Motif");
+                        XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
 					}
 					catch(Exception e1) {
 				          e1.printStackTrace();
@@ -1955,6 +2157,8 @@ public class ItSIMPLE extends JFrame {
 					try{
 						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 						SwingUtilities.updateComponentTreeUI(instance);
+                        itSettings.getChild("generalSettings").getChild("graphics").getChild("appearence").setText("Default");
+                        XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
 					}
 					catch(Exception e1) {
 				          e1.printStackTrace();
@@ -2267,7 +2471,8 @@ public class ItSIMPLE extends JFrame {
 			newDiagramMenu.add(newUseCaseDiagramAction);
 			newDiagramMenu.add(newClassDiagramAction);
 			newDiagramMenu.add(newStateMachineDiagramAction);
-			newDiagramMenu.add(newActivityDiagramAction);
+			//newDiagramMenu.add(newActivityDiagramAction);
+			newDiagramMenu.add(newTimingDiagramAction);
 			newDiagramMenu.add(newDomainAction);				
 		}
 		return newDiagramMenu;
@@ -2671,25 +2876,48 @@ public class ItSIMPLE extends JFrame {
 					if(selectedNode != null && selectedNode.getLevel() == 3){
 						
 						planAnalysisFramePanel.setTitle(":: Plan Analysis - Problem: "+ selectedNode.getUserObject());
-						solveProblemButton.setEnabled(true);
+
+                                                solveProblemButton.setEnabled(true);
 						setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(true);
 						importPlanButton.setEnabled(true);
 						planListModel.clear();
 						xmlPlan = null;
+                                                
+                                                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                                                Element problem = selectedNode.getData();
+                                                Element domainProject = problem.getDocument().getRootElement();
+                                                Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
 						
-						//fill the combo box with the existing available planners		
+						//fill the combo box with the existing available planners
 						plannersComboBox.removeAllItems();
-						List<?> planners = itPlanners.getChild("planners").getChildren("planner");
-						for (Iterator<?> iter = planners.iterator(); iter.hasNext();) {
-							Element planner = (Element) iter.next();
-                                                        //String plannerFile = planner.getChild("settings").getChildText("filePath");
-                                                        //System.out.println(plannerFile);
-                                                        //File f = new File(plannerFile);
-                                                        //if (f.exists()) {
-                                                            plannersComboBox.addItem(planner.getChildText("name") + " - Version: " + planner.getChildText("version"));
-                                                        //}
-						}
+                                                plannersList.clear();                                                
+                                                plannerSuggestion.initialPlannerSelection(xpddlDomain, itPlanners);
+
+                                                //List<?> planners = itPlanners.getChild("planners").getChildren("planner");     
+
+                                                plannersComboBox.addItem("-- Supported Planners --");
+                                                plannersList.add(null);
+
+                                                // Supported Planners
+                                                fillPlannersComboBox(plannerSuggestion.getSuggestedPlanners());
+                                                plannersComboBox.addItem("All Supported Planners");
+                                                plannersList.add("allSupportedPlanners");
+
+                                                plannersComboBox.addItem(null);
+                                                plannersList.add(null);
+
+                                                plannersComboBox.addItem("-- Discarded Planners --");
+                                                plannersList.add(null);
+                                                
+                                                // Discarded Planners
+                                                fillPlannersComboBox(plannerSuggestion.getDiscardedPlanners());
+
+                                                plannersComboBox.addItem(null);
+                                                plannersList.add(null);
+
+                                                plannersComboBox.addItem("All Planners");
+                                                plannersList.add("allPlanners");
 						
 						CheckBoxNode variablesPlanTreeRoot = (CheckBoxNode)variablesPlanTreeModel.getRoot();
 						
@@ -2701,11 +2929,8 @@ public class ItSIMPLE extends JFrame {
 							variablesPlanTreeModel.reload();
 						}
 						
-						// build the variables tree
-						Element problem = selectedNode.getData();
 											//planningProblems			domain
-						List<?> objects = problem.getParentElement().getParentElement()
-							.getChild("elements").getChild("objects").getChildren("object");
+						List<?> objects = problem.getParentElement().getParentElement().getChild("elements").getChild("objects").getChildren("object");
 						for (Iterator<?> iter = objects.iterator(); iter.hasNext();) {
 							Element object = (Element) iter.next();							
 							
@@ -2789,13 +3014,22 @@ public class ItSIMPLE extends JFrame {
 					else{
 						//clear the depending areas
 						planAnalysisFramePanel.setTitle(":: Plan Analysis");
-						solveProblemButton.setEnabled(false);
-						setPlannerButton.setEnabled(false);
+						//setPlannerButton.setEnabled(false);
+                        setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(false);
 						importPlanButton.setEnabled(false);
 						planListModel.clear();
 						xmlPlan = null;
+
+                                                //fill the combo box with all planners
 						plannersComboBox.removeAllItems();
+                        plannersList.clear();
+
+                        List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+                        fillPlannersComboBox(planners);
+
+                        plannersComboBox.addItem("All Planners");
+                        plannersList.add("allPlanners");
 						
 						//clear the variables tree, whether necessary
 						CheckBoxNode variablesPlanTreeRoot = (CheckBoxNode)variablesPlanTreeModel.getRoot();
@@ -2881,109 +3115,154 @@ public class ItSIMPLE extends JFrame {
 			planTreeTabbedPane.addTab("Selected", new JScrollPane(selectedVariablesPlanTree));
 			mainTreePanel.add(planTreeTabbedPane, BorderLayout.CENTER);
 			
-			// tool panel
-			JPanel toolsPanel = new JPanel();
-			// combobox with planners
-			plannersComboBox = new JComboBox();
-			
-			// add to the panel
-			toolsPanel.add(plannersComboBox);
-			
-			// solve problem button
-			solveProblemButton = new JButton("Solve");
-			solveProblemButton.setEnabled(false);
-			solveProblemButton.setActionCommand("solve");
-			solveProblemButton.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e) {
-					
-					if(solveProblemButton.getActionCommand().equals("solve")){						
-						ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-						
-						if(selectedNode != null){
-							Element problem = selectedNode.getData();							
-							if(problem != null){
-								// clear plan list and plan info pane					
-								setPlanList(null);
-								setPlanInfoPanelText("");
-								
-								String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
-								
-								// generate PDDL domain
-								Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(problem.getDocument().getRootElement(),
-										pddlVersion, null);
-								String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
-								
-								// generate PDDL problem
-								Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
-								String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
-								
-								// save in auxiliary files
-								File domainFile = new File("resources/planners/domain.pddl");
-								File problemFile = new File("resources/planners/problem.pddl");
 
-								try {
-					                FileWriter domainWriter = new FileWriter(domainFile);
-					                domainWriter.write(pddlDomain);
-					                domainWriter.close();
-									
-					                FileWriter problemWriter = new FileWriter(problemFile);
-									problemWriter.write(pddlProblem);
-									problemWriter.close();
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								}
-								
-								// execute planner					
-								
-								List<?> planners = itPlanners.getChild("planners").getChildren("planner");
-								Element chosenPlanner = (Element)planners.get(plannersComboBox.getSelectedIndex());
+            // tool panel
+            JPanel toolsPanel = new JPanel(new BorderLayout());
 
-								exe = new ExecPlanner(chosenPlanner, 
-										domainFile.getPath(), problemFile.getPath(), false);
-								
-								exe.setXMLDomain(problem.getParentElement().getParentElement());
-								exe.setXMLProblem(problem);								
+            JPanel topPanel = new JPanel();
+            JPanel bottonPanel = new JPanel();
 
-								currentThread = new Thread(exe);						
-								currentThread.start();							
-								
-								// changes the button action command
-								solveProblemButton.setActionCommand("stop");
-								solveProblemButton.setText("Stop");
-							}
-						}
-					}
-					else{
-						if(currentThread.isAlive()){
-							exe.destroyProcess();
-							try {
-								// waits for the thread to return
-								currentThread.join(2000);// 2 seconds time-out
-							} catch (InterruptedException e1) {								
-								e1.printStackTrace();
-							}
-							if(currentThread.isAlive()){
-								currentThread.interrupt();
-							}
-							
-							planSimStatusBar.setText("Status: Planning process stopped.");
-							
-							// changes the button action command
-							solveProblemButton.setActionCommand("solve");
-							solveProblemButton.setText("Solve");
-						}
-					}					
-				}
-				
-			});
-			// add to the panel
-			toolsPanel.add(solveProblemButton);
+            // combobox with planners
+            plannersComboBox = new JComboBox();
+
+            // add to the panel
+            //toolsPanel.add(plannersComboBox);
+            topPanel.add(plannersComboBox, BorderLayout.CENTER);
 			
-			// set planner button
-			//setPlannerButton = new JButton("Settings");
-                        setPlannerButton = new JButton(new ImageIcon("resources/images/edit.png"));
-			setPlannerButton.setEnabled(false);
-                        setPlannerButton.setToolTipText("Set planner parameters");
+            // solve problem button
+            solveProblemButton = new JButton("Solve");
+            //solveProblemButton.setEnabled(false);
+            solveProblemButton.setActionCommand("solve");
+            solveProblemButton.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                            if(solveProblemButton.getActionCommand().equals("solve")){
+                                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+                                    if(selectedNode != null){
+
+                                        //Verify selectedNode and solve problems
+                                        solve(selectedNode);
+                                        
+                                        /*
+                                        Element problem = selectedNode.getData();
+                                        if(problem != null){
+                                                // clear plan list and plan info pane
+                                                setPlanList(null);
+                                                setPlanInfoPanelText("");
+
+                                                Element domainProject = problem.getDocument().getRootElement();
+                                                Element domain = problem.getParentElement().getParentElement();
+
+                                                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+
+                                                // generate PDDL domain
+                                                Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
+                                                //XMLUtilities.printXML(xpddlDomain);
+
+                                                // generate PDDL problem
+                                                Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
+                                                //XMLUtilities.printXML(xpddlProblem);
+
+                                                //Change domain requirements (if necessary) based on the chosen problem
+                                                ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+
+                                                String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
+                                                String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
+
+                                                // save in auxiliary files
+                                                File domainFile = new File("resources/planners/domain.pddl");
+                                                File problemFile = new File("resources/planners/problem.pddl");
+
+                                                try {
+                                                    FileWriter domainWriter = new FileWriter(domainFile);
+                                                    domainWriter.write(pddlDomain);
+                                                    domainWriter.close();
+
+                                                    FileWriter problemWriter = new FileWriter(problemFile);
+                                                    problemWriter.write(pddlProblem);
+                                                    problemWriter.close();
+                                                } catch (IOException e1) {
+                                                        e1.printStackTrace();
+                                                }
+
+                                                // execute planner
+
+                                                //List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+                                                if (plannersList.get(plannersComboBox.getSelectedIndex()).getClass()==Element.class){
+                                                    Element chosenPlanner = (Element)plannersList.get(plannersComboBox.getSelectedIndex());
+
+                                                    exe = new ExecPlanner(chosenPlanner, domainFile.getPath(), problemFile.getPath(), false);
+
+                                                    exe.setXMLDomain(problem.getParentElement().getParentElement());
+                                                    exe.setXMLProblem(problem);
+                                                    exe.setProblemName(problem.getChildText("name"));
+                                                    exe.setDomainName(domain.getChildText("name"));
+                                                    exe.setProjectName(domainProject.getChildText("name"));
+
+                                                    currentThread = new Thread(exe);
+                                                    currentThread.start();
+
+                                                    // changes the button action command
+                                                    solveProblemButton.setActionCommand("stop");
+                                                    solveProblemButton.setText("Stop");
+                                                }
+
+                                                
+                                        }*/
+
+
+                                    }
+                            }
+                            else{
+                                    if(currentThread.isAlive()){
+                                            exe.destroyProcess();
+                                            try {
+                                                    // waits for the thread to return
+                                                    currentThread.join(2000);// 2 seconds time-out
+                                            } catch (InterruptedException e1) {
+                                                    e1.printStackTrace();
+                                            }
+                                            if(currentThread.isAlive()){
+                                                    currentThread.interrupt();
+                                            }
+
+                                            planSimStatusBar.setText("Status: Planning process stopped.");
+                                            outputEditorPane.append(">> Planning process stopped.");
+
+                                            // changes the button action command
+                                            solveProblemButton.setActionCommand("solve");
+                                            solveProblemButton.setText("Solve");
+                                    }
+                            }
+                    }
+
+            });
+            // add to the panel
+            //toolsPanel.add(solveProblemButton);
+            
+            /*
+            //runAllPlannersButton = new JButton("Run All planners", new ImageIcon("resources/images/edit.png"));
+            runAllPlannersButton = new JButton("Run all planners");
+            runAllPlannersButton.setToolTipText("Run all available planners");
+            runAllPlannersButton.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+                        if(selectedNode != null){
+                            Element problem = selectedNode.getData();
+                            if(problem != null){
+                                solveProblemWithAllPlanners(problem.getDocument().getRootElement(), problem);
+                            }
+
+                        }
+                    }
+            });*/
+
+
+            // set planner button
+            //setPlannerButton = new JButton("Settings");
+            setPlannerButton = new JButton(new ImageIcon("resources/images/edit.png"));
+            setPlannerButton.setEnabled(false);
+            setPlannerButton.setToolTipText("Set planner parameters");
 			setPlannerButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -2995,16 +3274,25 @@ public class ItSIMPLE extends JFrame {
 					Element chosenPlanner = 
 						(Element)planners.get(plannersComboBox.getSelectedIndex());*/
 					
-					PlannersSettingsDialog dialog =	new PlannersSettingsDialog(
-							ItSIMPLE.this, plannersComboBox.getSelectedIndex());
+					//PlannersSettingsDialog dialog =	new PlannersSettingsDialog(
+					//		ItSIMPLE.this, plannersComboBox.getSelectedIndex());
+                    PlannersSettingsDialog dialog =	new PlannersSettingsDialog(
+							ItSIMPLE.this);
 					
 					dialog.setVisible(true);					
 				}
 				
 			});
 			
-			toolsPanel.add(setPlannerButton);;
-			
+			//toolsPanel.add(setPlannerButton);
+
+
+            topPanel.add(setPlannerButton, BorderLayout.EAST);
+            bottonPanel.add(solveProblemButton);
+            //bottonPanel.add(runAllPlannersButton);
+            toolsPanel.add(topPanel, BorderLayout.NORTH);
+            toolsPanel.add(bottonPanel, BorderLayout.SOUTH);
+	
 			// add the tools panel to the main panel
 			mainTreePanel.add(toolsPanel, BorderLayout.SOUTH);
 			
@@ -3013,6 +3301,19 @@ public class ItSIMPLE extends JFrame {
 		
 		return planTreeFramePanel;
 	}
+
+        public void fillPlannersComboBox(List<?> planners){
+            for (Iterator<?> iter = planners.iterator(); iter.hasNext();) {
+                Element planner = (Element) iter.next();
+                //String plannerFile = planner.getChild("settings").getChildText("filePath");
+                //System.out.println(plannerFile);
+                //File f = new File(plannerFile);
+                //if (f.exists()) {
+                    plannersComboBox.addItem(planner.getChildText("name") + " - Version: " + planner.getChildText("version"));
+                    plannersList.add(planner);
+                //}
+            }
+        }
 	
 	public void solveReplaningProblem(Element project, Element problem){		
 		if(problem != null){
@@ -3024,10 +3325,12 @@ public class ItSIMPLE extends JFrame {
 			
 			// generate PDDL domain							// root element
 			Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
-			String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
-			
 			// generate PDDL problem
 			Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
+                        
+            ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+
+                        String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
 			String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
 			
 			// save in auxiliary files
@@ -3046,26 +3349,147 @@ public class ItSIMPLE extends JFrame {
 				e1.printStackTrace();
 			}
 			
-			// execute planner					
-			
-			List<?> planners = itPlanners.getChild("planners").getChildren("planner");
-			Element chosenPlanner = (Element)planners.get(plannersComboBox.getSelectedIndex());
+	
+           //get the selected planner 
+           Element chosenPlanner = null;
+           Object selectedPlannerListItem = null;
 
-			exe = new ExecPlanner(chosenPlanner, 
-					domainFile.getPath(), problemFile.getPath(), true);
-			
-			exe.setXMLDomain(problem.getParentElement().getParentElement());
-			exe.setXMLProblem(problem);
 
-			currentThread = new Thread(exe);						
-			currentThread.start();							
+            if (plannersComboBox.getSelectedItem() != null){
+                selectedPlannerListItem = plannersList.get(plannersComboBox.getSelectedIndex());
+            }
+
+            //System.out.println(selectedPlannerListItem);
+            if (selectedPlannerListItem!=null){
+               if (selectedPlannerListItem.getClass()==Element.class){
+                   chosenPlanner = (Element)selectedPlannerListItem;
+               }
+            }
+
 			
-			// changes the button action command
-			//solveProblemButton.setActionCommand("stop");
-			//solveProblemButton.setText("Stop");
+	        //List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+			//Element chosenPlanner = (Element)planners.get(plannersComboBox.getSelectedIndex());
+
+            if (chosenPlanner != null){
+                // execute planner
+                exe = new ExecPlanner(chosenPlanner,
+                        domainFile.getPath(), problemFile.getPath(), true);
+
+                exe.setXMLDomain(problem.getParentElement().getParentElement());
+                exe.setXMLProblem(problem);
+
+                currentThread = new Thread(exe);
+                currentThread.start();
+
+                // changes the button action command
+                //solveProblemButton.setActionCommand("stop");
+                //solveProblemButton.setText("Stop");
+            }
+            else{
+               JOptionPane.showMessageDialog(this,"Please, select a single planner in the list!");
+            }
+
 		}
 	}
-	
+
+
+    /**
+     * This methods calls all possible planners to solve a planning problem.
+     * Every plan (in a XML format) is inserted in a global variavel called
+     * (Element) plans
+     * @param project the chosen project
+     * @param problem the chosen problem
+     */
+    public void solveProblemWithAllPlanners(Element project, Element problem){
+		if(problem != null){
+			// clear plan list and plan info pane
+			setPlanList(null);
+			setPlanInfoPanelText("");
+ 			String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+
+			// generate PDDL domain							// root element
+			Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
+			// generate PDDL problem
+			Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
+
+            ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+
+            String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
+			String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
+
+			// save in auxiliary files
+			File domainFile = new File("resources/planners/domain.pddl");
+			File problemFile = new File("resources/planners/problem.pddl");
+			try {
+                FileWriter domainWriter = new FileWriter(domainFile);
+                domainWriter.write(pddlDomain);
+                domainWriter.close();
+
+                FileWriter problemWriter = new FileWriter(problemFile);
+				problemWriter.write(pddlProblem);
+				problemWriter.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			// execute planner
+
+			
+			exe = new ExecPlanner(null,
+					domainFile.getPath(), problemFile.getPath(), true);
+
+			exe.setXMLDomain(problem.getParentElement().getParentElement());
+			exe.setXMLProblem(problem);
+            exe.setProblemName(problem.getChildText("name"));
+            exe.setDomainName(problem.getParentElement().getParentElement().getChildText("name"));
+            exe.setProjectName(project.getChildText("name"));
+
+            plans = new Element("plans");
+            appendOutputPanelText(">> Calling all possible planners to solve the selected problem ");
+
+			currentThread = new Thread(){
+					public void run() {
+
+                        JLabel status = ItSIMPLE.getInstance().getPlanSimStatusBar();		
+                        status.setText("Status: Solving planning problem...");
+
+                        List<Element> planners = itPlanners.getChild("planners").getChildren("planner");
+                        for (Iterator<Element> it = planners.iterator(); it.hasNext();) {
+                            Element planner = it.next();
+                            if (planner.getChild("platform").getChild("windows") == null){
+                                try {
+                                    status.setText("Status: Solving planning problem with "+planner.getChildText("name")+"...");
+                                    exe.setChosenPlanner(planner);
+                                    Element xmlPlan = exe.solveProblem();
+                                    plans.addContent((Element)xmlPlan.clone());
+                                    status.setText("Status: Done solving planning problem with "+planner.getChildText("name")+"!");
+                                } catch (Exception e) {
+
+                                }
+                                
+                            }
+
+                        }
+
+                        status.setText("Status: Done solving planning problem with multiple planners!");
+                        ItSIMPLE.getInstance().setSolveProblemButton();
+
+                        XMLUtilities.printXML(plans);
+
+                        appendOutputPanelText(">> Done with all possible planners to solve the selected problem!");
+
+					}
+				};
+
+			currentThread.start();
+
+			// changes the button action command
+			solveProblemButton.setActionCommand("stop");
+			solveProblemButton.setText("Stop");
+		}
+	}
+
+
 	/**
 	 * Sets the solveProblemButton action command to "solve".
 	 * Has to be called when a plan is succesfully solved.
@@ -3079,6 +3503,514 @@ public class ItSIMPLE extends JFrame {
 		Element problem = ((ItTreeNode)problemsPlanTree.getLastSelectedPathComponent()).getData();
 		return problem;
 	}
+        
+    private void solve(ItTreeNode selectedNode) {
+        Element node = selectedNode.getData();
+        String type ="";
+        //check if it is a projects node
+        if (node == null){
+            type = "projects";
+        }
+        else{
+            type = node.getName();
+        }
+
+
+       boolean simpleCase = false;
+       List<Element> planners = new ArrayList<Element>();
+       Element singlePlanner = null;
+       Object selectedPlannerListItem = null;
+
+       if (plannersComboBox.getSelectedItem() != null){
+        selectedPlannerListItem = plannersList.get(plannersComboBox.getSelectedIndex());
+       }
+
+
+       //System.out.println(selectedPlannerListItem);
+
+       if (selectedPlannerListItem!=null){
+           if (selectedPlannerListItem.getClass()==Element.class){
+               planners.add((Element)selectedPlannerListItem);
+               singlePlanner = (Element)selectedPlannerListItem;
+               simpleCase =true;
+           }else if (selectedPlannerListItem.equals("allSupportedPlanners")){
+               planners.addAll(plannerSuggestion.getSuggestedPlanners());
+           }else if (selectedPlannerListItem.equals("allPlanners")){
+               //for the problem selects both suggested and discarded
+               if (type.equals("problem")){
+                   planners.addAll(plannerSuggestion.getSuggestedPlanners());
+                   planners.addAll(plannerSuggestion.getDiscardedPlanners());
+               }
+               //if it is a projects, project, or domain get all planners from itPlanners.xml
+               else{
+                   planners = itPlanners.getChild("planners").getChildren("planner");
+               }
+
+           }
+
+           switch(selectedNode.getLevel()){
+                case 0: //Projects
+                    this.solveAllProjects(selectedNode, planners);
+                    break;
+                case 1: //Project
+                    this.solveAllDomainsFromProject(selectedNode.getData(), planners);
+                    break;
+                case 2: //Domain
+                     this.solveAllProblemsFromDomain(selectedNode.getData(), planners);
+                    break;
+                case 3: //Problem
+                    if(simpleCase){
+                        this.solveProblemWithSinglePlanner(selectedNode.getData(), singlePlanner);
+                    }
+                    else{
+                        this.solveProblem(selectedNode.getData(), planners);
+                    }
+                    break;
+            }
+
+
+       }
+
+
+       
+    }
+
+    private void solveAllProjects(final ItTreeNode selectedNode, final List<Element> planners){
+        currentThread = new Thread(){
+            public void run() {
+                solveResult = null;
+                List<Element> projects = new ArrayList<Element>();
+                for (int i = 0; i < selectedNode.getChildCount(); i++) {
+                    ItTreeNode projectNode = (ItTreeNode)selectedNode.getChildAt(i);
+                    Element project = projectNode.getData();
+                    projects.add(project);
+                }
+
+                if (projects.size() > 0){
+                    solveResult = solveProjectsWithPlannersList(projects, planners);
+                    setSolveProblemButton();
+                    //XMLUtilities.printXML(solveResult);
+                    String report = PlanAnalyzer.generateReport(solveResult);
+                    String comparisonReport = PlanAnalyzer.generatePlannersComparisonReport(solveResult);
+
+                    //Save Comparison Report file
+                    saveFile("resources/report/Report.html", comparisonReport);
+
+                    setPlanInfoPanelText(report);
+                }else{
+                    setSolveProblemButton();
+                }
+                
+
+           }
+        };
+        currentThread.start();
+        // changes the button action command
+        solveProblemButton.setActionCommand("stop");
+        solveProblemButton.setText("Stop");
+    }
+
+    private void solveAllDomainsFromProject(final Element project, final List<Element> planners){
+        currentThread = new Thread(){
+           public void run() {
+               //solveResult = null;
+               //solveResult = solveProjectProblemsWithPlannersList(project, planners);
+
+               //preparing the same struture projects, project, domains, domain, problems, problem, plans, xmlPlan
+               solveResult = new Element ("projects");
+               Element projectRef = solveProjectProblemsWithPlannersList(project, planners);
+               if (projectRef!=null){
+                    solveResult.addContent(projectRef);
+               }
+               setSolveProblemButton();
+               
+               ///XMLUtilities.printXML(solveResult);
+               String report = PlanAnalyzer.generateReport(solveResult);
+               String comparisonReport = PlanAnalyzer.generatePlannersComparisonReport(solveResult);
+
+               //Save Comparison Report file
+               saveFile("resources/report/Report.html", comparisonReport);
+
+               setPlanInfoPanelText(report);
+
+               
+
+           }
+        };
+        currentThread.start();
+        // changes the button action command
+        solveProblemButton.setActionCommand("stop");
+        solveProblemButton.setText("Stop");
+    }
+
+    private void solveAllProblemsFromDomain(final Element domain, final List<Element> planners){
+       currentThread = new Thread(){
+           public void run() {
+               //solveResult = null;
+               //solveResult = solveDomainProblemsWithPlannersList(domain.getDocument().getRootElement(), domain, null, planners);
+
+               //preparing the same struture projects, project, domains, domain, problems, problem, plans, xmlPlan
+               solveResult = new Element ("projects");
+               Element projectRef = new Element("project");
+               Element project = domain.getDocument().getRootElement();
+               projectRef.addContent((Element)project.getChild("name").clone());
+               Element domainsRef = new Element("domains");
+               projectRef.addContent(domainsRef);
+
+               solveResult.addContent(projectRef);
+
+               Element domainRef = solveDomainProblemsWithPlannersList(domain.getDocument().getRootElement(), domain, null, planners);
+               if(domainRef!=null){
+                domainsRef.addContent(domainRef);
+               }
+
+               setSolveProblemButton();
+
+               //XMLUtilities.printXML(solveResult);
+               String report = PlanAnalyzer.generateReport(solveResult);
+               String comparisonReport = PlanAnalyzer.generatePlannersComparisonReport(solveResult);
+               //Save Comparison Report file
+               saveFile("resources/report/Report.html", comparisonReport);
+
+               setPlanInfoPanelText(report);
+
+               
+           }
+       };
+       currentThread.start();
+       // changes the button action command
+       solveProblemButton.setActionCommand("stop");
+       solveProblemButton.setText("Stop");
+    }
+
+    private void solveProblem(final Element problem, final List<Element> planners){
+       currentThread = new Thread(){
+           public void run() {
+               Element project = problem.getDocument().getRootElement();
+               Element domain = problem.getParentElement().getParentElement();
+               String pddlDomain = "";
+               String pddlProblem = "";
+               //solveResult = null;
+               //solveResult = solveProblemWithPlannersList(project, domain, problem, pddlDomain, pddlProblem, planners);
+
+               //preparing the same struture projects, project, domains, domain, problems, problem, plans, xmlPlan
+               solveResult = new Element ("projects");
+               Element projectRef = new Element("project");
+               projectRef.addContent((Element)project.getChild("name").clone());
+               Element domainsRef = new Element("domains");
+               projectRef.addContent(domainsRef);
+               Element domainRef = new Element("domain");
+               domainRef.setAttribute("id", domain.getAttributeValue("id"));
+               domainRef.addContent((Element)domain.getChild("name").clone());
+               domainsRef.addContent(domainRef);
+               Element problemsRef = new Element("problems");
+               domainRef.addContent(problemsRef);
+
+               solveResult.addContent(projectRef);
+
+               Element problemRef = solveProblemWithPlannersList(project, domain, problem, pddlDomain, pddlProblem, planners);
+
+               if (problemRef!=null){
+                problemsRef.addContent(problemRef);
+               }
+
+               setSolveProblemButton();
+
+               //XMLUtilities.printXML(solveResult);
+               String report = PlanAnalyzer.generateReport(solveResult);
+               String comparisonReport = PlanAnalyzer.generatePlannersComparisonReport(solveResult);
+
+               //Save Comparison Report file
+               saveFile("resources/report/Report.html", comparisonReport);
+
+               setPlanInfoPanelText(report);
+
+               
+           }
+       };
+       currentThread.start();
+       // changes the button action command
+       solveProblemButton.setActionCommand("stop");
+       solveProblemButton.setText("Stop");
+    }
+
+
+    public Element solveProblemWithPlannersList(Element project, Element domain, Element problem, String pddlDomain, String pddlProblem, List<Element> planners){
+        Element container = null;
+
+		if(project != null && problem != null){
+            container = new Element("problem");
+            container.setAttribute("id", problem.getAttributeValue("id"));
+            container.addContent((Element) problem.getChild("name").clone());
+
+            Element thePlans = new Element("plans");
+            container.addContent(thePlans);
+
+
+            //just in case the pddl is empty or null;
+            if (pddlDomain == null || pddlDomain.trim().equals("") || pddlProblem == null || pddlProblem.trim().equals("")){
+
+                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                // generate PDDL domain							// root element
+                Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
+                // generate PDDL problem
+                Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
+
+                ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+
+                pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
+                pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
+            }
+
+
+			// save in auxiliary files
+			File domainFile = new File("resources/planners/domain.pddl");
+			File problemFile = new File("resources/planners/problem.pddl");
+			try {
+                FileWriter domainWriter = new FileWriter(domainFile);
+                domainWriter.write(pddlDomain);
+                domainWriter.close();
+
+                FileWriter problemWriter = new FileWriter(problemFile);
+				problemWriter.write(pddlProblem);
+				problemWriter.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			// execute planner
+
+
+			exe = new ExecPlanner(null,
+					domainFile.getPath(), problemFile.getPath(), true);
+
+			exe.setXMLDomain(problem.getParentElement().getParentElement());
+			exe.setXMLProblem(problem);
+            exe.setProblemName(problem.getChildText("name"));
+            exe.setDomainName(problem.getParentElement().getParentElement().getChildText("name"));
+            exe.setProjectName(project.getChildText("name"));
+            exe.setShowReport(false);
+
+
+            appendOutputPanelText(">> Solving " + problem.getChildText("name") + " with selected planner(s) \n");
+
+
+            JLabel status = ItSIMPLE.getInstance().getPlanSimStatusBar();
+
+            for (Iterator<Element> it = planners.iterator(); it.hasNext();) {
+                Element planner = it.next();
+                status.setText("Status: Solving planning problem ...");
+
+                try {
+                    appendOutputPanelText("\n     Solving " + problem.getChildText("name") + " with planner "+planner.getChildText("name") + " \n");
+                    status.setText("Status: Solving planning problem " + problem.getChildText("name")+" with planner "+planner.getChildText("name")+"... \n");
+                    exe.setChosenPlanner(planner);
+                    Element result = exe.solveProblem();
+                    if (result != null){
+                        thePlans.addContent((Element)result.clone());                      
+                    }
+                    else{
+                        appendOutputPanelText(" ## No plan from " + planner.getChildText("name") + "! \n");
+                    }
+                    appendOutputPanelText("     Done with "+planner.getChildText("name")+"! \n");
+                } catch (Exception e) {
+
+                }
+
+
+
+            }
+
+
+            status.setText("Status: Done solving planning problem "+problem.getChildText("name")+" with planner(s)!");
+
+
+            appendOutputPanelText(">> Done solving problem "+problem.getChildText("name")+" with selected planner(s)! \n");
+
+
+		}
+
+        return container;
+	}
+
+
+    public Element solveDomainProblemsWithPlannersList(Element project, Element domain, Element xpddlDomain, List<Element> planners){
+        Element container = null;
+        if(project != null && domain != null){
+            container = new Element("domain");
+            container.setAttribute("id", domain.getAttributeValue("id"));
+            container.addContent((Element) domain.getChild("name").clone());
+            Element containerProblems = new Element("problems");
+            container.addContent(containerProblems);
+            //get all problems
+            List<Element> problems = null;
+            try {
+                XPath path = new JDOMXPath("planningProblems/problem");
+                problems = path.selectNodes(domain);
+            } catch (JaxenException e1) {
+                e1.printStackTrace();
+            }
+            if (problems != null){
+                //ger xddldomain if it is null
+                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                if(xpddlDomain == null){
+                    // generate PDDL domain							// root element
+                    xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
+                }
+
+                appendOutputPanelText(">> Starting  planning with domain " + domain.getChildText("name") + " with selected planner(s) \n");
+                //solve all problems
+                for (Iterator<Element> it = problems.iterator(); it.hasNext();) {
+                    Element problem = it.next();
+
+                    // generate PDDL problem
+                    Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
+                    ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+
+                    String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
+                    String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
+
+                    Element result = solveProblemWithPlannersList(project, domain, problem, pddlDomain, pddlProblem, planners);
+                    if (result !=null){
+                        containerProblems.addContent(result);
+                    }
+
+                }
+                appendOutputPanelText(">> Done with domain " + domain.getChildText("name") + "! \n");
+            }
+
+        }
+
+        return container;
+    }
+
+
+    public Element solveProjectProblemsWithPlannersList(Element project, List<Element> planners){
+        Element container = null;
+        if(project != null){
+            container = new Element("project");
+            //container.setAttribute("id", project.getAttributeValue("id"));
+            container.addContent((Element) project.getChild("name").clone());
+            Element containerDomains = new Element("domains");
+            container.addContent(containerDomains);
+            //get all problems
+            List<Element> domains = null;
+            try {
+                XPath path = new JDOMXPath("diagrams/planningDomains/domain");
+                domains = path.selectNodes(project);
+            } catch (JaxenException e1) {
+                e1.printStackTrace();
+            }
+            if (domains != null){
+                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                // generate PDDL domain							// root element
+                Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
+
+                appendOutputPanelText(">> Starting planning with project " + project.getChildText("name") + " with selected planner(s) \n");
+
+                //solve all problems in all domains
+                for (Iterator<Element> it = domains.iterator(); it.hasNext();) {
+                    Element domain = it.next();
+                    //get domain
+                    Element result = solveDomainProblemsWithPlannersList(project, domain, xpddlDomain, planners);
+                    if (result !=null){
+                        containerDomains.addContent(result);
+                    }
+
+                }
+                appendOutputPanelText(">> Done with project " + project.getChildText("name") + "! \n");
+            }
+
+        }
+
+        return container;
+    }
+
+
+    public Element solveProjectsWithPlannersList(List<Element> projects, List<Element> planners){
+        Element container = null;
+        if(projects != null && projects.size() > 0){
+            container = new Element("projects");
+
+            //solve all problems in all domains
+            for (Iterator<Element> it = projects.iterator(); it.hasNext();) {
+                Element project = it.next();
+                //get domain
+                appendOutputPanelText(">> Starting planning with all projects. \n");
+                Element result = solveProjectProblemsWithPlannersList(project, planners);
+                if (result !=null){
+                    container.addContent(result);
+                }
+                appendOutputPanelText(">> Planning with all projects done! \n");
+
+            }
+        }
+        return container;
+    }
+
+
+    public void solveProblemWithSinglePlanner(Element problem, Element chosenPlanner){
+        if(problem != null){
+            // clear plan list and plan info pane
+            setPlanList(null);
+            setPlanInfoPanelText("");
+
+            Element domainProject = problem.getDocument().getRootElement();
+            Element domain = problem.getParentElement().getParentElement();
+
+            String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+
+            // generate PDDL domain
+            Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
+            //XMLUtilities.printXML(xpddlDomain);
+
+            // generate PDDL problem
+            Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
+            //XMLUtilities.printXML(xpddlProblem);
+
+            //Change domain requirements (if necessary) based on the chosen problem
+            ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+
+            String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
+            String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
+
+            // save in auxiliary files
+            File domainFile = new File("resources/planners/domain.pddl");
+            File problemFile = new File("resources/planners/problem.pddl");
+
+            try {
+                FileWriter domainWriter = new FileWriter(domainFile);
+                domainWriter.write(pddlDomain);
+                domainWriter.close();
+
+                FileWriter problemWriter = new FileWriter(problemFile);
+                problemWriter.write(pddlProblem);
+                problemWriter.close();
+            } catch (IOException e1) {
+                    e1.printStackTrace();
+            }
+
+            // execute planner
+
+            exe = new ExecPlanner(chosenPlanner, domainFile.getPath(), problemFile.getPath(), false);
+
+            exe.setXMLDomain(problem.getParentElement().getParentElement());
+            exe.setXMLProblem(problem);
+            exe.setProblemName(problem.getChildText("name"));
+            exe.setDomainName(domain.getChildText("name"));
+            exe.setProjectName(domainProject.getChildText("name"));
+
+            currentThread = new Thread(exe);
+            currentThread.start();
+
+            // changes the button action command
+            solveProblemButton.setActionCommand("stop");
+            solveProblemButton.setText("Stop");
+
+
+        }
+
+    }
 
 
 	/**
@@ -3168,46 +4100,48 @@ public class ItSIMPLE extends JFrame {
 		if (xmlPlan != null) {			
 			exportPlanButton.setEnabled(true);
 			
-			if (xmlPlan != null) {
+            Element planNode = xmlPlan.getChild("plan");
+            List<?> actions = planNode.getChildren("action");
+            for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
+                Element action = (Element) iter.next();
 
-				Element planNode = xmlPlan.getChild("plan");
-				List<?> actions = planNode.getChildren("action");
-				for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
-					Element action = (Element) iter.next();
+                // start time
+                String line = action.getChildText("startTime") + ": ";
 
-					// start time
-					String line = action.getChildText("startTime") + ": ";
+                // action name
+                line += "(" + action.getAttributeValue("id") + " ";
 
-					// action name
-					line += "(" + action.getAttributeValue("id") + " ";
+                // action parameters
+                List<?> parameters = action.getChild("parameters")
+                        .getChildren("parameter");
+                for (Iterator<?> iterator = parameters.iterator(); iterator
+                        .hasNext();) {
+                    Element parameter = (Element) iterator.next();
+                    line += parameter.getAttributeValue("id");
+                    if (iterator.hasNext()) {
+                        line += " ";
+                    }
+                }
+                line += ")";
 
-					// action parameters
-					List<?> parameters = action.getChild("parameters")
-							.getChildren("parameter");
-					for (Iterator<?> iterator = parameters.iterator(); iterator
-							.hasNext();) {
-						Element parameter = (Element) iterator.next();
-						line += parameter.getAttributeValue("id");
-						if (iterator.hasNext()) {
-							line += " ";
-						}
-					}
-					line += ")";
+                // action duration
+                String duration = action.getChildText("duration");
+                if (!duration.equals("")) {
+                    line += " [" + duration + "]";
+                }
 
-					// action duration
-					String duration = action.getChildText("duration");
-					if (!duration.equals("")) {
-						line += " [" + duration + "]";
-					}
+                // add the line to the list
+                planListModel.addElement(line);
+            }
+            planListFramePanel.repaint();
+            planList.repaint();
+            planList.revalidate();
 
-					// add the line to the list
-					planListModel.addElement(line);
-				}
+
 			} else {
 				// do nothing, set the button disabled
 				exportPlanButton.setEnabled(false);
 			}
-		}		
 
 	}
 
@@ -3233,8 +4167,52 @@ public class ItSIMPLE extends JFrame {
 			JPanel mainChartsPanel = new JPanel(new BorderLayout());
 			mainChartsPanel.add(chartsToolBar, BorderLayout.NORTH);
 			mainChartsPanel.add(new JScrollPane(chartsPanel), BorderLayout.CENTER);
+
+
+            //Results
+            planInfoEditorPane = new JEditorPane();
+			planInfoEditorPane.setContentType("text/html");
+			planInfoEditorPane.setEditable(false);
+			planInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+            planInfoEditorPane.setBackground(Color.WHITE);
+
+
+            JPanel resultsPanel = new JPanel(new BorderLayout());
+
+            JToolBar resultsToolBar = new JToolBar();
+            resultsToolBar.setRollover(true);
+
+            JButton planReportButton = new JButton("View Full Report", new ImageIcon("resources/images/edit.png"));
+            planReportButton.setToolTipText("<html>View full plan report.<br> For multiple plans you will need " +
+                    "access to the Internet.<br> The components used in the report require such access (no data is " +
+                    "sent through the Internet).");
+            planReportButton.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                                //Opens html with defaut browser
+                                String path = "resources/report/Report.html";
+                                File report = new File(path);
+                                path = report.getAbsolutePath();
+                                try {
+                                    BrowserLauncher launcher = new BrowserLauncher();
+                                    launcher.openURLinBrowser("file://"+path);
+                                } catch (BrowserLaunchingInitializingException ex) {
+                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                } catch (UnsupportedOperatingSystemException ex) {
+                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                }
+                }
+            });
+            resultsToolBar.add(planReportButton);
+            
+            resultsPanel.add(resultsToolBar, BorderLayout.NORTH);
+            resultsPanel.add(new JScrollPane(planInfoEditorPane), BorderLayout.CENTER);
+
 			
 			JTabbedPane planAnalysisTabbedPane = new JTabbedPane();
+            planAnalysisTabbedPane.addTab("Results",  resultsPanel);
 			planAnalysisTabbedPane.addTab("Variable Tracking", mainChartsPanel);
 			planAnalysisTabbedPane.addTab("Movie Maker", getMovieMakerPanel());
 			
@@ -3297,16 +4275,34 @@ public class ItSIMPLE extends JFrame {
 	private ItFramePanel getPlanInfoFramePanel() {
 		if (planInfoFramePanel == null) {
 			JPanel planInfoPanel = new JPanel(new BorderLayout());
-			planInfoPanel.setMinimumSize(new Dimension(100, 20));			
-			planInfoFramePanel = new ItFramePanel(":: Plan Information", ItFramePanel.MINIMIZE_MAXIMIZE);
+			planInfoPanel.setMinimumSize(new Dimension(100, 40));
+			planInfoFramePanel = new ItFramePanel(":: Console", ItFramePanel.MINIMIZE_MAXIMIZE);
 			//informationPanel.setMinimumSize(new Dimension(100,25));
-			planInfoEditorPane = new JEditorPane();
-			planInfoEditorPane.setContentType("text/html");
-			planInfoEditorPane.setEditable(false);
-			planInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-			planInfoFramePanel.setContent(planInfoEditorPane, true);
-			planInfoFramePanel.setParentSplitPane(planInfoSplitPane);			
-			planInfoPanel.add(planInfoFramePanel, BorderLayout.CENTER);					
+
+
+			//planInfoEditorPane = new JEditorPane();
+			//planInfoEditorPane.setContentType("text/html");
+			//planInfoEditorPane.setEditable(false);
+			//planInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+            //planInfoEditorPane.setBackground(Color.WHITE);
+            
+            outputEditorPane = new JTextArea();
+			//outputEditorPane.setContentType("text/html");
+			outputEditorPane.setEditable(false);
+            outputEditorPane.setLineWrap(true);
+            outputEditorPane.setWrapStyleWord(true);
+			outputEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+
+            // tabbed panes with jtrees
+			JTabbedPane outputPane = new JTabbedPane();
+			outputPane.addTab("Output", new JScrollPane(outputEditorPane));
+			//outputPane.addTab("Results", new JScrollPane(planInfoEditorPane));
+
+			//planInfoFramePanel.setContent(planInfoEditorPane, true);
+            planInfoFramePanel.setContent(outputPane, false);
+			planInfoFramePanel.setParentSplitPane(planInfoSplitPane);
+
+			planInfoPanel.add(planInfoFramePanel, BorderLayout.CENTER);
 		}
 		return planInfoFramePanel;
 	}
@@ -3314,7 +4310,20 @@ public class ItSIMPLE extends JFrame {
 	public void setPlanInfoPanelText(String text){
 		planInfoEditorPane.setText(text);
 	}
-	
+
+    public void setOutputPanelText(String text){
+		outputEditorPane.setText(text);
+	}
+
+    public void appendOutputPanelText(String text){
+		outputEditorPane.append(text);
+        outputEditorPane.setCaretPosition(outputEditorPane.getDocument().getLength());
+
+        //String outputtext = outputEditorPane.getText();
+        //int pos = outputtext.length();
+        //outputEditorPane.setCaretPosition(pos);
+
+	}
 	
 	// sets the problems in the list
 	public void setProblemList(Element domain){
@@ -3326,15 +4335,15 @@ public class ItSIMPLE extends JFrame {
 				
 				Element problem = (Element)problems.next();
 				Action action = new AbstractAction(problem.getChildText("name")) {
-                    /**
-					 * 
-					 */
-					private static final long serialVersionUID = -131526563961355654L;
+                                     /**
+                                    *
+                                    */
+                                    private static final long serialVersionUID = -131526563961355654L;
 
 					public void actionPerformed(ActionEvent e) {
-                    	Element problemElement = (Element)this.getValue("data");
-                    	//Element domainElement = (Element)this.getValue("domain");
-						if (problemElement != null){
+                                            Element problemElement = (Element)this.getValue("data");
+                                            //Element domainElement = (Element)this.getValue("domain");
+                                            if (problemElement != null){
 							String details = "<html><font size='-1' face='Arial'><b>"+problemElement.getChildText("name")+
 							"</b><br>Problem<br>";
 						if (problemElement.getChildText("description").trim().equals("")){
@@ -3345,12 +4354,24 @@ public class ItSIMPLE extends JFrame {
 						}
 						detailsTextPane.setText(details);
 
-						Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problemElement, pddlButtonsGroup.getSelection().getActionCommand());
+                                                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+
+						Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problemElement, pddlVersion);
 						String problemText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "  ");
+
 						problemPddlTextPane.setText(problemText);
-						}
-                    }
-                };
+
+                                                //Check if the chosen problem requires additional PDDL requirement tags in the domain
+                                                if (ToXPDDL.needRequirementModification(xpddlProblem, pddlVersion)){
+                                                    Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(problemElement.getDocument().getRootElement(), pddlVersion, null);
+                                                    ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+                                                    String domainText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "  ");
+                                                    domainPddlTextPane.setText(domainText);
+                                                }
+
+                                            }
+                                        }
+                                };
                 action.putValue(Action.SMALL_ICON, new ImageIcon("resources/images/planningProblem.png"));
                 //action.putValue(Action.SHORT_DESCRIPTION, problem.getChild("description"));
                 action.putValue("data", problem);
@@ -3578,6 +4599,7 @@ public class ItSIMPLE extends JFrame {
 			domainDocument.setHighlightStyle(ItHilightedDocument.PDDL_STYLE);
 			domainPddlTextPane = new JTextPane(domainDocument);
 			domainPddlTextPane.setFont(new Font("Courier", 0, 12));
+            domainPddlTextPane.setBackground(Color.WHITE);
 			
 		}
 		return domainPddlTextPane;
@@ -3594,6 +4616,7 @@ public class ItSIMPLE extends JFrame {
 			problemDocument.setHighlightStyle(ItHilightedDocument.PDDL_STYLE);
 			problemPddlTextPane = new JTextPane(problemDocument);
 			problemPddlTextPane.setFont(new Font("Courier", 0, 12));
+            problemPddlTextPane.setBackground(Color.WHITE);
 		}
 		return problemPddlTextPane;
 	}
@@ -3722,6 +4745,7 @@ public class ItSIMPLE extends JFrame {
 			JRadioButton pddl21 = new JRadioButton("PDDL 2.1");
 			JRadioButton pddl22 = new JRadioButton("PDDL 2.2");
 			JRadioButton pddl30 = new JRadioButton("PDDL 3.0", true);
+			JRadioButton pddl31 = new JRadioButton("PDDL 3.1");
 			
 			pddl21.setOpaque(false);
 			pddl21.setActionCommand(ToXPDDL.PDDL_2_1);
@@ -3729,11 +4753,14 @@ public class ItSIMPLE extends JFrame {
 			pddl22.setActionCommand(ToXPDDL.PDDL_2_2);
 			pddl30.setOpaque(false);
 			pddl30.setActionCommand(ToXPDDL.PDDL_3_0);
+                        pddl31.setOpaque(false);
+			pddl31.setActionCommand(ToXPDDL.PDDL_3_1);
 						
 			pddlButtonsGroup = new ButtonGroup();		
 			pddlButtonsGroup.add(pddl21);
 			pddlButtonsGroup.add(pddl22);
 			pddlButtonsGroup.add(pddl30);
+			pddlButtonsGroup.add(pddl31);
 			pddlButtonsGroup.setSelected(pddl21.getModel(), true);
 			
 			JPanel settingsPanel = new JPanel();
@@ -3742,6 +4769,7 @@ public class ItSIMPLE extends JFrame {
 			settingsPanel.add(pddl21);
 			settingsPanel.add(pddl22);
 			settingsPanel.add(pddl30);
+			settingsPanel.add(pddl31);
 			
 			settingsPddlTaskPane.add(settingsPanel);
 			
@@ -3881,8 +4909,20 @@ public class ItSIMPLE extends JFrame {
 					public void run() {
 						ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
 						if(selectedNode != null && selectedNode.getLevel() == 3){
+
 							Element problem = selectedNode.getData();				
 							movie = PlanSimulator.getMovie(xmlPlan, problem);
+                            //XMLUtilities.printXML(xmlPlan);
+                            //XMLUtilities.printXML(movie);
+
+                            //IN CASE WE WANT TO RUN THE METRICS WITH SIMULATION
+                            //Element domain = problem.getParentElement().getParentElement();
+                            //Element metrics = PlanSimulator.createMetricsNode(problem, domain);
+                            //if(metrics.getChildren().size() > 0){
+                            //    PlanSimulator.createMetricDatasets(metrics, xmlPlan, problem, domain, movie);
+                            //}
+                            //XMLUtilities.printXML(metrics);
+                          
 							
 							PlanNavigationList.getInstance().setList(xmlPlan, movie,
 									problem.getParentElement().getParentElement(), 
@@ -3998,7 +5038,7 @@ public class ItSIMPLE extends JFrame {
 		
 		movieMakerToolBar.addSeparator();
 		
-                // edit state
+        // edit state
 		JButton editStateButton = new JButton("Edit");
 		editStateButton.setToolTipText("Edit current state");
 		editStateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4023,21 +5063,43 @@ public class ItSIMPLE extends JFrame {
 		});
 		movieMakerToolBar.add(editStateButton);
                 
-                // virtual reality
-		JButton virtualRealityButton = new JButton("Virtual Reality");
-		virtualRealityButton.setToolTipText("Generate virtual reality file");
+        // virtual reality
+        /*
+		JButton virtualRealityButton = new JButton("Virtual Prototyping");
+		virtualRealityButton.setToolTipText("Generate virtual prototype files");
 		virtualRealityButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				ItTreeNode problemNode = (ItTreeNode) problemsPlanTree.getLastSelectedPathComponent();
-				//ItTreeNode domainNode = (ItTreeNode)problemNode.getParent();
-				//ItTreeNode projectNode = (ItTreeNode)domainNode.getParent();
-				
-				VirtualRealityRobotNavigationDomain.generateBackgroundFile(problemNode.getData(), xmlPlan);
+				ItTreeNode domainNode = (ItTreeNode)problemNode.getParent();
+                //ItTreeNode projectNode = (ItTreeNode)domainNode.getParent();
+                try {
+
+                    VirtualPrototypingBlender.generatePrototypeFiles(domainNode.getData(), problemNode.getData(), xmlPlan);
+                    //VirtualRealityRobotNavigationDomain.generateBackgroundFile(problemNode.getData(), xmlPlan);
+                } catch (IOException ex) {
+                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                }
+				//VirtualRealityRobotNavigationDomain.generateBackgroundFile(problemNode.getData(), xmlPlan);
 			}
 		});
-		movieMakerToolBar.add(virtualRealityButton);                
-		
+		movieMakerToolBar.add(virtualRealityButton);
+        */
+
+        movieMakerToolBar.addSeparator();
+        // plan evaluation
+		JButton planEvaluationButton = new JButton("Evaluate Plan", new ImageIcon("resources/images/edit.png"));
+		 planEvaluationButton.setToolTipText("<html>Generate a plan evaluation in the planReport. <br> This is restricted to non-time-based domain only.</html>");
+		 planEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                //RUN plan evaluation
+				evaluatePlan.actionPerformed(e);
+			}
+		});
+		movieMakerToolBar.add( planEvaluationButton);
+
+
 		return movieMakerToolBar;
 	}
 	
@@ -4133,7 +5195,8 @@ public class ItSIMPLE extends JFrame {
 									pddlButtonsGroup.getSelection().getActionCommand(), null);
 							String domainText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "  ");
 							
-							domainPddlTextPane.setText(domainText);							
+							domainPddlTextPane.setText(domainText);
+                                                        //XMLUtilities.printXML(xpddlDomain);
 						}
                     }
                 };
@@ -4288,7 +5351,183 @@ public class ItSIMPLE extends JFrame {
     	selectedVariablesPlanTreeModel.reload();		        
 		selectedVariablesPlanTree.expandRow(0);
 	}
-	
+
+
+
+    /**
+     *
+     * @param xmlPlan
+     * @return a html string containing a simple plan report (basic info)
+     */
+    public void showHTMLReport(Element xmlPlan){
+        if (xmlPlan!=null){
+            String html = "";
+            if (xmlPlan.getName().equals("xmlPlan")){
+                html = PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan);
+                //Save Comparison Report file
+                saveFile("resources/report/Report.html", html);
+
+            }
+            setPlanInfoPanelText(html);
+            
+
+        }
+
+        /*
+    	// get the date
+        DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        Date date = new Date();
+        String dateTime = dateFormat.format(date);
+
+       ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+       Element problem = null;
+       Element domain = null;
+        if(selectedNode != null){
+			problem = selectedNode.getData();
+            domain = problem.getParentElement().getParentElement();
+        }
+
+        // head
+		String info = "<TABLE width='100%' BORDER='0' align='center'>"+
+					"<TR><TD bgcolor='333399'><font size=4 face=arial color='FFFFFF'>" +
+					"<b>REPORT</b> - "+ dateTime +"</font></TD></TR>";
+
+		// project, domain and problem
+		if(domain != null && problem != null){
+			Element project = domain.getParentElement().getParentElement().getParentElement();
+
+			info += "<TR><TD><font size=3 face=arial><b>Project: </b>"+ project.getChildText("name")+
+					"</font></TD></TR>"+
+					"<TR><TD><font size=3 face=arial><b>Domain: </b>"+ domain.getChildText("name")+
+					"</font></TD></TR>" +
+					"<TR><TD><font size=3 face=arial><b>Problem: </b>"+ problem.getChildText("name")+
+					"</font></TD></TR>";
+		}
+
+		info += "<TR><TD bgcolor='FFFFFF'><font size=3 face=arial><b>itSIMPLE message:<br></b>"+
+				xmlPlan.getChild("toolInformation").getChild("message").getText().replaceAll("\n", "<br>") +"<p></TD></TR>";
+
+		// planner
+		Element planner = xmlPlan.getChild("planner");
+		Element settingsPlanner = null;
+		try {
+			XPath path = new JDOMXPath("planners/planner[@id='"+ planner.getAttributeValue("id") +"']");
+			settingsPlanner = (Element)path.selectSingleNode(ItSIMPLE.getItPlanners());
+		} catch (JaxenException e) {
+			e.printStackTrace();
+		}
+
+		if(settingsPlanner != null){
+			info += "<TR><TD bgcolor='gray'><font size=4 face=arial color='FFFFFF'><b>Planner</b></TD></TR>" +
+					"<TR><TD><font size=3 face=arial><b>Name: </b>"+ settingsPlanner.getChildText("name")+
+					"</font></TD></TR>"+
+					"<TR><TD><font size=3 face=arial><b>Version: </b>"+ settingsPlanner.getChildText("version")+
+					"</font></TD></TR>"+
+					"<TR><TD><font size=3 face=arial><b>Author(s): </b>"+ settingsPlanner.getChildText("author")+
+					"</font></TD></TR>"+
+					"<TR><TD><font size=3 face=arial><b>Institution(s): </b>"+ settingsPlanner.getChildText("institution")+
+					"</font></TD></TR>"+
+					"<TR><TD><font size=3 face=arial><b>Link: </b>"+ settingsPlanner.getChildText("link")+
+					"</font></TD></TR>"+
+					"<TR><TD><font size=3 face=arial><b>Description: </b>"+ settingsPlanner.getChildText("description")+
+					"</font><p></TD></TR>";
+		}
+
+		// statistics
+		Element statistics = xmlPlan.getChild("statistics");
+		info += "<TR><TD bgcolor='gray'><font size=4 face=arial color='FFFFFF'><b>Statistics</b>" +
+				"</TD></TR>"+
+				"<TR><TD><font size=3 face=arial><b>Tool total time: </b>"+ statistics.getChildText("toolTime")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Planner time: </b>"+ statistics.getChildText("time")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Parsing time: </b>"+ statistics.getChildText("parsingTime")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Number of actions: </b>"+ statistics.getChildText("nrActions")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Make Span: </b>"+ statistics.getChildText("makeSpan")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Metric value: </b>"+ statistics.getChildText("metricValue")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Planning technique: </b>"+ statistics.getChildText("planningTechnique")+
+				"</font></TD></TR>" +
+				"<TR><TD><font size=3 face=arial><b>Additional: </b>"+ statistics.getChildText("additional").replaceAll("\n", "<br>")+
+				"</font><p></TD></TR>";
+
+
+		// plan
+		info += "<TR><TD bgcolor='gray'><font size=4 face=arial color='FFFFFF'><b>Plan</b></TD></TR>";
+
+
+		List<?> actions = xmlPlan.getChild("plan").getChildren("action");
+		if (actions.size() > 0) {
+			for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
+				Element action = (Element) iter.next();
+				// build up the action string
+				// start time
+				String actionStr = action.getChildText("startTime") + ": ";
+
+				// action name
+				actionStr += "(" + action.getAttributeValue("id") + " ";
+
+				// action parameters
+				List<?> parameters = action.getChild("parameters")
+						.getChildren("parameter");
+				for (Iterator<?> iterator = parameters.iterator(); iterator
+						.hasNext();) {
+					Element parameter = (Element) iterator.next();
+					actionStr += parameter.getAttributeValue("id");
+					if (iterator.hasNext()) {
+						actionStr += " ";
+					}
+				}
+				actionStr += ")";
+
+				// action duration
+				String duration = action.getChildText("duration");
+				if (!duration.equals("")) {
+					actionStr += " [" + duration + "]";
+				}
+
+				if(iter.hasNext()){
+					info += "<TR><TD><font size=3 face=arial>"+ actionStr +"</font></TD></TR>";
+				}
+				else{
+					info += "<TR><TD><font size=3 face=arial>"+ actionStr +"</font><p></TD></TR>";
+				}
+			}
+		}
+		else{
+			info += "<TR><TD><font size=3 face=arial>No plan found.</font><p></TD></TR>";
+		}
+
+
+		// planner console output
+		info += "<TR><TD bgcolor='gray'><font size=3 face=arial color='FFFFFF'>" +
+				"<b>Planner Console Output</b></TD></TR>"+
+				"<TR><TD><font size=4 face=courier>" +
+				planner.getChildText("consoleOutput").replaceAll("\n", "<br>")+"</font><p></TD></TR>";
+
+		info += "</TABLE>";
+
+
+        appendOutputPanelText(">> Plan importerd successfully. Chech the generated Results. \n");
+
+    	return info;
+         * */
+    }
+
+    
+    public void saveFile(String path,String content){
+        FileWriter file = null;
+        try {
+            file = new FileWriter(path);
+            file.write(content);
+            file.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }        
+    }
 
 	/**
 	 * This method initializes this
@@ -4300,9 +5539,10 @@ public class ItSIMPLE extends JFrame {
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setContentPane(getMainPanel());
 		setJMenuBar(getItMenuBar());
-		setTitle("itSIMPLE - Integrated Tool Software Interface for Modeling " +
-				"Planning Environments (version "+ 
-				itSettings.getChildText("version") +")");
+		//setTitle("itSIMPLE - Integrated Tool Software Interface for Modeling " +
+				//"Planning Environments (version "+
+				//itSettings.getChildText("version") +")");
+        setTitle("itSIMPLE (version "+	itSettings.getChildText("version") +")");
 		setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
                 
 

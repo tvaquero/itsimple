@@ -2,7 +2,7 @@
 <itPlanners>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>2.1.10</version>
+		<version>3.0.10</version>
 	</toolInformation>
 	<planners>
 		<planner id="1">
@@ -17,10 +17,22 @@
 				<windows />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <quantified-preconditions />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/metric-ff.exe</filePath>
@@ -91,12 +103,32 @@
 			<description />
 			<platform>
 				<linux />
+                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <object-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/sgplan522</filePath>
@@ -146,12 +178,32 @@
 			<description />
 			<platform>
 				<linux />
+                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <object-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/mips-xxl</filePath>
@@ -257,12 +309,23 @@
 			<description />
 			<platform>
 				<linux />
+                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/satplan</filePath>
@@ -312,12 +375,29 @@
 			<description />
 			<platform>
 				<linux />
+                                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/lpg-td-1.0</filePath>
@@ -354,7 +434,19 @@
 						<enable>true</enable>
 						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
 					</argument>
-					<argument parameter="-cputime" id="4">
+					<argument parameter="-speed" id="4">
+						<name>running mode</name>
+						<value />
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-n" id="5">
+						<name>running mode</name>
+						<value>2</value>
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-cputime" id="6">
 						<name>cputime</name>
 						<value>1800</value>
 						<enable>false</enable>
@@ -375,10 +467,28 @@
 				<windows />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/lpg-td-1.0.exe</filePath>
@@ -415,7 +525,19 @@
 						<enable>true</enable>
 						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
 					</argument>
-					<argument parameter="-cputime" id="4">
+					<argument parameter="-speed" id="4">
+						<name>running mode</name>
+						<value />
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-n" id="5">
+						<name>running mode</name>
+						<value>2</value>
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-cputime" id="6">
 						<name>cputime</name>
 						<value>1800</value>
 						<enable>false</enable>
@@ -426,7 +548,7 @@
 		</planner>
 		<planner id="7">
 			<name>MIPS-XXL</name>
-			<version>IPC-6 (2008) Linux</version>
+			<version>IPC-6 v1.1 (2008) Linux</version>
 			<date>2008</date>
 			<institution>University of Dortmund</institution>
 			<author>Stefan Edelkamp, Shahid Jabbar, Mohammed Nazih</author>
@@ -434,12 +556,30 @@
 			<description />
 			<platform>
 				<linux />
+                                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/mips-xxl2008</filePath>
@@ -452,6 +592,7 @@
 						</argument>
 						<additionalGeneratedFiles>
 							<fileName>mipsSolution.soln</fileName>
+                            <fileName>foundplan</fileName>
 						</additionalGeneratedFiles>
 					</outputFile>
 					<consoleOutput>
@@ -502,31 +643,49 @@
 						<enable>false</enable>
 						<description>do external merge</description>
 					</argument>
-					<argument parameter="-g" id="8">
+					<argument parameter="-D" id="8">
+						<name>do external Dijkstra</name>
+						<value />
+						<enable>false</enable>
+						<description>do external Dijkstra</description>
+					</argument>
+					<argument parameter="-Z" id="9">
+						<name>do external branch and bound</name>
+						<value />
+						<enable>false</enable>
+						<description>do external branch and bound</description>
+					</argument>
+					<argument parameter="-S" id="10">
+						<name>Stop at the first solution</name>
+						<value />
+						<enable>false</enable>
+						<description>Stop at the first solution</description>
+					</argument>
+					<argument parameter="-g" id="11">
 						<name>weight</name>
 						<value>10</value>
 						<enable>false</enable>
 						<description>set weight w_g in w_g*g(s) + w_h*h(s) [preset: 0]</description>
 					</argument>
-					<argument parameter="-h" id="9">
+					<argument parameter="-h" id="12">
 						<name>weight</name>
 						<value>10</value>
 						<enable>false</enable>
 						<description>set weight w_h in w_g*g(s) + w_h*h(s) [preset: 0]</description>
 					</argument>
-					<argument parameter="-O" id="10">
+					<argument parameter="-O" id="13">
 						<name>optimization</name>
 						<value />
 						<enable>true</enable>
 						<description>switch on optimization expression (default is plan length)</description>
 					</argument>
-					<argument parameter="-G" id="11">
+					<argument parameter="-G" id="14">
 						<name>output normal task</name>
 						<value />
 						<enable>false</enable>
 						<description>output normal task</description>
 					</argument>
-					<argument parameter="-A" id="12">
+					<argument parameter="-A" id="15">
 						<name>output ADL</name>
 						<value />
 						<enable>false</enable>
@@ -545,12 +704,31 @@
 			<description />
 			<platform>
 				<linux />
+                                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/sgplan6</filePath>
@@ -599,13 +777,26 @@
 			<link>http://members.deri.at/~joergh/ff.html</link>
 			<description />
 			<platform>
-				<windows />
+				<linux />
+                                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <quantified-preconditions />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/metric-ff</filePath>
@@ -663,7 +854,73 @@
 				</arguments>
 			</settings>
 		</planner>
-		<planner id="10">
+                <planner id="10">
+			<name>FF 2.3</name>
+			<version> FFv-2.3 Linux</version>
+			<date>2002</date>
+			<institution />
+			<author>J. Hoffmann</author>
+			<link>http://members.deri.at/~joergh/ff.html</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <quantified-preconditions />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/ffv-2.3</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="0">step</planStartIdentifier>
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-i" id="3">
+						<name>run-time information level</name>
+						<value>1</value>
+						<enable>false</enable>
+						<description>run-time information level</description>
+					</argument>
+				</arguments>
+			</settings>
+		</planner>
+		<planner id="11">
 			<name>LPG</name>
 			<version>1.2 Linux</version>
 			<date>June 2003</date>
@@ -673,12 +930,27 @@
 			<description />
 			<platform>
 				<linux />
+                                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/lpg</filePath>
@@ -730,7 +1002,7 @@
 				</arguments>
 			</settings>
 		</planner>
-		<planner id="11">
+		<planner id="12">
 			<name>hspsp</name>
 			<version>IPC-6 (2008) Linux</version>
 			<date>2008</date>
@@ -740,12 +1012,30 @@
 			<description>Note: the planner only fully supports monotonic numeric fluents, so that its plans in the transport domain are not guaranteed to be optimal.</description>
 			<platform>
 				<linux />
+                                <mac />
 			</platform>
 			<requirements>
-				<strips />
-				<typing />
-				<fluents />
 				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <object-fluents />
+                                <preferences />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/hsp_p</filePath>
@@ -785,6 +1075,74 @@
 				</arguments>
 			</settings>
 		</planner>
+		<planner id="13">
+			<name>Plan-A 1.0</name>
+			<version>IPC-6 (2008) Linux</version>
+			<date>2008</date>
+			<institution></institution>
+			<author>Qiang Lv, Yixin Chen, Ruoyun Huang</author>
+			<link>http://ipc.informatik.uni-freiburg.de/Planners/</link>
+			<description>Note: This planner is not guaranteed to produce globally optimal solutions, but solutions which are optimal with respect to a certain planning horizon. It participated noncompetitively.</description>
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <constraints />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <preferences />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/Plan-A</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter="-F">
+							<description></description>
+						</argument>
+						<additionalGeneratedFiles>
+							<fileName>bb_solving_result_cnf</fileName>
+						</additionalGeneratedFiles>
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>operator strips file name</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>fact strips file name</description>
+					</problem>
+					<argument parameter="-G" id="3">
+						<name>output type</name>
+						<value>1</value>
+						<enable>true</enable>
+						<description>(0) create CNF output or (1) build final solution</description>
+					</argument>
+				</arguments>
+			</settings>
+		</planner>
 	</planners>
 </itPlanners>
-
