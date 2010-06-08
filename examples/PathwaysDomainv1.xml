@@ -4,7 +4,7 @@
 	<description>This domain is inspired by the field of molecular biology, and specifically biochemical pathways. A pathway is a sequence of chemical reactions in a biological organism. Such pathways specify mechanisms that explain how cells carry out their major functions by means of molecules and reactions that produce regular changes. Many diseases can be explained by defects in pathways, and new treatments often involve finding drugs that correct those defects.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>

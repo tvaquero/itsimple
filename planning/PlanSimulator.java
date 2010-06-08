@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -3487,17 +3487,7 @@ public class PlanSimulator {
         Element metrics = new Element("metrics");
         //collect all metrics
         List<Element> metricList = new ArrayList<Element>();
-        //gather metrics from problem
-        List problemMetrics = null;
-        try {
-            XPath path = new JDOMXPath("metrics/qualityMetric");
-            problemMetrics = path.selectNodes(problem);
-        } catch (JaxenException e) {
-            e.printStackTrace();
-        }
-        if(problemMetrics !=null){
-            metricList.addAll(problemMetrics);
-        }
+
         //gather metrics from domain
         List domainMetrics = null;
         try {
@@ -3509,6 +3499,20 @@ public class PlanSimulator {
         if(domainMetrics !=null){
             metricList.addAll(domainMetrics);
         }
+
+        //gather metrics from problem
+        List problemMetrics = null;
+        try {
+            XPath path = new JDOMXPath("metrics/qualityMetric");
+            problemMetrics = path.selectNodes(problem);
+        } catch (JaxenException e) {
+            e.printStackTrace();
+        }
+        if(problemMetrics !=null){
+            metricList.addAll(problemMetrics);
+        }
+
+        
         for (Iterator it = metricList.iterator(); it.hasNext();) {
             Element eaMetric = (Element)it.next();
 
@@ -3594,9 +3598,9 @@ public class PlanSimulator {
 
     /**
      * This method fill out the metric dataset for the problem solution given the plan. 
-     * Since some metrics cases require simulation, the methods uses the movie for 
-     * creating the sets/values. If a movie is provided it uses for fill out the 
-     * value sets; otherwise,the methods can create it by itself.
+     * Since some metrics require simulation, the methods uses the movie for 
+     * creating the sets/values. If a movie is provided the method uses that to fill out the
+     * value sets; otherwise, the method can create it by itself.
      * @param metrics the reference metrics (domain and problem, all together). It is the result of createMetricNode method
      * @param xmlPlan the plan
      * @param problem the problem

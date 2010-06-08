@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -30,6 +30,8 @@ package planning;
 
 import itSIMPLE.ItSIMPLE;
 import itSIMPLE.PlanNavigationList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import languages.xml.XMLUtilities;
 
 import java.io.BufferedReader;
@@ -76,7 +78,11 @@ public class ExecPlanner implements Runnable{
 	private Element XMLProblem = null;
 	
 	private boolean replaning;
-    private boolean showReport = true;
+        private boolean showReport = true;
+        private Element thePlan = null;
+        private File plannerRunFile = null;
+
+
 
 	
 	public ExecPlanner(){
@@ -195,7 +201,42 @@ public class ExecPlanner implements Runnable{
 		    }
 		    return contents;
 		  }
-		
+
+
+    /**
+     * This method creates an empty plan just with data from planner
+     */
+    public void setEmptyPlan(){
+        thePlan = null;
+
+        //1. Get the default plan (empty)
+		try {
+			thePlan = XMLUtilities.readFromFile("resources/planners/DefaultPlan.xml")
+					.getRootElement();
+		} catch (Exception e) {
+			e.printStackTrace();
+        }
+
+        //2 set the project, domain and problem names
+        thePlan.getChild("project").setText(projectName);
+        thePlan.getChild("domain").setText(domainName);
+        thePlan.getChild("problem").setText(problemName);
+
+
+        //3. set the planner info
+        if (chosenPlanner != null){
+            Element planner = thePlan.getChild("planner");
+            //3.1 set the planner id
+            planner.setAttribute("id", chosenPlanner.getAttributeValue("id"));
+
+            //3.2 add planner's characteristics
+            planner.addContent(chosenPlanner.cloneContent());
+            planner.removeContent(planner.getChild("settings")); //except for setting
+
+        }
+
+    }
+
 		
 	public void getPlanAndStatistics(ArrayList<String> Output, ArrayList<String> Plan, ArrayList<String> Statistics){
 		//Separate statistics and plan (get plan)
@@ -206,11 +247,46 @@ public class ExecPlanner implements Runnable{
 				if (!element.trim().equals("")) {
 					//get plan
 					if(element.trim().startsWith(";")){
-                                            Statistics.add(element.trim().substring(1).trim());
+                        Statistics.add(element.trim().substring(1).trim());
 					}else{
-						// if it is not a standard action then put it in statistics
+						// if it is not a standard action then check if is still an action or a statistic
 						if (!(element.indexOf(":") > -1)){
-							Statistics.add(element.trim());
+                            boolean isAnAction = false;
+
+                            //check if the string can still be an action (e.g. 1 (action p1 p2 ... pn) )
+                            if ((element.indexOf("(") > -1) &&  (element.indexOf(")") > -1) ){
+                                //check if the first element on the string is the plan index
+                                StringTokenizer st = new StringTokenizer(element.trim());
+                                String firstItem = "index";
+                                if (st.hasMoreTokens()){
+                                    firstItem = st.nextToken();                               
+                                    try {
+                                        double theIndex = Double.parseDouble(firstItem);
+                                        isAnAction = true;
+                                    } catch (Exception e) {
+                                        isAnAction = false;
+                                    }
+                                }
+                                
+                                //if it is an action the include the ":" for standarlization
+                                if (isAnAction){
+                                    String actionBody = "";
+                                    while(st.hasMoreTokens()){
+                                    // for each parameter, create a node
+                                        actionBody += st.nextToken() + " ";
+                                    }
+                                    element = firstItem + ": " + actionBody;
+                                }
+                                
+                            }
+
+                            if (isAnAction){
+                                Plan.add(element.trim());
+                            }else{
+                                Statistics.add(element.trim());
+                            }
+
+							
 						}else{//When it is really an action
 							Plan.add(element.trim());	
 						}
@@ -263,6 +339,7 @@ public class ExecPlanner implements Runnable{
         String plannerFile = settings.getChildText("filePath");
         //System.out.println(plannerFile);
         File f = new File(plannerFile);
+        plannerRunFile = f;
         boolean plannerFileExists = true;
         if (!f.exists()){
             plannerFileExists = false;
@@ -335,7 +412,9 @@ public class ExecPlanner implements Runnable{
 
                 for (int i = 0; i < commandArguments.size(); i++) {
                         command[i] = commandArguments.get(i);
-                                }
+                        //System.out.println(command[i]);
+                }
+
 
                 this.time = 0;
                 //set inicial time
@@ -347,7 +426,7 @@ public class ExecPlanner implements Runnable{
                 try {
                     process = Runtime.getRuntime().exec(command);
                 } catch (Exception e) {
-                    String message = "## Error while running the planner. Please check the planner's executable file, permissions, and operating system compatibility. \n";
+                    String message = "## Error while running the planner "+ chosenPlanner.getChildText("name")+ ". Please check the planner's executable file, permissions, and operating system compatibility. \n";
                     System.out.println(message);
                     toolMessage += message;
                     ItSIMPLE.getInstance().appendOutputPanelText(message);
@@ -355,19 +434,22 @@ public class ExecPlanner implements Runnable{
                 }
                 //process = Runtime.getRuntime().exec(command);
 
+
                 //check if there is a error while running the planner
                 if (!gotError){
-  
+
                     Scanner sc = new Scanner(process.getInputStream());
                     //Get the planner answer exposed in the console
-                    String ongoingConsole = "<html><body><font size=4 face=courier>";
+                    //String ongoingConsole = "<html><body><font size=4 face=courier>";
                     if (consoleOutput != null) {
                         while (sc.hasNextLine()) {
                             //consoleOutput.add(sc.nextLine());
                             String line = sc.nextLine();
                             consoleOutput.add(line);
+                            //System.out.println(line);
+                            
 
-                            ongoingConsole += line + "<br>";
+                            //ongoingConsole += line + "<br>";
                             //ItSIMPLE.getInstance().setPlanInfoPanelText(ongoingConsole);
                             //ItSIMPLE.getInstance().setOutputPanelText(ongoingConsole);
                             ItSIMPLE.getInstance().appendOutputPanelText(line + "\n");
@@ -464,20 +546,25 @@ public class ExecPlanner implements Runnable{
 
                                 //capturing the plan
                                 if (isThePlan){
-                                    //System.out.println("Got it: " + line.trim());
-                                    String mline = line;
-                                    if (line.indexOf("(") == -1){//checking if it is in a pddl format about Parentheses
-                                         //if it is not in pddl format just add "(" after ":" and ")" at the end of the line
-                                        int indexOfDoubleDot = line.indexOf(":");
-                                        mline = line.substring(0, indexOfDoubleDot + 2) + "(" +
-                                                line.substring(indexOfDoubleDot + 2, line.length()) + ")";
+
+                                    if (line.trim().startsWith(";")){
+                                        statistics.add(line.trim());
+                                    }else{
+                                        //System.out.println("Got it: " + line.trim());
+                                        String mline = line;
+                                        if (line.indexOf("(") == -1){//checking if it is in a pddl format about Parentheses
+                                             //if it is not in pddl format just add "(" after ":" and ")" at the end of the line
+                                            int indexOfDoubleDot = line.indexOf(":");
+                                            mline = line.substring(0, indexOfDoubleDot + 2) + "(" +
+                                                    line.substring(indexOfDoubleDot + 2, line.length()) + ")";
+                                        }
+                                        if (line.indexOf("[") == -1){//checking if it is in a pddl format about "[" - action duration
+                                             //assume duration equals to 1
+                                            mline = mline + " [1]";
+                                        }
+                                        line = mline;
+                                        planList.add(line.trim());
                                     }
-                                    if (line.indexOf("[") == -1){//checking if it is in a pddl format about "[" - action duration
-                                         //assume duration equals to 1
-                                        mline = mline + " [1]";
-                                    }
-                                    line = mline;
-                                    planList.add(line.trim());
 
                                 }
                                 else if (line.trim().startsWith(";")){
@@ -583,17 +670,20 @@ public class ExecPlanner implements Runnable{
 			<notes/>
 		</action>*/
     	
-    	
-                Element xmlPlan = null;
-		try {
-			xmlPlan = XMLUtilities.readFromFile("resources/planners/DefaultPlan.xml")
-					.getRootElement();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-		//System.out.println(plan);
-		
-		if (xmlPlan != null) {			
+    	//Element xmlPlan = thePlan;
+        //Element xmlPlan = null;
+
+        //if (xmlPlan == null){
+        if (thePlan == null){
+            try {
+                //xmlPlan = XMLUtilities.readFromFile("resources/planners/DefaultPlan.xml").getRootElement();
+                thePlan = XMLUtilities.readFromFile("resources/planners/DefaultPlan.xml").getRootElement();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if(thePlan != null){
 			for (Iterator<?> iter = plan.iterator(); iter.hasNext();) {
 				String line = (String) iter.next();
 
@@ -607,14 +697,14 @@ public class ExecPlanner implements Runnable{
 
 				// the first token is the action name
 				String actionName = st.nextToken();
-				action.setAttribute("id", actionName);
+				action.setAttribute("id", actionName.toUpperCase());
 
 				// the other tokens are the parameters
 				Element parameters = new Element("parameters");
 				while (st.hasMoreTokens()) {
 					String parameterStr = st.nextToken();
 					Element parameter = new Element("parameter");
-					parameter.setAttribute("id", parameterStr);
+					parameter.setAttribute("id", parameterStr.toUpperCase());
 					parameters.addContent(parameter);
 				}
 				action.addContent(parameters);
@@ -626,8 +716,10 @@ public class ExecPlanner implements Runnable{
 				action.addContent(startTime);
 
 				// set the action duration
-				String durationStr = line.substring(line.indexOf('[')+1, line
-						.lastIndexOf(']'));
+                String durationStr = "1";
+                if (line.indexOf('[') > - 1){
+                    durationStr = line.substring(line.indexOf('[')+1, line.lastIndexOf(']'));
+                }
 				Element duration = new Element("duration");
 				duration.setText(durationStr);
 				action.addContent(duration);
@@ -650,7 +742,11 @@ public class ExecPlanner implements Runnable{
 	private void parseStatisticsToXML(Element statisticNode, List<?> statistic) {
 		
 		//1. set the tool time, i. e., the total time seen by itSIMPLE
-		statisticNode.getChild("toolTime").setText(String.valueOf(time/1000));
+        
+        //if (statisticNode.getChild("toolTime").getText().trim().equals("")){ //if nobady has already put something on the timeTool write it
+            statisticNode.getChild("toolTime").setText(String.valueOf(time/1000));
+        //}
+		
 		
 		/*	<statistics>
 		<toolTime/>
@@ -721,7 +817,8 @@ public class ExecPlanner implements Runnable{
     public Element solvePlanningProblem(Element chosenPlanner, String domainFile, String problemFile){
             toolMessage ="";
             // create the xml plan format
-            Element xmlPlan = null;
+            //Element xmlPlan = null;
+            //Element xmlPlan = thePlan;
 
             //check if the planner file exists
             Element settings = chosenPlanner.getChild("settings");
@@ -738,15 +835,20 @@ public class ExecPlanner implements Runnable{
 
             if (plannerFileExists){
 
-                try {
-                        xmlPlan = XMLUtilities.readFromFile("resources/planners/DefaultPlan.xml")
-                                        .getRootElement();
-                } catch (Exception e) {
-                        e.printStackTrace();
+                //if(xmlPlan == null){
+                if(thePlan == null){
+                    setEmptyPlan();
+                    //xmlPlan = thePlan;
+
+                    //try {
+                    //        xmlPlan = XMLUtilities.readFromFile("resources/planners/DefaultPlan.xml").getRootElement();
+                    //} catch (Exception e) {
+                    //        e.printStackTrace();
+                    //}
+
                 }
 
-
-                if(xmlPlan != null){
+                if(thePlan != null){
                     //1. get chosen planner output
                     ArrayList<String> output = new ArrayList<String>();
                     ArrayList<String> consoleOutput = new ArrayList<String>();
@@ -759,17 +861,12 @@ public class ExecPlanner implements Runnable{
                     ArrayList<String> statistic = new ArrayList<String>();
                     getPlanAndStatistics(output, plan, statistic);
 
-
+                    /* IT IS ALREADY ON THE SETEMPTYPLAN() method
+                     *
                     //3. set the project, domain and problem names
                     xmlPlan.getChild("project").setText(projectName);
                     xmlPlan.getChild("domain").setText(domainName);
                     xmlPlan.getChild("problem").setText(problemName);
-
-                    //3. set datetime
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date date = new Date();
-                    String dateTime = dateFormat.format(date);
-                    xmlPlan.getChild("datetime").setText(dateTime);
 
                     //4. set the planner features
                     Element planner = xmlPlan.getChild("planner");
@@ -783,7 +880,20 @@ public class ExecPlanner implements Runnable{
                     //4.1 and 4.2 add planner's characteristics
                     planner.addContent(chosenPlanner.cloneContent());
                     planner.removeContent(planner.getChild("settings")); //except for setting
+                     * 
+                     */
 
+                    //3. set datetime
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = new Date();
+                    String dateTime = dateFormat.format(date);
+                    //xmlPlan.getChild("datetime").setText(dateTime);
+                    thePlan.getChild("datetime").setText(dateTime);
+
+
+                    //4. set the planner results
+                    //Element planner = xmlPlan.getChild("planner");
+                    Element planner = thePlan.getChild("planner");
 
                     //4.3 set the planner console output
                     //4.3.1 build up the text from the string array
@@ -797,11 +907,13 @@ public class ExecPlanner implements Runnable{
                     planner.getChild("consoleOutput").setText(consoleOutputStr);
 
                     //5. set statistics
-                    Element statisticsNode = xmlPlan.getChild("statistics");
+                    //Element statisticsNode = xmlPlan.getChild("statistics");
+                    Element statisticsNode = thePlan.getChild("statistics");
                     parseStatisticsToXML(statisticsNode, statistic);
 
                     //6. set the plan
-                    Element planNode = xmlPlan.getChild("plan");
+                    //Element planNode = xmlPlan.getChild("plan");
+                    Element planNode = thePlan.getChild("plan");
                     parsePlanToXML(planNode, plan);
 
                     if(planNode.getChildren("action").size() > 0){
@@ -812,11 +924,13 @@ public class ExecPlanner implements Runnable{
                     }
 
                     //7. set tool information message
-                    xmlPlan.getChild("toolInformation").getChild("message").setText(toolMessage);
+                    //xmlPlan.getChild("toolInformation").getChild("message").setText(toolMessage);
+                    thePlan.getChild("toolInformation").getChild("message").setText(toolMessage);
 
                     if (showReport){
                         //8. set the plan info panel
-                        ItSIMPLE.getInstance().showHTMLReport(xmlPlan);
+                        //ItSIMPLE.getInstance().showHTMLReport(xmlPlan);
+                        ItSIMPLE.getInstance().showHTMLReport(thePlan);
                     }
 
                 }
@@ -834,7 +948,8 @@ public class ExecPlanner implements Runnable{
 
  
 		
-    	return xmlPlan;
+    	//return xmlPlan;
+        return thePlan;
     }
 
 
@@ -846,11 +961,15 @@ public class ExecPlanner implements Runnable{
      * @return
      */
     public Element solveProblem(){
-        Element xmlPlan = null;
+        //Element xmlPlan = null;
+        //thePlan = null;
 
-        xmlPlan = solvePlanningProblem(chosenPlanner, domainFile, problemFile);
+        //xmlPlan = solvePlanningProblem(chosenPlanner, domainFile, problemFile);
+        solvePlanningProblem(chosenPlanner, domainFile, problemFile);
+        //thePlan = xmlPlan;
 
-        return xmlPlan;
+        //return xmlPlan;
+        return thePlan;
     }
 
 
@@ -1040,6 +1159,9 @@ public class ExecPlanner implements Runnable{
     public void setProblemName(String name){
 		problemName = name;
 	}
+    public String getProblemName(){
+		return problemName;
+    }
 
     public void setChosenPlanner(Element chosenPlanner) {
         this.chosenPlanner = chosenPlanner;
@@ -1053,6 +1175,14 @@ public class ExecPlanner implements Runnable{
         this.showReport = showReport;
     }
 
+    public Element getPlan() {
+        return thePlan;
+    }
+
+    public void setPlan(Element thePlan) {
+        this.thePlan = thePlan;
+    }
+
 
 	public void run() {
 		if(chosenPlanner != null && domainFile != null && problemFile != null){
@@ -1061,6 +1191,7 @@ public class ExecPlanner implements Runnable{
 			status.setText("Status: Solving planning problem...");
 
 			Element xmlPlan = solvePlanningProblem(chosenPlanner, domainFile, problemFile);
+            //XMLUtilities.printXML(xmlPlan);
 			try {
 				if(replaning){
 					PlanNavigationList.getInstance().setPlanListAfterReplaning(xmlPlan);
@@ -1080,7 +1211,39 @@ public class ExecPlanner implements Runnable{
 
 	
 	public void destroyProcess(){
-		process.destroy();
+        if (process != null){
+            process.destroy();
+            
+            String operatingSystem = System.getProperty("os.name").toLowerCase();
+            if (operatingSystem.indexOf("linux")==0){
+                //kill process in linux with comand 'killall -9 <process_name>'
+                //System.out.println("Kill" );
+
+                if (plannerRunFile != null && plannerRunFile.exists()){
+
+                    //System.out.println(plannerRunFile.getName());
+                    String filename =plannerRunFile.getName();
+                    if (!filename.trim().equals("")){
+                        String[] command = new String[3];
+                        command[0] = "killall";
+                        command[1] = "-9";
+                        command[2] = filename;
+
+                        try {
+                            Runtime.getRuntime().exec(command);
+                        } catch (IOException ex) {
+                            Logger.getLogger(ExecPlanner.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+
+                    
+                }
+            }
+            
+
+
+        }
 	}
 
 

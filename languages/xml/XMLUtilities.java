@@ -146,6 +146,26 @@ public class XMLUtilities {
 			System.out.println();
 		}
 	}
+
+    /**
+     * This method returns an Element as a string
+     * @param element
+     * @return
+     */
+	public static String toString(Element element){
+        String content = "";
+		Format format = Format.getPrettyFormat();
+		format.setIndent("\t");
+		XMLOutputter op = new XMLOutputter(format);
+		if(element == null){
+			System.err.println("Null element");
+		}
+		else{
+			content = op.outputString(element);
+		}
+        return content;
+	}
+
 	
 	
 	/**

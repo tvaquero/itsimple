@@ -1,0 +1,5002 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+	<name>Paper Reviewing Domain</name>
+	<description>This model represents the challenge of assigning reviewer to paper in conferences, workshops and any academic event. In this model we have reserachers and their research areas, paper and their subjects (area). The goal is to do the best assignment based on a quality metric.This metric is based on the assigment of experts to paper.
+
+Author: Tiago Stegun Vaquero</description>
+	<generalInformation>
+		<tool>itSIMPLE</tool>
+		<version>3.1.10</version>
+	</generalInformation>
+	<elements>
+		<classes>
+			<class id="1">
+				<name>Boolean</name>
+				<type>Primitive</type>
+			</class>
+			<class id="2">
+				<name>Int</name>
+				<type>Primitive</type>
+			</class>
+			<class id="3">
+				<name>Float</name>
+				<type>Primitive</type>
+			</class>
+			<class id="4">
+				<name>String</name>
+				<type>Primitive</type>
+			</class>
+			<class id="21">
+				<name>Researcher</name>
+				<description />
+				<type />
+				<stereotype />
+				<attributes>
+					<attribute id="1">
+						<name>name</name>
+						<type>4</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="2">
+						<name>isReviewer</name>
+						<type>1</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="3">
+						<name>papersAssigned</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="4">
+						<name>researchArea</name>
+						<type>1</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters>
+							<parameter id="1">
+								<name>a</name>
+								<type>24</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+				</attributes>
+				<operators />
+				<generalization element="class" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Person1.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="22">
+				<name>Paper</name>
+				<description />
+				<type />
+				<stereotype />
+				<attributes>
+					<attribute id="1">
+						<name>title</name>
+						<type>4</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="2">
+						<name>reviewersAssigned</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="3">
+						<name>keywords</name>
+						<type>1</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters>
+							<parameter id="1">
+								<name>a</name>
+								<type>24</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+				</attributes>
+				<operators />
+				<generalization element="class" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon>Documents1.png</icon>
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<class id="23">
+				<name>Global</name>
+				<description />
+				<type />
+				<stereotype>utility</stereotype>
+				<attributes>
+					<attribute id="1">
+						<name>reviewersPerPaper</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="2">
+						<name>papersPerReviewer</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="3">
+						<name>quality</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+				</attributes>
+				<operators>
+					<operator id="1">
+						<name>assignReviewer</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>r</name>
+								<type>21</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>p</name>
+								<type>22</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints>pre:&#xD;
+r.isReviewer = true and r.papersAssigned &lt;  papersPerReviewer and p.reviewersAssigned &lt; reviewersPerPaper and  not(r.reviewerOf-&gt;includes(p)) and  not(r.authorOf-&gt;includes(p))&#xD;
+&#xD;
+post:&#xD;
+r.papersAssigned = r.papersAssigned + 1 and &#xD;
+p.reviewersAssigned = p.reviewersAssigned + 1 and r.reviewerOf = r.reviewerOf-&gt;including(p)</constraints>
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+					<operator id="2">
+						<name>assignRightReviewer</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>r</name>
+								<type>21</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>p</name>
+								<type>22</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>a</name>
+								<type>24</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints>pre:&#xD;
+r.isReviewer = true and r.papersAssigned &lt;  papersPerReviewer and p.reviewersAssigned &lt; reviewersPerPaper and  not(r.reviewerOf-&gt;includes(p)) and  not(r.authorOf-&gt;includes(p)) and r.researchArea(a) = true and p.keywords(a) = true&#xD;
+&#xD;
+post:&#xD;
+r.papersAssigned = r.papersAssigned + 1 and &#xD;
+p.reviewersAssigned = p.reviewersAssigned + 1 and r.reviewerOf = r.reviewerOf-&gt;including(p) and quality = quality + 5</constraints>
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+					<operator id="3">
+						<name>assignSpecialistReviewer</name>
+						<description />
+						<timeConstraints timed="false">
+							<duration />
+						</timeConstraints>
+						<parameters>
+							<parameter id="1">
+								<name>r</name>
+								<type>21</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="2">
+								<name>p</name>
+								<type>22</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="3">
+								<name>a1</name>
+								<type>24</type>
+								<defaultValue />
+							</parameter>
+							<parameter id="4">
+								<name>a2</name>
+								<type>24</type>
+								<defaultValue />
+							</parameter>
+						</parameters>
+						<constraints>pre:&#xD;
+r.isReviewer = true and r.papersAssigned &lt;  papersPerReviewer and p.reviewersAssigned &lt; reviewersPerPaper and  not(r.reviewerOf-&gt;includes(p)) and  not(r.authorOf-&gt;includes(p)) and  a1 &lt;&gt; a2 and r.researchArea(a1) = true and p.keywords(a1) = true and r.researchArea(a2) = true and p.keywords(a2) = true&#xD;
+&#xD;
+post:&#xD;
+r.papersAssigned = r.papersAssigned + 1 and &#xD;
+p.reviewersAssigned = p.reviewersAssigned + 1 and r.reviewerOf = r.reviewerOf-&gt;including(p) and quality = quality + 10</constraints>
+						<graphics>
+							<color />
+						</graphics>
+					</operator>
+				</operators>
+				<generalization element="class" id="">
+					<name />
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y="" />
+							</label>
+						</labels>
+						<points />
+						<color />
+						<lineStyle />
+					</graphics>
+				</generalization>
+				<constraints />
+				<graphics>
+					<icon />
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</class>
+			<enumeration id="24">
+				<name>Area</name>
+				<description />
+				<type />
+				<stereotype>enumeration</stereotype>
+				<literals>
+					<literal id="1">
+						<name>PlanAnalysis</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="2">
+						<name>PostDesign</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="3">
+						<name>VirtualPrototyping</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="4">
+						<name>VirtualEnvironment</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="5">
+						<name>KETools</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="6">
+						<name>PlanValidation</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="7">
+						<name>ModelRefinement</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="8">
+						<name>Learning</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="9">
+						<name>ReinforcementLearning</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="10">
+						<name>MetaLearning</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="11">
+						<name>DistributedAI</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="12">
+						<name>XML</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="13">
+						<name>DomainSpecification</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="14">
+						<name>Modeling</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="15">
+						<name>RepresentationLanguage</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="16">
+						<name>PDDL</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="17">
+						<name>LanguageDesign</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="18">
+						<name>Timeline</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="19">
+						<name>SpaceApplication</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="20">
+						<name>ModelChecking</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="21">
+						<name>TimeBasedModeling</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="22">
+						<name>Automata</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="23">
+						<name>knowledgeElicitation</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="24">
+						<name>HTN</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="25">
+						<name>Ontology</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="26">
+						<name>PlanDiagnosis</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="27">
+						<name>KnowledgeExtraction</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="28">
+						<name>TranslationProcess</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="29">
+						<name>BPM</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="30">
+						<name>XPDL</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="31">
+						<name>PlanSimulation</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+					<literal id="32">
+						<name>MultiAgentSystems</name>
+						<graphics>
+							<color />
+						</graphics>
+					</literal>
+				</literals>
+				<operators />
+				<constraints />
+				<graphics>
+					<icon />
+					<position x="" y="" />
+					<size width="" height="" />
+					<color />
+				</graphics>
+			</enumeration>
+		</classes>
+		<classAssociations>
+			<classAssociation id="1">
+				<name>author of</name>
+				<description />
+				<associationEnds>
+					<associationEnd navigation="false" element="class" element-id="21" id="1">
+						<type>none</type>
+						<rolename>
+							<value />
+						</rolename>
+						<multiplicity>
+							<value />
+						</multiplicity>
+					</associationEnd>
+					<associationEnd navigation="true" element="class" element-id="22" id="2">
+						<type>simple</type>
+						<rolename>
+							<value>authorOf</value>
+						</rolename>
+						<multiplicity>
+							<value />
+						</multiplicity>
+					</associationEnd>
+				</associationEnds>
+				<changeability>
+					<value />
+				</changeability>
+				<constraints />
+				<graphics>
+					<points />
+					<color />
+					<lineStyle />
+				</graphics>
+			</classAssociation>
+			<classAssociation id="2">
+				<name>reviewer of</name>
+				<description />
+				<associationEnds>
+					<associationEnd navigation="false" element="class" element-id="21" id="1">
+						<type>none</type>
+						<rolename>
+							<value />
+						</rolename>
+						<multiplicity>
+							<value />
+						</multiplicity>
+					</associationEnd>
+					<associationEnd navigation="true" element="class" element-id="22" id="2">
+						<type>simple</type>
+						<rolename>
+							<value>reviewerOf</value>
+						</rolename>
+						<multiplicity>
+							<value />
+						</multiplicity>
+					</associationEnd>
+				</associationEnds>
+				<changeability>
+					<value />
+				</changeability>
+				<constraints />
+				<graphics>
+					<points />
+					<color />
+					<lineStyle />
+				</graphics>
+			</classAssociation>
+		</classAssociations>
+	</elements>
+	<diagrams>
+		<useCaseDiagrams>
+			<useCaseDiagram id="1">
+				<name>Use Case Diagram</name>
+				<description />
+				<actors />
+				<useCases />
+				<associations />
+				<constraints />
+			</useCaseDiagram>
+		</useCaseDiagrams>
+		<classDiagrams>
+			<classDiagram id="1">
+				<name>Class Diagram</name>
+				<description>This model represents the the challenge behind the process of assigning reviewers to papers in a conference, worhshop, or any academic event. Given the researchers, their profile (research area), and the paper together with the paper's subject area, the goal is to make the best,optimal assigment based on a quality metric. The quality metric is related to assigning papers to the relative experts (a good matching of the researchers' areas and the papers' subjects. 
+
+This model already considered authors that are in the review commitee.</description>
+				<classes>
+					<class id="21">
+						<graphics>
+							<icon />
+							<position x="67" y="61" />
+							<size width="193" height="196" />
+							<color />
+						</graphics>
+					</class>
+					<class id="22">
+						<graphics>
+							<icon />
+							<position x="447" y="57" />
+							<size width="183" height="187" />
+							<color />
+						</graphics>
+					</class>
+					<class id="23">
+						<graphics>
+							<icon />
+							<position x="146" y="280" />
+							<size width="399" height="183" />
+							<color />
+						</graphics>
+					</class>
+					<enumeration id="24">
+						<graphics>
+							<icon />
+							<position x="646" y="58" />
+							<size width="158" height="463" />
+							<color />
+						</graphics>
+					</enumeration>
+				</classes>
+				<associations>
+					<classAssociation id="1">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="100" y="15" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="900" y="15" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="100" y="-15" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="900" y="-15" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="500" y="15" />
+								</label>
+							</labels>
+							<points>
+								<point x="340" y="134" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+					<classAssociation id="2">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="100" y="15" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="900" y="15" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="100" y="-15" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="900" y="-15" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="500" y="15" />
+								</label>
+							</labels>
+							<points>
+								<point x="353" y="213" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+				</associations>
+				<constraints />
+			</classDiagram>
+		</classDiagrams>
+		<stateMachineDiagrams>
+			<stateMachineDiagram id="1">
+				<class />
+				<name>State Machine Diagram</name>
+				<description />
+				<states />
+				<associations />
+				<constraints />
+			</stateMachineDiagram>
+		</stateMachineDiagrams>
+		<activityDiagrams />
+		<timingDiagrams />
+		<planningDomains>
+			<domain id="1">
+				<name>Simple Domain</name>
+				<description />
+				<elements>
+					<objects>
+						<object id="1">
+							<name>researcher1</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="2">
+							<name>researcher2</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="3">
+							<name>researcher3</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="4">
+							<name>researcher4</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="5">
+							<name>researcher5</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="6">
+							<name>researcher6</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="7">
+							<name>global</name>
+							<class>23</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="8">
+							<name>paper01</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="9">
+							<name>paper02</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="10">
+							<name>paper03</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="11">
+							<name>paper04</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+					</objects>
+				</elements>
+				<repositoryDiagrams>
+					<repositoryDiagram id="1">
+						<name>Object Repository</name>
+						<description />
+						<objects>
+							<object id="1">
+								<attributes>
+									<attribute class="21" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="39" y="126" />
+									<size width="160" height="142" />
+									<color />
+								</graphics>
+							</object>
+							<object id="2">
+								<attributes>
+									<attribute class="21" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="218" y="125" />
+									<size width="162" height="143" />
+									<color />
+								</graphics>
+							</object>
+							<object id="3">
+								<attributes>
+									<attribute class="21" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="396" y="119" />
+									<size width="162" height="145" />
+									<color />
+								</graphics>
+							</object>
+							<object id="4">
+								<attributes>
+									<attribute class="21" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="569" y="119" />
+									<size width="154" height="146" />
+									<color />
+								</graphics>
+							</object>
+							<object id="5">
+								<attributes>
+									<attribute class="21" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="736" y="114" />
+									<size width="157" height="152" />
+									<color />
+								</graphics>
+							</object>
+							<object id="6">
+								<attributes>
+									<attribute class="21" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="901" y="110" />
+									<size width="167" height="150" />
+									<color />
+								</graphics>
+							</object>
+							<object id="7">
+								<attributes>
+									<attribute class="23" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="23" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="23" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="434" y="14" />
+									<size width="177" height="87" />
+									<color />
+								</graphics>
+							</object>
+							<object id="8">
+								<attributes>
+									<attribute class="22" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="53" y="400" />
+									<size width="186" height="131" />
+									<color />
+								</graphics>
+							</object>
+							<object id="9">
+								<attributes>
+									<attribute class="22" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="295" y="399" />
+									<size width="181" height="132" />
+									<color />
+								</graphics>
+							</object>
+							<object id="10">
+								<attributes>
+									<attribute class="22" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="565" y="399" />
+									<size width="178" height="136" />
+									<color />
+								</graphics>
+							</object>
+							<object id="11">
+								<attributes>
+									<attribute class="22" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="801" y="402" />
+									<size width="166" height="137" />
+									<color />
+								</graphics>
+							</object>
+						</objects>
+						<associations />
+						<constraints />
+					</repositoryDiagram>
+				</repositoryDiagrams>
+				<planningProblems>
+					<problem id="1">
+						<name>Sample1</name>
+						<description />
+						<objectDiagrams>
+							<objectDiagram id="1">
+								<name>Snapshot</name>
+								<sequenceReference>init</sequenceReference>
+								<description />
+								<objects>
+									<object id="1">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>dddd</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="39" y="126" />
+											<size width="160" height="142" />
+											<color />
+										</graphics>
+									</object>
+									<object id="2">
+										<attributes>
+											<attribute class="21" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="218" y="125" />
+											<size width="162" height="143" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes>
+											<attribute class="21" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="396" y="119" />
+											<size width="162" height="145" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="21" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="569" y="119" />
+											<size width="166" height="146" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="21" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="744" y="113" />
+											<size width="157" height="152" />
+											<color />
+										</graphics>
+									</object>
+									<object id="6">
+										<attributes>
+											<attribute class="21" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="928" y="110" />
+											<size width="167" height="150" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes>
+											<attribute class="23" id="1">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="23" id="2">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="23" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="434" y="14" />
+											<size width="177" height="87" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="53" y="400" />
+											<size width="186" height="131" />
+											<color />
+										</graphics>
+									</object>
+									<object id="9">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="295" y="399" />
+											<size width="181" height="132" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="565" y="399" />
+											<size width="178" height="136" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="801" y="402" />
+											<size width="178" height="137" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="1">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="1" id="1" />
+											<objectAssociationEnd element="object" element-id="8" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+							<objectDiagram id="2">
+								<name>Snapshot</name>
+								<sequenceReference>goal</sequenceReference>
+								<description />
+								<objects>
+									<object id="8">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="53" y="400" />
+											<size width="186" height="131" />
+											<color />
+										</graphics>
+									</object>
+									<object id="9">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="295" y="399" />
+											<size width="181" height="132" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="565" y="399" />
+											<size width="178" height="136" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="801" y="402" />
+											<size width="166" height="137" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations />
+								<constraints />
+							</objectDiagram>
+						</objectDiagrams>
+						<constraints />
+						<metrics />
+					</problem>
+				</planningProblems>
+				<constraints />
+				<metrics />
+			</domain>
+			<domain id="2">
+				<name>Workshop1</name>
+				<description />
+				<elements>
+					<objects>
+						<object id="1">
+							<name>global</name>
+							<class>23</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="2">
+							<name>researcher5</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="3">
+							<name>researcher6</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="4">
+							<name>researcher7</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="5">
+							<name>researcher8</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="6">
+							<name>researcher9</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="7">
+							<name>researcher10</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="8">
+							<name>researcher11</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="9">
+							<name>researcher12</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="10">
+							<name>researcher13</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="11">
+							<name>researcher14</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="12">
+							<name>researcher15</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="13">
+							<name>researcher16</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="14">
+							<name>researcher1</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="15">
+							<name>researcher2</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="16">
+							<name>researcher3</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="17">
+							<name>researcher4</name>
+							<class>21</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="18">
+							<name>paper07</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="19">
+							<name>paper06</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="20">
+							<name>paper02</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="21">
+							<name>paper03</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="22">
+							<name>paper04</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="23">
+							<name>paper01</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="24">
+							<name>paper05</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+					</objects>
+				</elements>
+				<repositoryDiagrams>
+					<repositoryDiagram id="1">
+						<name>Object Repository</name>
+						<description />
+						<objects>
+							<object id="1">
+								<attributes>
+									<attribute class="23" id="1">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="23" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="23" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="339" y="9" />
+									<size width="216" height="87" />
+									<color />
+								</graphics>
+							</object>
+							<object id="2">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 5</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="11" y="274" />
+									<size width="204" height="131" />
+									<color />
+								</graphics>
+							</object>
+							<object id="3">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 6</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="221" y="273" />
+									<size width="177" height="130" />
+									<color />
+								</graphics>
+							</object>
+							<object id="4">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 7</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="407" y="274" />
+									<size width="188" height="126" />
+									<color />
+								</graphics>
+							</object>
+							<object id="5">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 8</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="602" y="273" />
+									<size width="192" height="124" />
+									<color />
+								</graphics>
+							</object>
+							<object id="6">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 9</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="806" y="275" />
+									<size width="210" height="125" />
+									<color />
+								</graphics>
+							</object>
+							<object id="7">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 10</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="1084" y="273" />
+									<size width="214" height="117" />
+									<color />
+								</graphics>
+							</object>
+							<object id="8">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 11</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="10" y="428" />
+									<size width="200" height="127" />
+									<color />
+								</graphics>
+							</object>
+							<object id="9">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 12</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="217" y="433" />
+									<size width="225" height="127" />
+									<color />
+								</graphics>
+							</object>
+							<object id="10">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 13</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="447" y="431" />
+									<size width="191" height="125" />
+									<color />
+								</graphics>
+							</object>
+							<object id="11">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 14</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="638" y="431" />
+									<size width="200" height="127" />
+									<color />
+								</graphics>
+							</object>
+							<object id="12">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 15</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="875" y="426" />
+									<size width="214" height="135" />
+									<color />
+								</graphics>
+							</object>
+							<object id="13">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 16</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="1128" y="420" />
+									<size width="196" height="135" />
+									<color />
+								</graphics>
+							</object>
+							<object id="14">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 1</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="48" y="112" />
+									<size width="192" height="128" />
+									<color />
+								</graphics>
+							</object>
+							<object id="15">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 2</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="257" y="114" />
+									<size width="188" height="123" />
+									<color />
+								</graphics>
+							</object>
+							<object id="16">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name 3</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="461" y="111" />
+									<size width="200" height="119" />
+									<color />
+								</graphics>
+							</object>
+							<object id="17">
+								<attributes>
+									<attribute class="21" id="1">
+										<value>Name4</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="21" id="4">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="691" y="108" />
+									<size width="229" height="117" />
+									<color />
+								</graphics>
+							</object>
+							<object id="18">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 07</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="553" y="942" />
+									<size width="364" height="126" />
+									<color />
+								</graphics>
+							</object>
+							<object id="19">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 06</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="989" y="771" />
+									<size width="364" height="126" />
+									<color />
+								</graphics>
+							</object>
+							<object id="20">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 02</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="565" y="616" />
+									<size width="380" height="124" />
+									<color />
+								</graphics>
+							</object>
+							<object id="21">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 03</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="997" y="605" />
+									<size width="372" height="112" />
+									<color />
+								</graphics>
+							</object>
+							<object id="22">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 04</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="144" y="770" />
+									<size width="396" height="131" />
+									<color />
+								</graphics>
+							</object>
+							<object id="23">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 01</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="163" y="622" />
+									<size width="366" height="124" />
+									<color />
+								</graphics>
+							</object>
+							<object id="24">
+								<attributes>
+									<attribute class="22" id="1">
+										<value>Title 05</value>
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="550" y="770" />
+									<size width="392" height="128" />
+									<color />
+								</graphics>
+							</object>
+						</objects>
+						<associations />
+						<constraints />
+					</repositoryDiagram>
+				</repositoryDiagrams>
+				<planningProblems>
+					<problem id="1">
+						<name>Problem</name>
+						<description />
+						<objectDiagrams>
+							<objectDiagram id="1">
+								<name>Snapshot</name>
+								<sequenceReference>init</sequenceReference>
+								<description />
+								<objects>
+									<object id="1">
+										<attributes>
+											<attribute class="23" id="1">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="23" id="2">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="23" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="339" y="9" />
+											<size width="216" height="87" />
+											<color />
+										</graphics>
+									</object>
+									<object id="2">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 5</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>BPM</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>PlanSimulation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>PlanValidation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>SpaceApplication</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="11" y="274" />
+											<size width="204" height="131" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 6</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Modeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>Timeline</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>MultiAgentSystems</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>SpaceApplication</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>ModelChecking</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>TimeBasedModeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="7">
+														<parameters>
+															<parameter id="1">
+																<value>ModelRefinement</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="221" y="273" />
+											<size width="177" height="130" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 7</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>MultiAgentSystems</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>HTN</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="407" y="274" />
+											<size width="188" height="126" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 8</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>DistributedAI</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>MultiAgentSystems</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>Timeline</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>SpaceApplication</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>Modeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>TimeBasedModeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="7">
+														<parameters>
+															<parameter id="1">
+																<value>PlanValidation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="602" y="273" />
+											<size width="192" height="124" />
+											<color />
+										</graphics>
+									</object>
+									<object id="6">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 9</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>Modeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>ModelChecking</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>KETools</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>Automata</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="821" y="271" />
+											<size width="210" height="125" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 10</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1063" y="272" />
+											<size width="214" height="123" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 11</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="10" y="428" />
+											<size width="200" height="127" />
+											<color />
+										</graphics>
+									</object>
+									<object id="9">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 12</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>BPM</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>KETools</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>Modeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>XPDL</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="217" y="433" />
+											<size width="225" height="127" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 13</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>SpaceApplication</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>PlanSimulation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>VirtualEnvironment</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>MultiAgentSystems</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="447" y="431" />
+											<size width="191" height="125" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 14</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>MultiAgentSystems</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="659" y="432" />
+											<size width="200" height="127" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 15</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>DomainSpecification</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>RepresentationLanguage</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>ModelChecking</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>TimeBasedModeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>knowledgeElicitation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>TranslationProcess</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="7">
+														<parameters>
+															<parameter id="1">
+																<value>BPM</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="8">
+														<parameters>
+															<parameter id="1">
+																<value>PostDesign</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="9">
+														<parameters>
+															<parameter id="1">
+																<value>PlanValidation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="868" y="431" />
+											<size width="217" height="123" />
+											<color />
+										</graphics>
+									</object>
+									<object id="13">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 16</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>Ontology</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>RepresentationLanguage</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1098" y="422" />
+											<size width="196" height="135" />
+											<color />
+										</graphics>
+									</object>
+									<object id="14">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="48" y="112" />
+											<size width="192" height="128" />
+											<color />
+										</graphics>
+									</object>
+									<object id="15">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="257" y="114" />
+											<size width="188" height="123" />
+											<color />
+										</graphics>
+									</object>
+									<object id="16">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name 3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="461" y="111" />
+											<size width="200" height="119" />
+											<color />
+										</graphics>
+									</object>
+									<object id="17">
+										<attributes>
+											<attribute class="21" id="1">
+												<value>Name4</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="4">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="691" y="108" />
+											<size width="229" height="117" />
+											<color />
+										</graphics>
+									</object>
+									<object id="18">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 07</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>TranslationProcess</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>BPM</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>XPDL</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="494" y="939" />
+											<size width="364" height="126" />
+											<color />
+										</graphics>
+									</object>
+									<object id="19">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 06</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Ontology</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>HTN</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>ModelRefinement</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>PlanDiagnosis</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>Modeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>KnowledgeExtraction</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="905" y="768" />
+											<size width="364" height="126" />
+											<color />
+										</graphics>
+									</object>
+									<object id="20">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 02</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Learning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>ReinforcementLearning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>MetaLearning</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>DistributedAI</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>MultiAgentSystems</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="496" y="635" />
+											<size width="380" height="124" />
+											<color />
+										</graphics>
+									</object>
+									<object id="21">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 03</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>XML</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>DomainSpecification</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>Modeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>RepresentationLanguage</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>PDDL</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>LanguageDesign</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="912" y="631" />
+											<size width="372" height="116" />
+											<color />
+										</graphics>
+									</object>
+									<object id="22">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 04</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>Timeline</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>SpaceApplication</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>KETools</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>ModelChecking</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>TimeBasedModeling</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>Automata</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="73" y="778" />
+											<size width="396" height="131" />
+											<color />
+										</graphics>
+									</object>
+									<object id="23">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 01</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>PlanAnalysis</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>PostDesign</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>VirtualPrototyping</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>VirtualEnvironment</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5">
+														<parameters>
+															<parameter id="1">
+																<value>KETools</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="6">
+														<parameters>
+															<parameter id="1">
+																<value>PlanValidation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="7">
+														<parameters>
+															<parameter id="1">
+																<value>ModelRefinement</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="8">
+														<parameters>
+															<parameter id="1">
+																<value>DomainSpecification</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="9">
+														<parameters>
+															<parameter id="1">
+																<value>PlanSimulation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="92" y="631" />
+											<size width="366" height="124" />
+											<color />
+										</graphics>
+									</object>
+									<object id="24">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 05</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>SpaceApplication</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>RepresentationLanguage</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3">
+														<parameters>
+															<parameter id="1">
+																<value>knowledgeElicitation</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4">
+														<parameters>
+															<parameter id="1">
+																<value>HTN</value>
+															</parameter>
+														</parameters>
+														<value>true</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="502" y="785" />
+											<size width="392" height="119" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="1">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="15" id="1" />
+											<objectAssociationEnd element="object" element-id="22" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="2">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="5" id="1" />
+											<objectAssociationEnd element="object" element-id="22" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="3">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="17" id="1" />
+											<objectAssociationEnd element="object" element-id="23" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="4">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="12" id="1" />
+											<objectAssociationEnd element="object" element-id="23" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="5">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="9" id="1" />
+											<objectAssociationEnd element="object" element-id="18" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="6">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="3" id="1" />
+											<objectAssociationEnd element="object" element-id="24" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+							<objectDiagram id="2">
+								<name>Snapshot</name>
+								<sequenceReference>goal</sequenceReference>
+								<description />
+								<objects>
+									<object id="18">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 07</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="93" y="53" />
+											<size width="364" height="126" />
+											<color />
+										</graphics>
+									</object>
+									<object id="19">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 06</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="483" y="47" />
+											<size width="364" height="126" />
+											<color />
+										</graphics>
+									</object>
+									<object id="20">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 02</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="894" y="64" />
+											<size width="380" height="124" />
+											<color />
+										</graphics>
+									</object>
+									<object id="21">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 03</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="58" y="215" />
+											<size width="372" height="112" />
+											<color />
+										</graphics>
+									</object>
+									<object id="22">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 04</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="880" y="204" />
+											<size width="396" height="131" />
+											<color />
+										</graphics>
+									</object>
+									<object id="23">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 01</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="485" y="209" />
+											<size width="366" height="124" />
+											<color />
+										</graphics>
+									</object>
+									<object id="24">
+										<attributes>
+											<attribute class="22" id="1">
+												<value>Title 05</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="483" y="349" />
+											<size width="371" height="115" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations />
+								<constraints>researcher5.papersAssigned &gt;= 1 and
+researcher6.papersAssigned &gt;= 1 and
+researcher7.papersAssigned &gt;= 1 and
+researcher8.papersAssigned &gt;= 1 and
+researcher9.papersAssigned &gt;= 1 and
+researcher10.papersAssigned &gt;= 1 and
+researcher11.papersAssigned &gt;= 1 and
+researcher12.papersAssigned &gt;= 1 and
+researcher13.papersAssigned &gt;= 1 and
+researcher14.papersAssigned &gt;= 1 and
+researcher15.papersAssigned &gt;= 1 and
+researcher16.papersAssigned &gt;= 1</constraints>
+							</objectDiagram>
+						</objectDiagrams>
+						<constraints />
+						<metrics>
+							<qualityMetric id="1">
+								<name>Quality Metric</name>
+								<description />
+								<enabled>true</enabled>
+								<type>variable</type>
+								<intention>maximize</intention>
+								<weight>1</weight>
+								<variable>
+									<chosenVariable type="attr">
+										<object class="23" id="1">
+											<attribute type="2" class="23" id="3" />
+										</object>
+									</chosenVariable>
+								</variable>
+								<expression>
+									<rule />
+								</expression>
+								<actionCounter>
+									<chosenOperator class="" id="">
+										<parameters />
+									</chosenOperator>
+								</actionCounter>
+								<preferenceFunction>
+									<function id="1">
+										<domain>
+											<lowerbound value="-inf" included="true" />
+											<upperbound value="+inf" included="true" />
+										</domain>
+										<rule>1</rule>
+									</function>
+								</preferenceFunction>
+							</qualityMetric>
+						</metrics>
+					</problem>
+				</planningProblems>
+				<constraints />
+				<metrics />
+			</domain>
+		</planningDomains>
+	</diagrams>
+</project>
+

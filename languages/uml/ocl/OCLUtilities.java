@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -85,7 +85,7 @@ public class OCLUtilities {
 				
 				Element tyClass = null;
 				try {
-					XPath path = new JDOMXPath("project/elements/classes/class[@id='"+parameter.getChildText("type")+"']");
+					XPath path = new JDOMXPath("project/elements/classes/*[@id='"+parameter.getChildText("type")+"']");
 					tyClass = (Element)path.selectSingleNode(operator.getDocument());
 				} catch (JaxenException e2) {			
 					e2.printStackTrace();
@@ -137,7 +137,7 @@ public class OCLUtilities {
 				if (!stateMachine.getChildText("class").trim().equals("")){
 					Element tyClass = null;
 					try {
-						XPath path = new JDOMXPath("project/elements/classes/class[@id='"+stateMachine.getChildText("class")+"']");
+						XPath path = new JDOMXPath("project/elements/classes/*[@id='"+stateMachine.getChildText("class")+"']");
 						tyClass = (Element)path.selectSingleNode(operator.getDocument());
 					} catch (JaxenException e2) {			
 						e2.printStackTrace();
@@ -353,7 +353,7 @@ public class OCLUtilities {
                 while (tokenizer.hasMoreTokens()) {
                     String token = tokenizer.nextToken();
                     boolean consider = true;
-                    ;
+                    
                     if (token.equals("pre:")){//this is either the end or the beggining
                         isPrecondition = true;
                         isPostcondition = false;

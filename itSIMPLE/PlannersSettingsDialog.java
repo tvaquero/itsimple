@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -58,7 +58,7 @@ public class PlannersSettingsDialog extends JDialog {
 		setTitle("Planners Settings");
 		
 		int w = 700;
-		int h = 350;
+		int h = 400;
 		
 		setBounds(screenSize.width/2-w/2, screenSize.height/2-h/2, w, h);
 		

@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
 *
 * This file is part of itSIMPLE.
@@ -180,7 +180,7 @@ public class VersionUpdater {
                                     newMetrics.add(qualityMetric);
                             }
 
-                            //remove all old metrics
+                            //remove allif(version.getText().equals("2.1.10")){ old metrics
                             metricSet.removeChildren("metric");
 
                             //add new quality metrics
@@ -201,6 +201,10 @@ public class VersionUpdater {
 
 
 		}
+                if(version.getText().equals("3.0.10")){
+                    version.setText("3.1.10");
+
+                }
 		
 		
 	}

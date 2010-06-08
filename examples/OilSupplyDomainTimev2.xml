@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -2364,7 +2364,7 @@ As refinarias possuem capacidades mínimas e máximas relacionadas, respectivament
 						<graphics>
 							<icon />
 							<position x="8" y="0" />
-							<size width="265" height="286" />
+							<size width="348" height="300" />
 							<color />
 						</graphics>
 					</class>
@@ -2379,7 +2379,7 @@ As refinarias possuem capacidades mínimas e máximas relacionadas, respectivament
 					<class id="24">
 						<graphics>
 							<icon />
-							<position x="361" y="8" />
+							<position x="402" y="9" />
 							<size width="195" height="268" />
 							<color />
 						</graphics>
@@ -5320,7 +5320,7 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 									<object id="12">
 										<attributes>
 											<attribute class="21" id="13">
-												<value />
+												<value>GEBAST</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -5394,14 +5394,14 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										<graphics>
 											<icon />
 											<position x="562" y="78" />
-											<size width="244" height="209" />
+											<size width="244" height="261" />
 											<color />
 										</graphics>
 									</object>
 									<object id="13">
 										<attributes>
 											<attribute class="21" id="13">
-												<value />
+												<value>GEBAST</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -5464,14 +5464,14 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										<graphics>
 											<icon />
 											<position x="233" y="84" />
-											<size width="243" height="209" />
+											<size width="243" height="238" />
 											<color />
 										</graphics>
 									</object>
 									<object id="14">
 										<attributes>
 											<attribute class="21" id="13">
-												<value />
+												<value>GEBAST</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -5534,7 +5534,7 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										<graphics>
 											<icon />
 											<position x="862" y="81" />
-											<size width="246" height="212" />
+											<size width="246" height="252" />
 											<color />
 										</graphics>
 									</object>
@@ -5547,55 +5547,55 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 												</graphics>
 											</attribute>
 											<attribute class="29" id="2">
-												<value />
+												<value>0</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="3">
-												<value />
+												<value>0</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="4">
-												<value />
+												<value>0</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="5">
-												<value />
+												<value>0</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="6">
-												<value />
+												<value>1</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="7">
-												<value />
+												<value>1</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="8">
-												<value />
+												<value>1</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="9">
-												<value />
+												<value>1</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="29" id="10">
-												<value />
+												<value>110</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -5603,8 +5603,8 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="1859" y="819" />
-											<size width="162" height="155" />
+											<position x="990" y="624" />
+											<size width="233" height="256" />
 											<color />
 										</graphics>
 									</object>
@@ -5706,7 +5706,7 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="1443" y="-36" />
+											<position x="1447" y="0" />
 											<size width="215" height="201" />
 											<color />
 										</graphics>
@@ -8867,6 +8867,1997 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 								</preferenceFunction>
 							</qualityMetric>
 						</metrics>
+					</problem>
+					<problem id="4">
+						<name>Tankers3Tanks5 - case1</name>
+						<description />
+						<objectDiagrams>
+							<objectDiagram id="1">
+								<name>Snapshot</name>
+								<sequenceReference>init</sequenceReference>
+								<description />
+								<objects>
+									<object id="15">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="742" y="1043" />
+											<size width="153" height="88" />
+											<color />
+										</graphics>
+									</object>
+									<object id="16">
+										<attributes>
+											<attribute class="26" id="3">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="26" id="1">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="544" y="474" />
+											<size width="174" height="116" />
+											<color />
+										</graphics>
+									</object>
+									<object id="17">
+										<attributes>
+											<attribute class="26" id="3">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="26" id="1">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="846" y="474" />
+											<size width="176" height="111" />
+											<color />
+										</graphics>
+									</object>
+									<object id="18">
+										<attributes>
+											<attribute class="24" id="4">
+												<value>cl4</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="3">
+												<value>49997</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="2">
+												<value>9654</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="1">
+												<value>77355</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="12">
+												<value>24</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="13">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="14">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="15">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="93" y="981" />
+											<size width="247" height="235" />
+											<color />
+										</graphics>
+									</object>
+									<object id="19">
+										<attributes>
+											<attribute class="24" id="4">
+												<value>cl6</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="3">
+												<value>39015</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="2">
+												<value>11022</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="1">
+												<value>77001</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="12">
+												<value>24</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="13">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="14">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="15">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="94" y="472" />
+											<size width="243" height="235" />
+											<color />
+										</graphics>
+									</object>
+									<object id="20">
+										<attributes>
+											<attribute class="24" id="4">
+												<value>cl5</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="3">
+												<value>69524</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="2">
+												<value>11370</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="1">
+												<value>73745</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="12">
+												<value>24</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="13">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="14">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="15">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="583" y="1268" />
+											<size width="238" height="213" />
+											<color />
+										</graphics>
+									</object>
+									<object id="21">
+										<attributes>
+											<attribute class="24" id="4">
+												<value>cl3</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="3">
+												<value>18232</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="2">
+												<value>10457</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="1">
+												<value>73077</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="12">
+												<value>24</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="13">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="14">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="15">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="96" y="740" />
+											<size width="246" height="227" />
+											<color />
+										</graphics>
+									</object>
+									<object id="22">
+										<attributes>
+											<attribute class="24" id="4">
+												<value>cl1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="3">
+												<value>13570</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="2">
+												<value>9766</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="1">
+												<value>77329</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="12">
+												<value>24</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="13">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="14">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="24" id="15">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="91" y="1239" />
+											<size width="237" height="235" />
+											<color />
+										</graphics>
+									</object>
+									<object id="23">
+										<attributes>
+											<attribute class="25" id="5">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="25" id="4">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="25" id="3">
+												<value>cl1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1192" y="1019" />
+											<size width="255" height="135" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes>
+											<attribute class="21" id="13">
+												<value>GEBAST</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="7">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="6">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="5">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>oc05</value>
+															</parameter>
+														</parameters>
+														<value>106000</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="14">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="15">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="562" y="78" />
+											<size width="244" height="261" />
+											<color />
+										</graphics>
+									</object>
+									<object id="13">
+										<attributes>
+											<attribute class="21" id="13">
+												<value>GEBAST</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="7">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="6">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="5">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>oc38</value>
+															</parameter>
+														</parameters>
+														<value>30000</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="14">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="15">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="233" y="84" />
+											<size width="243" height="240" />
+											<color />
+										</graphics>
+									</object>
+									<object id="14">
+										<attributes>
+											<attribute class="21" id="13">
+												<value>GEBAST</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="7">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="6">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="5">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>oc08</value>
+															</parameter>
+														</parameters>
+														<value>38000</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>oc27</value>
+															</parameter>
+														</parameters>
+														<value>20000</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="14">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="15">
+												<value>2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="862" y="81" />
+											<size width="261" height="280" />
+											<color />
+										</graphics>
+									</object>
+									<object id="24">
+										<attributes>
+											<attribute class="29" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="3">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="4">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="5">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="6">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="7">
+												<value>0.01</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="8">
+												<value>0.01</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="9">
+												<value>1</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="29" id="10">
+												<value>0.1371069</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="943" y="1194" />
+											<size width="279" height="257" />
+											<color />
+										</graphics>
+									</object>
+									<object id="1">
+										<attributes>
+											<attribute class="27" id="5">
+												<value repository="false">
+													135.2201
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>OSVAT</value>
+															</parameter>
+														</parameters>
+														<value>0.1352201</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="4">
+												<value repository="false">0.1298113</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="3">
+												<value repository="false">
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl1</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl3</value>
+															</parameter>
+														</parameters>
+														<value>1.57235</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl4</value>
+															</parameter>
+														</parameters>
+														<value>0.62895</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl5</value>
+															</parameter>
+														</parameters>
+														<value>1.57235</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl6</value>
+															</parameter>
+														</parameters>
+														<value>0.9434</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="6">
+												<value>4470</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1460" y="0" />
+											<size width="243" height="201" />
+											<color />
+										</graphics>
+									</object>
+									<object id="3">
+										<attributes>
+											<attribute class="27" id="5">
+												<value repository="false">
+													132.0755
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>OSVAT</value>
+															</parameter>
+														</parameters>
+														<value>0.1320755</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="4">
+												<value repository="false">0.1267925</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="3">
+												<value repository="false">
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl1</value>
+															</parameter>
+														</parameters>
+														<value>1.57235</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl3</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl4</value>
+															</parameter>
+														</parameters>
+														<value>0.94335</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl5</value>
+															</parameter>
+														</parameters>
+														<value>3.14465</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl6</value>
+															</parameter>
+														</parameters>
+														<value>2.51570</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="6">
+												<value>4390</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1459" y="207" />
+											<size width="242" height="173" />
+											<color />
+										</graphics>
+									</object>
+									<object id="4">
+										<attributes>
+											<attribute class="27" id="5">
+												<value repository="false">
+													133.9622
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>OSVAT</value>
+															</parameter>
+														</parameters>
+														<value>0.1339622</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="4">
+												<value repository="false">0.1286037</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="3">
+												<value repository="false">
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl1</value>
+															</parameter>
+														</parameters>
+														<value>0.62895</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl3</value>
+															</parameter>
+														</parameters>
+														<value>0.94335</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl4</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl5</value>
+															</parameter>
+														</parameters>
+														<value>2.20130</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl6</value>
+															</parameter>
+														</parameters>
+														<value>1.57235</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="6">
+												<value>4429</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1441" y="394" />
+											<size width="244" height="183" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes>
+											<attribute class="27" id="5">
+												<value repository="false">
+													138.3648
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>OSVAT</value>
+															</parameter>
+														</parameters>
+														<value>0.1383648</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="4">
+												<value repository="false">0.1320755</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="3">
+												<value repository="false">
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl1</value>
+															</parameter>
+														</parameters>
+														<value>1.57235</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl3</value>
+															</parameter>
+														</parameters>
+														<value>3.14465</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl4</value>
+															</parameter>
+														</parameters>
+														<value>2.20130</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl5</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl6</value>
+															</parameter>
+														</parameters>
+														<value>0.62895</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="6">
+												<value>4447</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1441" y="591" />
+											<size width="191" height="174" />
+											<color />
+										</graphics>
+									</object>
+									<object id="7">
+										<attributes>
+											<attribute class="27" id="5">
+												<value repository="false">
+													137.1069
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>OSVAT</value>
+															</parameter>
+														</parameters>
+														<value>0.1371069</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="4">
+												<value repository="false">0.1316227</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="3">
+												<value repository="false">
+													<parameterizedValue id="1" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl1</value>
+															</parameter>
+														</parameters>
+														<value>0.94340</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl3</value>
+															</parameter>
+														</parameters>
+														<value>2.51570</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="3" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl4</value>
+															</parameter>
+														</parameters>
+														<value>1.57235</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="4" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl5</value>
+															</parameter>
+														</parameters>
+														<value>0.62895</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="5" repository="false">
+														<parameters>
+															<parameter id="1">
+																<value>cl6</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="27" id="6">
+												<value>4511</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1439" y="775" />
+											<size width="193" height="189" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
+										<attributes>
+											<attribute class="28" id="4">
+												<value>7299</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1801" y="259" />
+											<size width="177" height="79" />
+											<color />
+										</graphics>
+									</object>
+									<object id="9">
+										<attributes>
+											<attribute class="28" id="4">
+												<value>6761</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1188" y="282" />
+											<size width="177" height="81" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes>
+											<attribute class="28" id="4">
+												<value>6478</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1771" y="463" />
+											<size width="178" height="75" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes>
+											<attribute class="28" id="4">
+												<value>7044</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1182" y="457" />
+											<size width="179" height="75" />
+											<color />
+										</graphics>
+									</object>
+									<object id="25">
+										<attributes>
+											<attribute class="30" id="1">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="30" id="2">
+												<value>0</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="1161" y="615" />
+											<size width="202" height="152" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations>
+									<objectAssociation id="13">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="22" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="14">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="20" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="15">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="19" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="16">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="21" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="17">
+										<classAssociation>1</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="18" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="18">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="16" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="19">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="17" id="1" />
+											<objectAssociationEnd element="object" element-id="15" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="20">
+										<classAssociation>3</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="23" id="2" />
+											<objectAssociationEnd element="object" element-id="15" id="1" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="1">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="1" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="2">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="9" id="1" />
+											<objectAssociationEnd element="object" element-id="1" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="3">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="11" id="1" />
+											<objectAssociationEnd element="object" element-id="1" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="4">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="5">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="9" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="6">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="4" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="7">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="10" id="1" />
+											<objectAssociationEnd element="object" element-id="4" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="8">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="10" id="1" />
+											<objectAssociationEnd element="object" element-id="5" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="9">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="5" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="10">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="8" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="11">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="10" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="12">
+										<classAssociation>5</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="11" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="500" y="-15" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+								</associations>
+								<constraints />
+							</objectDiagram>
+							<objectDiagram id="2">
+								<name>Snapshot</name>
+								<sequenceReference>goal</sequenceReference>
+								<description />
+								<objects>
+									<object id="12">
+										<attributes>
+											<attribute class="21" id="13">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="7">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="6">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="5">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>oc05</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="14">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="15">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="288" y="27" />
+											<size width="194" height="203" />
+											<color />
+										</graphics>
+									</object>
+									<object id="13">
+										<attributes>
+											<attribute class="21" id="13">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="7">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="6">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="5">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>oc38</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="14">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="15">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="53" y="31" />
+											<size width="219" height="266" />
+											<color />
+										</graphics>
+									</object>
+									<object id="14">
+										<attributes>
+											<attribute class="21" id="13">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="7">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="6">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="5">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="3">
+												<value>
+													<parameterizedValue id="1">
+														<parameters>
+															<parameter id="1">
+																<value>oc08</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+													<parameterizedValue id="2">
+														<parameters>
+															<parameter id="1">
+																<value>oc27</value>
+															</parameter>
+														</parameters>
+														<value>0</value>
+														<graphics>
+															<color />
+														</graphics>
+													</parameterizedValue>
+												</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="14">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="21" id="15">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="493" y="27" />
+											<size width="193" height="204" />
+											<color />
+										</graphics>
+									</object>
+								</objects>
+								<associations />
+								<constraints />
+							</objectDiagram>
+						</objectDiagrams>
+						<constraints />
+						<metrics />
 					</problem>
 				</planningProblems>
 				<metrics />

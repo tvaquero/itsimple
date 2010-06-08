@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -11227,7 +11227,7 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										<graphics>
 											<icon />
 											<position x="1362" y="138" />
-											<size width="145" height="78" />
+											<size width="166" height="78" />
 											<color />
 										</graphics>
 									</object>
@@ -11242,8 +11242,8 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="1972" y="797" />
-											<size width="153" height="78" />
+											<position x="1939" y="797" />
+											<size width="186" height="78" />
 											<color />
 										</graphics>
 									</object>
@@ -16188,7 +16188,7 @@ o.lastOil = null and domainMetric = domainMetric + wIC*(pipelineClass.interfaceC
 										<graphics>
 											<icon />
 											<position x="412" y="102" />
-											<size width="151" height="91" />
+											<size width="151" height="108" />
 											<color />
 										</graphics>
 									</object>

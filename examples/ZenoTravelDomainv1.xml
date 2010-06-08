@@ -6,7 +6,7 @@
 The final transportation domain involves transporting people around in planes, using different modes of movement: fast and slow. The key to this domain is that, where the expressive power of the numeric tracks is used, the fast movement consumes fuel faster than slow movement, making the search for a good quality plan (one using less fuel) much harder.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
