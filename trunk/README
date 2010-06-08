@@ -1,6 +1,6 @@
 itSIMPLE: Integrated Tools Software Interface for Modeling PLanning Environments
  
-Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+Copyright (C) 2007-2010 Universidade de Sao Paulo
  
 
 This file is part of itSIMPLE.
@@ -21,10 +21,10 @@ along with itSIMPLE.  If not, see <http://www.gnu.org/licenses/>.
 
 Authors:	Tiago S. Vaquero, 
 			Jose Reinaldo Silva,
+		 	Flavio Tonidandel.
 		 	Victor Romero,
 		 	Fernando Sette,
                         Matheus Haddad,
-		 	Flavio Tonidandel.
 
 
 Contact the authors:  
@@ -32,7 +32,7 @@ Contact the authors:
 			itsimple@dlab.poli.usp.br
                         tiago.vaquero@gmail.com
 
-			Design Lab - Escola Polit�cnica - Universidade de Sao Paulo
+			Design Lab - Escola Politecnica - Universidade de Sao Paulo
 			Av. Prof. Mello Moraes, 2231, sala MS-32
 			Sao Paulo, SP, 05508-030
 			Brazil
@@ -49,7 +49,8 @@ download them from the authors website and make a copy of the executable file
 files must correspond to what is specified in a file use by itSIMPLE. The file 
 itPlanners.xml (resources/planners/itPlanners.xml) holds information about each 
 planners that itSIMPLE can communicate with. The following list show the name of 
-files treated by itSIMPLE2.1:
+files treated by itSIMPLE:
+
 - metric-ff.exe  http://members.deri.at/~joergh/ff.html
 - metric-ff      http://members.deri.at/~joergh/ff.html
 - ffv-2.3        http://members.deri.at/~joergh/ff.html
@@ -61,13 +62,18 @@ files treated by itSIMPLE2.1:
 - mips-xxl2008   (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
 - sgplan6        (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
 - lpg            (version 1.2) http://zeus.ing.unibs.it/lpg/
-- hspsp          (2008 version from IPC-6)http://ipc.informatik.uni-freiburg.de/Planners/
-- Plan-A         (2008 version from IPC-6)http://ipc.informatik.uni-freiburg.de/Planners/
+- hspsp          (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
+- Plan-A         (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
+- blackbox       (version 4.3 11 Jan 2006) http://www.cs.rochester.edu/u/kautz/satplan/blackbox
+- blackbox.exe   (version 4.3 11 Jan 2006) http://www.cs.rochester.edu/u/kautz/satplan/blackbox
+- maxplan        (2006 version from IPC-5) http://www.cse.wustl.edu/~chen/maxplan/
+- lprpg          (Public Release 2 2010-04-11) http://planning.cis.strath.ac.uk/LPRPG/
 
-It is necessary to compile the source for some of them.
+It is necessary to compile the source for some of them, depending on the OS (windows, linux, mac).
 
 For more information check our website dlab.poli.usp.br.
 
 Have fun.
 
+Tiago
 

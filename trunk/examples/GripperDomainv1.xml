@@ -4,7 +4,7 @@
 	<description>There is a robot with two grippers. It can carry a ball in each. The goal is to take N balls from one room to another; N rises with problem number. Some planners treat the two grippers asymmetrically, giving rise to an unnecessary combinatorial explosion.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>

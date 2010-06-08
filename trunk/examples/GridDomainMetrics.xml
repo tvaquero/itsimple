@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-	<name>Grid Domain</name>
+	<name>Grid Domain Metrics</name>
 	<description>There is a square grid of locations. A robot can move one grid square at a time horizontally and vertically. If a square is locked, the robot can move to it only by unlocking it, which requires having a key of the same shape as the lock. 
 The goal is to get keys from various locations to various new locations. This domain was created by Jana Koehler, based on an earlier domain by Drew McDermott.
 
 Extracted from IPC-1 (1998) and extended to include some metrics and criteria measure.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>

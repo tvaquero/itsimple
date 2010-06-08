@@ -1,7 +1,7 @@
 /***
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 *
-* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2009 Universidade de Sao Paulo
 *
 
 * This file is part of itSIMPLE.
@@ -46,6 +46,11 @@ public class VirtualPrototypingBlender {
     private static String problemFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/problemMetrics.xml";
     private static String planFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/plan.xml";
     private static String solutionFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/solution.txt";
+
+    //private static String domainFile = "/home/tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/domainMetrics.xml";
+    //private static String problemFile = "/home/tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/problemMetrics.xml";
+    //private static String planFile = "/home/tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/plan.xml";
+    //private static String solutionFile = "/home/tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/solution.txt";
 
     public static void generatePrototypeFiles(Element domain, Element problem, Element xmlPlan) throws IOException{
 
@@ -240,9 +245,11 @@ public class VirtualPrototypingBlender {
             
             Element oName = (Element) theObject.getChild("name").clone();
             Element oClass = (Element) theObject.getChild("class").clone();
+            Element oDescription = (Element) theObject.getChild("description").clone();
             
             eaObject.addContent(oName);
             eaObject.addContent(oClass);
+            eaObject.addContent(oDescription);
 
             //find object class
             Element theClass = null;

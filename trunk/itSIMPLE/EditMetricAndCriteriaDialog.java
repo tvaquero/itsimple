@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008, 2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2009 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -451,13 +451,12 @@ public class EditMetricAndCriteriaDialog extends JDialog implements TableModelLi
                         if (selected != null){
                             Element theClass = selected.getParentElement().getParentElement();
                             //check if it changed
-                            if(!chosenOperator.getAttributeValue("class").equals(theClass.getAttributeValue("id")) && !chosenOperator.getAttributeValue("id").equals(selected.getAttributeValue("id"))){
+                            if(!chosenOperator.getAttributeValue("class").equals(theClass.getAttributeValue("id")) || !chosenOperator.getAttributeValue("id").equals(selected.getAttributeValue("id"))){
                                 setChosenOperator(selected);
                             }
 
                         }else{
                             setChosenOperator(null);
-
                         }
                             //String selection = (String)operatorCounterListComboBox.getSelectedItem();
                             //metricData.getChild("intention").setText(selection);
@@ -1027,6 +1026,16 @@ public class EditMetricAndCriteriaDialog extends JDialog implements TableModelLi
          */
         private void setChosenOperator(Element operator) {
 
+            //clear table of parameters
+            //deletes ALL the rows
+            parametersTableModel.getDataVector().removeAllElements();
+            //repaints the table and notify all listeners (only once!)
+            parametersTableModel.fireTableDataChanged();
+            
+            //while (parametersTableModel.getRowCount() > 0) {
+            //    parametersTableModel.removeRow(0);
+            //}
+
             Element chosenOperator = metricData.getChild("actionCounter").getChild("chosenOperator");
 
             if (operator != null){
@@ -1042,6 +1051,7 @@ public class EditMetricAndCriteriaDialog extends JDialog implements TableModelLi
 
 
                 currentParameters.clear();
+
 
                 //create the new parameter references
                 for (Iterator<Element> it = operator.getChild("parameters").getChildren().iterator(); it.hasNext();) {

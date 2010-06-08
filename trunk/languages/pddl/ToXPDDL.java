@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
 *
 * This file is part of itSIMPLE.
@@ -533,7 +533,7 @@ public class ToXPDDL {
                 //4.2 non-primitive attributes (they are treat differently depending on the chosen pddl version)
 		attributes = null;
 		try {
-			XPath path = new JDOMXPath("project/elements/classes/class/attributes/attribute[type!='1' and type!='2' and type!='3' and type!='4']");
+                        XPath path = new JDOMXPath("project/elements/classes/class/attributes/attribute[type!='1' and type!='2' and type!='3' and type!='4']");
 			attributes = path.selectNodes(project.getDocument());
 		} catch (JaxenException e) {
 			e.printStackTrace();
@@ -1725,8 +1725,8 @@ public class ToXPDDL {
 		result = null;
 		// look for 'exists' and 'forall' in the actions and cosntraints
 		try {
-			XPath path = new JDOMXPath("actions/action/descendant::exists or actions/action/descendant::forall or " +
-					"constraints/descendant::exists or constraints/descendant::forall");	
+			XPath path = new JDOMXPath("actions/action/descendant::exists | actions/action/descendant::forall | " +
+					"constraints/descendant::exists | constraints/descendant::forall");
 			result = path.selectNodes(xpddlDomain);
 		} catch (JaxenException e) {			
 			e.printStackTrace();
@@ -3788,7 +3788,9 @@ public class ToXPDDL {
 						} catch (JaxenException e) {			
 							e.printStackTrace();
 						}								
-						if(classAttribute != null){
+
+                                                //if(classAttribute != null){ //including string
+						if(classAttribute != null && !classAttribute.getChildText("type").equals("4")){ //excluding the String case
 							
 							Element predOrFunc = new Element("predicate");// tag name will be changed later if function
 							predOrFunc.setAttribute("id", classAttribute.getChildText("name"));									
@@ -3971,7 +3973,7 @@ public class ToXPDDL {
 				}
 			}
 
-                        //4.1.4 Contraints (local constraints that will be added as conditions)
+                        //4.1.4 Contraints from Object diagrams (local constraints that will be added as conditions)
                         Element localConstraints = objectDiagram.getChild("constraints");
                         if (localConstraints != null && !localConstraints.getText().trim().equals("")){
                             String constraints = localConstraints.getText().trim();
@@ -3980,7 +3982,17 @@ public class ToXPDDL {
                             Element expTree = builder.getExpressionTree();
                             //Element condition = buildCondition(expTree, null, null, null);
                             Element condition = buildCondition(expTree, null, null, PRECONDITION);
-                            containerXPDDLNode.addContent(condition);
+                            //If the container is (and ... and the conditions starts with (and ... to
+                            //we can insert the content of the contition directly to the container
+                            if (containerXPDDLNode.getName().equals(condition.getName())){
+                                //System.out.print("Yes");
+                                for (Iterator<Element> itc = condition.getChildren().iterator(); itc.hasNext();) {
+                                    Element object = (Element)itc.next();
+                                    containerXPDDLNode.addContent((Element)object.clone());
+                                }
+                            }else{
+                                containerXPDDLNode.addContent(condition);
+                            }
                             //XMLUtilities.printXML(condition);
                         }
 

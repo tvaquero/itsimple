@@ -7,7 +7,7 @@ The goal is to get keys from various locations to various new locations. This do
 Extracted from IPC-1 (1998)</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>

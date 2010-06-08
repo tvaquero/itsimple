@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008, 2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
 *
 * This file is part of itSIMPLE.
@@ -29,6 +29,7 @@ package languages.pddl;
 import java.util.Iterator;
 import java.util.List;
 
+import languages.xml.XMLUtilities;
 import org.jdom.Element;
 
 public class XPDDLToPDDL {
@@ -171,15 +172,20 @@ public class XPDDLToPDDL {
 			
 			
 			// 8.1.3 Precondition node	
-			
-				String precondition = identation + " :precondition \n";
-				if(xpddlNode.getChild("precondition").getChildren().size() > 0){
-					Element preconditionChild = (Element)xpddlNode.getChild("precondition").getChildren().get(0);
-					precondition += parseXPDDLToPDDL(preconditionChild, identation + "   ");
-				}
-							
-				pddl += precondition + "\n" ;
-			
+			String precondition = identation + " :precondition \n";
+                        String preconditionContent = "";
+                        if(xpddlNode.getChild("precondition").getChildren().size() > 0){
+
+                                Element preconditionChild = (Element)xpddlNode.getChild("precondition").getChildren().get(0);
+                                preconditionContent = parseXPDDLToPDDL(preconditionChild, identation + "   ");
+                                //precondition += parseXPDDLToPDDL(preconditionChild, identation + "   ");
+                        }
+                        //Ckeck if the precondition is empty
+                        if (!preconditionContent.trim().equals("")){                            
+                            pddl += precondition + preconditionContent + "\n" ;
+                        }
+                        //pddl += precondition + "\n" ;
+
 			//8.1.4 Effect node
 			String effect = identation + " :effect\n";
 			if(xpddlNode.getChild("effect").getChildren().size() > 0){
@@ -217,13 +223,19 @@ public class XPDDLToPDDL {
 			
 			// 8.2.4 Condition node	
 			String condition = identation + " :condition \n";
+                        String conditionContent = "";
 			if(xpddlNode.getChild("condition").getChildren().size() > 0){
 				Element conditionChild = (Element)xpddlNode.getChild("condition").getChildren().get(0);
-				condition += parseXPDDLToPDDL(conditionChild, identation + "   ");
+                                conditionContent = parseXPDDLToPDDL(conditionChild, identation + "   ");
+				//condition += parseXPDDLToPDDL(conditionChild, identation + "   ");
 			}
-						
-			pddl += condition + "\n" ;
-		
+                        //Check if the precondition is empty
+			if (!conditionContent.trim().equals("")){
+                            pddl += condition + conditionContent + "\n" ;
+                        }
+			//pddl += condition + "\n" ;
+
+
 			//8.1.4 Effect node
 			String effect = identation + " :effect\n";
 			if(xpddlNode.getChild("effect").getChildren().size() > 0){

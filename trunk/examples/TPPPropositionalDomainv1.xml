@@ -6,7 +6,7 @@
 This version (propositional) models a variant of the original TPP where: there can be more than one depot and more than one truck; the amount of goods are discrete and represented by qualitative levels; every type of good has the same price, independent from the market where we buy it; there are two new operators for loading and unloading goods to/from trucks; markets and depots can be indirectly connected.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>

@@ -4,7 +4,7 @@
 	<description>This model represents a relaxed Car Sequencing problem, where there are no optization.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>

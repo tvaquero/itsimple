@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2009 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -1064,9 +1064,12 @@ public class ItGraphUI extends BasicGraphUI {
 						// parameters[1]: number of objects
 						Object[] parameters = new Object[2];
 						
-											
-						MultiObjectDialog dialog = new MultiObjectDialog(project, parameters, e.getX()+150, e.getY()+100);//TODO the position is not right
+                                                int xpos = itGraph.getLocation().x;
+                                                int ypos = itGraph.getLocation().y;
+                                                MultiObjectDialog dialog = new MultiObjectDialog(project, parameters, e.getX() + xpos + 150, e.getY() + ypos + 100);
+                                                //MultiObjectDialog dialog = new MultiObjectDialog(project, parameters, e.getX()+150, e.getY()+100);//TODO the position is not right
 						dialog.setVisible(true);
+
 						
 						if(parameters[0] != null && parameters[1] != null){									
 							

@@ -6,7 +6,7 @@
 This version is equivalent to the original formulation of TPP in OR. There are only three operators, two of which are used to model the purchasing actions: "buy-all" and "buy-allneeded". The first buys at a certain market the whole amount of a good sold by the market while the second one buys at market the amount of goods that is needed to complete the purchase of goods (as specified in the problem goals). Note that every market is directly connected to every other market and to the depots. Moreover, there is only one depot and only one truck.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.0.10</version>
+		<version>3.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
