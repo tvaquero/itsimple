@@ -2,7 +2,7 @@ itSIMPLE's dependecy libraries and their versions
 
 BrowserLaucher2-1_3.jar (2 - 1.3, Aug 31 2007)
 JFlex.jar (1.4.3, January 31, 2009)
-forms-1.1.0.jar (1.1.0)
+forms-1.3.0.jar (1.3.0) - http://www.jgoodies.com/downloads/libraries.html
 jaxen-1.1.1.jar (1.1.1)
 jcommon-1.0.16.jar (1.0.16)
 jdom.jar (1.1.1 , 26-Jul-2009)

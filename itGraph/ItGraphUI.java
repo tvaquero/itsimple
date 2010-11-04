@@ -1155,9 +1155,14 @@ public class ItGraphUI extends BasicGraphUI {
 											
 											attributeReference.setAttribute("class", currentAtt.getParentElement().getParentElement().getAttributeValue("id"));
 											attributeReference.setAttribute("id", currentAtt.getAttributeValue("id"));
-											if (!currentAtt.getChildText("initialValue").equals("")){
-												attributeReference.getChild("value").setText(currentAtt.getChildText("initialValue"));
-											}
+
+                                                                                        //put the initial value only at the object diagrams, not in the repository.
+                                                                                        if (diagram.getName().equals("objectDiagram")){
+                                                                                            //put the initial value
+                                                                                            if (!currentAtt.getChildText("initialValue").equals("")){
+                                                                                                    attributeReference.getChild("value").setText(currentAtt.getChildText("initialValue"));
+                                                                                            }
+                                                                                        }
 											objectReference.getChild("attributes").addContent(attributeReference);
 										}	
 

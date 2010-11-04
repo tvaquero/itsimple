@@ -38,6 +38,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.ToolTipManager;
 
 public class PlannersSettingsDialog extends JDialog {
 
@@ -58,7 +59,7 @@ public class PlannersSettingsDialog extends JDialog {
 		setTitle("Planners Settings");
 		
 		int w = 700;
-		int h = 400;
+		int h = 500;
 		
 		setBounds(screenSize.width/2-w/2, screenSize.height/2-h/2, w, h);
 		
@@ -73,7 +74,9 @@ public class PlannersSettingsDialog extends JDialog {
 			public void actionPerformed(ActionEvent e){
 				XMLUtilities.writeToFile(
 						"resources/planners/itPlanners.xml", ItSIMPLE.getItPlanners().getDocument());
-				
+
+                                // Show tool tips after a second (since we change for immediately in the PlannersSettingsPanel)
+                                ToolTipManager.sharedInstance().setInitialDelay(750);
 				dispose();
 			}
 		});

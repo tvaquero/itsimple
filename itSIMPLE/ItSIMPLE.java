@@ -1,7 +1,7 @@
 /***
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 *
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo 
 *
 *
 * This is the main file of itSIMPLE.
@@ -21,8 +21,8 @@
 * along with itSIMPLE.  If not, see <http://www.gnu.org/licenses/>.
 *
 * Authors:	Tiago S. Vaquero,
-*			Victor Romero,
-*                       Matheus Haddad.
+*		Victor Romero,
+*               Matheus Haddad.
 **/
 
 package itSIMPLE;
@@ -34,7 +34,6 @@ import java.net.MalformedURLException;
 import update.VersionUpdater;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import virtualprototyping.VirtualRealityRobotNavigationDomain;
 import languages.xml.XMLUtilities;
 import itGraph.ItCellViewFactory;
 import itGraph.ItGraph;
@@ -90,6 +89,7 @@ import org.jgraph.graph.GraphModel;
 
 //import database.DataBase;
 //import database.ImportFromDBDialog;
+//import java.sql.SQLException;
 
 import util.filefilter.PDDLFileFilter;
 import util.filefilter.XMLFileFilter;
@@ -109,10 +109,6 @@ import java.awt.event.MouseListener;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-//import java.sql.SQLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -124,17 +120,23 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JProgressBar;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.SpringLayout;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
+import languages.pddl.PDDLToXPDDL;
 import planning.PlanSimulator;
 import languages.pddl.ToXPDDL;
 import languages.pddl.XPDDLToPDDL;
+import languages.pddl.XPDDLToUML;
 import languages.petrinets.toPNML;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import java.io.*;
+
+
 import planning.ExecPlanner;
 import planning.PlanAnalyzer;
+import planning.PlanValidator;
 import planning.PlannerSuggestion;
 import planning.TimeKiller;
 import sourceEditor.ItHilightedDocument;
@@ -177,6 +179,7 @@ public class ItSIMPLE extends JFrame {
 	//private JMenuItem exportToDataBaseMenuItem = null;
 	//private JMenuItem importFromDataBaseMenuItem = null;
 	private JMenuItem exitMenuItem = null;
+
         //Settings
 	private JMenu settingsMenu = null;
 	private JMenu appearanceMenu = null;
@@ -185,17 +188,21 @@ public class ItSIMPLE extends JFrame {
 	private JMenuItem motifMenuItem = null;
 	private JMenuItem defaultMenuItem = null;
 	private JMenuItem plannersSettingsMenuItem = null;
-    //Help
-    private JMenu helpMenu = null;
-    private JMenuItem aboutMenuItem = null;
-    private JMenuItem checkUpdatesMenuItem = null;
-    //Diagrams
+        //Help
+        private JMenu helpMenu = null;
+        private JMenuItem aboutMenuItem = null;
+        private JMenuItem checkUpdatesMenuItem = null;
+
+        //Diagrams
 	private JMenu newDiagramMenu = null;
 	private JMenu newProblemMenu = null;
 	private JMenu newDomainMenu = null;
 	private JMenu openAsDomainMenu = null;
 	private JMenu openAsProblemMenu = null;
 	private JMenu openAsPetriNetMenu = null;
+        private JMenu importDomainMenu = null;
+        private JMenu importProblemMenu = null;
+
         //About box
         private JDialog aboutBox;
 
@@ -213,6 +220,7 @@ public class ItSIMPLE extends JFrame {
 	// properties
 	private JPanel propertiesPanel = null;
 	private PropertiesTabbedPane propertiesPane = null;
+        private ItFramePanel propertiesFramePanel = null;
 
 	// graph
 	private ItTabbedPane graphTabbedPane = null;
@@ -289,31 +297,57 @@ public class ItSIMPLE extends JFrame {
 	private JButton editPlanActionButton = null;
 	private JButton importPlanButton = null;
 	private JButton exportPlanButton = null;
+	private JButton checkPlanValidityButton = null;
 	private JButton quickEvaluateButton = null;
         private JButton fullEvaluationButton = null;
 	private ItFramePanel planAnalysisFramePanel = null;
 	private JLabel planSimStatusBar = null;
-    private JProgressBar simProgressBar = null;
-    private JLabel simTimeSpent = null;
+        private JProgressBar simProgressBar = null;
+        private JLabel simTimeSpent = null;
 	private ItFramePanel planInfoFramePanel = null;
 	private JEditorPane planInfoEditorPane = null;
+        private JEditorPane planEvaluationInfoEditorPane = null;
 	private JTextArea outputEditorPane = null;
 	private JPanel chartsPanel = null;
 	private Element xmlPlan = null;
 	private Thread currentThread = null;
-    private Thread plannerThread = null;
+        private Thread plannerThread = null;
 	private ExecPlanner exe;
 	private JButton replanButton;
+
 
 	// movie maker
 	private Element movie = null;
 	private JPanel movieMakerPanel = null;
 	private JSplitPane movieMakerSplitPane = null;
 
+        //plan evaluation panel
+        private JPanel planEvaluationPanel = null;
+        private JTextField overallPlanEvaluationValue = null;
+        private Thread reuserationaleThread = null;
+        
+        //plan database panel
+        private JPanel planDatabasePanel = null;
+        private JTable resultPlanTable;
+	private DefaultTableModel resultPlanTableModel;
+        private boolean isPlanFromDB = false;
+        private int currentDBPlanID = -1;
+        private JTextPane planfilterTextPane = null;
+        private JPanel planFilterPanel = null;
+
+
+        //plan database panel
+        private JPanel rationaleDatabasePanel = null;
+        private JTable resultRationaleTable;
+	private DefaultTableModel resultRationaleTableModel;
+        private int currentDBRationaleID = -1;
+
+
 	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static Element commonData;
 	private static Element itSettings;
 	private static Element itPlanners;
+        private static Element itValidators;
 	private static ArrayList<Object> copyPaste = new ArrayList<Object>();
 	private static ArrayList<Object> copyPasteSenders = new ArrayList<Object>();
 
@@ -321,24 +355,24 @@ public class ItSIMPLE extends JFrame {
 	private JPanel informationPanel = null;
 	private JEditorPane infoEditorPane = null;
 	private ItFramePanel infoPanel = null;
-    private JMenuBar planNavigationMenuBar = null;
-    JMenu replanMenu = null;
-    private JMenuItem replanMenuItem = null;
+        private JMenuBar planNavigationMenuBar = null;
+        JMenu replanMenu = null;
+        private JMenuItem replanMenuItem = null;
 
-    //Planning process
-    Element plans = null;
-    Element solveResult = null;
-    Element theSingleChoosenPlanner = null;
+        //Planning process
+        Element plans = null;
+        Element solveResult = null;
+        Element theSingleChoosenPlanner = null;
 
-    //Planner List
-    private ArrayList<Object> plannersList = new ArrayList<Object>();
+        //Planner List
+        private ArrayList<Object> plannersList = new ArrayList<Object>();
 
-    //Planner Suggestion
-    PlannerSuggestion plannerSuggestion = new PlannerSuggestion();
+        //Planner Suggestion
+        PlannerSuggestion plannerSuggestion = new PlannerSuggestion();
 
-    //Force Planning finish
-    boolean forceFinish = false;;
-    boolean stopRunningPlanners = false;
+        //Force Planning finish
+        boolean forceFinish = false;;
+        boolean stopRunningPlanners = false;
 
 
 	// ACTIONS
@@ -650,6 +684,9 @@ public class ItSIMPLE extends JFrame {
 				saveMenuItem.setEnabled(false);
 				saveAsMenuItem.setEnabled(false);
 			}
+
+                        
+
 
 
 		}
@@ -1324,6 +1361,8 @@ public class ItSIMPLE extends JFrame {
 		}
 	};
 
+
+
 	private Action openAsPetriNet = new AbstractAction("Petri Net", new ImageIcon("resources/images/new.png")){
 		/**
 		 *
@@ -1428,21 +1467,21 @@ public class ItSIMPLE extends JFrame {
 					new Thread(){
 						public void run() {
 
-                            //fill out the analysis xml data
-                            PlanSimulator.buildPlanAnalysisDataset(analysis, xmlPlan, problem);
+                                                    //fill out the analysis xml data
+                                                    PlanSimulator.buildPlanAnalysisDataset(analysis, xmlPlan, problem);
 
-                            //Prepare HTML version of the analysis (incluiding charts).
-                            //String html = PlanSimulator.createHTMLPlanAnalysis(analysis, xmlPlan, problem);
-                            //System.out.println(html);
+                                                    //Prepare HTML version of the analysis (incluiding charts).
+                                                    //String html = PlanSimulator.createHTMLPlanAnalysis(analysis, xmlPlan, problem);
+                                                    //System.out.println(html);
 
-							//draw the charts in the iterface
-							List<ChartPanel> chartPanels = PlanSimulator.drawCharts(analysis, problem);
-							chartsPanel.removeAll();
-							for (Iterator<ChartPanel> iter = chartPanels.iterator(); iter.hasNext();) {
-								ChartPanel chartPanel = iter.next();
-								chartsPanel.add(chartPanel);
-							}
-							chartsPanel.revalidate();
+                                                    //draw the charts in the iterface
+                                                    List<ChartPanel> chartPanels = PlanSimulator.drawCharts(analysis, problem);
+                                                    chartsPanel.removeAll();
+                                                    for (Iterator<ChartPanel> iter = chartPanels.iterator(); iter.hasNext();) {
+                                                            ChartPanel chartPanel = iter.next();
+                                                            chartsPanel.add(chartPanel);
+                                                    }
+                                                    chartsPanel.revalidate();
 						}
 					}.start();
 
@@ -1465,7 +1504,7 @@ public class ItSIMPLE extends JFrame {
 				lastOpenFolder = lastOpenFolderElement.getText();
 			}
 			JFileChooser fc = new JFileChooser(lastOpenFolder);
-			fc.setDialogTitle("Import Plan");
+			fc.setDialogTitle("Import Plan file");
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fc.setFileFilter(new XMLFileFilter());// TODO add other file types
 			int returnVal = fc.showOpenDialog(ItSIMPLE.this);
@@ -1480,10 +1519,13 @@ public class ItSIMPLE extends JFrame {
 					e1.printStackTrace();
 				}
 				setPlanList(xmlPlan);
-                //setPlanInfoPanelText(generateHTMLReport(xmlPlan));
-                //setPlanInfoPanelText(PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan));
-                showHTMLReport(xmlPlan);
-                appendOutputPanelText(">> Plan importerd successfully. Check the generated Results. \n");
+                                //setPlanInfoPanelText(generateHTMLReport(xmlPlan));
+                                //setPlanInfoPanelText(PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan));
+                                showHTMLReport(xmlPlan);
+                                appendOutputPanelText(">> Plan importerd successfully. Check the generated Results. \n");
+
+                                //clean up reference of plans from database
+                                cleanupPlanDatabaseReference();
 
                                 //save lst open folder
 				if (lastOpenFolderElement != null){
@@ -1511,7 +1553,7 @@ public class ItSIMPLE extends JFrame {
 				lastOpenFolder = lastOpenFolderElement.getText();
 			}
 			JFileChooser fc = new JFileChooser(lastOpenFolder);
-			fc.setDialogTitle("Export Plan");
+			fc.setDialogTitle("Export xml plan");
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fc.setFileFilter(new XMLFileFilter());
 
@@ -1568,11 +1610,21 @@ public class ItSIMPLE extends JFrame {
 
 			List<?> actions = xmlPlan.getChild("plan").getChildren("action");
 
+
 			if(actions.size() > 0){
 				// remove the action
 				Element action = (Element)actions.get(selected);
 				action.detach();
 			}
+                        Element validity = xmlPlan.getChild("validity");
+                        if (validity!=null){
+                            if (!validity.getAttributeValue("isValid").equals("")){
+                                validity.setAttribute("isValid", "");
+                                validity.setText("");
+                                showHTMLReport(xmlPlan);
+                            }
+                            
+                        }
 
 			setPlanList(xmlPlan);
 		}
@@ -1600,49 +1652,131 @@ public class ItSIMPLE extends JFrame {
 	};
 
 
-private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources/images/evalquick.png")){
+ 
+
+
+
+        /*
+         * Action for executing a validator
+         */
+    private Action checkPlanValidity = new AbstractAction("", new ImageIcon("resources/images/validate.png")){
 		/**
 		 *
 		 */
-		public void actionPerformed(ActionEvent e){
+	public void actionPerformed(ActionEvent e){
             if (xmlPlan!=null){
-                String html = "";
                 if (xmlPlan.getName().equals("xmlPlan")){
-                    //Check if there is a problem being selected in the tree
-                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-                    if (selectedNode!=null){
-                        Element element = selectedNode.getData();
-                        System.out.println(element.getName());
-                        if (element.getName().equals("problem")){
-                            Element domain = element.getParentElement().getParentElement();
-                            Element metrics = PlanSimulator.createMetricsNode(element, domain);
-                            String metricshtml = "";
-                            if(metrics.getChildren().size() > 0){
-                                PlanSimulator.createMetricDatasets(metrics, xmlPlan, element, domain, null);
-                                metricshtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, metrics);
-                            }else{
-                                metricshtml = "<html><h2>No metric was specified.</h2></html>";
+                    new Thread(){
+                        @Override
+                            public void run() {
+                                PlanValidator.checkPlanValidityWithVAL(xmlPlan);
+                                showHTMLReport(xmlPlan);
                             }
-
-
-                            //html += "<br><br>";
-                            html += metricshtml;
-                            //html += "</body>";
-                           // html += "</html>";
-                        }
-
-                    }
-
+                    }.start();
                 }
 
-                setPlanInfoPanelText(html);
-
+                }
             }
+	};
+
+
+
+        /**
+         * Import PDDL problem instances
+         */
+	private Action importPDDLProblem = new AbstractAction("PDDL Problem", new ImageIcon("resources/images/new.png")){
+
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = -1827112480646045838L;
+
+		public void actionPerformed(ActionEvent e) {
+
+                    String lastOpenFolder = "";
+			Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+			if (lastOpenFolderElement != null){
+				lastOpenFolder = lastOpenFolderElement.getText();
+			}
+			JFileChooser fc = new JFileChooser(lastOpenFolder);
+			fc.setDialogTitle("Import PDDL Problem");
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        fc.setMultiSelectionEnabled(true);
+			fc.setFileFilter(new PDDLFileFilter());
+			int returnVal = fc.showOpenDialog(ItSIMPLE.this);
+			if (returnVal == JFileChooser.APPROVE_OPTION){
+
+                                File[] files = fc.getSelectedFiles();
+                                //File file = fc.getSelectedFile();
+
+                                for (int i = 0; i < files.length; i++) {
+                                    File file = files[i];
+
+                                    //String problemFile = "/home/tiago/Desktop/LogisticTwoPackages.pddl";
+                                    String problemFile = file.getPath();
+
+                                    // get selected node from the projects tree
+                                    ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
+
+                                    //parse pddl to xpddl
+                                    Element xpddlProblem = PDDLToXPDDL.parsePDDLproblemToXPDDL(problemFile);
+
+                                    //parse xpddl to internal uml model
+                                    Element problem = XPDDLToUML.parseXPDDLProbemToUML(xpddlProblem, selectedNode.getData());
+
+                                    selectedNode.getData().getChild("planningProblems").addContent(problem);
+                                    projectsTree.buildProblemNode(problem, selectedNode);
+
+                                    // problems plan tree
+                                    ItTreeNode problemsTreeProject = (ItTreeNode)((ItTreeNode)problemsPlanTreeModel.getRoot())
+                                                                                                            .getChildAt(treeRoot.getIndex(selectedNode.getParent()));
+
+                                    ItTreeNode problemsTreeDomain = null;
+                                    // look for the domain in problems plan tree
+                                    for(int ii = 0; ii < problemsTreeProject.getChildCount(); ii++){
+                                            ItTreeNode child = (ItTreeNode)problemsTreeProject.getChildAt(ii);
+                                            if(child.getData() == selectedNode.getData()){
+                                                    problemsTreeDomain = child;
+                                                    break;
+                                            }
+                                    }
+
+                                    if(problemsTreeDomain != null){
+                                            ItTreeNode problemsTreeProblem =
+                                                    new ItTreeNode(problem.getChildText("name"), problem, null, null);
+
+                                            problemsTreeProblem.setIcon(new ImageIcon("resources/images/planningProblem.png"));
+
+                                            problemsPlanTreeModel.insertNodeInto(
+                                                            problemsTreeProblem, problemsTreeDomain, problemsTreeDomain.getChildCount());
+                                    }
+
+
+
+                                    if (lastOpenFolderElement != null){
+                                            //Holds the last open folder
+                                            if (!lastOpenFolderElement.getText().equals(file.getParent())){
+                                                    lastOpenFolderElement.setText(file.getParent());
+                                                    XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+                                            }
+                                    }
+
+
+                                }
+
+
+			}
+
+
+
+
+
+
 		}
 	};
 
 
-	private Action plannersSettingsAction = new AbstractAction("Planners Settings"){
+	private Action plannersSettingsAction = new AbstractAction("Planners Settings", new ImageIcon("resources/images/engine.png")){
 		/**
 		 *
 		 */
@@ -1652,6 +1786,26 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			final PlannersSettingsDialog dialog = new PlannersSettingsDialog(ItSIMPLE.this);
 
 			dialog.setVisible(true);
+		}
+	};
+
+
+	/**
+         * This action opens the dialog for editing plan evaluation
+         */
+        private Action changePlanEvaluationAction = new AbstractAction("Edit Evaluation", new ImageIcon("resources/images/edit.png")){
+		/**
+		 *
+		 */
+		public void actionPerformed(ActionEvent e){
+			final PlanEvaluationEditDialog dialog = new PlanEvaluationEditDialog(ItSIMPLE.this, xmlPlan);
+			dialog.setVisible(true);
+                        if (xmlPlan != null){
+                            //String evaluationhtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, xmlPlan.getChild("metrics"));
+                            String evaluationhtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+                            setPlanEvaluationInfoPanelText(evaluationhtml);
+                            //System.out.println(evaluationhtml);
+                        }
 		}
 	};
 
@@ -1683,7 +1837,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                         try {
                             String urlVersion = "http://dlab.poli.usp.br/twiki/pub/ItSIMPLE/DownLoad/currentVersion.xml";
                             String versionFilePath = "resources/settings/versionControl.xml";
-
+                            
 
                             File versionFile = new File(versionFilePath);
                             URL url = null;
@@ -1699,7 +1853,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
                             //TODO: Treat when there is no internet access.
                             //wait until download is completed.
-
+                            
                             //wait to finish normaly or by timeout
                             //long timeout = 10000;
                             //long start = System.currentTimeMillis();
@@ -1752,7 +1906,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                                         "Version: <strong>" + sversion + "</strong></html>");
                                     }
                                 }
-
+                                
 
                             }
                             else{
@@ -1778,7 +1932,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
             }.start();
 
-
+           
 
 
              }
@@ -1807,10 +1961,60 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	};
 
 
+    private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources/images/evalquick.png")){
+		/**
+		 *
+		 */
+		public void actionPerformed(ActionEvent e){
+            if (xmlPlan!=null){
+                appendOutputPanelText(">> Plan evaluation process requested. \n");
+                String html = "";
+                if (xmlPlan.getName().equals("xmlPlan")){
+                    //Check if there is a problem being selected in the tree
+                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+                    if (selectedNode!=null){
+                        Element element = selectedNode.getData();
+                        //System.out.println(element.getName());
+                        if (element.getName().equals("problem")){
+                            Element domain = element.getParentElement().getParentElement();
+                            Element metrics = PlanSimulator.createMetricsNode(element, domain);
+                            String metricshtml = "";
+                            if(metrics.getChildren().size() > 0){
+                                PlanSimulator.createMetricDatasets(metrics, xmlPlan, element, domain, null);
+                                PlanAnalyzer.setMetricsValuesAndEvaluations(metrics, xmlPlan);
+                                xmlPlan.removeChildren("metrics"); //clear metrics
+                                xmlPlan.addContent(metrics);
+                                //metricshtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, metrics);
+                                metricshtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+                            }else{
+                                metricshtml = "<h2><font color=\"red\">No metric specified.<font></h2>";
+                                metricshtml += PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+                                
+                                //metricshtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+                                //metricshtml += "<br><h2><font color=\"red\">No metric was specified.<font></h2>";
+
+                                //metricshtml = "<html><h2>No metric was specified.</h2></html>";
+                            }
 
 
+                            //html += "<br><br>";
+                            html += metricshtml;
+                            //html += "</body>";
+                           // html += "</html>";
+                        }
 
-    private Action evaluatePlan = new AbstractAction("Evaluate Plan", new ImageIcon("resources/images/eval.png")){
+                    }
+
+                }
+
+                setPlanEvaluationInfoPanelText(html);
+
+            }
+		}
+	};
+
+
+    private Action generateEvaluationReport = new AbstractAction("Evaluation Report", new ImageIcon("resources/images/viewreport.png")){
 		/**
 		 *
 		 */
@@ -1818,118 +2022,123 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		public void actionPerformed(ActionEvent e) {
 
                 // the thread is created so the status bar can be refreshed
-				new Thread(){
-					public void run() {
-						ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-						if(selectedNode != null && selectedNode.getLevel() == 3){
-							Element problem = selectedNode.getData();
+                    new Thread(){
+                            public void run() {
+                                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+                                    if(selectedNode != null && selectedNode.getLevel() == 3){
+                                            Element problem = selectedNode.getData();
 
-                            if (xmlPlan != null){
-                                //XMLUtilities.printXML(xmlPlan);
-                                appendOutputPanelText(">> Plan evaluation process requested. \n");
-                                Element domain = problem.getParentElement().getParentElement();
-                                Element metrics = PlanSimulator.createMetricsNode(problem, domain);
-                                if(metrics.getChildren().size() > 0){
-                                    PlanSimulator.createMetricDatasets(metrics, xmlPlan, problem, domain, null);
-                                }
-                                //XMLUtilities.printXML(metrics);
+                                    if (xmlPlan != null){
+                                        //XMLUtilities.printXML(xmlPlan);
+                                        appendOutputPanelText(">> Plan evaluation report requested. \n");
+                                        Element domain = problem.getParentElement().getParentElement();
+                                        //if no metrics exists create it
+                                        /*
+                                        if (xmlPlan.getChild("metrics") == null){
+                                            Element metrics = PlanSimulator.createMetricsNode(problem, domain);
+                                            if(metrics.getChildren().size() > 0){
+                                                PlanSimulator.createMetricDatasets(metrics, xmlPlan, problem, domain, null);
+                                            }
+                                            //XMLUtilities.printXML(metrics);
+                                            xmlPlan.addContent(metrics);
+                                        }
+                                         */
 
-                                appendOutputPanelText("         Creating report (html format)... \n");
+                                        appendOutputPanelText("         Creating report (html format)... \n");
 
-                                //String html = PlanAnalyzer.generateFullPlanReport2(domain, problem, xmlPlan, metrics);
-                                String html = PlanAnalyzer.generateFullPlanReport2(domain, problem, xmlPlan, metrics);
-
-
-
-
-                                    //EXEPERIMENTS WITH GOOGLE CHARTS API
-                                    /*
-                                    String html = "<html>\n";
-                                    html += "<head>\n";
-                                    html += "    <script type=\"text/javascript\" src=\"http://www.google.com/jsapi\"></script>\n";
-
-                                    html += "  </head> \n";
-                                    html += " \n";
-                                    html += "  <body> \n";
-                                    html += "    <div id=\"chart_div\"></div> \n";
-
-                                    html += "    <script type=\"text/javascript\">\n";
-                                    html += "      google.load(\"visualization\", \"1\", {packages:[\"linechart\"]});\n";
-                                    html += "      google.setOnLoadCallback(drawChart);\n";
-                                    html += "      function drawChart() {\n";
-                                    html += "        var data = new google.visualization.DataTable();\n";
-                                    html += "        data.addColumn('string', 'Year');\n";
-                                    html += "        data.addColumn('number', 'Sales');\n";
-                                    html += "        data.addColumn('number', 'Expenses');\n";
-                                    html += "        data.addRows(4);\n";
-                                    html += "        data.setValue(0, 0, '2004');\n";
-                                    html += "        data.setValue(0, 1, 1000);\n";
-                                    html += "        data.setValue(0, 2, 400);\n";
-                                    html += "        data.setValue(1, 0, '2005');\n";
-                                    html += "        data.setValue(1, 1, 1170);\n";
-                                    html += "        data.setValue(1, 2, 460);\n";
-                                    html += "        data.setValue(2, 0, '2006');\n";
-                                    html += "        data.setValue(2, 1, 860);\n";
-                                    html += "        data.setValue(2, 2, 580); \n";
-                                    html += "        data.setValue(3, 0, '2007'); \n";
-                                    html += "        data.setValue(3, 1, 1030); \n";
-                                    html += "        data.setValue(3, 2, 540); \n";
-                                    html += " \n";
-                                    html += "        var chart = new google.visualization.LineChart(document.getElementById('chart_div')); \n";
-                                    html += "        chart.draw(data, {width: 700, height: 400, legend: 'bottom', title: 'Company Performance'}); \n";
-                                    html += "      } \n";
-                                    html += "    </script> \n";
-
-                                    html += "    <img border='0' alt='Google Chart' src='http://chart.apis.google.com/chart?chxt=x,y&chtt=Test&cht=lc&chxl=&chs=300x200&chd=s:ADjJ2A8&chf=bg,s,' /> \n";
-                                    html += "  </body> \n";
-                                    html += "</html> \n";
-                                    */
-
-
-                                    //EXPREIMENTS WITH GOOGLE CHART API IMAGE - works in basick panel
-                                    //info += "<img border='0' alt='Google Chart' src='http://chart.apis.google.com/chart?chxt=x,y&chtt=Test&cht=lc&chxl=&chs=300x200&chd=s:ADjJ2A8&chf=bg,s,' />";
-
-
-                                //System.out.println(html);
-
-                                appendOutputPanelText(">> The Plan Report was generated! Lauching browser. \n");
-
-
-                                //TEST
-                                //Save file
-                                String path = "resources/report/PlanReport.html";
-                                FileWriter file = null;
-                                try {
-                                    file = new FileWriter(path);
-                                    file.write(html);
-                                    file.close();
-                                } catch (IOException e1) {
-                                    e1.printStackTrace();
-                                }
-                                //Opens html with defaut browser
-                                File report = new File(path);
-                                path = report.getAbsolutePath();
-                                //System.out.println(path);
-                                try {
-                                    BrowserLauncher launcher = new BrowserLauncher();
-                                    launcher.openURLinBrowser("file://"+path);
-
-                                } catch (BrowserLaunchingInitializingException ex) {
-                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
-                                } catch (UnsupportedOperatingSystemException ex) {
-                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
-                                }
+                                        //String html = PlanAnalyzer.generateFullPlanReport2(domain, problem, xmlPlan, metrics);
+                                        String html = PlanAnalyzer.generateFullPlanReport2(domain, problem, xmlPlan, xmlPlan.getChild("metrics"));
 
 
 
+
+                                            //EXEPERIMENTS WITH GOOGLE CHARTS API
+                                            /*
+                                            String html = "<html>\n";
+                                            html += "<head>\n";
+                                            html += "    <script type=\"text/javascript\" src=\"http://www.google.com/jsapi\"></script>\n";
+
+                                            html += "  </head> \n";
+                                            html += " \n";
+                                            html += "  <body> \n";
+                                            html += "    <div id=\"chart_div\"></div> \n";
+
+                                            html += "    <script type=\"text/javascript\">\n";
+                                            html += "      google.load(\"visualization\", \"1\", {packages:[\"linechart\"]});\n";
+                                            html += "      google.setOnLoadCallback(drawChart);\n";
+                                            html += "      function drawChart() {\n";
+                                            html += "        var data = new google.visualization.DataTable();\n";
+                                            html += "        data.addColumn('string', 'Year');\n";
+                                            html += "        data.addColumn('number', 'Sales');\n";
+                                            html += "        data.addColumn('number', 'Expenses');\n";
+                                            html += "        data.addRows(4);\n";
+                                            html += "        data.setValue(0, 0, '2004');\n";
+                                            html += "        data.setValue(0, 1, 1000);\n";
+                                            html += "        data.setValue(0, 2, 400);\n";
+                                            html += "        data.setValue(1, 0, '2005');\n";
+                                            html += "        data.setValue(1, 1, 1170);\n";
+                                            html += "        data.setValue(1, 2, 460);\n";
+                                            html += "        data.setValue(2, 0, '2006');\n";
+                                            html += "        data.setValue(2, 1, 860);\n";
+                                            html += "        data.setValue(2, 2, 580); \n";
+                                            html += "        data.setValue(3, 0, '2007'); \n";
+                                            html += "        data.setValue(3, 1, 1030); \n";
+                                            html += "        data.setValue(3, 2, 540); \n";
+                                            html += " \n";
+                                            html += "        var chart = new google.visualization.LineChart(document.getElementById('chart_div')); \n";
+                                            html += "        chart.draw(data, {width: 700, height: 400, legend: 'bottom', title: 'Company Performance'}); \n";
+                                            html += "      } \n";
+                                            html += "    </script> \n";
+
+                                            html += "    <img border='0' alt='Google Chart' src='http://chart.apis.google.com/chart?chxt=x,y&chtt=Test&cht=lc&chxl=&chs=300x200&chd=s:ADjJ2A8&chf=bg,s,' /> \n";
+                                            html += "  </body> \n";
+                                            html += "</html> \n";
+                                            */
+
+
+                                            //EXPREIMENTS WITH GOOGLE CHART API IMAGE - works in basick panel
+                                            //info += "<img border='0' alt='Google Chart' src='http://chart.apis.google.com/chart?chxt=x,y&chtt=Test&cht=lc&chxl=&chs=300x200&chd=s:ADjJ2A8&chf=bg,s,' />";
+
+
+                                        //System.out.println(html);
+
+                                        appendOutputPanelText(">> The Plan Report was generated! Lauching browser. \n");
+
+
+                                        //Save file
+                                        String path = "resources/report/PlanReport.html";
+                                        FileWriter file = null;
+                                        try {
+                                            file = new FileWriter(path);
+                                            file.write(html);
+                                            file.close();
+                                        } catch (IOException e1) {
+                                            e1.printStackTrace();
+                                        }
+                                        //Opens html with defaut browser
+                                        File report = new File(path);
+                                        path = report.getAbsolutePath();
+                                        //System.out.println(path);
+                                        try {
+                                            BrowserLauncher launcher = new BrowserLauncher();
+                                            launcher.openURLinBrowser("file://"+path);
+
+                                        } catch (BrowserLaunchingInitializingException ex) {
+                                            Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                            appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                        } catch (UnsupportedOperatingSystemException ex) {
+                                            Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                            appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                        }
+
+
+
+                                    }
+
+                //XMLUtilities.printXML(xmlPlan);
+                                    }
                             }
-
-                            //XMLUtilities.printXML(xmlPlan);
-						}
-					}
-				}.start();
+                    }.start();
 
 
 
@@ -2066,15 +2275,15 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	 */
 	/*private void exportProjectToDataBase(String name, String version, String path){
 		File xmlFile = new File(path);
-		DataBase eInsertType = new DataBase();
+		DataBase updateType = new DataBase();
 
-		eInsertType.setTableName("itsimple");
-		eInsertType.setColumnList("itssname, itssversion, itsxmodel"); // please, don't use ()
-		eInsertType.setValueList("?, ?, ?"); // please, don't use ()
-		eInsertType.addToParametersList(name);
-		eInsertType.addToParametersList(version);
-		eInsertType.addToParametersList(xmlFile);
-		eInsertType.Insert();
+		updateType.setTableName("itsimple");
+		updateType.setColumnList("itssname, itssversion, itsxmodel"); // please, don't use ()
+		updateType.setValueList("?, ?, ?"); // please, don't use ()
+		updateType.addToParametersList(name);
+		updateType.addToParametersList(version);
+		updateType.addToParametersList(xmlFile);
+		updateType.Insert();
 	}*/
 
 	/**
@@ -2575,7 +2784,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			propertiesPanel.setMinimumSize(new java.awt.Dimension(50,150));
 			propertiesPanel.setPreferredSize(new java.awt.Dimension(100,150));
 			propertiesPanel.setLayout(new BorderLayout());
-			ItFramePanel propertiesFramePanel = new ItFramePanel(":: Properties", ItFramePanel.MINIMIZE_MAXIMIZE);
+			propertiesFramePanel = new ItFramePanel(":: Properties", ItFramePanel.MINIMIZE_MAXIMIZE);
 			propertiesFramePanel.setContent(getPropertiesPane(), false);
 			propertiesFramePanel.setParentSplitPane(propertySplitPane);
 			propertiesPanel.add(propertiesFramePanel, BorderLayout.CENTER);
@@ -2583,6 +2792,14 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		}
 		return propertiesPanel;
 	}
+
+        /**
+         * This method sets the title of the propoerties panel (default ':: Properties')
+         * @param title
+         */
+        public void setPropertiesPanelTitle(String title){
+            propertiesFramePanel.setTitle(title);
+        }
 
 	/**
 	 * This method initializes tree
@@ -2833,7 +3050,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	}
 
 	/**
-	 * This method initializes newDiagramMenu
+	 * This method initializes getOpenAsProblemMenu
 	 *
 	 * @return javax.swing.JMenu
 	 */
@@ -2864,6 +3081,23 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 
 	/**
+	 * This method initializes getOpenAsProblemMenu
+	 *
+	 * @return javax.swing.JMenu
+	 */
+	private JMenu getImportProblemMenu() {
+		if (importProblemMenu == null) {
+			importProblemMenu = new JMenu();
+			importProblemMenu.setIcon(new ImageIcon("resources/images/new.png"));
+			importProblemMenu.setText("Import");
+			importProblemMenu.add(importPDDLProblem);
+		}
+		return importProblemMenu;
+	}
+
+
+
+	/**
 	 * This method initializes treePopupMenu
 	 *
 	 * @return javax.swing.JPopupMenu
@@ -2888,6 +3122,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 					// domain menus
 					treePopupMenu.add(getNewDomainMenu());
 					treePopupMenu.add(getOpenAsDomainMenu());
+                                        treePopupMenu.add(getImportProblemMenu());
 					treePopupMenu.addSeparator();
                                         treePopupMenu.add(duplicateAction);
 					treePopupMenu.add(deleteDomainAction);
@@ -2975,7 +3210,8 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			mainTabbedPane.addTab("UML", getUmlSplitPane());
 			mainTabbedPane.addTab("Petri Net", getPetriSplitPane());
 			mainTabbedPane.addTab("PDDL", getPddlSplitPane());
-			mainTabbedPane.addTab("Plan Sim", getPlanSimPane());
+			//mainTabbedPane.addTab("Plan Sim", getPlanSimPane());
+                        mainTabbedPane.addTab("Planning", getPlanSimPane());
 			mainTabbedPane.addChangeListener(new ChangeListener(){
 		        public void stateChanged(ChangeEvent evt) {
 		            switch(mainTabbedPane.getSelectedIndex()){
@@ -3073,7 +3309,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
             bottomPlanSimPane.add(timeCtrlPlanSimPane, BorderLayout.EAST);
             planSimPane.add(bottomPlanSimPane, BorderLayout.SOUTH);
 
-
+			
 		}
 
 		return planSimPane;
@@ -3210,53 +3446,56 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 						planAnalysisFramePanel.setTitle(":: Plan Analysis - Problem: "+ selectedNode.getUserObject());
 
-                        solveProblemButton.setEnabled(true);
+                                                solveProblemButton.setEnabled(true);
 						setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(true);
 						importPlanButton.setEnabled(true);
 						planListModel.clear();
 						xmlPlan = null;
 
-                        String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
-                        Element problem = selectedNode.getData();
-                        Element domainProject = problem.getDocument().getRootElement();
-                        Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
+                                                //clean up reference of plans from database
+                                                cleanupPlanDatabaseReference();
+
+                                                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                                                Element problem = selectedNode.getData();
+                                                Element domainProject = problem.getDocument().getRootElement();
+                                                Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
 
 						//fill the combo box with the existing available planners
 						plannersComboBox.removeAllItems();
-                        plannersList.clear();
-                        plannerSuggestion.initialPlannerSelection(xpddlDomain, itPlanners);
+                                                plannersList.clear();
+                                                plannerSuggestion.initialPlannerSelection(xpddlDomain, itPlanners);
 
-                        //List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+                                                //List<?> planners = itPlanners.getChild("planners").getChildren("planner");
 
-                        plannersComboBox.addItem("-- Supported Planners --");
-                        plannersList.add(null);
+                                                plannersComboBox.addItem("-- Supported Planners --");
+                                                plannersList.add(null);
 
-                        // Supported Planners
-                        fillPlannersComboBox(plannerSuggestion.getSuggestedPlanners());
-                        plannersComboBox.addItem("All Supported Planners");
-                        plannersList.add("allSupportedPlanners");
+                                                // Supported Planners
+                                                fillPlannersComboBox(plannerSuggestion.getSuggestedPlanners());
+                                                plannersComboBox.addItem("All Supported Planners");
+                                                plannersList.add("allSupportedPlanners");
 
-                        plannersComboBox.addItem(null);
-                        plannersList.add(null);
+                                                plannersComboBox.addItem(null);
+                                                plannersList.add(null);
 
-                        plannersComboBox.addItem("-- Discarded Planners --");
-                        plannersList.add(null);
+                                                plannersComboBox.addItem("-- Discarded Planners --");
+                                                plannersList.add(null);
 
-                        // Discarded Planners
-                        fillPlannersComboBox(plannerSuggestion.getDiscardedPlanners());
+                                                // Discarded Planners
+                                                fillPlannersComboBox(plannerSuggestion.getDiscardedPlanners());
 
-                        plannersComboBox.addItem(null);
-                        plannersList.add(null);
+                                                plannersComboBox.addItem(null);
+                                                plannersList.add(null);
 
-                        plannersComboBox.addItem("All Planners");
-                        plannersList.add("allPlanners");
+                                                plannersComboBox.addItem("All Planners");
+                                                plannersList.add("allPlanners");
 
-                        //This item specify/represent the planners that are seceyed/enable for run all
-                        plannersComboBox.addItem("My Favorite Planners");
-                        plannersList.add("myFavoritePlanners");
-                        //plannersComboBox.addItem("All Selected Planners");
-                        //plannersList.add("allSelectedPlanners");
+                                                //This item specify/represent the planners that are seceyed/enable for run all
+                                                plannersComboBox.addItem("My Favorite Planners");
+                                                plannersList.add("myFavoritePlanners");
+                                                //plannersComboBox.addItem("All Selected Planners");
+                                                //plannersList.add("allSelectedPlanners");
 
 						CheckBoxNode variablesPlanTreeRoot = (CheckBoxNode)variablesPlanTreeModel.getRoot();
 
@@ -3267,7 +3506,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 							variablesPlanTreeModel.setRoot(variablesPlanTreeRoot);
 							variablesPlanTreeModel.reload();
 						}
-
+                        
 											//planningProblems			domain
 						List<?> objects = problem.getParentElement().getParentElement().getChild("elements").getChild("objects").getChildren("object");
 						for (Iterator<?> iter = objects.iterator(); iter.hasNext();) {
@@ -3354,27 +3593,30 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 						//clear the depending areas
 						planAnalysisFramePanel.setTitle(":: Plan Analysis");
 						//setPlannerButton.setEnabled(false);
-                        setPlannerButton.setEnabled(true);
+                                                setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(false);
 						importPlanButton.setEnabled(false);
 						planListModel.clear();
 						xmlPlan = null;
 
-                        //fill the combo box with all planners
+                                                //clean up reference of plans from database
+                                                cleanupPlanDatabaseReference();
+
+                                                //fill the combo box with all planners
 						plannersComboBox.removeAllItems();
-                        plannersList.clear();
+                                                plannersList.clear();
 
-                        List<?> planners = itPlanners.getChild("planners").getChildren("planner");
-                        fillPlannersComboBox(planners);
+                                                List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+                                                fillPlannersComboBox(planners);
 
-                        plannersComboBox.addItem("All Planners");
-                        plannersList.add("allPlanners");
+                                                plannersComboBox.addItem("All Planners");
+                                                plannersList.add("allPlanners");
 
-                        //This item specify/represent the planners that are seceyed/enable for run all
-                        plannersComboBox.addItem("My Favorite Planners");
-                        plannersList.add("myFavoritePlanners");
-                        //plannersComboBox.addItem("All Selected Planners");
-                        //plannersList.add("allSelectedPlanners");
+                                                //This item specify/represent the planners that are seceyed/enable for run all
+                                                plannersComboBox.addItem("My Favorite Planners");
+                                                plannersList.add("myFavoritePlanners");
+                                                //plannersComboBox.addItem("All Selected Planners");
+                                                //plannersList.add("allSelectedPlanners");
 
 						//clear the variables tree, whether necessary
 						CheckBoxNode variablesPlanTreeRoot = (CheckBoxNode)variablesPlanTreeModel.getRoot();
@@ -3453,12 +3695,18 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			// create a main pane
 			JPanel mainTreePanel = new JPanel(new BorderLayout());
 
-			// tabbed panes with jtrees
-			planTreeTabbedPane = new JTabbedPane();
-			planTreeTabbedPane.addTab("Problems", new JScrollPane(problemsPlanTree));
-			planTreeTabbedPane.addTab("Variables", new JScrollPane(variablesPlanTree));
-			planTreeTabbedPane.addTab("Selected", new JScrollPane(selectedVariablesPlanTree));
-			mainTreePanel.add(planTreeTabbedPane, BorderLayout.CENTER);
+
+                        //The below approach of put variable selection and problems all together
+                        // has confused user, so we decided to put variable selection inside the Variable tracking panel
+                        // tabbed panes with jtrees
+			//planTreeTabbedPane = new JTabbedPane();
+			//planTreeTabbedPane.addTab("Problems", new JScrollPane(problemsPlanTree));
+			//planTreeTabbedPane.addTab("Variables", new JScrollPane(variablesPlanTree));
+			//planTreeTabbedPane.addTab("Selected", new JScrollPane(selectedVariablesPlanTree));
+			//mainTreePanel.add(planTreeTabbedPane, BorderLayout.CENTER);
+
+                        //
+                        mainTreePanel.add(new JScrollPane(problemsPlanTree), BorderLayout.CENTER);
 
 
             // tool panel
@@ -3475,7 +3723,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
             topPanel.add(plannersComboBox, BorderLayout.CENTER);
 
             // solve problem button
-            solveProblemButton = new JButton("Solve");
+            solveProblemButton = new JButton("Solve", new ImageIcon("resources/images/engine.png"));
             //solveProblemButton.setEnabled(false);
             solveProblemButton.setActionCommand("solve");
             solveProblemButton.addActionListener(new ActionListener(){
@@ -3551,6 +3799,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                                                     // changes the button action command
                                                     solveProblemButton.setActionCommand("stop");
                                                     solveProblemButton.setText("Stop");
+                                                    solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
                                                 }
 
 
@@ -3583,7 +3832,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                                                 }
                                             }
 
-
+                                            
 
                                             planSimStatusBar.setText("Status: Planning process stopped.");
                                             outputEditorPane.append(">> Planning process stopped.");
@@ -3591,21 +3840,22 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                                             // changes the button action command
                                             solveProblemButton.setActionCommand("solve");
                                             solveProblemButton.setText("Solve");
+                                            solveProblemButton.setIcon(new ImageIcon("resources/images/engine.png"));
 
                                             //changes the Skip Button
                                             skipPlannerProblemButton.setEnabled(false);
-
+                                            
                                     }
                                     hideSimProgressBar();
                                     simTimeSpent.setText("");
-
+                                    
                             }
                     }
 
             });
 
             // skip planner/problem button
-            skipPlannerProblemButton = new JButton("Skip");
+            skipPlannerProblemButton = new JButton("Skip", new ImageIcon("resources/images/skip.png"));
             skipPlannerProblemButton.setVisible(false);
             skipPlannerProblemButton.setActionCommand("skip");
             skipPlannerProblemButton.addActionListener(new ActionListener(){
@@ -3700,6 +3950,8 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			// clear plan list and plan info pane
 			setPlanList(null);
 			setPlanInfoPanelText("");
+                        setPlanEvaluationInfoPanelText("");
+                        cleanupPlanDatabaseReference();
 
 			String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
 
@@ -3708,7 +3960,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			// generate PDDL problem
 			Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problem, pddlVersion);
 
-            ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
+                        ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
 
                         String pddlDomain = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "");
 			String pddlProblem = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "");
@@ -3785,7 +4037,9 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			// clear plan list and plan info pane
 			setPlanList(null);
 			setPlanInfoPanelText("");
+                        setPlanEvaluationInfoPanelText("");
  			String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                        cleanupPlanDatabaseReference();
 
 			// generate PDDL domain							// root element
 			Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
@@ -3868,6 +4122,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			// changes the button action command
 			solveProblemButton.setActionCommand("stop");
 			solveProblemButton.setText("Stop");
+                        solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
 		}
 	}
 
@@ -3879,6 +4134,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	public void setSolveProblemButton(){
 		solveProblemButton.setActionCommand("solve");
 		solveProblemButton.setText("Solve");
+                solveProblemButton.setIcon(new ImageIcon("resources/images/engine.png"));
                 skipPlannerProblemButton.setVisible(false);
 	}
 
@@ -3935,7 +4191,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                 try {
                     XPath path = new JDOMXPath("planner[settings/runAllComparison/@enabled='true']");
                     planners = path.selectNodes(itPlanners.getChild("planners"));
-
+                    
                 } catch (JaxenException e2) {
                     e2.printStackTrace();
                 }
@@ -4005,6 +4261,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                     saveFile("resources/report/Report.html", comparisonReport);
 
                     setPlanInfoPanelText(report);
+                    setPlanEvaluationInfoPanelText("");
                 }else{
                     setSolveProblemButton();
                 }
@@ -4016,6 +4273,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
         // changes the button action command
         solveProblemButton.setActionCommand("stop");
         solveProblemButton.setText("Stop");
+        solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
     }
 
     private void solveAllDomainsFromProject(final Element project, final List<Element> planners){
@@ -4040,6 +4298,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                saveFile("resources/report/Report.html", comparisonReport);
 
                setPlanInfoPanelText(report);
+               setPlanEvaluationInfoPanelText("");
 
 
 
@@ -4049,6 +4308,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
         // changes the button action command
         solveProblemButton.setActionCommand("stop");
         solveProblemButton.setText("Stop");
+        solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
     }
 
     private void solveAllProblemsFromDomain(final Element domain, final List<Element> planners){
@@ -4081,6 +4341,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                saveFile("resources/report/Report.html", comparisonReport);
 
                setPlanInfoPanelText(report);
+               setPlanEvaluationInfoPanelText("");
 
 
            }
@@ -4089,6 +4350,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
        // changes the button action command
        solveProblemButton.setActionCommand("stop");
        solveProblemButton.setText("Stop");
+       solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
     }
 
     private void solveProblem(final Element problem, final List<Element> planners){
@@ -4132,6 +4394,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                saveFile("resources/report/Report.html", comparisonReport);
 
                setPlanInfoPanelText(report);
+               setPlanEvaluationInfoPanelText("");
 
 
            }
@@ -4140,6 +4403,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
        // changes the button action command
        solveProblemButton.setActionCommand("stop");
        solveProblemButton.setText("Stop");
+       solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
     }
 
 
@@ -4300,7 +4564,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                             simProgressBar.repaint();
                         }
 
-
+                       
                         if (forceFinish){
                             timeKiller.setFinished(true);
                             exe.destroyProcess();
@@ -4311,7 +4575,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                             while (plannerThread.isAlive()) {
                                 Thread.sleep(500); //sleep to finish all killing
                             }
-
+                            
                             //set the reason (skipped) and time in the statistics
                             Element plan = exe.getPlan();
                             //System.out.println("forced " + timespentStr +" - "+ planner.getChildText("name"));
@@ -4343,7 +4607,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                             statistics.getChild("toolTime").setText(thetimeoutstr);
                             Element plannerstatus = statistics.getChild("forcedQuit");
                             plannerstatus.setText("timeout");
-
+                            
                             //set datetime
                             dateTime = dateFormat.format(date);
                             plan.getChild("datetime").setText(dateTime);
@@ -4413,7 +4677,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 
             appendOutputPanelText(">> Done solving problem "+problem.getChildText("name")+" with selected planner(s)! \n");
-
+            
 
 
 		}
@@ -4506,7 +4770,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
                     if (stopRunningPlanners){
                         break;
                     }
-
+                    
                     Element domain = it.next();
                     //get domain
                     Element result = solveDomainProblemsWithPlannersList(project, domain, xpddlDomain, planners);
@@ -4551,6 +4815,8 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
             // clear plan list and plan info pane
             setPlanList(null);
             setPlanInfoPanelText("");
+            setPlanEvaluationInfoPanelText("");
+            cleanupPlanDatabaseReference();
 
             Element domainProject = problem.getDocument().getRootElement();
             Element domain = problem.getParentElement().getParentElement();
@@ -4604,6 +4870,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
             // changes the button action command
             solveProblemButton.setActionCommand("stop");
             solveProblemButton.setText("Stop");
+            solveProblemButton.setIcon(new ImageIcon("resources/images/stop.png"));
 
 
         }
@@ -4651,39 +4918,52 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 			// initialize the buttons
 			addPlanActionButton = new JButton(addPlanAction);
-            addPlanActionButton.setToolTipText("Add an action to the plan");
-			removePlanActionButton = new JButton(removePlanAction);
-            removePlanActionButton.setToolTipText("Remove selected action");
-			editPlanActionButton = new JButton(editPlanAction);
-            editPlanActionButton.setToolTipText("Edit selected action");
-			importPlanButton = new JButton(importPlanAction);
-            importPlanButton.setToolTipText("Import plan");
-			exportPlanButton = new JButton(exportPlanAction);
-            exportPlanButton.setToolTipText("Export current plan");
+                        addPlanActionButton.setToolTipText("Add an action to the plan");
 
-            quickEvaluateButton = new JButton(quickEvaluation);
-            quickEvaluateButton.setToolTipText("Quick evaluation of the selected plan");
+                        removePlanActionButton = new JButton(removePlanAction);
+                        removePlanActionButton.setToolTipText("Remove selected action");
 
-            fullEvaluationButton = new JButton(evaluatePlan);
-            fullEvaluationButton.setToolTipText("<html>Full evaluation of the selected plan. <br> Generate a plan evaluation in the planReport. <br> This is restricted to non-time-based domain only.</html>");
-            fullEvaluationButton.setText("");
+                        editPlanActionButton = new JButton(editPlanAction);
+                        editPlanActionButton.setToolTipText("Edit selected action");
 
-            addPlanActionButton.setEnabled(false);
-            removePlanActionButton.setEnabled(false);
-            editPlanActionButton.setEnabled(false);
-            importPlanButton.setEnabled(false);
-            exportPlanButton.setEnabled(false);
-            quickEvaluateButton.setEnabled(false);
-            fullEvaluationButton.setEnabled(false);
-            JToolBar planListToolBar = new JToolBar();
-            planListToolBar.add(addPlanActionButton);
-            planListToolBar.add(removePlanActionButton);
-            planListToolBar.add(editPlanActionButton);
-            planListToolBar.add(importPlanButton);
-            planListToolBar.add(exportPlanButton);
-            planListToolBar.add(quickEvaluateButton);
-            planListToolBar.add(fullEvaluationButton);
+                        importPlanButton = new JButton(importPlanAction);
+                        importPlanButton.setToolTipText("Import plan from xml file");
 
+                        exportPlanButton = new JButton(exportPlanAction);
+                        exportPlanButton.setToolTipText("Export current plan");
+
+                        checkPlanValidityButton = new JButton(checkPlanValidity);
+                        checkPlanValidityButton.setToolTipText("<html>Validate plan with validator VAL <br>(based on the generated PDDL model).</html>");
+
+                        //quickEvaluateButton = new JButton(quickEvaluation);
+                        //quickEvaluateButton.setToolTipText("Quick evaluation of the selected plan");
+
+                        //fullEvaluationButton = new JButton(generateEvaluatioReport);
+                        //fullEvaluationButton.setToolTipText("<html>Full evaluation of the selected plan. <br> Generate a plan evaluation in the planReport. <br> This is restricted to non-time-based domain only.</html>");
+                        //fullEvaluationButton.setText("");
+
+                        addPlanActionButton.setEnabled(false);
+                        removePlanActionButton.setEnabled(false);
+                        editPlanActionButton.setEnabled(false);
+                        checkPlanValidityButton.setEnabled(false);
+                        //quickEvaluateButton.setEnabled(false);
+                        //fullEvaluationButton.setEnabled(false);
+                        importPlanButton.setEnabled(false);
+                        exportPlanButton.setEnabled(false);
+
+                        JToolBar planListToolBar = new JToolBar();
+                        planListToolBar.add(addPlanActionButton);
+                        planListToolBar.add(removePlanActionButton);
+                        planListToolBar.add(editPlanActionButton);
+                        planListToolBar.addSeparator();
+                        planListToolBar.add(checkPlanValidityButton);
+                        //planListToolBar.add(quickEvaluateButton);
+                        //planListToolBar.add(fullEvaluationButton);
+                        planListToolBar.addSeparator();
+                        planListToolBar.add(importPlanButton);
+                        planListToolBar.add(exportPlanButton);
+
+            
 
 			JScrollPane listScrollPane = new JScrollPane(planList);
 
@@ -4708,54 +4988,56 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		this.xmlPlan = xmlPlan;
 		planListModel.clear();
 		if (xmlPlan != null) {
+                        checkPlanValidityButton.setEnabled(true);
+                        //quickEvaluateButton.setEnabled(true);
+                        //fullEvaluationButton.setEnabled(true);
 			exportPlanButton.setEnabled(true);
-            quickEvaluateButton.setEnabled(true);
-            fullEvaluationButton.setEnabled(true);
 
-            Element planNode = xmlPlan.getChild("plan");
-            List<?> actions = planNode.getChildren("action");
-            for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
-                Element action = (Element) iter.next();
+                        Element planNode = xmlPlan.getChild("plan");
+                        List<?> actions = planNode.getChildren("action");
+                        for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
+                            Element action = (Element) iter.next();
 
-                // start time
-                String line = action.getChildText("startTime") + ": ";
+                            // start time
+                            String line = action.getChildText("startTime") + ": ";
 
-                // action name
-                line += "(" + action.getAttributeValue("id") + " ";
+                            // action name
+                            line += "(" + action.getAttributeValue("id") + " ";
 
-                // action parameters
-                List<?> parameters = action.getChild("parameters")
-                        .getChildren("parameter");
-                for (Iterator<?> iterator = parameters.iterator(); iterator
-                        .hasNext();) {
-                    Element parameter = (Element) iterator.next();
-                    line += parameter.getAttributeValue("id");
-                    if (iterator.hasNext()) {
-                        line += " ";
-                    }
-                }
-                line += ")";
+                            // action parameters
+                            List<?> parameters = action.getChild("parameters")
+                                    .getChildren("parameter");
+                            for (Iterator<?> iterator = parameters.iterator(); iterator
+                                    .hasNext();) {
+                                Element parameter = (Element) iterator.next();
+                                line += parameter.getAttributeValue("id");
+                                if (iterator.hasNext()) {
+                                    line += " ";
+                                }
+                            }
+                            line += ")";
 
-                // action duration
-                String duration = action.getChildText("duration");
-                if (!duration.equals("")) {
-                    line += " [" + duration + "]";
-                }
+                            // action duration
+                            String duration = action.getChildText("duration");
+                            if (!duration.equals("")) {
+                                line += " [" + duration + "]";
+                            }
 
-                // add the line to the list
-                planListModel.addElement(line);
-            }
-            planListFramePanel.repaint();
-            planList.repaint();
-            planList.revalidate();
+                            // add the line to the list
+                            planListModel.addElement(line);
+                        }
+                        planListFramePanel.repaint();
+                        planList.repaint();
+                        planList.revalidate();
 
 
-			} else {
-				// do nothing, set the button disabled
-				exportPlanButton.setEnabled(false);
-                quickEvaluateButton.setEnabled(false);
-                fullEvaluationButton.setEnabled(false);
-			}
+		} else {
+                    // do nothing, set the button disabled
+                    checkPlanValidityButton.setEnabled(false);
+                    //quickEvaluateButton.setEnabled(false);
+                    //fullEvaluationButton.setEnabled(false);
+                    exportPlanButton.setEnabled(false);
+		}
 
 	}
 
@@ -4777,331 +5059,371 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			chartsPanel = new JPanel();
 			chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
 
+
+                        ItFramePanel variableSelectionPanel = new ItFramePanel(".: Select variables to be tracked", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+                        //variableSelectionPanel.setBackground(new Color(151,151,157));
+
+                        JSplitPane split = new JSplitPane();
+			split.setContinuousLayout(true);
+			split.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+                        split.setDividerLocation(2*screenSize.height/3);
+			
+			split.setDividerSize(8);
+			//split.setPreferredSize(new Dimension(screenSize.width/4-20, screenSize.height/2 - 50));
+			//split.setPreferredSize(new Dimension(screenSize.width/4-20, 120));
+			split.setLeftComponent(new JScrollPane(variablesPlanTree));
+			split.setRightComponent(new JScrollPane(selectedVariablesPlanTree));
+
+                        variableSelectionPanel.setContent(split, false);
+                        //variableSelectionPanel.setParentSplitPane()
+
+                        //JPanel variableSelectionPanel  = new JPanel(new BorderLayout());
+			//variableSelectionPanel.add(new JScrollPane(variablesPlanTree), BorderLayout.CENTER);
+			//variableSelectionPanel.add(new JScrollPane(selectedVariablesPlanTree), BorderLayout.EAST);
+
+                        ItFramePanel variableGraphPanel = new ItFramePanel(".: Chart", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+                        variableGraphPanel.setContent(chartsPanel, true);
+
+
+                        JSplitPane mainvariablesplit = new JSplitPane();
+			mainvariablesplit.setContinuousLayout(true);
+			mainvariablesplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
+                        mainvariablesplit.setDividerLocation(150);
+			mainvariablesplit.setDividerSize(8);
+			//mainvariablesplit.setPreferredSize(new Dimension(screenSize.width/4-20, screenSize.height/2 - 50));
+			mainvariablesplit.setTopComponent(variableSelectionPanel);
+			mainvariablesplit.setBottomComponent(variableGraphPanel);
+
+
 			// main charts panel - used to locate the tool bar above the charts panel
 			JPanel mainChartsPanel = new JPanel(new BorderLayout());
 			mainChartsPanel.add(chartsToolBar, BorderLayout.NORTH);
-			mainChartsPanel.add(new JScrollPane(chartsPanel), BorderLayout.CENTER);
+			//mainChartsPanel.add(new JScrollPane(chartsPanel), BorderLayout.CENTER);
+                        mainChartsPanel.add(mainvariablesplit, BorderLayout.CENTER);
 
 
-            //Results
-            planInfoEditorPane = new JEditorPane();
-			planInfoEditorPane.setContentType("text/html");
-			planInfoEditorPane.setEditable(false);
-			planInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-            planInfoEditorPane.setBackground(Color.WHITE);
 
 
-            JPanel resultsPanel = new JPanel(new BorderLayout());
 
-            JToolBar resultsToolBar = new JToolBar();
-            resultsToolBar.setRollover(true);
+                        //Results
+                        planInfoEditorPane = new JEditorPane();
+                        planInfoEditorPane.setContentType("text/html");
+                        planInfoEditorPane.setEditable(false);
+                        planInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                        planInfoEditorPane.setBackground(Color.WHITE);
 
-            JButton planReportButton = new JButton("View Full Report", new ImageIcon("resources/images/edit.png"));
-            planReportButton.setToolTipText("<html>View full plan report.<br> For multiple plans you will need " +
-                    "access to the Internet.<br> The components used in the report require such access (no data is " +
-                    "sent through the Internet).</html>");
-            planReportButton.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                                //Opens html with defaut browser
-                                String path = "resources/report/Report.html";
-                                File report = new File(path);
-                                path = report.getAbsolutePath();
-                                try {
-                                    BrowserLauncher launcher = new BrowserLauncher();
-                                    launcher.openURLinBrowser("file://"+path);
-                                } catch (BrowserLaunchingInitializingException ex) {
-                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
-                                } catch (UnsupportedOperatingSystemException ex) {
-                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                    appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
-                                }
-                }
-            });
-            resultsToolBar.add(planReportButton);
 
-            resultsToolBar.addSeparator();
-            JButton planReportDataButton = new JButton("Save Report Data", new ImageIcon("resources/images/savePDDL.png"));
-            planReportDataButton.setToolTipText("<html>Save report data to file</html>");
-            planReportDataButton.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //Save report data
-                    if (solveResult != null){
-                        Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
-                        JFileChooser fc = new JFileChooser(lastOpenFolderElement.getText());
-                        fc.setDialogTitle("Save Report Data");
-                        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                        fc.setFileFilter(new XMLFileFilter());
+                        JPanel resultsPanel = new JPanel(new BorderLayout());
 
-                        int returnVal = fc.showSaveDialog(ItSIMPLE.this);
-                        if (returnVal == JFileChooser.APPROVE_OPTION){
-                            File selectedFile = fc.getSelectedFile();
-                            String path = selectedFile.getPath();
+                        JToolBar resultsToolBar = new JToolBar();
+                        resultsToolBar.setRollover(true);
 
-                            if (!path.toLowerCase().endsWith(".xml")){
-                                path += ".xml";
+                        JButton planReportButton = new JButton("View Full Report", new ImageIcon("resources/images/viewreport.png"));
+                        planReportButton.setToolTipText("<html>View full plan report.<br> For multiple plans you will need " +
+                                "access to the Internet.<br> The components used in the report require such access (no data is " +
+                                "sent through the Internet).</html>");
+                        planReportButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                            //Opens html with defaut browser
+                                            String path = "resources/report/Report.html";
+                                            File report = new File(path);
+                                            path = report.getAbsolutePath();
+                                            try {
+                                                BrowserLauncher launcher = new BrowserLauncher();
+                                                launcher.openURLinBrowser("file://"+path);
+                                            } catch (BrowserLaunchingInitializingException ex) {
+                                                Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                                appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                            } catch (UnsupportedOperatingSystemException ex) {
+                                                Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                                appendOutputPanelText("ERROR. Problem while trying to open the default browser. \n");
+                                            }
                             }
-                            //save file (xml)
-                            try {
-                                FileWriter file = new FileWriter(path);
-                                file.write(XMLUtilities.toString(solveResult));
-                                file.close();
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
-                            }
+                        });
+                        resultsToolBar.add(planReportButton);
 
-                            //Save as a last open folder
-                            String folder = selectedFile.getParent();
-                            //Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
-                            lastOpenFolderElement.setText(folder);
-                            XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+                        resultsToolBar.addSeparator();
+                        JButton planReportDataButton = new JButton("Save Report Data", new ImageIcon("resources/images/savePDDL.png"));
+                        planReportDataButton.setToolTipText("<html>Save report data to file</html>");
+                        planReportDataButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //Save report data
+                                if (solveResult != null){
+                                    Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+                                    JFileChooser fc = new JFileChooser(lastOpenFolderElement.getText());
+                                    fc.setDialogTitle("Save Report Data");
+                                    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                                    fc.setFileFilter(new XMLFileFilter());
 
+                                    int returnVal = fc.showSaveDialog(ItSIMPLE.this);
+                                    if (returnVal == JFileChooser.APPROVE_OPTION){
+                                        File selectedFile = fc.getSelectedFile();
+                                        String path = selectedFile.getPath();
 
-
-                            //Ask if the user wants to save plans individually too.
-                            boolean needToSavePlans = false;
-                            int option = JOptionPane.showOptionDialog(instance,
-                                    "<html><center>Do you also want to save the plans" +
-                                    "<br>in individual files?</center></html>",
-                                    "Save plans",
-                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                            switch(option){
-                                case JOptionPane.YES_OPTION:{
-                                    needToSavePlans = true;
-                                }
-                                break;
-                                case JOptionPane.NO_OPTION:{
-                                    needToSavePlans = false;
-                                }
-                                break;
-                            }
-
-                            if (needToSavePlans){
-                                //Close Open tabs
-                                List<?> problems = null;
-                                try {
-                                    XPath ppath = new JDOMXPath("project/domains/domain/problems/problem");
-                                    problems = ppath.selectNodes(solveResult);
-                                } catch (JaxenException e2) {
-                                    e2.printStackTrace();
-                                }
-
-                                for (int i = 0; i < problems.size(); i++){
-                                    Element problem = (Element)problems.get(i);
-                                    //create a folder for each problem and put all plans inside as xml files
-                                    String folderName = problem.getChildText("name");
-                                    String folderPath = selectedFile.getAbsolutePath().replace(selectedFile.getName(), folderName);
-                                    //System.out.println(folderPath);
-                                    File planfolder = new File(folderPath);
-                                    boolean canSavePlan = false;
-                                    try {
-                                        if (planfolder.mkdir()){
-                                            System.out.println("Directory '" + folderPath + "' created.");
-                                            canSavePlan = true;
-                                        }else{
-                                            System.out.println("Directory '" + folderPath + "' was not created.");
+                                        if (!path.toLowerCase().endsWith(".xml")){
+                                            path += ".xml";
+                                        }
+                                        //save file (xml)
+                                        try {
+                                            FileWriter file = new FileWriter(path);
+                                            file.write(XMLUtilities.toString(solveResult));
+                                            file.close();
+                                        } catch (IOException e1) {
+                                            e1.printStackTrace();
                                         }
 
-                                    } catch (Exception ep) {
-                                        ep.printStackTrace();
+                                        //Save as a last open folder
+                                        String folder = selectedFile.getParent();
+                                        //Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+                                        lastOpenFolderElement.setText(folder);
+                                        XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+
+
+
+                                        //Ask if the user wants to save plans individually too.
+                                        boolean needToSavePlans = false;
+                                        int option = JOptionPane.showOptionDialog(instance,
+                                                "<html><center>Do you also want to save the plans" +
+                                                "<br>in individual files?</center></html>",
+                                                "Save plans",
+                                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                                        switch(option){
+                                            case JOptionPane.YES_OPTION:{
+                                                needToSavePlans = true;
+                                            }
+                                            break;
+                                            case JOptionPane.NO_OPTION:{
+                                                needToSavePlans = false;
+                                            }
+                                            break;
+                                        }
+
+                                        if (needToSavePlans){
+                                            //Close Open tabs
+                                            List<?> problems = null;
+                                            try {
+                                                XPath ppath = new JDOMXPath("project/domains/domain/problems/problem");
+                                                problems = ppath.selectNodes(solveResult);
+                                            } catch (JaxenException e2) {
+                                                e2.printStackTrace();
+                                            }
+
+                                            for (int i = 0; i < problems.size(); i++){
+                                                Element problem = (Element)problems.get(i);
+                                                //create a folder for each problem and put all plans inside as xml files
+                                                String folderName = problem.getChildText("name");
+                                                String folderPath = selectedFile.getAbsolutePath().replace(selectedFile.getName(), folderName);
+                                                //System.out.println(folderPath);
+                                                File planfolder = new File(folderPath);
+                                                boolean canSavePlan = false;
+                                                try {
+                                                    if (planfolder.mkdir()){
+                                                        System.out.println("Directory '" + folderPath + "' created.");
+                                                        canSavePlan = true;
+                                                    }else{
+                                                        System.out.println("Directory '" + folderPath + "' was not created.");
+                                                    }
+
+                                                } catch (Exception ep) {
+                                                    ep.printStackTrace();
+                                                }
+
+                                                if (canSavePlan){
+                                                    Element plans = problem.getChild("plans");
+                                                    for (Iterator<Element> it = plans.getChildren("xmlPlan").iterator(); it.hasNext();) {
+                                                        Element eaplan = it.next();
+                                                        Element theplanner = eaplan.getChild("planner");
+                                                        //save file (xml)
+                                                        String planFileName = "solution" + theplanner.getChildText("name") + "-" + theplanner.getChildText("version") + "-" + Integer.toString(plans.getChildren().indexOf(eaplan)) + ".xml";
+                                                        String planPath = folderPath + File.separator + planFileName;
+
+                                                        try {
+                                                            FileWriter planfile = new FileWriter(planPath);
+                                                            planfile.write(XMLUtilities.toString(eaplan));
+                                                            planfile.close();
+                                                            System.out.println("File '" + planPath + "' created.");
+                                                        } catch (IOException e1) {
+                                                            e1.printStackTrace();
+                                                        }
+
+                                                    }
+
+                                                }
+
+
+
+                                            }
+                                        }
+
+
+
+                                    }
+                                }
+                                else{
+                                    appendOutputPanelText(">> No report data available to save! \n");
+                                }
+
+                            }
+                        });
+                        resultsToolBar.add(planReportDataButton);
+
+                        JButton openPlanReportDataButton = new JButton("Open Report Data", new ImageIcon("resources/images/openreport.png"));
+                        openPlanReportDataButton.setToolTipText("<html>Open report data to file</html>");
+                        openPlanReportDataButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                planSimStatusBar.setText("Status: Opening File...");
+                                appendOutputPanelText(">> Opening File... \n");
+                                //Open report data
+                                Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+                                JFileChooser fc = new JFileChooser(lastOpenFolderElement.getText());
+                                fc.setDialogTitle("Open Report Data");
+                                fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                                fc.setFileFilter(new XMLFileFilter());
+
+                                int returnVal = fc.showOpenDialog(ItSIMPLE.this);
+                                if (returnVal == JFileChooser.APPROVE_OPTION){
+
+                                    File file = fc.getSelectedFile();
+                                    // Get itSIMPLE itSettings from itSettings.xml
+                                    org.jdom.Document resultsDoc = null;
+                                    try{
+                                        resultsDoc = XMLUtilities.readFromFile(file.getPath());
+                                        solveResult = resultsDoc.getRootElement();
+                                        //XMLUtilities.printXML(solveResult);
+                                        if (solveResult.getName().equals("projects")){
+
+                                            String report = PlanAnalyzer.generatePlannersComparisonReport(solveResult);
+                                            String comparisonReport = PlanAnalyzer.generateFullPlannersComparisonReport(solveResult);
+                                            //Save Comparison Report file
+                                            saveFile("resources/report/Report.html", comparisonReport);
+                                            setPlanInfoPanelText(report);
+                                            setPlanEvaluationInfoPanelText("");
+                                            appendOutputPanelText(">> Report data read! \n");
+
+                                            //My experiments
+                                            PlanAnalyzer.myAnalysis(itPlanners.getChild("planners"), solveResult);
+                                        }
+                                    }
+                                    catch(Exception e1){
+                                        e1.printStackTrace();
                                     }
 
-                                    if (canSavePlan){
-                                        Element plans = problem.getChild("plans");
-                                        for (Iterator<Element> it = plans.getChildren("xmlPlan").iterator(); it.hasNext();) {
-                                            Element eaplan = it.next();
-                                            Element theplanner = eaplan.getChild("planner");
-                                            //save file (xml)
-                                            String planFileName = "solution" + theplanner.getChildText("name") + "-" + theplanner.getChildText("version") + "-" + Integer.toString(plans.getChildren().indexOf(eaplan)) + ".xml";
-                                            String planPath = folderPath + File.separator + planFileName;
+                                    //Save as a last open folder
+                                    String folder = fc.getSelectedFile().getParent();
+                                    lastOpenFolderElement.setText(folder);
+                                    XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
 
-                                            try {
-                                                FileWriter planfile = new FileWriter(planPath);
-                                                planfile.write(XMLUtilities.toString(eaplan));
-                                                planfile.close();
-                                                System.out.println("File '" + planPath + "' created.");
-                                            } catch (IOException e1) {
-                                                e1.printStackTrace();
+                                }
+                                else{
+                                    planSimStatusBar.setText("Status:");
+                                    appendOutputPanelText(">> Canceled \n");
+                                }
+
+                            }
+                        });
+                        resultsToolBar.add(openPlanReportDataButton);
+
+
+
+                    JButton compareProjectReportDataButton = new JButton("Compare Project Data", new ImageIcon("resources/images/compare.png"));
+                    compareProjectReportDataButton.setToolTipText("<html>Compare different project report data <br> This is commonly use to compare diferent domain models with different adjustments.<br>" +
+                            "One project data must be chosen as a reference; others will be compared to this referencial one.</html>");
+                    compareProjectReportDataButton.addActionListener(new java.awt.event.ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+
+                            final ProjectComparisonDialog dialog = new ProjectComparisonDialog();
+                            dialog.setVisible(true);
+
+                            final List<String> files = dialog.getFiles();
+
+                            if (files.size() > 1){
+
+                                new Thread(){
+                                    public void run() {
+                                        appendOutputPanelText(">> Project comparison report requested. Processing... \n");
+
+                                        planSimStatusBar.setText("Status: Reading files ...");
+                                        appendOutputPanelText(">> Reading files ... \n");
+
+                                        //base project file
+                                        String baseFileName = files.get(0);
+                                        appendOutputPanelText(">> Reading file '"+baseFileName+"' \n");
+                                        org.jdom.Document baseProjectDoc = null;
+                                        try{
+                                            baseProjectDoc = XMLUtilities.readFromFile(baseFileName);
+                                        }
+                                        catch(Exception ec){
+                                            ec.printStackTrace();
+                                        }
+                                        Element baseProject = null;
+                                        if (baseProjectDoc != null){
+                                            baseProject = baseProjectDoc.getRootElement().getChild("project");
+                                        }
+
+                                        //The comparible projects
+                                        List<Element> comparableProjects = new ArrayList<Element>();
+
+                                        for (int i = 1; i < files.size(); i++) {
+                                            String eafile = files.get(i);
+                                            appendOutputPanelText(">> Reading file '"+eafile+"' \n");
+                                            org.jdom.Document eaProjectDoc = null;
+                                            try{
+                                                eaProjectDoc = XMLUtilities.readFromFile(eafile);
+                                            }
+                                            catch(Exception ec){
+                                                ec.printStackTrace();
+                                            }
+                                            if (eaProjectDoc != null){
+                                                comparableProjects.add(eaProjectDoc.getRootElement().getChild("project"));
                                             }
 
                                         }
+                                        appendOutputPanelText(">> Files read. Building report... \n");
+
+                                        String comparisonReport = PlanAnalyzer.generateProjectComparisonReport(baseProject, comparableProjects);
+                                        saveFile("resources/report/Report.html", comparisonReport);
+                                        appendOutputPanelText(">> Project comparison report generated. Press 'View Full Report'\n");
+                                        appendOutputPanelText(" \n");
 
                                     }
+                                }.start();
 
 
-
-                                }
                             }
 
 
 
+
+
                         }
-                    }
-                    else{
-                        appendOutputPanelText(">> No report data available to save! \n");
-                    }
-
-                }
-            });
-            resultsToolBar.add(planReportDataButton);
-
-            JButton openPlanReportDataButton = new JButton("Open Report Data", new ImageIcon("resources/images/edit.png"));
-            openPlanReportDataButton.setToolTipText("<html>Open report data to file</html>");
-            openPlanReportDataButton.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    planSimStatusBar.setText("Status: Opening File...");
-                    appendOutputPanelText(">> Opening File... \n");
-                    //Open report data
-                    Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
-                    JFileChooser fc = new JFileChooser(lastOpenFolderElement.getText());
-                    fc.setDialogTitle("Open Report Data");
-                    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    fc.setFileFilter(new XMLFileFilter());
-
-                    int returnVal = fc.showOpenDialog(ItSIMPLE.this);
-                    if (returnVal == JFileChooser.APPROVE_OPTION){
-
-                        File file = fc.getSelectedFile();
-                        // Get itSIMPLE itSettings from itSettings.xml
-                        org.jdom.Document resultsDoc = null;
-                        try{
-                            resultsDoc = XMLUtilities.readFromFile(file.getPath());
-                            solveResult = resultsDoc.getRootElement();
-                            //XMLUtilities.printXML(solveResult);
-                            if (solveResult.getName().equals("projects")){
-
-                                String report = PlanAnalyzer.generatePlannersComparisonReport(solveResult);
-                                String comparisonReport = PlanAnalyzer.generateFullPlannersComparisonReport(solveResult);
-                                //Save Comparison Report file
-                                saveFile("resources/report/Report.html", comparisonReport);
-                                setPlanInfoPanelText(report);
-                                appendOutputPanelText(">> Report data read! \n");
-
-                                //My experiments
-                                PlanAnalyzer.myAnalysis(itPlanners.getChild("planners"), solveResult);
-                            }
-                        }
-                        catch(Exception e1){
-                            e1.printStackTrace();
-                        }
-
-                        //Save as a last open folder
-                        String folder = fc.getSelectedFile().getParent();
-                        lastOpenFolderElement.setText(folder);
-                        XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
-
-                    }
-                    else{
-                        planSimStatusBar.setText("Status:");
-                        appendOutputPanelText(">> Canceled \n");
-                    }
-
-                }
-            });
-            resultsToolBar.add(openPlanReportDataButton);
+                    });
+                    resultsToolBar.add(compareProjectReportDataButton);
 
 
 
-            JButton compareProjectReportDataButton = new JButton("Compare Project Data", new ImageIcon("resources/images/edit.png"));
-            compareProjectReportDataButton.setToolTipText("<html>Compare different project report data <br> This is commonly use to compare diferent domain models with different adjustments.<br>" +
-                    "One project data must be chosen as a reference; others will be compared to this referencial one.</html>");
-            compareProjectReportDataButton.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+                    resultsPanel.add(resultsToolBar, BorderLayout.NORTH);
+                    resultsPanel.add(new JScrollPane(planInfoEditorPane), BorderLayout.CENTER);
 
 
-                    final ProjectComparisonDialog dialog = new ProjectComparisonDialog();
-                    dialog.setVisible(true);
-
-                    final List<String> files = dialog.getFiles();
-
-                    if (files.size() > 1){
-
-                        new Thread(){
-                            public void run() {
-                                appendOutputPanelText(">> Project comparison report requested. Processing... \n");
-
-                                planSimStatusBar.setText("Status: Reading files ...");
-                                appendOutputPanelText(">> Reading files ... \n");
-
-                                //base project file
-                                String baseFileName = files.get(0);
-                                appendOutputPanelText(">> Reading file '"+baseFileName+"' \n");
-                                org.jdom.Document baseProjectDoc = null;
-                                try{
-                                    baseProjectDoc = XMLUtilities.readFromFile(baseFileName);
-                                }
-                                catch(Exception ec){
-                                    ec.printStackTrace();
-                                }
-                                Element baseProject = null;
-                                if (baseProjectDoc != null){
-                                    baseProject = baseProjectDoc.getRootElement().getChild("project");
-                                }
-
-                                //The comparible projects
-                                List<Element> comparableProjects = new ArrayList<Element>();
-
-                                for (int i = 1; i < files.size(); i++) {
-                                    String eafile = files.get(i);
-                                    appendOutputPanelText(">> Reading file '"+eafile+"' \n");
-                                    org.jdom.Document eaProjectDoc = null;
-                                    try{
-                                        eaProjectDoc = XMLUtilities.readFromFile(eafile);
-                                    }
-                                    catch(Exception ec){
-                                        ec.printStackTrace();
-                                    }
-                                    if (eaProjectDoc != null){
-                                        comparableProjects.add(eaProjectDoc.getRootElement().getChild("project"));
-                                    }
-
-                                }
-                                appendOutputPanelText(">> Files read. Building report... \n");
-
-                                String comparisonReport = PlanAnalyzer.generateProjectComparisonReport(baseProject, comparableProjects);
-                                saveFile("resources/report/Report.html", comparisonReport);
-                                appendOutputPanelText(">> Project comparison report generated. Press 'View Full Report'\n");
-                                appendOutputPanelText(" \n");
-
-                            }
-                        }.start();
-
-
-                    }
-
-
-
-
-
-                }
-            });
-            resultsToolBar.add(compareProjectReportDataButton);
-
-
-
-            resultsPanel.add(resultsToolBar, BorderLayout.NORTH);
-            resultsPanel.add(new JScrollPane(planInfoEditorPane), BorderLayout.CENTER);
-
-
-			JTabbedPane planAnalysisTabbedPane = new JTabbedPane();
+            JTabbedPane planAnalysisTabbedPane = new JTabbedPane();
             planAnalysisTabbedPane.addTab("Results",  resultsPanel);
-			planAnalysisTabbedPane.addTab("Variable Tracking", mainChartsPanel);
-			planAnalysisTabbedPane.addTab("Movie Maker", getMovieMakerPanel());
+            planAnalysisTabbedPane.addTab("Variable Tracking", mainChartsPanel);
+            planAnalysisTabbedPane.addTab("Movie Maker", getMovieMakerPanel());
+            planAnalysisTabbedPane.addTab("Plan Evaluation", getPlanEvaluationPanel());
+            
+            JPanel planAnalysisPanel = new JPanel(new BorderLayout());
+            //planAnalysisPanel.add(chartsToolBar, BorderLayout.NORTH);
+            planAnalysisPanel.add(planAnalysisTabbedPane, BorderLayout.CENTER);
+            planAnalysisFramePanel.setContent(planAnalysisPanel, false);
 
-			JPanel planAnalysisPanel = new JPanel(new BorderLayout());
-			//planAnalysisPanel.add(chartsToolBar, BorderLayout.NORTH);
-			planAnalysisPanel.add(planAnalysisTabbedPane, BorderLayout.CENTER);
+            }
 
-
-			planAnalysisFramePanel.setContent(planAnalysisPanel, false);
-
-		}
-
-		return planAnalysisFramePanel;
+            return planAnalysisFramePanel;
 	}
 
 	/**
@@ -5119,8 +5441,6 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 		return movieMakerPanel;
 	}
-
-
 
 	/**
 	 * This method initializes movieMakerSplitPane
@@ -5144,6 +5464,77 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	}
 
 	/**
+	 * This method initializes planEvaluationPanel
+	 *
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPlanEvaluationPanel(){
+            //TODO:
+
+		if(planEvaluationPanel == null){
+			planEvaluationPanel = new JPanel(new BorderLayout());
+                        
+                        JPanel contentPanel = new JPanel(new BorderLayout());
+
+                        //Plan evaluation summary
+                        planEvaluationInfoEditorPane = new JEditorPane();
+                        planEvaluationInfoEditorPane.setContentType("text/html");
+                        planEvaluationInfoEditorPane.setEditable(false);
+                        planEvaluationInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                        planEvaluationInfoEditorPane.setBackground(Color.WHITE);
+                        planEvaluationInfoEditorPane.setPreferredSize(new Dimension(600, 100));
+                        contentPanel.add(new JScrollPane(planEvaluationInfoEditorPane), BorderLayout.CENTER);
+                        //contentPanel.add(new JScrollPane(planEvaluationInfoEditorPane), BorderLayout.NORTH);
+
+
+
+                        //metric table
+                        // create parameters table
+//                        JScrollPane scrollParamPane = new JScrollPane(getMetricsTable());
+//                        JPanel paramPane = new JPanel(new BorderLayout());
+//                        paramPane.add(scrollParamPane, BorderLayout.CENTER);
+//                        paramPane.setPreferredSize(new Dimension(600, 210));
+//                        //add(paramPane, BorderLayout.CENTER);
+//                        plannerSettingPanel.add(paramPane, BorderLayout.CENTER);
+
+
+
+
+//                        //cost and overall plan evaluation panel
+//                        FormLayout layout = new FormLayout(
+//                                        "pref, 4px, 100px", // columns
+//                                        "pref, 4px, pref"); // rows
+//                        JPanel costoverallPanel = new JPanel(layout);
+//
+//                        //plan cost
+//                        JLabel costLabel = new JLabel("Plan Cost:");
+//                        JLabel thecostLabel = new JLabel("...");
+//                        //plan overall evaluation
+//                        JLabel evaluationLabel = new JLabel("<html><strong>Plan evaluation:</strong></html>");
+//                        overallPlanEvaluationValue = new JTextField(30);
+//                        JTextFieldFilter filter = new JTextFieldFilter(JTextFieldFilter.FLOAT);
+//                        filter.setNegativeAccepted(false);
+//                        //filter.setLimit(3);
+//                        overallPlanEvaluationValue.setDocument(filter);
+//                        overallPlanEvaluationValue.setColumns(9);
+//
+//                        CellConstraints cc = new CellConstraints();
+//                        costoverallPanel.add(costLabel, cc.xy (1, 1));
+//                        costoverallPanel.add(thecostLabel, cc.xy(3, 1));
+//                        costoverallPanel.add(evaluationLabel, cc.xy(1, 3));
+//                        costoverallPanel.add(overallPlanEvaluationValue, cc.xy(3, 3));
+//                        contentPanel.add(costoverallPanel, BorderLayout.SOUTH);
+
+
+			planEvaluationPanel.add(getPlanEvaluationToolBar(), BorderLayout.NORTH);
+                        planEvaluationPanel.add(contentPanel, BorderLayout.CENTER);
+		}
+
+		return planEvaluationPanel;
+	}
+
+	
+	/**
 	 * This method initializes planInfoFramePanel
 	 *
 	 * @return javax.swing.JPanel
@@ -5160,22 +5551,22 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			//planInfoEditorPane.setContentType("text/html");
 			//planInfoEditorPane.setEditable(false);
 			//planInfoEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-            //planInfoEditorPane.setBackground(Color.WHITE);
+                        //planInfoEditorPane.setBackground(Color.WHITE);
 
-            outputEditorPane = new JTextArea();
+                        outputEditorPane = new JTextArea();
 			//outputEditorPane.setContentType("text/html");
 			outputEditorPane.setEditable(false);
-            outputEditorPane.setLineWrap(true);
-            outputEditorPane.setWrapStyleWord(true);
+                        outputEditorPane.setLineWrap(true);
+                        outputEditorPane.setWrapStyleWord(true);
 			outputEditorPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
-            // tabbed panes with jtrees
+                        // tabbed panes with jtrees
 			JTabbedPane outputPane = new JTabbedPane();
 			outputPane.addTab("Output", new JScrollPane(outputEditorPane));
 			//outputPane.addTab("Results", new JScrollPane(planInfoEditorPane));
 
 			//planInfoFramePanel.setContent(planInfoEditorPane, true);
-            planInfoFramePanel.setContent(outputPane, false);
+                        planInfoFramePanel.setContent(outputPane, false);
 			planInfoFramePanel.setParentSplitPane(planInfoSplitPane);
 
 			planInfoPanel.add(planInfoFramePanel, BorderLayout.CENTER);
@@ -5187,21 +5578,23 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		planInfoEditorPane.setText(text);
 	}
 
-    public void setOutputPanelText(String text){
-		outputEditorPane.setText(text);
+	public void setPlanEvaluationInfoPanelText(String text){
+		planEvaluationInfoEditorPane.setText(text);
 	}
 
-    public void appendOutputPanelText(String text){
-        try {
-            outputEditorPane.append(text);
-            outputEditorPane.setCaretPosition(outputEditorPane.getDocument().getLength());
-        } catch (Exception e) {
-        }
+        public void setOutputPanelText(String text){
+                    outputEditorPane.setText(text);
+            }
 
-
-        //String outputtext = outputEditorPane.getText();
-        //int pos = outputtext.length();
-        //outputEditorPane.setCaretPosition(pos);
+        public void appendOutputPanelText(String text){
+            try {
+                outputEditorPane.append(text);
+                outputEditorPane.setCaretPosition(outputEditorPane.getDocument().getLength());
+            } catch (Exception e) {
+            }
+            //String outputtext = outputEditorPane.getText();
+            //int pos = outputtext.length();
+            //outputEditorPane.setCaretPosition(pos);
 
 	}
 
@@ -5238,6 +5631,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 						Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problemElement, pddlVersion);
 						String problemText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "  ");
+                                                XMLUtilities.printXML(xpddlProblem);
 
 						problemPddlTextPane.setText(problemText);
 
@@ -5779,7 +6173,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 		// generate movie
 		JButton generateMovieButton = new JButton("Generate Movie",
-				new ImageIcon("resources/images/new.png"));
+				new ImageIcon("resources/images/makemovie.png"));
 		generateMovieButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 
@@ -5852,7 +6246,8 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		movieMakerToolBar.addSeparator();
 
 		// zoom in
-		JButton zoomInButton = new JButton("Zoom In",new ImageIcon("resources/images/zoomIN.png"));
+		//JButton zoomInButton = new JButton("Zoom In",new ImageIcon("resources/images/zoomIN.png"));
+                JButton zoomInButton = new JButton(new ImageIcon("resources/images/zoomIN.png"));
 		zoomInButton.setToolTipText("Zoom In");
 		zoomInButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5873,7 +6268,8 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		movieMakerToolBar.add(zoomInButton);
 
 		// zoom out
-		JButton zoomOutButton = new JButton("Zoom Out",new ImageIcon("resources/images/zoomOUT.png"));
+		//JButton zoomOutButton = new JButton("Zoom Out",new ImageIcon("resources/images/zoomOUT.png"));
+                JButton zoomOutButton = new JButton(new ImageIcon("resources/images/zoomOUT.png"));
 		zoomOutButton.setToolTipText("Zoom Out");
 		zoomOutButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5919,7 +6315,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		movieMakerToolBar.addSeparator();
 
         // edit state
-		JButton editStateButton = new JButton("Edit");
+		JButton editStateButton = new JButton("Edit", new ImageIcon("resources/images/edit.png"));
 		editStateButton.setToolTipText("Edit current state");
 		editStateButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
@@ -5945,24 +6341,27 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 
 
-        movieMakerToolBar.addSeparator();
-        // plan evaluation
+            movieMakerToolBar.addSeparator();
+            // plan evaluation
+
+            /*
 		JButton planEvaluationButton = new JButton("Evaluate Plan", new ImageIcon("resources/images/eval.png"));
 		 planEvaluationButton.setToolTipText("<html>Generate a plan evaluation in the planReport. <br> This is restricted to non-time-based domain only.</html>");
 		 planEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
                 //RUN plan evaluation
-				evaluatePlan.actionPerformed(e);
+				generateEvaluatioReport.actionPerformed(e);
 			}
 		});
 		movieMakerToolBar.add( planEvaluationButton);
+             */
 
 
 
         // virtual reality
 
-		JButton virtualRealityButton = new JButton("Virtual Prototyping");
+		JButton virtualRealityButton = new JButton("Virtual Prototyping", new ImageIcon("resources/images/virtualprototype.png"));
 		virtualRealityButton.setToolTipText("Generate virtual prototype files");
 		virtualRealityButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
@@ -5980,14 +6379,62 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 				//VirtualRealityRobotNavigationDomain.generateBackgroundFile(problemNode.getData(), xmlPlan);
 			}
 		});
-		//movieMakerToolBar.add(virtualRealityButton);
-
+		movieMakerToolBar.add(virtualRealityButton);
 
 
 		return movieMakerToolBar;
 	}
 
-	public void setMainTabbedPaneSelectedIndex(int index){
+
+
+    private JToolBar getPlanEvaluationToolBar() {
+
+            JToolBar planEvaluationToolBar = new JToolBar();
+            planEvaluationToolBar.setRollover(true);
+
+            // create the buttons
+
+            // plan evaluation
+
+            JButton planEvaluationButton = new JButton("Evaluate Plan", new ImageIcon("resources/images/eval.png"));
+            planEvaluationButton.setToolTipText("<html>Evaluate current plan based on the specified metrics. <br> This is restricted to non-time-based domain only.</html>");
+            planEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //RUN plan evaluation
+                         quickEvaluation.actionPerformed(e);
+                    }
+            });
+            planEvaluationToolBar.add(planEvaluationButton);
+
+
+            JButton planEvaluationReportButton = new JButton("Evaluation Report", new ImageIcon("resources/images/viewreport.png"));
+            planEvaluationReportButton.setToolTipText("<html>Generate a html plan evaluation in the planReport. <br> This is restricted to non-time-based domain only.</html>");
+            planEvaluationReportButton.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+            //RUN plan evaluation
+                            generateEvaluationReport.actionPerformed(e);
+                    }
+            });
+            planEvaluationToolBar.add(planEvaluationReportButton);
+
+            JButton editEvaluationButton = new JButton("Edit Evaluation", new ImageIcon("resources/images/edit.png"));
+            editEvaluationButton.setToolTipText("<html>Modify plan classification and its metrics evaluation.</html>");
+            editEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //RUN plan evaluation edit
+                        changePlanEvaluationAction.actionPerformed(e);
+                    }
+            });
+            planEvaluationToolBar.add(editEvaluationButton);
+
+            return planEvaluationToolBar;
+	}
+
+
+        public void setMainTabbedPaneSelectedIndex(int index){
 		mainTabbedPane.setSelectedIndex(index);
 	}
 
@@ -6080,7 +6527,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 							String domainText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "  ");
 
 							domainPddlTextPane.setText(domainText);
-                                                        //XMLUtilities.printXML(xpddlDomain);
+                                                        XMLUtilities.printXML(xpddlDomain);
 						}
                     }
                 };
@@ -6255,14 +6702,24 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
     public void showHTMLReport(Element xmlPlan){
         if (xmlPlan!=null){
             String html = "";
+            String evaluationhtml = "";
             if (xmlPlan.getName().equals("xmlPlan")){
+
                 html = PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan);
                 //Save Comparison Report file
                 saveFile("resources/report/Report.html", html);
 
+                //evaluationhtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, xmlPlan.getChild("metrics"));
+                evaluationhtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+
+                //System.out.println(evaluationhtml);
+
             }
 
+            //set plan result panel
             setPlanInfoPanelText(html);
+            //set plan evaluation panel
+            setPlanEvaluationInfoPanelText(evaluationhtml);
 
         }
 
@@ -6410,6 +6867,28 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
          * */
     }
 
+    /**
+     * This method cleans up any reference of plans loaded from the database
+     */
+    public void cleanupPlanDatabaseReference(){
+        currentDBPlanID = -1;
+        isPlanFromDB = false;
+    }
+
+    /**
+     * This method gets the id of the current plan (if the plan does not come from the database return -1)
+     */
+    public int getCurrentPlanFromDatabaseID(){
+        return currentDBPlanID;
+    }
+
+    /**
+     * This method checks if the current plan was loaded from the database
+     */
+    public boolean isCurrentPlanFromDatabase(){
+        return isPlanFromDB;
+    }
+
 
     public void saveFile(String path,String content){
         FileWriter file = null;
@@ -6490,6 +6969,10 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 		return itPlanners;
 	}
 
+	public static Element getItValidators(){
+		return itValidators;
+	}
+
 	public ItTree getItTree(){
 		return projectsTree;
 	}
@@ -6511,22 +6994,41 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	}
 
 
-    public Thread getCurrentThread() {
-        return currentThread;
-    }
+        public Thread getCurrentThread() {
+            return currentThread;
+        }
 
-    public Thread getPlannerThread() {
-        return plannerThread;
-    }
+        public Thread getPlannerThread() {
+            return plannerThread;
+        }
 
 
-    public ExecPlanner getExe() {
-        return exe;
-    }
+        public ExecPlanner getExe() {
+            return exe;
+        }
 
-	public static JFrame getItSIMPLEFrame(){
-		return instance;
-	}
+        public static JFrame getItSIMPLEFrame(){
+                return instance;
+        }
+
+        public Element getSelectedProblemTreeNode(){
+            Element selected = null;
+
+            ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+            if (selectedNode!=null){
+                selected = selectedNode.getData();
+            }
+            return selected;
+        }
+
+
+        /**
+         * get selected pddl version
+         * @return
+         */
+        public String getSelectedPDDLversion(){
+                return pddlButtonsGroup.getSelection().getActionCommand();
+        }
 
 	/*public static PropertiesTabbedPane getItPropertiesPane(){
 		return propertiesPane;
@@ -6538,7 +7040,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 	 */
 	public static void main(String[] args) {
 
-		//get CommonData
+		//get CommonDatapddlVer
 		Document commonDoc = null;
 		try {
 			commonDoc = XMLUtilities.readFromFile("resources/settings/commonData.xml");
@@ -6554,7 +7056,7 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 			commonData = commonDoc.getRootElement();
 		}
 
-		// Get itSIMPLE itSettings from itSettings.xml
+		// Get settings from itSettings.xml
 		org.jdom.Document itSettingsDoc = null;
 		try{
 			itSettingsDoc = XMLUtilities.readFromFile("resources/settings/itSettings.xml");
@@ -6578,6 +7080,19 @@ private Action quickEvaluation = new AbstractAction("", new ImageIcon("resources
 
 		if (itPlannersDoc != null){
 			itPlanners = itPlannersDoc.getRootElement();
+		}
+
+		// Get validators from itValidators
+		org.jdom.Document itValidatorsDoc = null;
+		try{
+			itValidatorsDoc = XMLUtilities.readFromFile("resources/validators/itValidators.xml");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+
+		if (itPlannersDoc != null){
+			itValidators = itValidatorsDoc.getRootElement();
 		}
 
 
@@ -6642,11 +7157,11 @@ class WindowEventHandler extends WindowAdapter {
       if (itsimpleInst != null){
           //Kill all threads
           if (itsimpleInst.getExe() != null){
-            itsimpleInst.getExe().destroyProcess();
+            itsimpleInst.getExe().destroyProcess();   
           }
           Thread currentThread = itsimpleInst.getCurrentThread();
           if (currentThread != null && currentThread.isAlive()){
-              currentThread.interrupt();
+              currentThread.interrupt();              
           }
           Thread plannerThread = itsimpleInst.getPlannerThread();
           if (plannerThread != null && plannerThread.isAlive()){

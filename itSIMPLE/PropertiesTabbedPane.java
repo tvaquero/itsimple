@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 *
 *
 * This file is part of itSIMPLE.
@@ -312,7 +312,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			JLabel descriptionLabel = new JLabel("Description");
 			descriptionTextPane = new JTextPane();			
 			descriptionTextPane.addKeyListener(this);
-            descriptionTextPane.setBackground(Color.WHITE);
+                        descriptionTextPane.setBackground(Color.WHITE);
 			JScrollPane scrollText = new JScrollPane();
 			scrollText.setViewportView(descriptionTextPane);
 			
@@ -332,6 +332,20 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private void setBasePanel(){
 		nameTextField.setText(data.getChildText("name"));
 		descriptionTextPane.setText(data.getChildText("description"));
+
+                //check if users selected more than on object (Multi-selection mode)
+                if(selectedCell!= null){
+                    Object[] selecs = ((ItGraph)senderObject).getSelectionCells();
+                    //System.out.println(selecs.length);
+                    if (selecs.length > 1){
+                        //ItSIMPLE.getInstance().setPropertiesPanelTitle(":: Properties (multi objects)");
+                        ItSIMPLE.getInstance().setPropertiesPanelTitle(":: Properties ("+selecs.length+" objs selected)");
+                    }
+                    else{
+                        ItSIMPLE.getInstance().setPropertiesPanelTitle(":: Properties");
+                    }
+                    
+                }
 		
 		//
 		if (data.getName().equals("actor") ||
@@ -2191,6 +2205,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	public void keyPressed(KeyEvent e) {		
 		if (e.getSource() == nameTextField){			
 			if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                                String oldName = data.getChildText("name");
 				String newName = nameTextField.getText();
 				if (!data.getChildText("name").equals(newName)){
 					boolean change = true;
@@ -2275,17 +2290,37 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 						
 						// repaint open diagrams
 						if(data.getName().equals("class") ||
-								data.getName().equals("classAssociation")){
-			            	ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-			            	tabbed.repaintOpenDiagrams("repositoryDiagram");
-			            	tabbed.repaintOpenDiagrams("objectDiagram");
+                                                    data.getName().equals("classAssociation")){
+                                                    ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+                                                    tabbed.repaintOpenDiagrams("repositoryDiagram");
+                                                    tabbed.repaintOpenDiagrams("objectDiagram");
 						}
 						
-						else if(data.getName().equals("object") &&
-								reference.getParentElement().getParentElement()
-								.getName().equals("repositoryDiagram")){
-							ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();			            	
-			            	tabbed.repaintOpenDiagrams("objectDiagram");
+						else if(data.getName().equals("object") && reference.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
+
+                                                    //Change the name in every attribute or parameterized attribute
+                                                    Element domain = data.getParentElement().getParentElement().getParentElement();
+
+                                                    //System.out.println(domain.getName());
+                                                    List<?> result = null;
+                                                    try {
+                                                            XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object/attributes/attribute//value[text()='"+oldName+"'] | " +
+                                                                            "planningProblems/problem/objectDiagrams/objectDiagram/objects/object/attributes/attribute//value[text()='"+oldName+"']");
+                                                            result = path.selectNodes(domain);
+                                                    } catch (JaxenException e2) {
+                                                            e2.printStackTrace(); }
+                                                    for (int i = 0; i < result.size(); i++){
+                                                            Element value = (Element)result.get(i);
+                                                            System.out.println("Mudei!");
+                                                            value.setText(newName);
+                                                    }
+
+
+                                                    //repaint object diagrams
+                                                    ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+                                                    tabbed.repaintOpenDiagrams("objectDiagram");
+
+
 						}
 					}
 					else{
@@ -2608,9 +2643,15 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 										
 										attributeReference.setAttribute("class", currentAtt.getParentElement().getParentElement().getAttributeValue("id"));
 										attributeReference.setAttribute("id", currentAtt.getAttributeValue("id"));
-										if (!currentAtt.getChildText("initialValue").equals("")){
-											attributeReference.getChild("value").setText(currentAtt.getChildText("initialValue"));
-										}
+
+                                                                                //put the initial value only at the object diagrams, not in the repository.
+                                                                                Element diagram = object.getParentElement().getParentElement();
+                                                                                if (diagram.getName().equals("objectDiagram")){
+                                                                                            //put the initial value
+                                                                                    if (!currentAtt.getChildText("initialValue").equals("")){
+                                                                                            attributeReference.getChild("value").setText(currentAtt.getChildText("initialValue"));
+                                                                                    }
+                                                                                }
 										object.getChild("attributes").addContent(attributeReference);
 									}	
 								}
@@ -3624,24 +3665,33 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	        } 
 		}
 		
-		else if(e.getSource() == objectAttributeTable.getModel()){			
-			int row = e.getFirstRow();
-			int col = e.getColumn();
-			if (row > -1 && col > -1){
-	        	TableModel model = (TableModel)e.getSource();
-	        	String strdata = (String) model.getValueAt(row, col);
+		else if(e.getSource() == objectAttributeTable.getModel()){
+
+                    //selectedCell.setUserObject(data.getChildText("name"));
+
+                    int row = e.getFirstRow();
+                    int col = e.getColumn();
+                    if (row > -1 && col > -1){
+                    TableModel model = (TableModel)e.getSource();
+                    String strdata = (String) model.getValueAt(row, col);
 	            Element selectedAttribute = currentAttributes.get(row);
 	            Element selectedObjectAttribute = currentObjectAttributes.get(row);
 	            				//object		objects			elements			domain
 	            Element domain = data.getParentElement().getParentElement().getParentElement();
+                    Element object = selectedObjectAttribute.getParentElement().getParentElement();
 	            
 	            //if the value is the same, do nothing
 	            if(!selectedObjectAttribute.getChildText("value").equals(strdata)){
 	            	//not parameterized attribute
 	            	if (selectedAttribute.getChild("parameters").getChildren("parameter").size() <= 0){
 	            		// repository diagram
+
 			            if(selectedCell.getReference().getParentElement().getParentElement().getName().equals("repositoryDiagram")){
 			            	selectedObjectAttribute.getChild("value").setText(strdata.trim());
+
+
+
+                                        /*Approach: if something is change in the repository it will affect all object in the objecty diagrams
 			            	// set this value in all other object diagrams, if it's not empty
 			            	if(!strdata.trim().equals("")){
 				            	List<?> result = null;
@@ -3656,25 +3706,36 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 								}
 								for (Iterator<?> iter = result.iterator(); iter.hasNext();) {
 									Element attribute = (Element) iter.next();
-									attribute.getChild("value").setText(strdata.trim());
+                                                                        if(attribute.getChildText("value").trim().equals("")){
+                                                                            attribute.getChild("value").setText(strdata.trim());
+                                                                        }
+									
 								}
 			            	}
+                                        */
 			            }
+                                    //other object diagrams
 			            else{
-			            	// other object diagrams
+
 			            	// look for the same attribute in the repository
-			            	Element object = selectedObjectAttribute.getParentElement().getParentElement();
+			            	//Element object = selectedObjectAttribute.getParentElement().getParentElement();
 			            	//Element domain = object.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
+
+                                        //here we allow the change
+                                        selectedObjectAttribute.getChild("value").setText(strdata.trim());
+
+
+                                        /* In case we want to block and check if it can be changed based on th repository
 			            	Element repositoryAttribute = null;
-							try {
-								XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='"+ object.getAttributeValue("id")
-										+"']/attributes/attribute[@class='"+ selectedObjectAttribute.getAttributeValue("class")+
-										"' and @id='"+ selectedObjectAttribute.getAttributeValue("id") +"']");									
-								repositoryAttribute = (Element)path.selectSingleNode(domain);
-							} catch (JaxenException e2) {			
-								e2.printStackTrace();
-							}							
-							if(repositoryAttribute != null){
+                                        try {
+                                                XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='"+ object.getAttributeValue("id")
+                                                                +"']/attributes/attribute[@class='"+ selectedObjectAttribute.getAttributeValue("class")+
+                                                                "' and @id='"+ selectedObjectAttribute.getAttributeValue("id") +"']");
+                                                repositoryAttribute = (Element)path.selectSingleNode(domain);
+                                        } catch (JaxenException e2) {
+                                                e2.printStackTrace();
+                                        }
+                                        if(repositoryAttribute != null){
 				            	if(repositoryAttribute.getChildText("value").trim().equals("") ||
 				            			repositoryAttribute.getChildText("value").trim().equals(strdata.trim()) ||
 				            			strdata.trim().equals("")){
@@ -3683,6 +3744,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 				            		selectedObjectAttribute.getChild("value").setText(strdata.trim());
 				            	}
 				            	else{
+
 				            		// if the value was set in the repository, it can't be changed
 				            		JOptionPane.showMessageDialog(this,
 											"<html><center>This value can't be changed since<br>it was defined in the Repository Diagram</center></html>",
@@ -3691,8 +3753,56 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 				            		model.setValueAt(selectedObjectAttribute.getChildText("value"), row, col);
 				            		objectAttributeValue.cancelCellEditing();
 				            	}
-							}
+					}
+                                        */
 			            }
+                                    
+                                    //Multi-selection mode
+                                    if (selectedCell != null){
+                                        DefaultGraphModel tmodel = (DefaultGraphModel) ((ItGraph)senderObject).getModel();
+                                        Object[] selecs = ((ItGraph)senderObject).getSelectionCells();
+                                        System.out.println(selecs.length);
+                                        if (selecs.length > 1){
+                                            for (int i = 0; i < selecs.length; i++) {
+                                                Object selobject = selecs[i];
+                                                if (selobject instanceof BasicCell){
+                                                    //System.out.println("Basic cell " + selobject);
+                                                    BasicCell gobject = (BasicCell)selobject;
+                                                    Element selobjdata = gobject.getReference();
+                                                    if(!object.equals(selobjdata)){
+                                                        //XMLUtilities.printXML(selobjdata);
+                                                        //find attribute in the object
+                                                        Element refAttribute = null;
+                                                        try {
+                                                                XPath path = new JDOMXPath("attributes/attribute[@class="+selectedObjectAttribute.getAttributeValue("class")+" and @id="+selectedObjectAttribute.getAttributeValue("id")+"]");
+                                                                refAttribute = (Element)path.selectSingleNode(selobjdata);
+                                                        } catch (JaxenException e2) {
+                                                                e2.printStackTrace();
+                                                        }
+                                                        //put the same value
+                                                        if (refAttribute!=null){
+                                                            refAttribute.getChild("value").setText(strdata.trim());
+                                                        }
+                                                        //XMLUtilities.printXML(selobjdata);
+                                                        gobject.setVisual();
+                                                    }
+
+                                                }
+
+                                            }
+                                            //repaint the objects
+                                            tmodel.cellsChanged(selecs);
+
+                                        }
+
+                                    }
+
+
+
+
+
+
+
 		            }
 					
 		        	if (selectedCell != null){

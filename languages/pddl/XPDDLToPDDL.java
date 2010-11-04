@@ -34,7 +34,14 @@ import org.jdom.Element;
 
 public class XPDDLToPDDL {
 
-	public static String parseXPDDLToPDDL(Element xpddlNode, String identation){
+
+    /**
+     * Parse XPDDL elements into PDDL elements
+     * @param xpddlNode
+     * @param identation
+     * @return
+     */
+    public static String parseXPDDLToPDDL(Element xpddlNode, String identation){
 		String pddl = "";
 			
 		//1. Root node
@@ -737,7 +744,77 @@ public class XPDDLToPDDL {
 	}
 	
 	
-	
+
+    /**
+     * Parse a xml plan (itSIMPLE format) to a PDDL plan format
+     * @param xmlPlan
+     * @return
+     */
+    public static String parseXMLPlanToPDDL(Element xmlPlan){
+        String pddlplan = "";
+
+
+        //Planner name
+        Element planner = xmlPlan.getChild("planner");
+        pddlplan = "; Planner "+ planner.getChildText("name") + " " + planner.getChildText("version") + " \n";
+
+        //statistics
+        Element statistics = xmlPlan.getChild("statistics");
+        pddlplan += "; itSIMPLETime "+ statistics.getChildText("toolTime") + "\n";
+        pddlplan += "; Time "+ statistics.getChildText("time") + "\n";
+        pddlplan += "; Parsing time "+ statistics.getChildText("parsingTime") + "\n";
+        pddlplan += "; NrActions "+ statistics.getChildText("parsingTime") + "\n";
+        pddlplan += "; MakeSpan "+ statistics.getChildText("parsingTime") + "\n";
+        pddlplan += "; MetricValue "+ statistics.getChildText("metricValue") + "\n";
+        pddlplan += "; PlanningTechnique: "+ statistics.getChildText("planningTechnique").trim().replaceAll("\n", " ") + "\n";
+        pddlplan += "\n";
+
+        //plan
+        List<?> actions = xmlPlan.getChild("plan").getChildren("action");
+        if (actions.size() > 0) {
+                for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
+                        Element action = (Element) iter.next();
+                        // build up the action string
+                        // start time
+                        String actionStr = action.getChildText("startTime") + ": ";
+
+                        // action name
+                        actionStr += "(" + action.getAttributeValue("id") + " ";
+
+                        // action parameters
+                        List<?> parameters = action.getChild("parameters")
+                                        .getChildren("parameter");
+                        for (Iterator<?> iterator = parameters.iterator(); iterator
+                                        .hasNext();) {
+                                Element parameter = (Element) iterator.next();
+                                actionStr += parameter.getAttributeValue("id");
+                                if (iterator.hasNext()) {
+                                        actionStr += " ";
+                                }
+                        }
+                        actionStr += ")";
+
+                        // action duration
+                        String duration = action.getChildText("duration");
+                        if (!duration.equals("")) {
+                                actionStr += " [" + duration + "]";
+                        }
+                        
+                        if(iter.hasNext()){
+                                pddlplan += actionStr +"\n";
+                        }
+                        else{
+                                pddlplan += actionStr;
+                        }
+                        //pddlplan += actionStr +"\n";
+                }
+        }
+
+
+        return pddlplan;
+    }
+
+
 	/*public static void main(String[] args) {
 		Element project = null;
 		try {

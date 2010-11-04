@@ -53,8 +53,8 @@ public class ToXPDDL {
 	
 	private static final String PRECONDITION = "precondition";
 	private static final String POSTCONDITION = "postcondition";	
-	public static final String PDDL_2_1 = "pddl20";
-	public static final String PDDL_2_2 = "pddl21";
+	public static final String PDDL_2_1 = "pddl21";
+	public static final String PDDL_2_2 = "pddl22";
 	public static final String PDDL_3_0 = "pddl30";
 	public static final String PDDL_3_1 = "pddl31";
 	public static final String TIME_METRIC_REPLACEMENT = "total#time";	
@@ -2548,9 +2548,10 @@ public class ToXPDDL {
 			
 			
 			// 3. Objects
-									 //planningProblems  domain 
+
+			//planningProblems  domain 
 			Element domain = problem.getParentElement().getParentElement();
-			
+			/*Approach putting every object
 			List<?> objects = domain.getChild("elements").getChild("objects").getChildren("object");
 			for (Iterator<?> iter = objects.iterator(); iter.hasNext();) {
 				Element object = (Element) iter.next();				
@@ -2569,11 +2570,66 @@ public class ToXPDDL {
 					xpddlProblem.getChild("objects").addContent(xpddlObject);
 				}				
 			}
-			
-			
+                        */
+                        
+                        //Approach: putting just the objects that are used.
+                        Element domainObjects = domain.getChild("elements").getChild("objects");
+                        List<?> tobjectDiagrams = problem.getChild("objectDiagrams").getChildren("objectDiagram");
+			for (Iterator<?> iter = tobjectDiagrams.iterator(); iter.hasNext();) {
+				Element objectDiagram = (Element) iter.next();
+                                List<?> objects = objectDiagram.getChild("objects").getChildren("object");
+                                for (Iterator<?> iter2 = objects.iterator(); iter2.hasNext();) {
+                                        Element object = (Element) iter2.next();
+
+                                        //find the object in the domain
+
+                                        Element theDomainObject = null;
+                                        try {
+                                                XPath path = new JDOMXPath("object[@id='" + object.getAttributeValue("id") + "']");
+                                                theDomainObject = (Element)path.selectSingleNode(domainObjects);
+                                        } catch (JaxenException e) {
+                                                e.printStackTrace();
+                                        }
+                                        if(theDomainObject!=null){
+                                            //check if there is already an object with the same name in the xpddl
+                                            Element xpddlObject = null;
+                                            try {
+                                                    XPath path = new JDOMXPath("object[@name='" + theDomainObject.getChildText("name") + "']");
+                                                    xpddlObject = (Element)path.selectSingleNode(xpddlProblem.getChild("objects"));
+                                            } catch (JaxenException e) {
+                                                    e.printStackTrace();
+                                            }
+                                            //if there is not such object yet then create it
+                                            if(xpddlObject==null){
+                                                Element objectType = null;
+                                                try {
+                                                        XPath path = new JDOMXPath("elements/classes/class[@id='" + theDomainObject.getChildText("class") + "']");
+                                                        objectType = (Element)path.selectSingleNode(project);
+                                                } catch (JaxenException e) {
+                                                        e.printStackTrace();
+                                                }
+                                                if(objectType != null && !objectType.getChildText("stereotype").equals("utility")){
+                                                        //Element xpddlObject = new Element("object");
+                                                        xpddlObject = new Element("object");
+                                                        xpddlObject.setAttribute("name", theDomainObject.getChildText("name"));
+                                                        xpddlObject.setAttribute("type", objectType.getChildText("name"));
+                                                        xpddlProblem.getChild("objects").addContent(xpddlObject);
+                                                }
+
+                                            }
+
+                                        }
+
+                                }
+
+                        }
+
+
+
 			// 3. Repository diagram			
 			Element repositoryDiagram = domain.getChild("repositoryDiagrams").getChild("repositoryDiagram");
-			parseObjectDiagram(repositoryDiagram, xpddlProblem.getChild("init"),pddlVersion);
+                        //since it is used just for reusability we do no considered it on the translation process
+			//parseObjectDiagram(repositoryDiagram, xpddlProblem.getChild("init"),pddlVersion);
 			
 			
 			// 4. object diagrams
@@ -3885,11 +3941,13 @@ public class ToXPDDL {
 									 }
 								}
 							}
-							else{// not parameterized attribute TODO
+                                                        // not parameterized attribute TODO
+							else{
 								
 								if(!objectAttribute.getChildText("value").trim().equals("")){
 									// 4.1.3.1 boolean attributes -> predicate
 									if(classAttribute.getChildText("type").equals("1")){
+
 										if(objectAttribute.getChildText("value").equals("true")){
 											 if(!objectDiagram.getName().equals("repositoryDiagram") &&
 													 objectDiagram.getChildText("sequenceReference").equals("init")){								 
