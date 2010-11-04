@@ -1,7 +1,7 @@
 /***
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 *
-* Copyright (C) 2007-2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 *
 
 * This file is part of itSIMPLE.
@@ -42,10 +42,15 @@ import org.jdom.Element;
  * @author Tiago
  */
 public class VirtualPrototypingBlender {
-    private static String domainFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/domainMetrics.xml";
-    private static String problemFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/problemMetrics.xml";
-    private static String planFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/plan.xml";
-    private static String solutionFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/solution.txt";
+    //private static String domainFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/domainMetrics.xml";
+    //private static String problemFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/problemMetrics.xml";
+    //private static String planFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/plan.xml";
+    //private static String solutionFile = "C:/Users/Tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/solution.txt";
+
+    private static String domainFile = "/home/tiago/Desktop/PhD/First Loop postDAM/BlenderTest/VP/domainfiles/domainMetrics.xml";
+    private static String problemFile = "/home/tiago/Desktop/PhD/First Loop postDAM/BlenderTest/VP/domainfiles/problemMetrics.xml";
+    private static String planFile = "/home/tiago/Desktop/PhD/First Loop postDAM/BlenderTest/VP/domainfiles/plan.xml";
+    private static String solutionFile = "/home/tiago/Desktop/PhD/First Loop postDAM/BlenderTest/VP/domainfiles/solution.txt";
 
     //private static String domainFile = "/home/tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/domainMetrics.xml";
     //private static String problemFile = "/home/tiago/Desktop/BlenderTest/GoldMiner v1/domainfiles/problemMetrics.xml";

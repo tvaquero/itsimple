@@ -3,7 +3,7 @@
 * 
 * Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
-
+*
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -3179,7 +3179,7 @@ public class PlanSimulator {
                      */
                     Element chosenVariable = eacMetric.getChild("variable").getChild("chosenVariable");
                     Element chosenObject = chosenVariable.getChild("object");
-                    Element chosenAttribute =chosenObject.getChild("attribute");
+                    Element chosenAttribute = chosenObject.getChild("attribute");
 
                     // get the attribute in the current snapshot
                     Element snapshotObjectAttr = null;
@@ -3523,6 +3523,8 @@ public class PlanSimulator {
              *  type
              *  type node (expession, variavle, or actionCounter)
              *  dataset
+             *  value
+             *  evaluation
              */
             //set main attributes of node quality metric
             Element levelParent = eaMetric.getParentElement().getParentElement();
@@ -3585,6 +3587,14 @@ public class PlanSimulator {
             }
 
             refMetric.addContent(new Element("dataset"));
+
+
+            //node to store metric value and evaluation
+            refMetric.addContent(new Element("value"));
+            Element evaluationNode = new Element("evaluation");
+            evaluationNode.setAttribute("value", "");
+            refMetric.addContent(evaluationNode);
+
             metrics.addContent(refMetric);
 
 

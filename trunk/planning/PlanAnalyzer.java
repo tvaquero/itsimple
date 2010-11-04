@@ -30,6 +30,11 @@ package planning;
 
 import itSIMPLE.ItSIMPLE;
 import java.awt.Color;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -39,13 +44,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import languages.xml.XMLUtilities;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 import org.jaxen.jdom.JDOMXPath;
+import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.Namespace;
+import org.jdom.input.SAXBuilder;
 import org.nfunk.jep.JEP;
 
 /**
@@ -67,24 +77,28 @@ public class PlanAnalyzer {
         double upExpression = 0;
         double weights = 0;
 
-        for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
-            Element qualityMetric = it.next();
-            String metricWeight = qualityMetric.getChildText("weight");
+        if(metrics!=null){
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element qualityMetric = it.next();
+                String metricWeight = qualityMetric.getChildText("weight");
 
-            double weight = 1;
-            if (!metricWeight.trim().equals("")){
-                try {
-                    weight = Double.parseDouble(metricWeight);
-                } catch (Exception e) {
-                    weight = 1;
+                double weight = 1;
+                if (!metricWeight.trim().equals("")){
+                    try {
+                        weight = Double.parseDouble(metricWeight);
+                    } catch (Exception e) {
+                        weight = 1;
+                    }
                 }
+                            //evaluate the metric
+                double metricGrade = evaluateMetric(qualityMetric);
+
+                upExpression += metricGrade*weight;
+                weights += weight;
             }
-			//evaluate the metric
-            double metricGrade = evaluateMetric(qualityMetric);
-            
-            upExpression += metricGrade*weight;
-            weights += weight;
+
         }
+
 
 
         if (weights > 0){
@@ -92,6 +106,64 @@ public class PlanAnalyzer {
         }
 
         return overallGrade;
+    }
+
+/**
+     * This method evaluates a plan based on the specified metric evaluations.
+     *  The evaluation of the metrics is redone only if necessary, empty)
+     * @param thePlan
+     * @return the plan score recomputed
+     */
+    public static double reEvaluatePlan(Element thePlan){
+
+        double overallScore = 0;
+
+        double upExpression = 0;
+        double weights = 0;
+
+        Element metrics = thePlan.getChild("metrics");
+
+        if(metrics!=null){
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element qualityMetric = it.next();
+                String metricWeight = qualityMetric.getChildText("weight");
+
+                double weight = 1;
+                if (!metricWeight.trim().equals("")){
+                    try {
+                        weight = Double.parseDouble(metricWeight);
+                    } catch (Exception e) {
+                        weight = 1;
+                    }
+                }
+                //evaluate the metric
+                Element metricEvaluation = qualityMetric.getChild("evaluation");
+                double metricScore = 0.0;
+                if (metricEvaluation!=null){
+                    String metricScoreStr = metricEvaluation.getAttributeValue("value");
+                    if (!metricScoreStr.trim().equals("")){
+                        metricScore = Double.parseDouble(metricScoreStr);
+                    }else{
+                        metricScore = evaluateMetric(qualityMetric);
+                    }
+                }
+                else{
+                    metricScore = evaluateMetric(qualityMetric);
+                }
+
+                upExpression += metricScore*weight;
+                weights += weight;
+            }
+
+        }
+
+
+
+        if (weights > 0){
+            overallScore = upExpression/weights;
+        }
+
+        return overallScore;
     }
 
 
@@ -211,23 +283,26 @@ public class PlanAnalyzer {
         double overallCostAward = 0;
 
 
-        for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
-            Element qualityMetric = it.next();
-            String metricWeight = qualityMetric.getChildText("weight");
+        if(metrics!=null){
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element qualityMetric = it.next();
+                String metricWeight = qualityMetric.getChildText("weight");
 
-            double weight = 1;
-            if (!metricWeight.trim().equals("")){
-                try {
-                    weight = Double.parseDouble(metricWeight);
-                } catch (Exception e) {
-                    weight = 1;
+                double weight = 1;
+                if (!metricWeight.trim().equals("")){
+                    try {
+                        weight = Double.parseDouble(metricWeight);
+                    } catch (Exception e) {
+                        weight = 1;
+                    }
                 }
-            }
-			//evaluate the metric
-            double metricValue = getMetricValue(qualityMetric);
+                            //evaluate the metric
+                double metricValue = getMetricValue(qualityMetric);
 
-            overallCostAward += metricValue*weight;
+                overallCostAward += metricValue*weight;
+            }            
         }
+  
 
         return overallCostAward;
     }
@@ -516,7 +591,7 @@ public class PlanAnalyzer {
                 String metricID = metric.getAttributeValue("id");
                 String metricLevel = metric.getAttributeValue("level");
 
-                //TODO: select the name of the chart. Variable, expression, actionCounter.
+                //TODO: select the name of the chart. Variable, expression, pslPlan.
                 String chartTitle = metricname;
 
 
@@ -695,7 +770,7 @@ public class PlanAnalyzer {
 
 
             //Gathering the final values
-            dataXML = "<graph caption='Initial PlanEvaluation' xAxisName='Metrics' yAxisName='Preference Grades' decimalPrecision='2' ";
+            dataXML = "<graph caption='Initial PlanEvaluation' xAxisName='Metrics' yAxisName='Preference Scores' decimalPrecision='2' ";
             dataXML += "formatNumberScale='0'>";
 
             for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
@@ -840,6 +915,8 @@ public class PlanAnalyzer {
         Element planner = xmlPlan.getChild("planner");
         Element statistics = xmlPlan.getChild("statistics");
         Element plan = xmlPlan.getChild("plan");
+        Element validity = xmlPlan.getChild("validity");
+        Element validator = xmlPlan.getChild("validator");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -853,8 +930,6 @@ public class PlanAnalyzer {
         String problemName = problem.getChildText("name");
         String problemDescription = problem.getChildText("description");
         String plannerName = planner.getChildText("name");
-
-
 
 
 
@@ -885,13 +960,10 @@ public class PlanAnalyzer {
         //If there are metrics instaciate the google charts
         if (metrics!=null && metrics.getChildren().size() > 0){
 
-
-
             int oIndex = 0;
 
             String odataName ="";
             String ochartName = "";
-
 
 
             //Individual metric charts
@@ -913,7 +985,7 @@ public class PlanAnalyzer {
                 String metricID = metric.getAttributeValue("id");
                 String metricLevel = metric.getAttributeValue("level");
 
-                //TODO: select the name of the chart. Variable, expression, actionCounter.
+                //TODO: select the name of the chart. Variable, expression, pslPlan.
 
                 String chartTitle = metricname;
 
@@ -1000,10 +1072,6 @@ public class PlanAnalyzer {
 
 
             }
-
-
-
-
 
 
 
@@ -1131,17 +1199,29 @@ public class PlanAnalyzer {
                 String metricID = metric.getAttributeValue("id");
                 String metricLevel = metric.getAttributeValue("level");
                 String metricWeight = metric.getChildText("weight");
+                Element metricEvaluation = metric.getChild("evaluation");
+                if (metricEvaluation == null){
+                    metricEvaluation = new Element("evaluation");
+                    metricEvaluation.setAttribute("value", "");
+                    metric.addContent(metricEvaluation);
+                }
+
 
                 //TODO: put the appropriate name
                 String name = metricname;
-
 
                 float weight = 1;
                 if (!metricWeight.trim().equals("")){
                     weight = Float.parseFloat(metricWeight);
                 }
 
-                String value = Double.toString(evaluateMetric(metric));
+                String value = metricEvaluation.getAttributeValue("value").trim();
+                if (value.equals("")){
+                    value = Double.toString(evaluateMetric(metric));
+                    metricEvaluation.setAttribute("value", value);
+                }
+
+                //String value = Double.toString(evaluateMetric(metric));
                 //Gathering data
                 evaluationChart.append(odataName+".setValue("+oIndex+", 0, '"+name+"'); \n");
                 evaluationChart.append(odataName+".setValue("+oIndex+", 1, "+value+"); \n");
@@ -1151,10 +1231,25 @@ public class PlanAnalyzer {
             }
 
             //General/Overall evaluation
-            double overallgrade = evaluatePlan(metrics);
+            Element planEvaluation = xmlPlan.getChild("evaluation");
+            if (planEvaluation == null){
+                planEvaluation = new Element("evaluation");
+                planEvaluation.setAttribute("value", "");
+                xmlPlan.addContent(planEvaluation);
+            }
+
+            String overallScore = planEvaluation.getAttributeValue("value").trim();
+            if (overallScore.equals("")){
+                double overallgrade = evaluatePlan(metrics);
+                DecimalFormat overall = new DecimalFormat("0.00");
+                overallScore = overall.format(overallgrade);
+                planEvaluation.setAttribute("value", overallScore);
+            }
+
+
             DecimalFormat overall = new DecimalFormat("0.00");
             evaluationChart.append(odataName+".setValue("+oIndex+", 0, 'Final'); \n");
-            evaluationChart.append(odataName+".setValue("+oIndex+", 2, "+Double.toString(overallgrade)+"); \n");
+            evaluationChart.append(odataName+".setValue("+oIndex+", 2, "+overallScore+"); \n");
 
 
             ochartName = "chartEvaluation";
@@ -1181,7 +1276,7 @@ public class PlanAnalyzer {
             htmlevaluation.append("			</tr> \n");
             htmlevaluation.append("           		<tr> \n");
             htmlevaluation.append("               		<td valign=\"top\" class=\"text\">  \n");
-            htmlevaluation.append("               			<p><strong>Plan Quality: <a name=\"planquality\">"+overall.format(overallgrade)+"</a></strong></p>  \n");
+            htmlevaluation.append("               			<p><strong>Plan Quality: <a name=\"planquality\">"+overallScore+"</a></strong></p>  \n");
             htmlevaluation.append("               		</td> \n");
             htmlevaluation.append("          		</tr> \n");
             htmlevaluation.append("		</table> \n");
@@ -1200,6 +1295,45 @@ public class PlanAnalyzer {
 
 
 
+
+        //Plan Validation
+        boolean isValid = true;
+        boolean planChecked = false;
+        String validityString = "";
+        if (validity!= null){
+            if (!validity.getAttributeValue("isValid").trim().equals("") && !validator.getAttributeValue("id").trim().equals("")){
+               planChecked = true;
+            }
+            if(validity.getAttributeValue("isValid").trim().equals("false")){
+                isValid = false;
+            }
+        }
+
+        //Plan Validity
+        if (plan.getChildren().size() > 0){
+            if (planChecked){
+                if (isValid){
+                    validityString += "			<li><strong>. Plan validity: </strong><font color='green'>Valid plan</font></li> \n ";
+                }else{
+                    validityString += "			<li><strong>. Plan validity: </strong><font color='red'>Invalid plan</font> ("+validity.getText()+")</li> \n ";
+                }
+                if(!validator.getAttributeValue("id").trim().equals("")){
+                    String validatorName = validator.getChildText("name") + " " + validator.getChildText("version");
+                    String link = validator.getChildText("link");
+                    if (!link.trim().equals("")){
+                        validatorName += " (<a href='"+link+"' target='_blank'>"+link+"</a>)";
+                    }
+                    validityString += "			<li><strong>. Validated by: </strong>"+validatorName+"</li> \n ";
+                }else{
+
+                }
+            }
+            else{
+                validityString += "			<li><strong>. Plan validity: </strong>not validated</li> \n ";
+            }
+        }else{
+            validityString += "			<li><strong>. Plan validity: </strong>Empty plan</li> \n ";
+        }
 
 
 
@@ -1257,6 +1391,9 @@ public class PlanAnalyzer {
         introduction.append("			<li><strong>. Domain: </strong>"+domainName +"</li> \n");
         introduction.append("			<li><strong>. Planning problem: </strong>"+problemName+"</li> \n");
         introduction.append("			<li><strong>. Solution provided by: </strong>"+plannerName+"</li> \n");
+        if (!validityString.trim().equals("")){
+            introduction.append(validityString);
+        }
         introduction.append("		<ul> <br>\n");
         introduction.append("		<p>Planner's info:</p> \n");
         introduction.append("		<ul> \n");
@@ -1445,7 +1582,7 @@ public class PlanAnalyzer {
                 String metricID = metric.getAttributeValue("id");
                 String metricLevel = metric.getAttributeValue("level");
 
-                //TODO: select the name of the chart. Variable, expression, actionCounter.
+                //TODO: select the name of the chart. Variable, expression, pslPlan.
                 String chartTitle = metricname;
 
 
@@ -1778,6 +1915,8 @@ public class PlanAnalyzer {
         Element projectName = xmlPlan.getChild("project");
         Element domainName = xmlPlan.getChild("domain");
         Element problemName = xmlPlan.getChild("problem");
+        Element planvalidity = xmlPlan.getChild("validity");
+        Element validator = xmlPlan.getChild("validator");
 
         String toolMessage = xmlPlan.getChild("toolInformation").getChildText("message");
 
@@ -1796,6 +1935,36 @@ public class PlanAnalyzer {
                                 "</font></TD></TR>" +
                                 "<TR><TD><font size=3 face=arial><b>Date/Time: </b>"+ dateTime+
                                 "</font></TD></TR>";
+                if (planvalidity != null && validator != null){
+                    String validityString = "";
+                    String validatorname = validator.getChildText("name") + " " + validator.getChildText("version");
+                    if (!validator.getAttributeValue("id").trim().equals("")){
+                        String link = validator.getChildText("link");
+                        if (!link.trim().equals("")){
+                            validatorname += ": "+link;
+                        }
+                    }
+                    
+                    String isvalid = planvalidity.getAttributeValue("isValid");
+                    if (isvalid.equals("true")){
+                        validityString = "<font color='green'><strong>Valid plan.</strong></font> (validated by "+validatorname+")";
+                    }
+                    else if (isvalid.equals("false")){
+                        validityString = "<font color='red'><strong>Invalid plan. "+planvalidity.getText()+".</strong></font> (validated by "+validatorname+")";
+
+                    }
+                    else{
+                       validityString = "<font color='blue'><strong>Unknown. Plan not validated. "+planvalidity.getText()+"</strong>";
+                    }
+                    
+                    //check if this is a empty plan
+                    if (xmlPlan.getChild("plan").getChildren().size() < 1){
+                        validityString = "<font color='red'><strong>Empty plan. Goal not satisfied.</strong>";
+                    }
+                     info += "<TR><TD><font size=3 face=arial><b>Plan validity: </b>"+ validityString+
+                                "</font></TD></TR>";
+
+                }
         }
 
         info += "<TR><TD bgcolor='FFFFFF'><font size=3 face=arial><b>itSIMPLE message:<br></b>"+
@@ -1839,7 +2008,7 @@ public class PlanAnalyzer {
                         "</font></TD></TR>" +
                         "<TR><TD><font size=3 face=arial><b>Number of actions: </b>"+  xmlPlan.getChild("plan").getChildren().size()+
                         "</font></TD></TR>" +
-                        "<TR><TD><font size=3 face=arial><b>Make Span: </b>"+ statistics.getChildText("makeSpan")+
+                        "<TR><TD><font size=3 face=arial><b>Makespan: </b>"+ statistics.getChildText("makeSpan")+
                         "</font></TD></TR>" +
                         "<TR><TD><font size=3 face=arial><b>Metric value: </b>"+ statistics.getChildText("metricValue")+
                         "</font></TD></TR>" +
@@ -1897,10 +2066,12 @@ public class PlanAnalyzer {
 
 
         // planner console output
+        if (planner!=null && planner.getChild("consoleOutput") != null){
         info += "<TR><TD bgcolor='gray'><font size=3 face=arial color='FFFFFF'>" +
                         "<b>Planner Console Output</b></TD></TR>"+
                         "<TR><TD><font size=4 face=courier>" +
                         planner.getChildText("consoleOutput").replaceAll("\n", "<br>")+"</font><p></TD></TR>";
+        }
 
 
         info += "</TABLE>";
@@ -1945,6 +2116,7 @@ public class PlanAnalyzer {
         html.append("<th>Planners</th>\n");
         html.append("<th width=\"50px\">Time (s)</th>\n");
         html.append("<th width=\"50px\">Steps</th>\n");
+        html.append("<th width=\"50px\">Validity</th>\n");
         html.append("</tr>\n");
 
         for(int p=0;p<projects.size();p++){
@@ -1984,12 +2156,23 @@ public class PlanAnalyzer {
 
                          int planLength = plan.getChild("plan").getChildren().size();
                          boolean isValid = true;
+                         boolean planchecked = true;
 
                          //check the validity of the plan
                          Element validity = plan.getChild("validity");
-                         if (validity != null && !validity.getAttributeValue("isValid").equals("true")){
-                             planLength = 0;
-                             isValid = false;
+                         if (validity != null){
+                             
+                             if(validity.getAttributeValue("isValid").equals("false")){
+                                //planLength = 0;
+                                isValid = false;
+                                //XMLUtilities.printXML(validity);
+                             }
+                             else if(validity.getAttributeValue("isValid").trim().equals("")){
+                                planchecked = false;
+                             }
+                            
+                         }else{
+                             planchecked = false;
                          }
 
                          if(planLength < 1){
@@ -2000,16 +2183,31 @@ public class PlanAnalyzer {
                                 reason = status.getText().trim();
                              }
                              //Check if it was a invalid plan
-                             if(!isValid){
-                                 reason = "invalid plan";
-                             }
-
+                             //if(!isValid){
+                             //    reason = "invalid plan";
+                             //}
                              html.append("<td bgcolor=\"#FFFFFF\" align=\"center\">" + plan.getChild("statistics").getChildText("toolTime") + "</td>\n");
-                             html.append("<td bgcolor=\"#FFFFFF\" align=\"center\"><em>"+reason+"</em></td>\n");
+                             html.append("<td bgcolor=\"#FFFFFF\" align=\"center\"><em>0</em></td>\n");
+                             html.append("<td bgcolor=\"#FFFFFF\" align=\"center\"><font color='red'><em>"+reason+"</em></font></td>\n");
                          }
                          else{
-                            html.append("<td bgcolor=\"#FFFFFF\" align=\"center\">" + plan.getChild("statistics").getChildText("toolTime") + "</td>\n");
-                            html.append("<td bgcolor=\"#FFFFFF\" align=\"center\">" + plan.getChild("plan").getChildren().size() + "</td>\n");
+                             //Check if it was a invalid plan
+                             html.append("<td bgcolor=\"#FFFFFF\" align=\"center\">" + plan.getChild("statistics").getChildText("toolTime") + "</td>\n");
+                             html.append("<td bgcolor=\"#FFFFFF\" align=\"center\">" + plan.getChild("plan").getChildren().size() + "</td>\n");
+                            String reason = "";
+                            if(!isValid){//a validated plan classified as invalid by the validator
+                                reason = "invalid plan";                               
+                                html.append("<td bgcolor=\"#FFFFFF\" align=\"center\"><font color='red'>"+ reason+ "</font> </td>\n");
+                            }
+                            else if (!planchecked){//a plan that was not validated by the validator
+                                reason = "not validated";
+                                html.append("<td bgcolor=\"#FFFFFF\" align=\"center\"><font color='blue'>"+ reason+ "</font> </td>\n");
+                            }
+                            else if (isValid && planchecked){//a plan that was validated and classifyed as valid by the validator
+                                reason = "valid";
+                                html.append("<td bgcolor=\"#FFFFFF\" align=\"center\"><font color='green'>"+ reason+ "</font> </td>\n");
+                            }
+                            
                          }
 
                          html.append("</tr>\n");
@@ -2199,6 +2397,7 @@ public class PlanAnalyzer {
         comparisonTable.append("                   data.addColumn('string', 'Planners');\n");
         comparisonTable.append("                   data.addColumn('number', 'Time');\n");
         comparisonTable.append("                   data.addColumn('number', 'Steps');\n");
+        comparisonTable.append("                   data.addColumn('string', 'Validity');\n");
 
         StringBuilder cells = new StringBuilder();
         int number_of_rows = 0;
@@ -2222,12 +2421,38 @@ public class PlanAnalyzer {
                              thetooltimeStr = "0";
                          }
                          cells.append("data.setCell(" + number_of_rows + ",4," + thetooltimeStr + ");\n");
-                         if(plan.getChild("plan").getChildren().size() < 1) {
-                            cells.append("data.setCell(" + number_of_rows + ",5,-1,' ');\n");
+                         
+                         cells.append("data.setCell(" + number_of_rows + ",5," + plan.getChild("plan").getChildren().size() + ");\n");
+
+                         //if(plan.getChild("plan").getChildren().size() < 1) {
+                         //   cells.append("data.setCell(" + number_of_rows + ",5,-1,' ');\n");
+                         //}
+                         //else{
+                         //   cells.append("data.setCell(" + number_of_rows + ",5," + plan.getChild("plan").getChildren().size() + ");\n");
+                         //}
+
+                         Element validity = plan.getChild("validity");
+                         //check the validity of the plan
+                         if (validity != null){
+                             if(plan.getChild("plan").getChildren().size() < 1) {
+                                 cells.append("data.setCell(" + number_of_rows + ",6,'no plan found');\n");
+                             }
+                             else if (validity.getAttributeValue("isValid").equals("true")){
+                                 cells.append("data.setCell(" + number_of_rows + ",6,'valid');\n");
+                             }
+                             else if (validity.getAttributeValue("isValid").equals("false")){
+                                 cells.append("data.setCell(" + number_of_rows + ",6,'invalid');\n");
+                             }
+                             else if (validity.getAttributeValue("isValid").trim().equals("")){
+                                 cells.append("data.setCell(" + number_of_rows + ",6,'not validated');\n");
+                             }
+
                          }
                          else{
-                            cells.append("data.setCell(" + number_of_rows + ",5," + plan.getChild("plan").getChildren().size() + ");\n");
+                             cells.append("data.setCell(" + number_of_rows + ",6,'not validated');\n");
                          }
+
+
                          number_of_rows++;
                      }
                     problemId++;
@@ -2283,7 +2508,7 @@ public class PlanAnalyzer {
 
             //DATA CHARTS
 
-            //Chart: Number of actions x Planners
+            //Chart: Number of actions (considering all planners involved)
             comparisonGraphs.append("var data" + data + "S= new google.visualization.DataTable();\n");
             comparisonGraphs.append("data" + data + "S.addColumn('string', 'Problems');\n");
             for(int pl=0;pl<plans.size();pl++){
@@ -2304,7 +2529,23 @@ public class PlanAnalyzer {
                    for(int pl=0;pl<plans.size();pl++){
                         Element plan = (Element)plans.get(pl);
                         //comparisonGraphs.append("data" + data + "S.setValue("+pb+","+(pl+1)+","+ plan.getChild("plan").getChildren().size() +");\n");
-                        comparisonGraphs.append("data" + data + "S.setValue("+probleId+","+(pl+1)+","+ plan.getChild("plan").getChildren().size() +");\n");
+                        //comparisonGraphs.append("data" + data + "S.setValue("+probleId+","+(pl+1)+","+ plan.getChild("plan").getChildren().size() +");\n");
+
+                        //check plan validity
+                        boolean isValid = true;
+                        Element validity = plan.getChild("validity");
+                        if (validity != null){
+                            if (validity.getAttributeValue("isValid").trim().equals("false")){
+                                isValid = false;
+                            }
+                        }
+                        if (isValid){
+                            comparisonGraphs.append("data" + data + "S.setValue("+probleId+","+(pl+1)+","+ plan.getChild("plan").getChildren().size() +");\n");
+                        }else{
+                            comparisonGraphs.append("data" + data + "S.setValue("+probleId+","+(pl+1)+",0);\n");
+                        }
+
+
                    }
                    probleId++;
                 }
@@ -2312,17 +2553,17 @@ public class PlanAnalyzer {
             }
             if (totalProblems.size()==1){
                 comparisonGraphs.append("var chart" + data + "S = new google.visualization.ColumnChart(document.getElementById('comparison-graph-" + data + "S'));\n");
-                comparisonGraphs.append("chart" + data + "S.draw(data" + data + "S, {width: 840, height: 300,is3D: true,title:'Number of Actions x Planners'});\n\n");
+                comparisonGraphs.append("chart" + data + "S.draw(data" + data + "S, {width: 840, height: 300,is3D: true,title:'Number of Actions'});\n\n");
             }
             else{
                 comparisonGraphs.append("var chart" + data + "S = new google.visualization.LineChart(document.getElementById('comparison-graph-" + data + "S'));\n");
-                comparisonGraphs.append("chart" + data + "S.draw(data" + data + "S, {width: 840, height: 300, min: 0,title:'Number of Actions x Planners'});\n\n");
+                comparisonGraphs.append("chart" + data + "S.draw(data" + data + "S, {width: 840, height: 300, min: 0,title:'Number of Actions'});\n\n");
             }
             graphs_div.append("<div id=\"comparison-graph-" + data + "S\"></div> <br>\n");
 
 
 
-            //Chart: Time(speed) x Planners
+            //Chart: Runtime(speed) (considering all planners involved)
             comparisonGraphs.append("var data" + data + "T= new google.visualization.DataTable();\n");
             comparisonGraphs.append("data" + data + "T.addColumn('string', 'Problems');\n");
             plans = firstProblemAsReference.getChild("plans").getChildren("xmlPlan");
@@ -2343,11 +2584,23 @@ public class PlanAnalyzer {
                         Element plan = (Element)plans.get(pl);
                         //comparisonGraphs.append("data" + data + "T.setValue("+pb+","+(pl+1)+","+ (plan.getChild("plan").getChildren().size()>0?plan.getChild("statistics").getChildText("toolTime"):0) +");\n");
                         //comparisonGraphs.append("data" + data + "T.setValue("+probleId+","+(pl+1)+","+ (plan.getChild("plan").getChildren().size()>0?plan.getChild("statistics").getChildText("toolTime"):0) +");\n");
-                        if (!plan.getChild("statistics").getChildText("toolTime").trim().equals("")){
-                            comparisonGraphs.append("data" + data + "T.setValue("+probleId+","+(pl+1)+","+ plan.getChild("statistics").getChildText("toolTime") +");\n");
-                        }else{
-                            comparisonGraphs.append("data" + data + "T.setValue("+probleId+","+(pl+1)+","+ (plan.getChild("plan").getChildren().size()>0?plan.getChild("statistics").getChildText("toolTime"):0) +");\n");
+
+                        //check plan validity
+                        boolean isValid = true;
+                        Element validity = plan.getChild("validity");
+                        if (validity != null){
+                            if (validity.getAttributeValue("isValid").trim().equals("false")){
+                                isValid = false;
+                            }
                         }
+                        if (isValid && plan.getChild("plan").getChildren().size()>0){
+                            if (!plan.getChild("statistics").getChildText("toolTime").trim().equals("")){
+                                comparisonGraphs.append("data" + data + "T.setValue("+probleId+","+(pl+1)+","+ plan.getChild("statistics").getChildText("toolTime") +");\n");
+                            }else{
+                                comparisonGraphs.append("data" + data + "T.setValue("+probleId+","+(pl+1)+","+ (plan.getChild("plan").getChildren().size()>0?plan.getChild("statistics").getChildText("toolTime"):0) +");\n");
+                            }
+                        }
+
                    }
                    probleId++;
                 }
@@ -2355,11 +2608,11 @@ public class PlanAnalyzer {
             }
             if (totalProblems.size()==1){
                comparisonGraphs.append("var chart" + data + "T = new google.visualization.ColumnChart(document.getElementById('comparison-graph-" + data + "T'));\n");
-               comparisonGraphs.append("chart" + data + "T.draw(data" + data + "T, {width: 840, height: 300, is3D: true,title:'Time(seconds) x Planners'});\n\n");
+               comparisonGraphs.append("chart" + data + "T.draw(data" + data + "T, {width: 840, height: 300, is3D: true,title:'Runtime (seconds) to solve problem'});\n\n");
             }
             else{
                 comparisonGraphs.append("var chart" + data + "T = new google.visualization.LineChart(document.getElementById('comparison-graph-" + data + "T'));\n");
-                comparisonGraphs.append("chart" + data + "T.draw(data" + data + "T, {width: 840, height: 300, min: 0,title:'Time(seconds) x Planners'});\n\n");
+                comparisonGraphs.append("chart" + data + "T.draw(data" + data + "T, {width: 840, height: 300, min: 0,title:'Runtime (seconds) to solve problem'});\n\n");
             }
 
 
@@ -2415,9 +2668,28 @@ public class PlanAnalyzer {
 
                         if (theplannerstat != null){//if we found it go on
 
-                            //Check if this is a valid plan
+                            
                             int plansize = plan.getChild("plan").getChildren().size();
-                            if (plansize > 0 && plan.getChild("validity").getAttributeValue("isValid").equals("true")){
+
+                            //Check if this is a valid plan
+                            boolean isValid = true;
+                            boolean planChecked = true;
+
+                            Element validity = plan.getChild("validity");
+                            if (validity!=null){
+                                if (plan.getChild("validity").getAttributeValue("isValid").equals("false")){
+                                    isValid = false;
+                                }
+                                else if (plan.getChild("validity").getAttributeValue("isValid").trim().equals("")){
+                                    planChecked = false;
+                                }
+                            }else{
+                                planChecked = false;
+
+                            }
+
+
+                            if (plansize > 0 && isValid){
 
 
                                 //General data
@@ -2489,6 +2761,13 @@ public class PlanAnalyzer {
                                 int skippedCounter = Integer.parseInt(theplannerstat.getChild("skipped").getAttributeValue("counter"));
                                 skippedCounter++;
                                 theplannerstat.getChild("skipped").setAttribute("counter", Integer.toString(skippedCounter));
+
+                            }
+                            else if(!isValid){
+                                //no solution counter
+                                int invalidsolutionCounter = Integer.parseInt(theplannerstat.getChild("invalidsolution").getAttributeValue("counter"));
+                                invalidsolutionCounter++;
+                                theplannerstat.getChild("invalidsolution").setAttribute("counter", Integer.toString(invalidsolutionCounter));
 
                             }
                             else{
@@ -2631,12 +2910,16 @@ public class PlanAnalyzer {
 
                 solvabilityData.append(dataNameSolvability + ".setValue(2, "+dindex+", "+eaPlannerStat.getChild("nosolutionfound").getAttributeValue("counter")+");\n");
 
+                solvabilityData.append(dataNameSolvability + ".setValue(3, "+dindex+", "+eaPlannerStat.getChild("invalidsolution").getAttributeValue("counter")+");\n");
+
                 dindex++;
             }
-            comparisonGraphs.append(dataNameSolvability + ".addRows(3);\n");
+            comparisonGraphs.append(dataNameSolvability + ".addRows(4);\n");
             comparisonGraphs.append(dataNameSolvability + ".setValue(0, 0, 'Problems solved');\n");
             comparisonGraphs.append(dataNameSolvability + ".setValue(1, 0, 'Timeouts');\n");
             comparisonGraphs.append(dataNameSolvability + ".setValue(2, 0, 'No-solution');\n");
+            comparisonGraphs.append(dataNameSolvability + ".setValue(3, 0, 'Invalid-solution');\n");
+
 
             comparisonGraphs.append(solvabilityData);
 
@@ -2713,12 +2996,12 @@ public class PlanAnalyzer {
 
             String chartNameQuality = "chartQuality"+ data;
             comparisonGraphs.append("var " + chartNameQuality + " = new google.visualization.ColumnChart(document.getElementById('analysis-"+chartNameQuality+"'));\n");
-            comparisonGraphs.append(chartNameQuality + ".draw(" + dataNameQuality + ", {width: 750, height: 300, is3D: true, title:'Quality Score (planners get 0.00–1.00 points per solved task)'});\n\n");
+            comparisonGraphs.append(chartNameQuality + ".draw(" + dataNameQuality + ", {width: 750, height: 300, is3D: true, title:'Quality Score (planners get 0.00–1.00 points per solved task, depending on the plan cost)'});\n\n");
 
 
             graphs_div.append("<div id=\"analysis-"+chartNameQuality+"\"></div> <br>\n");
             graphs_div.append("<p> In order to calculate the quality score we do the following: score is 1.00 for optimal or best known solutions; " +
-                    "otherwise score is (cost of best known plan / cost of generated plan). </p>");
+                    "otherwise score is (cost of best known plan) / (cost of generated plan). </p>");
 
 
 
@@ -2900,6 +3183,7 @@ public class PlanAnalyzer {
             }
 
         }
+        
         String metricsSummary = metricTable.toString();
         if (!metricsSummary.trim().equals("")){
             html.append("       <h2><a name=\"table\">Metrics Summary</a></h2>\n");  
@@ -2932,7 +3216,6 @@ public class PlanAnalyzer {
 
 
 
-
     /**
      * This method creates an table containing the metric values and evaluations of a plan
      * @param xmlPlan
@@ -2956,7 +3239,192 @@ public class PlanAnalyzer {
             html.append(getHtmlMetricTableRow(metrics, xmlPlan));
             
             html.append("</table>");
+
+        }else{
+             html.append("<h3>Metrics Summary</h3> \n");
+
+             html.append("<p>No evaluation performed.</p><br>\n");
+
+             html.append("<table cellpadding=\"5\" cellspacing=\"1\" width=\"100%\">\n");
+
+            //Header
+            html.append(getHtmlMetricTableHeader(metrics));
+
+            //table body
+            html.append(getHtmlMetricTableRow(metrics, xmlPlan));
+
+            html.append("</table> \n<");
         }
+
+
+        return html.toString();
+    }
+
+
+/**
+     * This method creates an short html summary containing the metric values and evaluations of a plan
+     * @param xmlPlan
+     * @return
+     */
+    public static String generatePlanMetricsEvaluationSummary(Element xmlPlan){
+
+        StringBuilder html = new StringBuilder();
+
+        Element metrics = xmlPlan.getChild("metrics");
+
+        html.append("<h1>Evaluation Summary</h1>");
+
+        //Planner
+        html.append("Planner: " + xmlPlan.getChild("planner").getChildText("name") + " " + xmlPlan.getChild("planner").getChildText("version") + "<br>");
+
+        int planlength = xmlPlan.getChild("plan").getContentSize();
+        html.append("Plan length: " + planlength +"<br>");
+
+        //Validity
+        Element theValidity = xmlPlan.getChild("validity");
+        boolean isValid = true;
+        boolean planChecked = true;
+        if (theValidity != null){
+                if (theValidity.getAttributeValue("isValid").equals("false")){
+                    //planlength = 0;
+                    isValid = false;
+                }
+                else if(theValidity.getAttributeValue("isValid").trim().equals("")){
+                   planChecked = false;
+                }
+        }else{
+            planChecked = false;
+        }
+
+        String validityString = "";
+        if (planlength < 1){
+            validityString = "<font color='red'>empty plan</font>";
+        }
+        else if (planChecked){
+            if(isValid){validityString = "<font color='green'>valid</font>";}
+            else{validityString = "<font color='red'>invalid</font>";}
+        }
+        else if (!planChecked){
+            validityString = "<font color='blue'>not validated</font>";
+        }
+
+        if(validityString.trim().equals("")){
+            validityString = "<font color='blue'>not validated</font>";
+        }
+
+        html.append("Plan validity: " + validityString +"<br>");
+        
+        html.append("<br>");
+
+
+
+        //Metrics evaluation
+        html.append("<h2>Metrics</h2>");
+
+        if (metrics!=null && metrics.getChildren().size() > 0){
+            html.append(getHtmlMetricVerticalTable(xmlPlan));
+            //html.append(getHtmlMetricHorizontalTable(xmlPlan));
+        }else{
+            html.append("<p>No evaluation performed.</p><br>\n");
+        }
+        html.append("<br>");
+
+
+        //Overall evaluation
+        html.append("<h2>Plan evaluation</h2>");
+
+
+        //Overall evaluation (plan score)
+
+        double overallCostAward = 0;
+
+        //compute the plan cost based on the metrics.
+        //if (isValid && planlength > 0){
+            overallCostAward = evaluateCostAward(metrics);
+        //}
+
+        double overallgrade = 0;
+        String overallScore = "";
+        Element planEvaluation = xmlPlan.getChild("evaluation");
+        if(planEvaluation == null){
+            planEvaluation = new Element("evaluation");
+            planEvaluation.setAttribute("value", "");
+            Element rationales = new Element("rationales");
+            planEvaluation.addContent(rationales);
+            xmlPlan.addContent(planEvaluation);
+        }
+        //check (or compute if necessary) planEvaluation
+        if (planEvaluation.getAttributeValue("value").trim().equals("")){
+            if (isValid && planlength > 0){
+                overallgrade = evaluatePlan(metrics);
+                DecimalFormat overall = new DecimalFormat("0.00");
+                planEvaluation.setAttribute("value", overall.format(overallgrade));
+            }
+        }
+
+        overallScore = planEvaluation.getAttributeValue("value").trim();
+        if (overallScore.equals("")){
+            overallScore = "0.00";
+        }
+
+        html.append("<p>Plan cost: "+Double.toString(overallCostAward)+"</p>");
+        html.append("<p>Plan evaluation: <strong>"+overallScore+"</strong></p>");
+
+
+        html.append("<br><br>");
+
+
+        //Rationales
+        Element rationales = planEvaluation.getChild("rationales");
+        if (rationales == null){
+            rationales = new Element("rationales");
+            planEvaluation.addContent(rationales);
+        }
+        if (rationales.getChildren().size() > 0){
+            html.append("<h2>Evaluation rationales</h2>");
+
+            for (Iterator<Element> it = rationales.getChildren().iterator(); it.hasNext();) {
+                Element rationale = it.next();
+                String enabled = "";
+                //XMLUtilities.printXML(rationale);
+                if (rationale.getAttributeValue("enabled").equals("false")){
+                    enabled = " (NOT APPLIED)";
+                }
+                html.append("<p>");
+                html.append("<strong>Name: <font color='blue'>"+rationale.getChildText("name").trim()+enabled+"</font></strong><br>");
+                html.append("<strong>Description: </strong>"+rationale.getChildText("description")+"<br>");
+                html.append("<strong>Formal description: </strong><font face='courier'>"+rationale.getChildText("rule")+"</font><br>");
+                html.append("<strong>Quality impact: </strong>"+rationale.getChild("impact").getAttributeValue("quality")+"<br>");
+                html.append("<strong>Abstraction level: </strong>"+rationale.getChild("abstractionlevel").getAttributeValue("range")+"<br>");
+                String validityStr = "";
+                if (rationale.getChild("validity").getAttributeValue("isValid").trim().equals("")){
+                    validityStr = "<font color='blue'>not verified</font>";
+                }else if (rationale.getChild("validity").getAttributeValue("isValid").trim().equals("true")){
+                    validityStr = "<font color='green'>valid</font>";
+                }else if (rationale.getChild("validity").getAttributeValue("isValid").trim().equals("false")){
+                    validityStr = "<font color='red'>unvalid</font>";
+                }
+                html.append("<strong>Validity: </strong>"+validityStr+"<br>");
+                html.append("<strong>Comments: </strong><br> \n");
+                String commentsStr = "";
+                Element comments = rationale.getChild("comments");
+                for (Iterator<Element> it1 = comments.getContent().iterator(); it1.hasNext();) {
+                    Element comment = it1.next();
+                    commentsStr += comment.getText() + " <br>";
+                }
+                if (!commentsStr.trim().equals("")){
+                    html.append(commentsStr);
+                }else{
+                    html.append("no comment.");
+                }
+
+                html.append("</p>");
+
+                html.append("<br>");
+
+            }
+        }
+
 
 
         return html.toString();
@@ -2970,50 +3438,117 @@ public class PlanAnalyzer {
      */
     public static String getHtmlMetricTableHeader(Element metrics){
 
+        boolean emptyMetrics = false;
+        if (metrics == null){
+            emptyMetrics = true;
+        }else if (metrics.getChildren().size() < 1){
+            emptyMetrics = true;
+        }
+
+        //rowspan
+        String rowspan = "rowspan=\"2\"";
+        if (emptyMetrics){
+            rowspan = "";
+        }
+
         //Header
         StringBuilder tableHeader = new StringBuilder();
         //Firstline
         // Planner(s) | Metric 1 ... Metric N | Time (s) | # actions | Evaluation
         StringBuilder firstLine = new StringBuilder();
         firstLine.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
-        firstLine.append("  <th rowspan=\"2\" valign=\"top\">Planner(s)</th>\n");
+        firstLine.append("  <th "+rowspan+" valign=\"top\">Planner</th>\n");
 
         StringBuilder secondLine = new StringBuilder();
-        secondLine.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
+        
 
         //table body
-        for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
-            Element metric = it.next();
-            String metricname = metric.getChildText("name");
+        if(metrics!=null && metrics.getChildren().size() > 0){
+            secondLine.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
 
-            firstLine.append("   <th colspan=\"3\">"+ metricname +"</th> \n");
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element metric = it.next();
+                String metricname = metric.getChildText("name");
 
-            secondLine.append(" <th>Value</th> \n");
-            secondLine.append(" <th>Grade</th> \n");
-            secondLine.append(" <th>Weight</th> \n");
+                firstLine.append("   <th colspan=\"3\">"+ metricname +"</th> \n");
+
+                secondLine.append(" <th>Value</th> \n");
+                secondLine.append(" <th>Score</th> \n");
+                secondLine.append(" <th>Weight</th> \n");
+            }
+            //Finishing second line
+            secondLine.append("</tr>\n");
 
         }
 
         //Finishing first line
         //Time (in seconds)
-        firstLine.append("<th rowspan=\"2\" valign=\"top\">Time (s)</th>\n");
+        firstLine.append("<th "+rowspan+" valign=\"top\" >Time(sec)</th>\n");
         //Number of actions
-        firstLine.append("<th rowspan=\"2\" valign=\"top\">Steps</th>\n");
+        firstLine.append("<th "+rowspan+" valign=\"top\">Steps</th>\n");
+        //Plan validity
+        firstLine.append("<th "+rowspan+" valign=\"top\">Validity</th>\n");
         //Cost/awars
-        firstLine.append("<th rowspan=\"2\" valign=\"top\">Cost</th>\n");
+        firstLine.append("<th "+rowspan+" valign=\"top\">Cost</th>\n");
         //Evaluation of the plan [0,1]
-        firstLine.append("<th rowspan=\"2\" valign=\"top\">Evaluation</th>\n");
+        firstLine.append("<th "+rowspan+" valign=\"top\">Evaluation</th>\n");
         
         firstLine.append("</tr>\n");
-        
-        //Finishing second line
-        secondLine.append("</tr>\n");
-
+       
 
         tableHeader.append(firstLine);
         tableHeader.append(secondLine);
 
+
         return tableHeader.toString();
+    }
+
+
+/**
+     * This methos generates the header of a html table for a set of metrics
+     * @param metrics the xml node that holds the metrics
+     * @return
+     */
+    public static String getHtmlMetricTableHeaderOnly(Element xmlPlan){
+
+        //Metric Header
+        StringBuilder tableHeader = new StringBuilder();
+        Element metrics = xmlPlan.getChild("metrics");
+
+        if (metrics != null && metrics.getChildren().size() > 0){
+            //Firstline
+            //| Metric 1 ... Metric N |
+            StringBuilder firstLine = new StringBuilder();
+            firstLine.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
+            StringBuilder secondLine = new StringBuilder();
+
+
+            //table body
+            if(metrics!=null && metrics.getChildren().size() > 0){
+                secondLine.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
+
+                for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                    Element metric = it.next();
+                    String metricname = metric.getChildText("name");
+
+                    firstLine.append("   <th colspan=\"3\">"+ metricname +"</th> \n");
+
+                    secondLine.append(" <th>Value</th> \n");
+                    secondLine.append(" <th>Score</th> \n");
+                    secondLine.append(" <th>Weight</th> \n");
+                }
+                //Finishing second line
+                secondLine.append("</tr>\n");
+
+            }
+            firstLine.append("</tr>\n");
+            tableHeader.append(firstLine);
+            tableHeader.append(secondLine);
+
+        }
+        return tableHeader.toString();
+
+
     }
 
 
@@ -3038,26 +3573,64 @@ public class PlanAnalyzer {
         DecimalFormat indgrade = new DecimalFormat("0.00");
 
         //metric values (value, individual evaluation, weight)
-        for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
-            Element metric = it.next();
+        if (metrics!=null){
 
-            String value = "-";
-            String individualEval = "-";
-            //String metricname = metric.getChildText("name");
-            String metricWeight = metric.getChildText("weight");
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element metric = it.next();
 
-            Element dataset = metric.getChild("dataset");
-            if (dataset.getChildren().size() > 0){
-                //Getting metric value
-                value = Float.toString(getMetricValue(metric));
 
-                //individual evaluation
-                individualEval = indgrade.format(evaluateMetric(metric));
+
+                String value = "";
+                String individualEval = "";
+                //String metricname = metric.getChildText("name");
+                String metricWeight = metric.getChildText("weight");
+
+                //check if it need evaluation (the values and evaluation can be already available in the value and evaluation node of the metric)
+                Element metricValue = metric.getChild("value");
+                Element metricEvaluation = metric.getChild("evaluation");
+
+                if (metricValue == null){
+                   metricValue = new  Element("value");
+                   metric.addContent(metricValue);
+                }
+                if (metricEvaluation == null){
+                   metricEvaluation = new  Element("evaluation");
+                   metricEvaluation.setAttribute("value", "");
+                   metric.addContent(metricEvaluation);
+                }
+
+                Element dataset = metric.getChild("dataset");
+                if (metricValue.getText().trim().equals("") && dataset.getChildren().size() > 0){
+                    //Getting metric value
+                    value = Float.toString(getMetricValue(metric));
+                    metricValue.setText(value);
+                }
+                if (metricEvaluation.getAttributeValue("value").trim().equals("") && dataset.getChildren().size() > 0){
+                    //individual evaluation
+                    individualEval = indgrade.format(evaluateMetric(metric));
+                    metricEvaluation.setAttribute("value", individualEval);
+                }
+
+                //Element dataset = metric.getChild("dataset");
+    //            if (dataset.getChildren().size() > 0){
+    //                //Getting metric value
+    //                value = Float.toString(getMetricValue(metric));
+    //
+    //                //individual evaluation
+    //                individualEval = indgrade.format(evaluateMetric(metric));
+    //
+    //            }
+
+                value = metricValue.getText().trim();
+                individualEval = metricEvaluation.getAttributeValue("value").trim();
+
+                if (value.equals("")){value = "-"; }
+                if (individualEval.equals("")){individualEval = "-"; }
+
+                tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+value+"</td> \n");
+                tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+individualEval+"</td> \n");
+                tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+metricWeight+"</td> \n");
             }
-
-            tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+value+"</td> \n");
-            tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+individualEval+"</td> \n");
-            tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+metricWeight+"</td> \n");
         }
 
 
@@ -3070,17 +3643,27 @@ public class PlanAnalyzer {
         int planlength = plan.getChildren().size();
 
         //check the validity of the plan
+        String validityString = "";
+
         Element theValidity = xmlPlan.getChild("validity");
         boolean isValid = true;
-        if (theValidity != null && !theValidity.getAttributeValue("isValid").equals("true")){
-            planlength = 0;
-            isValid = false;
+        boolean planChecked = true;
+        if (theValidity != null){
+                if (theValidity.getAttributeValue("isValid").equals("false")){
+                    //planlength = 0;
+                    isValid = false;
+                }
+                else if(theValidity.getAttributeValue("isValid").trim().equals("")){
+                   planChecked = false;
+                }
+         }else{
+            planChecked = false;
          }
 
         String numberOfActions = Integer.toString(planlength);
 
 
-        //check if it was timeout or skipped
+        //check if it was timeout or skipped or
         boolean timeoutOrSkipped = false;
         if (planlength < 1){
             Element reason = xmlPlan.getChild("statistics").getChild("forcedQuit");
@@ -3088,36 +3671,365 @@ public class PlanAnalyzer {
                 time += " ("+ reason.getText().trim() + ")";
                 timeoutOrSkipped = true;
             }
-            if (!isValid){
-                numberOfActions += " (invalid)";
-                
+            validityString = "<font color='red'>empty plan</font>";
+            //numberOfActions += " (empty plan)";
+        }
+        else if (planChecked){
+            if(isValid){
+                validityString = "<font color='green'>valid</font>";
             }
-
+            else{
+                validityString = "<font color='red'>invalid</font>";
+                //numberOfActions += " (invalid)";
+            }
+        }
+        else if (!planChecked){
+            validityString = "<font color='blue'>not validated</font>";
+            //numberOfActions += " (not validated)";
         }
 
-        //Overall evaluation (plan grade)
+        if(validityString.trim().equals("")){
+            validityString = "<font color='blue'>not validated</font>";
+        }
+
+        String overallScore = "";
+
+        Element planEvaluation = xmlPlan.getChild("evaluation");
+
+        if(planEvaluation == null){
+            planEvaluation = new Element("evaluation");
+            planEvaluation.setAttribute("value", "");
+            xmlPlan.addContent(planEvaluation);
+        }
+
+        //Overall evaluation (plan score)
         double overallgrade = 0;
         double overallCostAward = 0;
-        if (!timeoutOrSkipped && isValid && planlength > 0){
-            overallgrade = evaluatePlan(metrics);
+
+        //compute the plan cost based on the metrics.
+        if (!timeoutOrSkipped && isValid && planlength > 0){           
             overallCostAward = evaluateCostAward(metrics);
         }
 
-        DecimalFormat overall = new DecimalFormat("0.00");
+        //check (or compute if necessary) planEvaluation
+        if (planEvaluation.getAttributeValue("value").trim().equals("")){
+            if (!timeoutOrSkipped && isValid && planlength > 0){
+                overallgrade = evaluatePlan(metrics);
+                DecimalFormat overall = new DecimalFormat("0.00");
+                planEvaluation.setAttribute("value", overall.format(overallgrade));
+            }
+        }
+
+        overallScore = planEvaluation.getAttributeValue("value").trim();
+        if (overallScore.equals("")){
+            overallScore = "0.00";
+        }
+
 
         tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+time+"</td> \n");
 
         tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+numberOfActions+"</td> \n");
 
+        tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+validityString+"</td> \n");
+
         tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+Double.toString(overallCostAward)+"</td> \n");
       
-        tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+overall.format(overallgrade)+"</td> \n");
+        tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+overallScore+"</td> \n");
 
         tableRow.append("</tr> \n");
 
         return tableRow.toString();
     }
 
+
+
+    public static String getHtmlMetricTableRowOnly(Element xmlPlan){
+
+        StringBuilder tableRow = new StringBuilder();
+
+        Element metrics = xmlPlan.getChild("metrics");
+
+        tableRow.append("<tr> \n");
+
+
+        DecimalFormat indgrade = new DecimalFormat("0.00");
+
+        //metric values (value, individual evaluation, weight)
+        if (metrics!=null){
+
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element metric = it.next();
+
+                String value = "";
+                String individualEval = "";
+                //String metricname = metric.getChildText("name");
+                String metricWeight = metric.getChildText("weight");
+
+                //check if it need evaluation (the values and evaluation can be already available in the value and evaluation node of the metric)
+                Element metricValue = metric.getChild("value");
+                Element metricEvaluation = metric.getChild("evaluation");
+
+                if (metricValue == null){
+                   metricValue = new  Element("value");
+                   metric.addContent(metricValue);
+                }
+                if (metricEvaluation == null){
+                   metricEvaluation = new  Element("evaluation");
+                   metricEvaluation.setAttribute("value", "");
+                   metric.addContent(metricEvaluation);
+                }
+
+                Element dataset = metric.getChild("dataset");
+                if (metricValue.getText().trim().equals("") && dataset.getChildren().size() > 0){
+                    //Getting metric value
+                    value = Float.toString(getMetricValue(metric));
+                    metricValue.setText(value);
+                }
+                if (metricEvaluation.getAttributeValue("value").trim().equals("") && dataset.getChildren().size() > 0){
+                    //individual evaluation
+                    individualEval = indgrade.format(evaluateMetric(metric));
+                    metricEvaluation.setAttribute("value", individualEval);
+                }
+
+                //Element dataset = metric.getChild("dataset");
+    //            if (dataset.getChildren().size() > 0){
+    //                //Getting metric value
+    //                value = Float.toString(getMetricValue(metric));
+    //
+    //                //individual evaluation
+    //                individualEval = indgrade.format(evaluateMetric(metric));
+    //
+    //            }
+
+                value = metricValue.getText().trim();
+                individualEval = metricEvaluation.getAttributeValue("value").trim();
+
+                if (value.equals("")){value = "-"; }
+                if (individualEval.equals("")){individualEval = "-"; }
+
+                tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+value+"</td> \n");
+                tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+individualEval+"</td> \n");
+                tableRow.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+metricWeight+"</td> \n");
+            }
+        }
+
+        tableRow.append("</tr> \n");
+
+        return tableRow.toString();
+    }
+
+    /**
+     * This methods creates a html (horizontal) table with the metrics value, weight and evaluation (only the metrics
+     * @param xmlPlan
+     * @return
+     */
+    public static String getHtmlMetricHorizontalTable(Element xmlPlan){
+
+        StringBuilder table = new StringBuilder();
+
+        //horizontal Table
+        table.append("<table cellpadding=\"5\" cellspacing=\"1\" width=\"100%\">\n");
+        //Header
+        table.append(getHtmlMetricTableHeaderOnly(xmlPlan));
+        //body
+        table.append(getHtmlMetricTableRowOnly(xmlPlan));
+        table.append("</table>");
+
+
+        return table.toString();
+
+    }
+
+
+    /**
+     * This methods creates a html (vertical) table with the metrics value, weight and evaluation (only the metrics
+     * @param xmlPlan
+     * @return
+     */
+    public static String getHtmlMetricVerticalTable(Element xmlPlan){
+
+        StringBuilder table = new StringBuilder();
+        table.append("<table cellpadding=\"5\" cellspacing=\"1\" width=\"100%\">\n");
+        //header
+        table.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
+        table.append("   <th>Metric name</th> \n");
+        table.append("   <th>Weight</th> \n");
+        table.append("   <th>Value</th> \n");
+        table.append("   <th>Score</th> \n");
+        table.append("</tr> \n");
+
+        //table body
+        Element metrics = xmlPlan.getChild("metrics");
+
+        DecimalFormat indgrade = new DecimalFormat("0.00");
+
+        //metric values (value, individual evaluation, weight)
+        if (metrics!=null){
+            table.append("<tr> \n");
+
+            for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+                Element metric = it.next();
+
+                String value = "";
+                String individualEval = "";
+                String metricname = metric.getChildText("name");
+                String metricWeight = metric.getChildText("weight");
+
+                //check if it need evaluation (the values and evaluation can be already available in the value and evaluation node of the metric)
+                Element metricValue = metric.getChild("value");
+                Element metricEvaluation = metric.getChild("evaluation");
+
+                if (metricValue == null){
+                   metricValue = new  Element("value");
+                   metric.addContent(metricValue);
+                }
+                if (metricEvaluation == null){
+                   metricEvaluation = new  Element("evaluation");
+                   metricEvaluation.setAttribute("value", "");
+                   metric.addContent(metricEvaluation);
+                }
+
+                Element dataset = metric.getChild("dataset");
+                if (metricValue.getText().trim().equals("") && dataset.getChildren().size() > 0){
+                    //Getting metric value
+                    value = Float.toString(getMetricValue(metric));
+                    metricValue.setText(value);
+                }
+                if (metricEvaluation.getAttributeValue("value").trim().equals("") && dataset.getChildren().size() > 0){
+                    //individual evaluation
+                    individualEval = indgrade.format(evaluateMetric(metric));
+                    metricEvaluation.setAttribute("value", individualEval);
+                }
+
+                //Element dataset = metric.getChild("dataset");
+    //            if (dataset.getChildren().size() > 0){
+    //                //Getting metric value
+    //                value = Float.toString(getMetricValue(metric));
+    //
+    //                //individual evaluation
+    //                individualEval = indgrade.format(evaluateMetric(metric));
+    //
+    //            }
+
+                value = metricValue.getText().trim();
+                individualEval = metricEvaluation.getAttributeValue("value").trim();
+
+                if (value.equals("")){value = "-"; }
+                if (individualEval.equals("")){individualEval = "-"; }
+
+                table.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+metricname+"</td> \n");
+                table.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+metricWeight+"</td> \n");
+                table.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+value+"</td> \n");
+                table.append("   <td align=\"center\" bgcolor=\"#FFFFFF\">"+individualEval+"</td> \n");
+
+                table.append("</tr> \n");
+            }
+        }
+
+        table.append("</table>");
+
+        return table.toString();
+    }
+
+
+/**
+     * This method sets the value of the metric and its evaluation (when available)
+     * @param metrics
+     * @param xmlPlan
+     * @return an String containing a html row
+     */
+    public static void setMetricsValuesAndEvaluations(Element metrics, Element xmlPlan){
+
+
+        //Planner's name
+        Element planner = xmlPlan.getChild("planner");
+
+        DecimalFormat individualScoreFormat = new DecimalFormat("0.00");
+
+        //metric values (value, individual evaluation, weight)
+        for (Iterator<Element> it = metrics.getChildren().iterator(); it.hasNext();) {
+            Element metric = it.next();
+
+            String value = "";
+            String individualEval = "";
+
+            Element dataset = metric.getChild("dataset");
+            if (dataset.getChildren().size() > 0){
+                //Getting metric value
+                value = Float.toString(getMetricValue(metric));
+
+                //individual evaluation
+                individualEval = individualScoreFormat.format(evaluateMetric(metric));
+            }
+
+            Element metricValue = metric.getChild("value");
+            Element metricEvaluation = metric.getChild("evaluation");
+
+            if (metricValue==null){
+               metricValue = new  Element("value");
+               metric.addContent(metricValue);
+            }
+            if (metricEvaluation==null){
+               metricEvaluation = new  Element("evaluation");
+               metricEvaluation.setAttribute("value", "");
+               metric.addContent(metricEvaluation);
+            }
+
+            metricValue.setText(value);
+            metricEvaluation.setAttribute("value", individualEval);
+
+        }
+
+
+        //Time (seconds)
+        Element statistics = xmlPlan.getChild("statistics");
+        String time = statistics.getChildText("toolTime");
+
+        //Number of actions
+        Element plan = xmlPlan.getChild("plan");
+        int planlength = plan.getChildren().size();
+
+        //check the validity of the plan
+        String validityString = "";
+
+        Element theValidity = xmlPlan.getChild("validity");
+        boolean isValid = true;
+        boolean planChecked = true;
+        if (theValidity != null){
+                if (theValidity.getAttributeValue("isValid").equals("false")){
+                    //planlength = 0;
+                    isValid = false;
+                }
+                else if(theValidity.getAttributeValue("isValid").trim().equals("")){
+                   planChecked = false;
+                }
+         }else{
+            planChecked = false;
+         }
+
+        String numberOfActions = Integer.toString(planlength);
+
+
+         //Overall evaluation (plan grade)
+        double overallscore = 0;
+        //double overallCostAward = 0;
+        if (isValid && planlength > 0){
+            overallscore = evaluatePlan(metrics);
+            //overallCostAward = evaluateCostAward(metrics);
+        }
+
+        DecimalFormat overall = new DecimalFormat("0.00");
+
+        Element planEvaluation = xmlPlan.getChild("evaluation");
+        if (planEvaluation == null){
+            planEvaluation = new Element("evaluation");
+            planEvaluation.setAttribute("value", "");
+            xmlPlan.addContent(planEvaluation);
+        }
+        planEvaluation.setAttribute("value", overall.format(overallscore));
+
+
+    }
 
 
 
@@ -3235,6 +4147,7 @@ public class PlanAnalyzer {
                     baseProjStat.getChild("name").setText(baseProject.getChildText("name"));
                     Element timeStat = baseProjStat.getChild("time");
                     Element planLengthStat = baseProjStat.getChild("planlength");
+                    Element planCostStat = baseProjStat.getChild("plancost");
                     Element evaluationStat = baseProjStat.getChild("evaluation");
 
                     //Add it to the projectsStaticts
@@ -3277,6 +4190,7 @@ public class PlanAnalyzer {
                         //it start in each base plan
                         float bestTime = -1;
                         float bestPlanLength = -1;
+                        double bestPlanCost = -1;
                         double bestEvaluation = 0.0;
 
                         //Collect analysis data
@@ -3288,14 +4202,16 @@ public class PlanAnalyzer {
                         int baselength = basePlan.getChild("plan").getChildren().size();
                                                 
                         //check the validity of the plan
+                        boolean isValid = true;
                         Element validity = basePlan.getChild("validity");
-                        if (validity != null && !validity.getAttributeValue("isValid").equals("true")){
+                        if (validity != null && validity.getAttributeValue("isValid").equals("false")){
                             baselength = 0;
+                            isValid = false;
                         }
 
 
                         if (baselength > 0){
-                            //1.Time (min) - starting with the base solution/plan
+                            //1. Time (min) - starting with the base solution/plan
                             float baseTime = -1;
                             try {
                                 baseTime = Float.parseFloat(baseStatistics.getChildText("toolTime"));
@@ -3306,14 +4222,35 @@ public class PlanAnalyzer {
                                 bestTime = baseTime;                                
                             }
                             
-                            //2.Plan length (min) - starting with the base solution/plan
+                            //2. Plan length (min) - starting with the base solution/plan
                             bestPlanLength = baselength;
                             planLengthStat.setAttribute("temp", Integer.toString(baselength));
 
-                            //3.Evaluation (max) -  starting with the base solution/plan
-                            double eval = evaluatePlan(basePlanMetrics);
-                            bestEvaluation = eval;
+                            //3. Plan cost (min) - starting with the base solution/plan
+                            double basePlanCost = evaluateCostAward(basePlanMetrics);
+                            bestPlanCost = basePlanCost;
+                            planCostStat.setAttribute("temp", Double.toString(bestPlanCost));
+
+                            //4. Evaluation (max) -  starting with the base solution/plan
+                            double eval = 0;
+                            Element basePlanEvaluation = basePlan.getChild("evaluation");
+                            if (basePlanEvaluation==null){
+                                basePlanEvaluation = new Element("evaluation");
+                                basePlanEvaluation.setAttribute("value", "");
+                                basePlan.addContent(basePlanEvaluation);
+                            }
+                            if (!basePlanEvaluation.getAttributeValue("value").trim().equals("")){
+                                eval = Double.parseDouble(basePlanEvaluation.getAttributeValue("value").trim());
+                            }else{
+                                eval = evaluatePlan(basePlanMetrics);
+                            }
                             evaluationStat.setAttribute("temp", Double.toString(eval));
+                            bestEvaluation = eval;
+
+                            //double eval = evaluatePlan(basePlanMetrics);
+                            //bestEvaluation = eval;
+                            //evaluationStat.setAttribute("temp", Double.toString(eval));
+
 
                         }
 
@@ -3340,10 +4277,12 @@ public class PlanAnalyzer {
                                 Element compStatistics = comparablePlan.getChild("statistics");
                                 Element eaTimeStat = eaProjStat.getChild("time");
                                 Element eaPlanLengthStat = eaProjStat.getChild("planlength");
+                                Element eaPlanCostStat = eaProjStat.getChild("plancost");
                                 Element eaEvaluationStat = eaProjStat.getChild("evaluation");
                                 //clear temp values
                                 eaTimeStat.setAttribute("temp", "");
                                 eaPlanLengthStat.setAttribute("temp", "");
+                                eaPlanCostStat.setAttribute("temp", "");
                                 eaEvaluationStat.setAttribute("temp", "");
 
 
@@ -3361,9 +4300,11 @@ public class PlanAnalyzer {
                                     int theLength = comparablePlan.getChild("plan").getChildren().size();
 
                                     //check the validity of the plan
-                                    Element theValidity = basePlan.getChild("validity");
-                                    if (theValidity != null && !theValidity.getAttributeValue("isValid").equals("true")){
+                                    boolean isTheValid = true;
+                                    Element theValidity = comparablePlan.getChild("validity");
+                                    if (theValidity != null && theValidity.getAttributeValue("isValid").equals("false")){
                                         theLength = 0;
+                                        isTheValid = false;
                                     }
 
                                     if (theLength > 0){
@@ -3392,8 +4333,33 @@ public class PlanAnalyzer {
                                             if (theLength < bestPlanLength){bestPlanLength = theLength;}
                                         }
 
-                                        //3.Evaluation (max)
-                                        double eval = evaluatePlan(planMetrics);
+
+                                        //3. Plan cost (min)
+                                        double thePlanCost = evaluateCostAward(planMetrics);
+                                        eaPlanCostStat.setAttribute("temp", Double.toString(thePlanCost));
+                                        if (bestPlanCost == -1) {
+                                            bestPlanCost = thePlanCost;
+                                        }else{
+                                            if (thePlanCost < bestPlanCost){bestPlanCost = thePlanCost;}
+                                        }
+                                        
+
+
+                                         //4 .Evaluation (max)
+                                        double eval = 0;
+                                        Element planEvaluation = comparablePlan.getChild("evaluation");
+                                        if (planEvaluation==null){
+                                            planEvaluation = new Element("evaluation");
+                                            planEvaluation.setAttribute("value", "");
+                                            comparablePlan.addContent(planEvaluation);
+                                        }
+                                        if (!planEvaluation.getAttributeValue("value").trim().equals("")){
+                                            eval = Double.parseDouble(planEvaluation.getAttributeValue("value").trim());
+                                        }else{
+                                            eval = evaluatePlan(planMetrics);
+                                        }
+                                      
+                                        //double eval = evaluatePlan(planMetrics);
                                         eaEvaluationStat.setAttribute("temp", Double.toString(eval));
                                         if (eval > bestEvaluation){bestEvaluation = eval;}
                                         
@@ -3440,7 +4406,21 @@ public class PlanAnalyzer {
                                     eaPlanLengthStat.setAttribute("counter", Integer.toString(planLengthCounter));
                                 }
                             }
-                            //2.evaluation
+                            
+                            //3.plancost
+                            Element eaPlanCostStat = eaStat.getChild("plancost");
+                            String planCostStr = eaPlanCostStat.getAttributeValue("temp");
+                            if (!planCostStr.trim().equals("")){
+                                //if this model/project reached the best plan cost then score it
+                                double thePlanCost = Double.parseDouble(planCostStr);
+                                if (thePlanCost == bestPlanCost) {
+                                    int planCostCounter = Integer.parseInt(eaPlanCostStat.getAttributeValue("counter"));
+                                    planCostCounter++;
+                                    eaPlanCostStat.setAttribute("counter", Integer.toString(planCostCounter));
+                                }
+                            }
+
+                            //4.evaluation
                             Element eaEvaluationStat = eaStat.getChild("evaluation");
                             String planEvaluationStr = eaEvaluationStat.getAttributeValue("temp");
                             if (!planEvaluationStr.trim().equals("")){
@@ -3521,15 +4501,16 @@ public class PlanAnalyzer {
                             //Gathering data
                             overAllTimeData.append(odataName+".setValue(0, "+oIndex+", "+element.getChild("time").getAttributeValue("counter")+"); \n");
                             overAllPlanLengthData.append(odataName+".setValue(1, "+oIndex+", "+element.getChild("planlength").getAttributeValue("counter")+"); \n");
-                            overAllEvaluationData.append(odataName+".setValue(2, "+oIndex+", "+element.getChild("evaluation").getAttributeValue("counter")+"); \n");
+                            overAllEvaluationData.append(odataName+".setValue(2, "+oIndex+", "+element.getChild("plancost").getAttributeValue("counter")+"); \n");
+                            overAllEvaluationData.append(odataName+".setValue(3, "+oIndex+", "+element.getChild("evaluation").getAttributeValue("counter")+"); \n");
 
                             //TODO: other criteria
 
                             oIndex++;
                         }
 
-                        //Row is equals to the number of criteria (time, plan length, evaluation,...)
-                        overviewChart.append(odataName+".addRows(3); \n");
+                        //Row is equals to the number of criteria (time, plan length, plancost, evaluation,...)
+                        overviewChart.append(odataName+".addRows(4); \n");
 
                         //1.Time
                         overviewChart.append(odataName+".setValue(0, 0, 'Time'); \n");
@@ -3539,8 +4520,12 @@ public class PlanAnalyzer {
                         overviewChart.append(odataName+".setValue(1, 0, 'Plan Length'); \n");
                         overviewChart.append(overAllPlanLengthData);
 
-                        //3.Quality
-                        overviewChart.append(odataName+".setValue(2, 0, 'Quality'); \n");
+                        //3.Cost
+                        overviewChart.append(odataName+".setValue(2, 0, 'Plan Cost'); \n");
+                        overviewChart.append(overAllEvaluationData);
+
+                        //3.Evaluation
+                        overviewChart.append(odataName+".setValue(3, 0, 'Evaluation'); \n");
                         overviewChart.append(overAllEvaluationData);
 
                         //TODO: other criteria
@@ -3568,6 +4553,7 @@ public class PlanAnalyzer {
                         
                         int bestTimeCounter = 0;
                         int bestPlanLengthCounter = 0;
+                        int bestPlanCostCounter = 0;
                         int bestEvaluationCounter = 0;
 
                         //Clear overall temp values
@@ -3575,6 +4561,7 @@ public class PlanAnalyzer {
                              Element eaOverAllPrjSt = OverAllProjectsStatistics.get(i);
                              eaOverAllPrjSt.getChild("time").setAttribute("temp","");
                              eaOverAllPrjSt.getChild("planlength").setAttribute("temp","");
+                             eaOverAllPrjSt.getChild("plancost").setAttribute("temp","");
                              eaOverAllPrjSt.getChild("evaluation").setAttribute("temp","");
                         }
                                 
@@ -3583,17 +4570,22 @@ public class PlanAnalyzer {
                             Element eaPrjSt = projectsStatistics.get(i);
                             Element eaOverAllPrjSt = OverAllProjectsStatistics.get(i);
 
-                            //1.Time
+                            //1. Time
                             int timeCounter = Integer.parseInt(eaPrjSt.getChild("time").getAttributeValue("counter"));
                             eaOverAllPrjSt.getChild("time").setAttribute("temp", Integer.toString(timeCounter));
                             if (timeCounter > bestTimeCounter){bestTimeCounter = timeCounter;}
 
-                            //1.Plan length
+                            //2. Plan length
                             int planLengthCounter = Integer.parseInt(eaPrjSt.getChild("planlength").getAttributeValue("counter"));
                             eaOverAllPrjSt.getChild("planlength").setAttribute("temp", Integer.toString(planLengthCounter));
                             if (planLengthCounter > bestPlanLengthCounter){bestPlanLengthCounter = planLengthCounter;}
 
-                            //1.Evaluation
+                            //3. Plan Cost
+                            int planCostCounter = Integer.parseInt(eaPrjSt.getChild("plancost").getAttributeValue("counter"));
+                            eaOverAllPrjSt.getChild("plancost").setAttribute("temp", Integer.toString(planCostCounter));
+                            if (planCostCounter > bestPlanCostCounter){bestPlanCostCounter = planCostCounter;}
+
+                            //4. Evaluation
                             int evaluationCounter = Integer.parseInt(eaPrjSt.getChild("evaluation").getAttributeValue("counter"));
                             eaOverAllPrjSt.getChild("evaluation").setAttribute("temp", Integer.toString(evaluationCounter));
                             if (evaluationCounter > bestEvaluationCounter){bestEvaluationCounter = evaluationCounter;}
@@ -3603,7 +4595,7 @@ public class PlanAnalyzer {
                         for (int i = 0; i < OverAllProjectsStatistics.size(); i++) {
                              Element eaOverAllPrjSt = OverAllProjectsStatistics.get(i);
 
-                             //1.Time
+                             //1. Time
                              int theTimeCounter = Integer.parseInt(eaOverAllPrjSt.getChild("time").getAttributeValue("temp"));
                              if (theTimeCounter == bestTimeCounter && bestTimeCounter > 0) {
                                 int timeCounter = Integer.parseInt(eaOverAllPrjSt.getChild("time").getAttributeValue("counter"));
@@ -3619,7 +4611,15 @@ public class PlanAnalyzer {
                                 eaOverAllPrjSt.getChild("planlength").setAttribute("counter", Integer.toString(planlengthCounter));
                              }
 
-                             //3.Evaluation
+                             //3. Plan Cost
+                             int thePlanCostCounter = Integer.parseInt(eaOverAllPrjSt.getChild("plancost").getAttributeValue("temp"));
+                             if (thePlanCostCounter == bestPlanCostCounter && bestPlanCostCounter > 0) {
+                                int eplancostCounter = Integer.parseInt(eaOverAllPrjSt.getChild("plancost").getAttributeValue("counter"));
+                                eplancostCounter++;
+                                eaOverAllPrjSt.getChild("plancost").setAttribute("counter", Integer.toString(eplancostCounter));
+                             }
+
+                             //4. Evaluation
                              int theEvaluationCounter = Integer.parseInt(eaOverAllPrjSt.getChild("evaluation").getAttributeValue("temp"));
                              if (theEvaluationCounter == bestEvaluationCounter && bestEvaluationCounter > 0) {
                                 int evaluationCounter = Integer.parseInt(eaOverAllPrjSt.getChild("evaluation").getAttributeValue("counter"));
@@ -3664,6 +4664,7 @@ public class PlanAnalyzer {
 
             StringBuilder overAllTimeData = new StringBuilder();
             StringBuilder overAllPlanLengthData = new StringBuilder();
+            StringBuilder overAllPlanCostData = new StringBuilder();
             StringBuilder overAllEvaluationData = new StringBuilder();
             int oIndex = 1;
             for (int i = 0; i < OverAllProjectsStatistics.size(); i++) {
@@ -3678,7 +4679,8 @@ public class PlanAnalyzer {
                 //Gathering data
                 overAllTimeData.append(dataName+".setValue(0, "+oIndex+", "+element.getChild("time").getAttributeValue("counter")+"); \n");
                 overAllPlanLengthData.append(dataName+".setValue(1, "+oIndex+", "+element.getChild("planlength").getAttributeValue("counter")+"); \n");
-                overAllEvaluationData.append(dataName+".setValue(2, "+oIndex+", "+element.getChild("evaluation").getAttributeValue("counter")+"); \n");
+                overAllPlanCostData.append(dataName+".setValue(2, "+oIndex+", "+element.getChild("plancost").getAttributeValue("counter")+"); \n");
+                overAllEvaluationData.append(dataName+".setValue(3, "+oIndex+", "+element.getChild("evaluation").getAttributeValue("counter")+"); \n");
 
                 //TODO: other criteria
 
@@ -3686,19 +4688,23 @@ public class PlanAnalyzer {
 
             }
 
-            //Row is equals to the number of criteria (time, plan length, evaluation,...)
-            overAllChart.append(dataName+".addRows(3); \n");
+            //Row is equals to the number of criteria (time, plan length, plan cost, evaluation,...)
+            overAllChart.append(dataName+".addRows(4); \n");
 
-            //1.Time
+            //1. Time
             overAllChart.append(dataName+".setValue(0, 0, 'Time'); \n");
             overAllChart.append(overAllTimeData);
 
-            //2.Time
+            //2. Plan Length
             overAllChart.append(dataName+".setValue(1, 0, 'Plan Length'); \n");
             overAllChart.append(overAllPlanLengthData);
 
-            //3.Evaluation
-            overAllChart.append(dataName+".setValue(2, 0, 'Quality'); \n");
+            //3. Plan Cost
+            overAllChart.append(dataName+".setValue(2, 0, 'Plan Cost'); \n");
+            overAllChart.append(overAllPlanCostData);
+
+            //4. Evaluation
+            overAllChart.append(dataName+".setValue(3, 0, 'Evaluation'); \n");
             overAllChart.append(overAllEvaluationData);
 
             //TODO: other criteria
@@ -3917,12 +4923,7 @@ public class PlanAnalyzer {
 
 
 
-
-
-
-
-
-
+    
 
 
     /**

@@ -2,11 +2,12 @@
 <itPlanners>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>3.1.10</version>
+		<version>3.5.10</version>
 	</toolInformation>
-    <settings>
-        <timeout enabled="true">1800</timeout>
-    </settings>
+        <settings>
+            <timeout enabled="true">1800</timeout>
+            <planValidation enabled="true"/>
+        </settings>
 	<planners>
 		<planner id="1">
 			<name>Metric-FF</name>

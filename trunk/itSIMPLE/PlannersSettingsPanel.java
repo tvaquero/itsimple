@@ -51,10 +51,16 @@ import org.jdom.Element;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JToolTip;
 import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
 
 public class PlannersSettingsPanel extends ItPanel 
 		implements ItemListener, TableModelListener, KeyListener{
@@ -67,12 +73,13 @@ public class PlannersSettingsPanel extends ItPanel
 	private JComboBox plannersCombo;
 	private JCheckBox windowsCheck;
 	private JCheckBox linuxCheck;
-    private JCheckBox macCheck;
-    private JCheckBox timeOutCheck;
-    private JTextField timeOutValue;
-    private JCheckBox individualTimeOutCheck;
-    private JTextField individualTimeOutValue;
-    private JCheckBox favoriteCheck;
+        private JCheckBox macCheck;
+        private JCheckBox timeOutCheck;
+        private JCheckBox validateCheck;
+        private JTextField timeOutValue;
+        private JCheckBox individualTimeOutCheck;
+        private JTextField individualTimeOutValue;
+        private JCheckBox favoriteCheck;
 	private JTable paramTable;
 	private DefaultTableModel tableModel;
 	private List<Element> planners;
@@ -91,62 +98,87 @@ public class PlannersSettingsPanel extends ItPanel
 	}
 
 	private void initialize(){
+                // Get current delay
+                //int initialDelay = ToolTipManager.sharedInstance().getInitialDelay();
+                //System.out.print(initialDelay);
+
+                // Show tool tips immediately for the information icons
+                ToolTipManager.sharedInstance().setInitialDelay(0);
 		
 		setLayout(new BorderLayout());
 
-        JPanel header = new JPanel(new BorderLayout());
-		
+
+                ItFramePanel experimentsFramePanel = new ItFramePanel("Experiment settings", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+                ItFramePanel plannersFramePanel = new ItFramePanel("Planner settings", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+
+
+                //EXPERIMENT SETTINGS PANEL
+
+                JPanel experimentSettingsPanel = new JPanel(new BorderLayout());				
+                JPanel experimentPanel = getExperimentsPanel();
+                experimentSettingsPanel.add(experimentPanel,BorderLayout.CENTER);
+
+                experimentsFramePanel.setContent(experimentSettingsPanel, false);
+                add(experimentsFramePanel,BorderLayout.NORTH);
+
+
+
+                //PLANNER SETTINGS PANEL
+
+                JPanel plannerSettingPanel = new JPanel(new BorderLayout());
+
+                //planner list
 		FormLayout layout = new FormLayout(
 				"pref, 4px, 200px", // columns
-				"pref, 4px, pref, 4px"); // rows	
-		JPanel topPanel = new JPanel(layout);	
-		
+				"pref, 4px, pref, 4px"); // rows
+                JPanel topPanel = new JPanel(layout);
 		plannersCombo = new JComboBox();
 		populatePlannersComboBox();
 		plannersCombo.addItemListener(this);
-
-	
 		CellConstraints cc = new CellConstraints();
 		topPanel.add(new JLabel("Planners:"), cc.xy (1, 1));
 		topPanel.add(plannersCombo, cc.xy(3, 1));
 		topPanel.add(new JLabel("Parameters:"), cc.xy (1, 3));
-		
-		//add(topPanel, BorderLayout.NORTH);
-        header.add(topPanel, BorderLayout.WEST);
+                plannerSettingPanel.add(topPanel, BorderLayout.NORTH);
 
-        // time-out
-        JPanel timeOutPanel = getTimeOutPanel();
-        header.add(timeOutPanel,BorderLayout.CENTER);
-
-        add(header,BorderLayout.NORTH);
-		
+	
 		// create parameters table		
 		JScrollPane scrollParamPane = new JScrollPane(getParametersTable());		
 		JPanel paramPane = new JPanel(new BorderLayout());
 		paramPane.add(scrollParamPane, BorderLayout.CENTER);
 		paramPane.setPreferredSize(new Dimension(600, 210));
-		
-		add(paramPane, BorderLayout.CENTER);
-		
-		// operational system check boxes		
+		//add(paramPane, BorderLayout.CENTER);
+                plannerSettingPanel.add(paramPane, BorderLayout.CENTER);
+
+
+		// operational system check boxes
+                JPanel bottom = new JPanel(new BorderLayout());
 		JPanel platformPanel = getPlatformPanel();
-        JPanel individualTimeoutPanel = getIndividualTimeoutPanel();
+                JPanel individualTimeoutPanel = getIndividualTimeoutPanel();
+                JPanel favoritePanel = getFavoritePanel();
+                bottom.add(platformPanel, BorderLayout.NORTH);
+                bottom.add(individualTimeoutPanel, BorderLayout.CENTER);
+                bottom.add(favoritePanel, BorderLayout.SOUTH);
+                plannerSettingPanel.add(bottom, BorderLayout.SOUTH);
 
-        JPanel favoritePanel = getFavoritePanel();
+                //add(bottom, BorderLayout.SOUTH);
+                //add(platformPanel, BorderLayout.SOUTH);
 
-        JPanel bottom = new JPanel(new BorderLayout());
-        bottom.add(platformPanel, BorderLayout.NORTH);
-        bottom.add(individualTimeoutPanel, BorderLayout.CENTER);
-        bottom.add(favoritePanel, BorderLayout.SOUTH);
-		
-        add(bottom, BorderLayout.SOUTH);
-        //add(platformPanel, BorderLayout.SOUTH);
+                plannersFramePanel.setContent(plannerSettingPanel, false);
 
 
-		
-	}
+                add(plannersFramePanel, BorderLayout.SOUTH);
+
+
+
 	
-	private void populatePlannersComboBox(){
+	}
+
+	
+	/**
+         * List all available planners in the combobox
+         */
+        private void populatePlannersComboBox(){
 		plannersCombo.removeAllItems();
 		plannersCombo.addItem("Select");
 		
@@ -211,25 +243,24 @@ public class PlannersSettingsPanel extends ItPanel
 		if(selectedPlanner.getChild("platform").getChild("mac") != null)
 			macCheck.setSelected(true);
 
-        // timeout
-        // individual timeout values
-        individualTimeOutCheck.setEnabled(true);
-        individualTimeOutValue.setEnabled(true);
-        //System.out.print(selectedPlanner.getChild("settings").getChild("timeout").getAttributeValue("enabled"));
-	individualTimeOutCheck.setSelected(selectedPlanner.getChild("settings").getChild("timeout").getAttributeValue("enabled").equals("true"));
-        individualTimeOutValue.setText(selectedPlanner.getChild("settings").getChildText("timeout"));
+                // timeout
+                // individual timeout values
+                individualTimeOutCheck.setEnabled(true);
+                individualTimeOutValue.setEnabled(true);
+                //System.out.print(selectedPlanner.getChild("settings").getChild("timeout").getAttributeValue("enabled"));
+                individualTimeOutCheck.setSelected(selectedPlanner.getChild("settings").getChild("timeout").getAttributeValue("enabled").equals("true"));
+                individualTimeOutValue.setText(selectedPlanner.getChild("settings").getChildText("timeout"));
 
-        //favorites
-        favoriteCheck.setEnabled(true);
-        favoriteCheck.setSelected(selectedPlanner.getChild("settings").getChild("runAllComparison").getAttributeValue("enabled").equals("true"));
-
+                //favorites
+                favoriteCheck.setEnabled(true);
+                favoriteCheck.setSelected(selectedPlanner.getChild("settings").getChild("runAllComparison").getAttributeValue("enabled").equals("true"));
 
 	}
 	
 	private JPanel getPlatformPanel(){
 		
-		FormLayout layout = new FormLayout(
-				"pref, 4dlu, pref, 2dlu, pref, 8dlu, pref, 2dlu pref, 8dlu, pref, 2dlu, pref", "pref");
+		//FormLayout layout = new FormLayout("pref, 4dlu, pref, 2dlu, pref, 8dlu, pref, 2dlu, pref, 8dlu, pref, 2dlu, pref", "pref");
+                FormLayout layout = new FormLayout("pref, 4dlu, pref, 2dlu, pref, 8dlu, pref, 2dlu, pref, 8dlu, pref, 2dlu, pref", "pref");
 		
 		JPanel osPanel = new JPanel(layout);
 		
@@ -263,156 +294,209 @@ public class PlannersSettingsPanel extends ItPanel
 		return osPanel;
 	}
 
-    private JPanel getTimeOutPanel(){
+        private JPanel getExperimentsPanel(){
 
-        //master timeout
+                //master timeout
 
-        FormLayout layout = new FormLayout(
-        "left:30px,left:75px,center:90px,right:55,left:80px", // columns
-        "center:25px,center:25px"); // rows
+//                FormLayout layout = new FormLayout(
+//                "left:30px,left:75px,center:90px,right:55,left:80px", // columns
+//                "center:25px,center:25px"); // rows
 
-		JPanel timeOutPanel = new JPanel(layout);
+                FormLayout layout = new FormLayout(
+                "left:110px,center:90px,left:55,left:180px", // columns
+                "center:25px,center:25px"); // rows
+
+		JPanel experimentsPanel = new JPanel(layout);
+
+
+                //timeout setting
 
 		JLabel timeOutLabel = new JLabel("Timeout:");
-		timeOutCheck = new JCheckBox("Enabled");
-        //timeOutCheck.addItemListener(this);
+		timeOutCheck = new JCheckBox("Enabled");                
+                //timeOutCheck.addItemListener(this);
+                ActionListener actionListener = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (timeOutCheck.isSelected() == true){
+                            Element itPlannersRoot = ItSIMPLE.getItPlanners();
+                            itPlannersRoot.getChild("settings").getChild("timeout").setAttribute("enabled", "true");
+                        }
+                        else{
+                            Element itPlannersRoot = ItSIMPLE.getItPlanners();
+                            itPlannersRoot.getChild("settings").getChild("timeout").setAttribute("enabled", "false");
+                        }
+                    }
+                };
+                timeOutCheck.addActionListener(actionListener);
+
 		JLabel timeLabel = new JLabel("Time (s)");
-        timeOutValue = new JTextField(50);
-        JTextFieldFilter filter = new JTextFieldFilter(JTextFieldFilter.FLOAT);
+                timeOutValue = new JTextField(50);
+                JTextFieldFilter filter = new JTextFieldFilter(JTextFieldFilter.FLOAT);
 		filter.setNegativeAccepted(false);
 		//filter.setLimit(3);
 		timeOutValue.setDocument(filter);
 		timeOutValue.setColumns(9);
-        timeOutValue.addKeyListener(this);
+                timeOutValue.addKeyListener(this);
 
-        ActionListener actionListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (timeOutCheck.isSelected() == true){
-                    Element itPlannersRoot = ItSIMPLE.getItPlanners();
-                    itPlannersRoot.getChild("settings").getChild("timeout").setAttribute("enabled", "true");
-                }
-                else{
-                    Element itPlannersRoot = ItSIMPLE.getItPlanners();
-                    itPlannersRoot.getChild("settings").getChild("timeout").setAttribute("enabled", "false");
-                }
-            }
-        };
-        timeOutCheck.addActionListener(actionListener);
+                Element itPlannersRoot = ItSIMPLE.getItPlanners();
+                //master (main) timeout values
+                timeOutCheck.setSelected(itPlannersRoot.getChild("settings").getChild("timeout").getAttributeValue("enabled").equals("true"));
+                timeOutValue.setText(itPlannersRoot.getChild("settings").getChildText("timeout"));
 
-        //timeOutCheck.setHorizontalTextPosition(SwingConstants.LEFT);
-	CellConstraints cc = new CellConstraints();
-	timeOutPanel.add(timeOutLabel, cc.xy (2, 1));
-        timeOutPanel.add(timeOutCheck, cc.xy(3, 1));
-        timeOutPanel.add(timeLabel, cc.xy(4, 1));
-        timeOutPanel.add(timeOutValue, cc.xy(5, 1));
+
+                //timeOutCheck.setHorizontalTextPosition(SwingConstants.LEFT);
+                CellConstraints cc = new CellConstraints();
+                experimentsPanel.add(timeOutLabel, cc.xy (1, 1));
+                experimentsPanel.add(timeOutCheck, cc.xy(2, 1));
+                experimentsPanel.add(timeLabel, cc.xy(3, 1));
+                experimentsPanel.add(timeOutValue, cc.xy(4, 1));
 
 
 
+                //Plan Validation settings
+                JLabel validationLabel = new JLabel("Plan validation:");
+
+		validateCheck = new JCheckBox("Enabled");
+                validateCheck.setToolTipText("<html>When enabled, the validator (VAL) will be called automatically <br> right after the plan generation (i.e. after the planner)</html>");
+                //timeOutCheck.addItemListener(this);
+                ActionListener actionListenerValidate = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (validateCheck.isSelected() == true){
+                            Element itPlannersRoot = ItSIMPLE.getItPlanners();
+                            itPlannersRoot.getChild("settings").getChild("planValidation").setAttribute("enabled", "true");
+                        }
+                        else{
+                            Element itPlannersRoot = ItSIMPLE.getItPlanners();
+                            itPlannersRoot.getChild("settings").getChild("planValidation").setAttribute("enabled", "false");
+                        }
+                    }
+                };
+                validateCheck.addActionListener(actionListenerValidate);
+                validateCheck.setSelected(itPlannersRoot.getChild("settings").getChild("planValidation").getAttributeValue("enabled").equals("true"));
+
+
+                ImageIcon infoImage = new ImageIcon("resources/images/help.png");
+                JLabel infoLabel = new JLabel(infoImage, JLabel.CENTER);
+//                JLabel infoLabel = new JLabel(infoImage, JLabel.CENTER){
+//                      public JToolTip createToolTip() {
+//                        JToolTip tip = super.createToolTip();
+//                        tip.setBackground(Color.YELLOW);
+//                        tip.setForeground(Color.BLACK);
+//                        return tip;
+//                      }
+//                };
+                infoLabel.setToolTipText("<html>When enabled, the validator (VAL) will be called automatically <br> right after the plan generation (i.e. after the planner)</html>");
 
 
 
-        Element itPlannersRoot = ItSIMPLE.getItPlanners();
-        // master timeout values
-	timeOutCheck.setSelected(itPlannersRoot.getChild("settings").getChild("timeout").getAttributeValue("enabled").equals("true"));
-        timeOutValue.setText(itPlannersRoot.getChild("settings").getChildText("timeout"));
+                experimentsPanel.add(validationLabel, cc.xy (1, 2));
+                experimentsPanel.add(validateCheck, cc.xy (2, 2));
+                experimentsPanel.add(infoLabel, cc.xy (3, 2));
+
+
+
+
+
+
+
+
 
         
-		return timeOutPanel;
+		return experimentsPanel;
 	}
 
-    private JPanel getIndividualTimeoutPanel() {
-        FormLayout layout = new FormLayout(
-        "left:140px,center:180px,right:55,left:80px", // columns
-        "center:25px"); // rows
+        private JPanel getIndividualTimeoutPanel() {
+            FormLayout layout = new FormLayout(
+            "left:140px,center:180px,right:55,left:80px", // columns
+            "center:25px"); // rows
 
-		JPanel timeOutPanel = new JPanel(layout);
+            JPanel timeOutPanel = new JPanel(layout);
 
-		JLabel timeOutLabel = new JLabel("Individual timeout:");
+            JLabel timeOutLabel = new JLabel("Individual timeout:");
 
-		individualTimeOutCheck = new JCheckBox("Use specific timeout");
-        //individualTimeOutCheck.addItemListener(this);
-        
-        ActionListener actionListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (selectedPlanner != null){
-                    if (individualTimeOutCheck.isSelected() == true){
-                        selectedPlanner.getChild("settings").getChild("timeout").setAttribute("enabled", "true");
-                    }
-                    else{
-                        selectedPlanner.getChild("settings").getChild("timeout").setAttribute("enabled", "false");
-                    }
-                }
-            }
-        };
-        individualTimeOutCheck.addActionListener(actionListener);
+            individualTimeOutCheck = new JCheckBox("Use specific timeout");
+            //individualTimeOutCheck.addItemListener(this);
 
-
-		JLabel timeLabel = new JLabel("Time (s)");
-        individualTimeOutValue = new JTextField(30);
-        JTextFieldFilter filter = new JTextFieldFilter(JTextFieldFilter.FLOAT);
-		filter.setNegativeAccepted(false);
-		//filter.setLimit(3);
-		individualTimeOutValue.setDocument(filter);
-		individualTimeOutValue.setColumns(9);
-        individualTimeOutValue.addKeyListener(this);
-
-
-        //individualTimeOutCheck.setHorizontalTextPosition(SwingConstants.LEFT);
-	CellConstraints cc = new CellConstraints();
-	timeOutPanel.add(timeOutLabel, cc.xy (1, 1));
-        timeOutPanel.add(individualTimeOutCheck, cc.xy(2, 1));
-        timeOutPanel.add(timeLabel, cc.xy(3, 1));
-        timeOutPanel.add(individualTimeOutValue, cc.xy(4, 1));
-
-        individualTimeOutCheck.setEnabled(false);
-        individualTimeOutValue.setEnabled(false);
-
-        return timeOutPanel;
-    }
-
-
-
-    private JPanel getFavoritePanel() {
-        FormLayout layout = new FormLayout(
-        "left:90px,center:90px", // columns
-        "center:25px"); // rows
-
-	JPanel favoritePanel = new JPanel(layout);
-
-	JLabel favoriteLabel = new JLabel("Favorites:");
-
-	favoriteCheck = new JCheckBox("included");
-        //favoriteCheck.addItemListener(this);
-
-        ActionListener actionListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (selectedPlanner != null){
-                    if (favoriteCheck.isSelected() == true){
-                        selectedPlanner.getChild("settings").getChild("runAllComparison").setAttribute("enabled", "true");
-                    }
-                    else{
-                        selectedPlanner.getChild("settings").getChild("runAllComparison").setAttribute("enabled", "false");
+            ActionListener actionListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (selectedPlanner != null){
+                        if (individualTimeOutCheck.isSelected() == true){
+                            selectedPlanner.getChild("settings").getChild("timeout").setAttribute("enabled", "true");
+                        }
+                        else{
+                            selectedPlanner.getChild("settings").getChild("timeout").setAttribute("enabled", "false");
+                        }
                     }
                 }
-            }
-        };
-        favoriteCheck.addActionListener(actionListener);
+            };
+            individualTimeOutCheck.addActionListener(actionListener);
 
 
-        //favoriteCheck.setHorizontalTextPosition(SwingConstants.LEFT);
-	CellConstraints cc = new CellConstraints();
-	favoritePanel.add(favoriteLabel, cc.xy (1, 1));
-        favoritePanel.add(favoriteCheck, cc.xy(2, 1));
-
-        favoriteCheck.setEnabled(false);
-
-        return favoritePanel;
-    }
-
+            JLabel timeLabel = new JLabel("Time (s)");
+            individualTimeOutValue = new JTextField(30);
+            JTextFieldFilter filter = new JTextFieldFilter(JTextFieldFilter.FLOAT);
+            filter.setNegativeAccepted(false);
+            //filter.setLimit(3);
+            individualTimeOutValue.setDocument(filter);
+            individualTimeOutValue.setColumns(9);
+            individualTimeOutValue.addKeyListener(this);
 
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
+            //individualTimeOutCheck.setHorizontalTextPosition(SwingConstants.LEFT);
+            CellConstraints cc = new CellConstraints();
+            timeOutPanel.add(timeOutLabel, cc.xy (1, 1));
+            timeOutPanel.add(individualTimeOutCheck, cc.xy(2, 1));
+            timeOutPanel.add(timeLabel, cc.xy(3, 1));
+            timeOutPanel.add(individualTimeOutValue, cc.xy(4, 1));
+
+            individualTimeOutCheck.setEnabled(false);
+            individualTimeOutValue.setEnabled(false);
+
+            return timeOutPanel;
+        }
+
+
+
+        private JPanel getFavoritePanel() {
+            FormLayout layout = new FormLayout(
+            "left:90px,center:90px", // columns
+            "center:25px"); // rows
+
+            JPanel favoritePanel = new JPanel(layout);
+
+            JLabel favoriteLabel = new JLabel("Favorites:");
+
+            favoriteCheck = new JCheckBox("included");
+            //favoriteCheck.addItemListener(this);
+
+            ActionListener actionListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (selectedPlanner != null){
+                        if (favoriteCheck.isSelected() == true){
+                            selectedPlanner.getChild("settings").getChild("runAllComparison").setAttribute("enabled", "true");
+                        }
+                        else{
+                            selectedPlanner.getChild("settings").getChild("runAllComparison").setAttribute("enabled", "false");
+                        }
+                    }
+                }
+            };
+            favoriteCheck.addActionListener(actionListener);
+
+
+            //favoriteCheck.setHorizontalTextPosition(SwingConstants.LEFT);
+            CellConstraints cc = new CellConstraints();
+            favoritePanel.add(favoriteLabel, cc.xy (1, 1));
+            favoritePanel.add(favoriteCheck, cc.xy(2, 1));
+
+            favoriteCheck.setEnabled(false);
+
+            return favoritePanel;
+        }
+
+
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == plannersCombo && e.getStateChange() == ItemEvent.SELECTED){
 			// clear the table
 			tableModel.setRowCount(0);
@@ -471,28 +555,29 @@ public class PlannersSettingsPanel extends ItPanel
 		
 	}
 
-    public void keyTyped(KeyEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+        public void keyTyped(KeyEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
 
-    public void keyPressed(KeyEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+        public void keyPressed(KeyEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
 
-    public void keyReleased(KeyEvent e) {
-        if(e.getSource() == timeOutValue){
-            //set master timeout
-            Element itPlannersRoot = ItSIMPLE.getItPlanners();
-            itPlannersRoot.getChild("settings").getChild("timeout").setText(timeOutValue.getText());
-		}
-        else if(e.getSource() == individualTimeOutValue){
-            if (selectedPlanner !=null){
-                //set individual timeout
-                selectedPlanner.getChild("settings").getChild("timeout").setText(individualTimeOutValue.getText());
+        public void keyReleased(KeyEvent e) {
+            if(e.getSource() == timeOutValue){
+                //set master timeout
+                Element itPlannersRoot = ItSIMPLE.getItPlanners();
+                itPlannersRoot.getChild("settings").getChild("timeout").setText(timeOutValue.getText());
+            }
+            else if(e.getSource() == individualTimeOutValue){
+                if (selectedPlanner !=null){
+                    //set individual timeout
+                    selectedPlanner.getChild("settings").getChild("timeout").setText(individualTimeOutValue.getText());
+                }
+
             }
 
         }
-    }
 
 
 

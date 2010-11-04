@@ -927,11 +927,35 @@ public class ExecPlanner implements Runnable{
                     //xmlPlan.getChild("toolInformation").getChild("message").setText(toolMessage);
                     thePlan.getChild("toolInformation").getChild("message").setText(toolMessage);
 
+
+
+                    //Plan Validation
+                   // System.out.println("Validation");
+
+                    //check if automatic plan validation is enabled (if so call validation with VAL
+                    Element validitySettings = ItSIMPLE.getItPlanners().getChild("settings").getChild("planValidation");
+                    if (validitySettings != null && validitySettings.getAttributeValue("enabled").equals("true")){
+                        if (thePlan.getChild("plan").getChildren().size() > 0){
+                            //System.out.println("Starting Validation");
+                            try {
+                                PlanValidator.checkPlanValidityWithVAL(thePlan);
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+
+
+
                     if (showReport){
                         //8. set the plan info panel
                         //ItSIMPLE.getInstance().showHTMLReport(xmlPlan);
                         ItSIMPLE.getInstance().showHTMLReport(thePlan);
                     }
+
+
+
+
+
 
                 }
 
@@ -1191,7 +1215,8 @@ public class ExecPlanner implements Runnable{
 			status.setText("Status: Solving planning problem...");
 
 			Element xmlPlan = solvePlanningProblem(chosenPlanner, domainFile, problemFile);
-            //XMLUtilities.printXML(xmlPlan);
+                        //XMLUtilities.printXML(xmlPlan);
+
 			try {
 				if(replaning){
 					PlanNavigationList.getInstance().setPlanListAfterReplaning(xmlPlan);
@@ -1203,9 +1228,15 @@ public class ExecPlanner implements Runnable{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			status.setText("Status: Done solving planning problem!");
+
+
+                        status.setText("Status: Done solving planning problem!");
+
 			ItSIMPLE.getInstance().setSolveProblemButton();
+                        
+                        //clean up plan database reference in case there is one being used in itsimple
+                        ItSIMPLE.getInstance().cleanupPlanDatabaseReference();
+
 		}
 	}
 

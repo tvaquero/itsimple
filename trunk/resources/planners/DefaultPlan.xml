@@ -3,7 +3,7 @@
 <xmlPlan>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>3.1.10</version>
+		<version>3.5.10</version>
 		<message/>
 	</toolInformation>
 	<name/>
@@ -24,7 +24,11 @@
 		<additional/>
                 <forcedQuit/>
 	</statistics>
-        <validity isValid="true"/>
+        <validity isValid=""/>
+        <validator id="" />
+        <evaluation value="">
+            <rationales/>
+        </evaluation>
 	<plan/>
         <comments/>
 </xmlPlan>

@@ -3,7 +3,7 @@
 <commonData>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>3.5.10</version>
 	</generalInformation>
 	<definedNodes>
 		<elements>
@@ -776,28 +776,39 @@
 			<parameters/>
 		</action>
 	</planSimulationNodes>
-    <planAnalysis>
-        <statisticSupport id="">
-            <name/>
-            <time temp="" counter="0"/>
-            <planlength temp="" counter="0"/>
-            <evaluation temp="" counter="0"/>
-        </statisticSupport>
-        <plannerStatisticSupport id="">
-            <name/>
-            <ntimesbetter>
-                <runtime temp="" counter="0"/>
+        <planAnalysis>
+            <statisticSupport id="">
+                <name/>
+                <time temp="" counter="0"/>
                 <planlength temp="" counter="0"/>
                 <plancost temp="" counter="0"/>
                 <evaluation temp="" counter="0"/>
-            </ntimesbetter>
-            <problemssolved counter="0"/>
-            <timeoutsreached counter="0"/>
-            <nosolutionfound counter="0"/>
-            <skipped counter="0"/>
-            <largestplanlength value=""/>
-            <costqualityscore value="0"/>
-            <score value="0"/>
-        </plannerStatisticSupport>
-    </planAnalysis>
+            </statisticSupport>
+            <plannerStatisticSupport id="">
+                <name/>
+                <ntimesbetter>
+                    <runtime temp="" counter="0"/>
+                    <planlength temp="" counter="0"/>
+                    <plancost temp="" counter="0"/>
+                    <evaluation temp="" counter="0"/>
+                </ntimesbetter>
+                <problemssolved counter="0"/>
+                <timeoutsreached counter="0"/>
+                <nosolutionfound counter="0"/>
+                <skipped counter="0"/>
+                <invalidsolution counter="0"/>
+                <largestplanlength value=""/>
+                <costqualityscore value="0"/>
+                <score value="0"/>
+            </plannerStatisticSupport>
+            <rationale id="" targetplanid="" relationalid="" enabled="true">
+                <name/>
+                <description/>
+                <rule/>
+                <impact quality="none"/>
+                <abstractionlevel range="problem-specific"/>
+                <validity isValid=""/>
+                <comments/>
+            </rationale>
+        </planAnalysis>
 </commonData>
