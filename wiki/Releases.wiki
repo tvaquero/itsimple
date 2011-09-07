@@ -1,5 +1,11 @@
 = Release Changes =
 
+== Version 3.5.10 (2010) == 
+
+
+== Version 3.1.10 (2010) == 
+
+
 == Version 3.0.10 (September 2009) == 
 
 In this new release some bugs were fixed and new features were developed. itSIMPLE can generate a series of reports when running planners. These reports showthe performance of planners and evaluations of plans through graphs and charts, similar to those reports seen in the International Planning Competition (IPC). PDDL 3.1 is now supported (the latest version of PDDL). New planners were added to itSIMPLE, such as hspsp, Plan-A.
