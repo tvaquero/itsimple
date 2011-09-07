@@ -1,0 +1,20 @@
+= Release Changes =
+
+== Version 3.0.10 (September 2009) == 
+
+In this new release some bugs were fixed and new features were developed. itSIMPLE can generate a series of reports when running planners. These reports showthe performance of planners and evaluations of plans through graphs and charts, similar to those reports seen in the International Planning Competition (IPC). PDDL 3.1 is now supported (the latest version of PDDL). New planners were added to itSIMPLE, such as hspsp, Plan-A.
+
+== Version 2.1.10 (June 2009) == 
+In this new release some bugs were fixed. Plan metric can be specified (minimize and maximize). itSIMPLE can now deal with more planners (e.g., Metric-FF, FF, SGPlan6, MIPS-XXL, SATPlan, LPG-TD, LPG) 
+
+== Version 2.0.30 (February 2008) == 
+
+In this new release some bugs were fixed, planner setting feature was added (were user can set planners parameters from itSIMPLE GUI) and pnml file exporting bug was also fixed
+
+== Version 2.0.22 (September 2007) == 
+
+With the new itSIMPLE release came a host of new features including new UML capabilites, Petri Nets integration for dynamic domain analysis, support PDDL3 features, new plan analyis capabilites (variable observation and movie maker). The tool became Java-based.
+
+== Version 1.0 (June 2005) == 
+
+The first version of itSIMPLE. This version had few capabilities including UML frnt end. PDDL export, PDDL import and supported PDDL 2.1. Only for Windows.
