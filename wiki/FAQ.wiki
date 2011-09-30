@@ -1,0 +1,53 @@
+Frequently Asked Questions (FAQ)
+
+The following list contains the most common questions about the itSIMPLE 
+tool and project.
+
+If your question isn't already in this list, please tell us what it is.
+
+
+== How can I install itSIMPLE? ==
+
+Linux:
+# Check if you have the lastest version of Java Runtime installed (e.g., JRE 6, http://java.sun.com). You can check your version by typing "java -version" in a terminal;
+#  Download itSIMPLE;
+# Unzip the file;
+# Change permission (e.g. chmod +x itSIMPLE.jar);
+# Run the software: java -jar itSIMPLE.jar
+# If you have any problems with GUI look and feel change it for Metal in Settings-&gt;Appearance-&gt;Metal.
+
+Windows (XP/Vista):
+# Check if you have the lastest version of Java Runtime installed (e.g., JRE 6, http://java.sun.com/);
+# Download itSIMPLE;
+# Unzip the file;
+# Run the software in command line (java -jar itSIMPLE.jar) or double-click on itSIMPLE.jar file
+
+== Does itSIMPLE run on Linux, Windows and Mac? ==
+
+Yes, itSIMPLE is a java-based software and run in Windows, linux and Mac.
+
+== How can I add icons and use them in the diagrams? ==
+
+You can add your own icons to the itSIMPLE and use them in the Usecase, Class, State Machine diagrams. In order to add an icon just paste it into the folder: itImages\Icons. We recomend to use .png icons (48x48, 32x32).
+
+== How do I add a planner to itSIMPLE? ==
+
+itSIMPLE is integrated to several AI planner such as Metric-FF, FF, SGPlan, MIPS-xxl, SATPlan, LPG-td, LPG, hspsp. In order them to work properly you have to download the planners (check README.txt) that are not distributed with itSIMPLE and paste them in the folder 'myPlanners/'. Open the file itPlanners.xml (located in resources/planners) and check the file name that you have to use.
+
+If you wish your planner were connected to itSIMPLE or if you would like to see a planner integrated to the tool, please send us an email (tiago.vaquero (at) poli.usp.br) so we can help you with that. In fact, we just need to properly register the planner in a specific file (itPlanners.xml).
+
+== What planners are currently compatible with itSIMPLE? How can I obtain them? ==
+
+The current version of itSIMPLE (version 3.0) is compatible with the following planners:
+
+   * Metric-FF (windows and linux). [[http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html][http://members.deri.at/~joergh/ff.html]]
+   * FF (v2.3) (linux). http://members.deri.at/~joergh/ff.html
+   * SGPlan 5.2.2 (linux). http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
+   * SGPlan 6 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+   * MIPS-xxl 2006 (linux). http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
+   * MIPS-xxl 2008 v1.1 (linux). http://sjabbar.com/mips-xxl-planner
+   * LPG-td 1.0 (windows and linux). http://lpg.ing.unibs.it
+   * LPG 1.2 (linux). http://prometeo.ing.unibs.it/lpg/
+   * hspsp 2008 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+   * Plan-A 1.0 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+Some of these planners are available with the tool. The others can be downloaded from their webpage.
