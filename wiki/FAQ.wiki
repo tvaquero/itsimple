@@ -1,4 +1,4 @@
-Frequently Asked Questions (FAQ)
+= Frequently Asked Questions (FAQ) =
 
 The following list contains the most common questions about the itSIMPLE 
 tool and project.
@@ -9,18 +9,18 @@ If your question isn't already in this list, please tell us what it is.
 == How can I install itSIMPLE? ==
 
 Linux:
-# Check if you have the lastest version of Java Runtime installed (e.g., JRE 6, http://java.sun.com). You can check your version by typing "java -version" in a terminal;
-#  Download itSIMPLE;
-# Unzip the file;
-# Change permission (e.g. chmod +x itSIMPLE.jar);
-# Run the software: java -jar itSIMPLE.jar
-# If you have any problems with GUI look and feel change it for Metal in Settings-&gt;Appearance-&gt;Metal.
+   # Check if you have the lastest version of Java Runtime installed (e.g., JRE 6, http://java.sun.com). You can check your version by typing "java -version" in a terminal;
+   #  Download itSIMPLE;
+   # Unzip the file;
+   # Change permission (e.g. chmod +x itSIMPLE.jar);
+   # Run the software: java -jar itSIMPLE.jar
+   # If you have any problems with GUI look and feel change it for Metal in Settings-&gt;Appearance-&gt;Metal.
 
 Windows (XP/Vista):
-# Check if you have the lastest version of Java Runtime installed (e.g., JRE 6, http://java.sun.com/);
-# Download itSIMPLE;
-# Unzip the file;
-# Run the software in command line (java -jar itSIMPLE.jar) or double-click on itSIMPLE.jar file
+   # Check if you have the lastest version of Java Runtime installed (e.g., JRE 6, http://java.sun.com/);
+   # Download itSIMPLE;
+   # Unzip the file;
+   # Run the software in command line (java -jar itSIMPLE.jar) or double-click on itSIMPLE.jar file
 
 == Does itSIMPLE run on Linux, Windows and Mac? ==
 
