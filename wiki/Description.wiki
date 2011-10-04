@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Project description.
 
 
 The itSIMPLE Project aims to study and develop a Knowledge Engineering tool for designing Planning Domain models. The tool has been designed to give support to users during the construction of a planning domain application mainly in the initial stages of the design life cycle. These initial stages encompass processes such as domain specification, modeling, analysis, model testing and maintenance, all of them crucial for the success of the application.
