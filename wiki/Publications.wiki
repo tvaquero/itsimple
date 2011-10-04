@@ -1,4 +1,4 @@
-#Publications based on itSIMPLE system
+#Publications based on itSIMPLE system.
 
 = 2011 =
 
