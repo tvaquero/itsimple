@@ -1,4 +1,4 @@
-#summary Publications of itSIMPLE tool and its application.
+#summary Publications about the itSIMPLE tool and its application.
 
 = 2011 =
 
