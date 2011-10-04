@@ -1,5 +1,3 @@
-#Publications based on itSIMPLE system.
-
 = 2011 =
 
   * VAQUERO, T. S.; SILVA, J. R.; BECK, J.C. A Brief Review of Tools and Methods for Knowledge Engineering for Planning & Scheduling. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.
