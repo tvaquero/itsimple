@@ -5,7 +5,7 @@
 == Version 3.5.10 (November 2010) == 
 Version 3.5 has the following improvements:
   * Some bugs fixed.
-  * An Automatic Validation tool (VAL) was integrated to itSIMPLE for validating plans during experiments. After running a planner the can validate the resulting plan using VAL.
+  * An Automatic Validation tool (VAL) was integrated to itSIMPLE for validating plans during experiments. After running a planner the tool can automatically validate the resulting plan using VAL.
 
 
 == Version 3.1.10 (May 2010) == 
