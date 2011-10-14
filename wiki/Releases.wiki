@@ -47,4 +47,4 @@ The new Java-based itSIMPLE release came with a lot of new features including ne
 
 == Version 1.0 (June 2005) == 
 
-The first version of itSIMPLE. This version had few capabilities including UML frnt end. PDDL export, PDDL import and supported PDDL 2.1. Only for Windows.
+The first version of itSIMPLE. This version had few capabilities including UML front end for editing domain models. PDDL export, PDDL import (PDDL 2.1 supported). Only for Windows.
