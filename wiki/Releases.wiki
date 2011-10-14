@@ -8,6 +8,8 @@ Details coming soon.
 
 == Version 3.1.10 (May 2010) == 
 Version 3.1 has the following improvements:
+  * Some bugs fixed.
+  * Metric definition. Users can select variables or specify sentence that represent the quality of the plan. These metrics are used to help designers to evaluate and compare the generated plans.
   * More planners integrated to the tool. Users can use all of the following planner: Metric-ff, FF, SGPlan, MIPS-xxl, SATplan, LPG-td, LPG, hspsp, Plan-A, Blackbox, Maxplan, LPRPG.
   * Plan report was refined, now having plan and planner comparison reports, and comparison of planner performance across different version of the same (refined) domain models.
 
