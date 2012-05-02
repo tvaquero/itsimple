@@ -1,7 +1,7 @@
 #summary Tutorials.
 
 
-We are working on tutorial videos and materials to support itSIMPLE users. However you can find tutorials for previous versions below.
+We are working on updated tutorial videos and materials to support itSIMPLE users. However, you can find tutorials for previous versions below.
 
 
 *Old Versions*
