@@ -1,0 +1,15 @@
+#summary One-sentence summary of this page.
+
+
+We are working on tutorial videos and materials to support itSIMPLE users. However you can find tutorials for older version below.
+
+
+*Old Versions*
+
+  * Creating a UML Use Case diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleDomain_UseCases.htm click here] 
+  * Creating a UML Class diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleDomain_Classes.htm click here] 
+  * Creating a UML State Machine diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleDomain_StateMachine.htm click here]
+  * Creating a UML Object (snapshot) diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleProblem_Objects.htm click here]
+  * Plan Analysis in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/PlanAnalysis.htm click here]
+
+  * Petri Nets utilization in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/PlanAnalysis.htm click here]
