@@ -11,5 +11,4 @@ We are working on tutorial videos and materials to support itSIMPLE users. Howev
   * Creating a UML State Machine diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleDomain_StateMachine.htm click here]
   * Creating a UML Object (snapshot) diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleProblem_Objects.htm click here]
   * Plan Analysis in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/PlanAnalysis.htm click here]
-
   * Petri Nets utilization in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/PlanAnalysis.htm click here]
