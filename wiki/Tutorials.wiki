@@ -1,7 +1,7 @@
 #summary One-sentence summary of this page.
 
 
-We are working on tutorial videos and materials to support itSIMPLE users. However you can find tutorials for older version below.
+We are working on tutorial videos and materials to support itSIMPLE users. However you can find tutorials for previous versions below.
 
 
 *Old Versions*
