@@ -1,6 +1,12 @@
 #summary Publications about the itSIMPLE tool and its application.
 
-= 2011 =
+== 2012 ==
+
+  * VAQUERO, T.S.; COSTA, C.; TONIDANDEL, F.; IGREJA, H.; SILVA, J. R.; BECK, J. C. Planning and Scheduling Ship Operations on Petroleum Ports and Platforms. In: Proceedings of the ICAPS 2012 Workshop on Scheduling and Planning Applications (SPARK), p 8-16. Atibaia, São Paulo, Brazil. 2012. (Online proceedings)
+  * VAQUERO, T.S.; TONACO, R.; COSTA, C.; TONIDANDEL, F.; SILVA, J. R.; BECK, J. C. itSIMPLE4.0: Enhancing the Modeling Experience of Planning Problems. In: Proceedings of the ICAPS 2012 System Demonstration, p 11-14. Atibaia, São Paulo, Brazil. 2012.
+
+
+== 2011 ==
 
   * VAQUERO, T. S.; SILVA, J. R.; BECK, J.C. A Brief Review of Tools and Methods for Knowledge Engineering for Planning & Scheduling. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.
 
@@ -10,20 +16,20 @@
 
   * VAQUERO, T. S.; SILVA, J. R.; TONIDANDEL, F.; BECK, J.C. itSIMPLE: Towards an Integrated Design System for Real Planning Applications. To appear in: The Knowledge Engineering Review Journal, special issue on International Competition on Knowledge Engineering for Planning & Scheduling (ICKEPS). Cambridge University Press.
 
-=2010=
+==2010==
 
   * VAQUERO, T. S. ; SILVA, J. R.; BECK, J.C. Improving Planning Performance Through Post-Design Analysis. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010), Toronto. Canada. 2010.
 
   * VAQUERO, T. S.; SILVA, J. R.; BECK, J.C. Analyzing Plans and Planners in itSIMPLE3.1. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010). Toronto. Canada. 2010.
 
 
-=2009=
+==2009==
 
   * VAQUERO, T. S.; SILVA, J. R; FERREIRA, M.; TONIDANDEL, F.; BECK, J. C. From Requirements and Analysis to PDDL in itSIMPLE3.0. In: Proceedings of the 3rd International Competition on Knowledge Engineering for Planning and Scheduling. ICAPS-09. Thessaloniki, Greece. 2009.
 
   * VAQUERO, T. S.; SETTE, F.; SILVA, J. R.; BECK, J. C. Planning and Scheduling of Crude Oil Distribution in a Petroleum Plant. In: ICAPS-09 Workshop on Scheduling and Planning Applications (SPARK). Thessaloniki, Greece. 2009.
 
-=2008=
+==2008==
 
   * VAQUERO, T. S.; TONIDANDEL, F.; SILVA, J. R. Suggestions for the Knowledge Engineering Competition. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008.
 
@@ -34,7 +40,7 @@
   * SETTE, F. ; VAQUERO, T. S; PARK S. W.; SILVA, J. R. Are Automated Planners up to Solve Real Problems?. In: The 17th IFAC World Congress (IFAC 2008), 2008, Seoul, Korea.
 
 
-=2007=
+==2007==
 
   * VAQUERO, T. S. ; ROMERO, V. M. C. ; TONIDANDEL, F. ; SILVA, J. R. itSIMPLE 2.0: An Integrated Tool for Designing Planning Domains. In: The International Conference on Automated Planning & Scheduling (ICAPS 2007), 2007, Providence, Rhode Island. The International Conference on Automated Planning & Scheduling. Menlo Park, California, USA, 2007.
 
@@ -48,13 +54,13 @@
 
   * VAQUERO, T. S. ; SETTE, F. ; SANTOS, E. A. ; SILVA, J. R. . Integrated Tools Environment for Modeling and Analysis of Automated Planning Systems. In: COBEM07 - the 19th Congress of Mechanical Engineering, 2007, Brasilia, Brazil. 19th Congress of Mechanical Engineering - COBEM, 2007.
 
-= 2006=
+==2006==
 
   * VAQUERO, T.S., TONIDANDEL, F., BARROS, L.N., and SILVA, J.R. On the use of UML.P for modeling a real planning problem . In Proceeding of 16th International Conference on Automated Planning and Scheduling (ICAPS). Cumbria, UK. 2006.
 
   * TONIDANDEL, F., VAQUERO, T.S., and SILVA, J.R. Reading PDDL, Writing an Object-Oriented Model. In Leture Notes in Computer Science. International Joint Conference on AI IBERAMIA/SBIA. Springer-Verlag. 2006.
 
-= 2005 =
+==2005==
 
   * VAQUERO, T.S., TONIDANDEL, F., and SILVA, J.R. The itSIMPLE tool for Modeling Planning Domains. In Proceeding of the First International Competition on Knowledge Engineering for AI Planning and Scheduling (ICKEPS). Monterey, California, USA. 2005.
 
