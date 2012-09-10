@@ -3,7 +3,8 @@
 
 *itSIMPLE 4.0*
 
-Demo video: 
+Demo video:
+<wiki:video url="https://www.youtube.com/watch?v=FGBhvBnzyvo&feature=player_embedded"/>
 https://www.youtube.com/watch?v=FGBhvBnzyvo&feature=player_embedded
 
 
