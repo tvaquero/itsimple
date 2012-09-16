@@ -1,4 +1,6 @@
 #summary This page is where you can find the documentation for the itSIMPLE Project.
 
 
-OCL to PDDL. [https://docs.google.com/document/d/1s0-yA_b4FLr1NbCV4vAXzeNzyUN8kXgwTPpopVinn8I/edit (View document)]
+OCL to PDDL. ([https://docs.google.com/document/d/1s0-yA_b4FLr1NbCV4vAXzeNzyUN8kXgwTPpopVinn8I/edit View document])
+
+Modeling Patterns for AI Planning (an initial approach). ([https://docs.google.com/document/d/1CB-nuAa0ydl6uPtWPav_s6R-fUHzYWRLxT23OE42Zho/edit View document])
