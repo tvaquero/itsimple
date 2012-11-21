@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
 *
 *
 * This file is part of itSIMPLE.
@@ -52,6 +52,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -59,6 +62,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -193,14 +198,28 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	
 	//Action Pre and Post Conditions panel	
 	private JPanel actionConditionsPanel = null;
+        private JPanel actionEffectsPanel = null;
 	private ItPanel preConditionPanel = null;
 	private ItPanel postConditionPanel = null;
 	private JTextPane preConditionTextPane = null;
 	private JTextPane postConditionTextPane = null;	
 	private JLabel preConditionLabel = null;
 	private JLabel postConditionLabel = null;	
-	
-	
+	private ItPanel topPreOclConditionPanel = null;
+	private ItPanel bottomPreOclConditionPanel = null;	
+	private JTable oclPreConditionTable = null;	
+	private JToolBar oclPreConditionToolBar = null;
+	private ItComboBox oclPreConditionType = null;
+	private JLabel preOclConditionLabel = null;
+        private ItPanel topPostOclConditionPanel = null;
+	private ItPanel bottomPostOclConditionPanel = null;	
+	private JTable oclPostConditionTable = null;	
+	private JToolBar oclPostConditionToolBar = null;
+	private ItComboBox oclPostConditionType = null;
+	private JLabel postOclConditionLabel = null;
+        private ArrayList<Element> currentAnnotatedPreconditions = new ArrayList<Element>();
+        private ArrayList<Element> currentAnnotatedPostconditions = new ArrayList<Element>();
+        
 	//Association Role A panel	
 	private JPanel roleAPanel = null;
 	private JLabel classALabel = null;	
@@ -229,13 +248,13 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private ArrayList<Element> currentObjectAttributes = new ArrayList<Element>();
 	private EachRowEditor objectAttributeValue = null;
 
-    // Timing diagram
-    private JPanel mainTimingPanel = null;
-    private JPanel actionTimingPanel = null;
-    private ItComboBox typeTimingDiagramComboBox = null;
-    private ItComboBox contextTimingDiagramComboBox = null;
-    private ItComboBox actionTimingDiagramComboBox = null;
-    private List<Element> actionTimingDiagramList = null;
+        // Timing diagram
+        private JPanel mainTimingPanel = null;
+        private JPanel actionTimingPanel = null;
+        private ItComboBox typeTimingDiagramComboBox = null;
+        private ItComboBox contextTimingDiagramComboBox = null;
+        private ItComboBox actionTimingDiagramComboBox = null;
+        private List<Element> actionTimingDiagramList = null;
 	private JTextField durationTimingDiagramField = null;
 
 	
@@ -248,7 +267,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private JCheckBoxList metricsList = null;
 	private DefaultListModel metricsListModel = null;
         
-    //Metrics and Criteria Panel - Quality metrics for analysis
+        //Metrics and Criteria Panel - Quality metrics for analysis
 	private JPanel metricsAndCriteriaPanel = null;
 	private JCheckBoxList metricsAndCriteriaList = null;
 	private DefaultListModel metricsAndCriteriaListModel = null;
@@ -258,7 +277,8 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private Element reference = null;
 	private Element additional = null;
 	private Element commonData = null;
-	
+        
+        
 	private ItTreeNode selectedNode = null;
 	private BasicCell selectedCell = null;
 	private BasicAssociation selectedAssociation = null;
@@ -270,6 +290,12 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	private int lastSelectIndex = 0;
 	
 
+        //PDDL project
+        private JPanel basePDDLPanel = null;
+        private JTextField namePDDLTextField = null;
+        
+        
+        
 	public PropertiesTabbedPane() {
 		super();
 		iconsFilePath = ItSIMPLE.getIconsPathElement().getText();
@@ -289,6 +315,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		getLiteralsPanel();
 		getInternalConditionPanel();
 		getActionConditionPanel();
+                getActionEffectPanel();
 		getRoleAPanel();
 		getRoleBPanel();
 		getAdditionalAssociationPanel();
@@ -309,6 +336,13 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			JLabel nameLabel = new JLabel("Name ");			
 			nameTextField = new JTextField(15);
 			nameTextField.addKeyListener(this);
+                        nameTextField.addFocusListener(new FocusAdapter() {
+                            @Override
+                            public void focusLost(FocusEvent e) {                                
+                              setTextComponentChange(e);
+                            }
+                          });
+                        
 			JLabel descriptionLabel = new JLabel("Description");
 			descriptionTextPane = new JTextPane();			
 			descriptionTextPane.addKeyListener(this);
@@ -889,6 +923,12 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		JLabel diagramNameLabel = new JLabel("Name ");	
 		objectDiagramTextField = new JTextField(15);
 		objectDiagramTextField.addKeyListener(this);
+                objectDiagramTextField.addFocusListener(new FocusAdapter() {
+                            @Override
+                            public void focusLost(FocusEvent e) {                                
+                              setTextComponentChange(e);
+                            }
+                          });
 		
 		JLabel sequenceReferenceLabel = new JLabel("Sequence ");
 		sequenceReferenceComboBox = new ItComboBox();
@@ -1337,8 +1377,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		actionConditionsPanel.setPreferredSize(new Dimension(250,200));			
 
 		preConditionPanel = new ItPanel(new BorderLayout());
-		postConditionPanel = new ItPanel(new BorderLayout());
-		
+				
 		ItHilightedDocument preConditionDocument = new ItHilightedDocument();
 		preConditionDocument.setHighlightStyle(ItHilightedDocument.OCL_STYLE);
 		preConditionTextPane = new JTextPane(preConditionDocument);
@@ -1347,36 +1386,383 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		JScrollPane preScrollText = new JScrollPane();
 		preScrollText.setViewportView(preConditionTextPane);
 		
+		preConditionLabel = new JLabel("Pre-conditions");
+		preOclConditionLabel = new JLabel("Annotated Pre-Conditions");
+                
+		preConditionPanel.add(preConditionLabel, BorderLayout.NORTH);
+		preConditionPanel.add(preScrollText, BorderLayout.CENTER);
+		                
+		preConditionPanel.setPreferredSize(new Dimension(250,160));
+		
+		actionConditionsPanel.add(preConditionPanel, BorderLayout.NORTH);
+		
+                topPreOclConditionPanel = new ItPanel(new BorderLayout());
+		bottomPreOclConditionPanel = new ItPanel(new BorderLayout());
+		JButton button = null;
+                oclPreConditionToolBar = new JToolBar();
+		button = oclPreConditionToolBar.add(newAnnotatedOCLPreCondition);
+                button.setToolTipText("New Annotated OCL");
+		button = oclPreConditionToolBar.add(deleteAnnotatedOCLPreCondition);
+                button.setToolTipText("Delete selected Annotated OCL");
+		button = oclPreConditionToolBar.add(editAnnotatedOCLPreCondition);
+		button.setToolTipText("Edit selected Annotated OCL");
+		
+                //TABLE
+		DefaultTableModel tableOclModel = new DefaultTableModel();		
+		tableOclModel.addTableModelListener(this);
+		
+                oclPreConditionTable = new JTable(tableOclModel);
+                
+                //set size of all rows
+                oclPreConditionTable.setRowHeight(20);
+		JScrollPane scrollText = new JScrollPane();
+		scrollText.setViewportView(oclPreConditionTable);	
+			
+		
+		//Name column
+		tableOclModel.addColumn("Annotation");
+
+		
+		//Type column
+		tableOclModel.addColumn("OCL Expression");
+		
+		
+		//Annotation column
+	
+		oclPreConditionType = new ItComboBox();
+                oclPreConditionType.setEditable(true);
+		oclPreConditionType.addItem("");
+		//oclPreConditionType.addItem("@start");
+		oclPreConditionType.addItem("@end");
+		oclPreConditionType.addItem("@overall");	                      
+                
+		//TableColumn type = new TableColumn();
+		TableColumn type = oclPreConditionTable.getColumnModel().getColumn(0);		
+		type.setCellEditor(new DefaultCellEditor(oclPreConditionType));
+		
+		topPreOclConditionPanel.add(scrollText, BorderLayout.CENTER);		
+		bottomPreOclConditionPanel.add(oclPreConditionToolBar, BorderLayout.NORTH);
+	        topPreOclConditionPanel.add(preOclConditionLabel, BorderLayout.NORTH);
+		
+                actionConditionsPanel.add(topPreOclConditionPanel, BorderLayout.CENTER);
+		actionConditionsPanel.add(bottomPreOclConditionPanel, BorderLayout.SOUTH);
+                
+                currentAnnotatedPreconditions.clear();
+                currentAnnotatedPostconditions.clear();
+                        
+                
+		return actionConditionsPanel;
+	}
+        
+        private void showAnnotatedPreCondition(Element condition) {
+		DefaultTableModel tableModel = (DefaultTableModel)oclPreConditionTable.getModel();
+		
+		Vector<String> attRow = new Vector<String>();		
+		attRow.add(condition.getChildText("annotation"));
+                attRow.add(condition.getChildText("condition"));		
+		tableModel.addRow(attRow);			
+	}	
+        
+        private void showAnnotatedPostCondition(Element condition) {
+		DefaultTableModel tableModel = (DefaultTableModel)oclPostConditionTable.getModel();
+		
+		Vector<String> attRow = new Vector<String>();		
+		attRow.add(condition.getChildText("annotation"));
+                attRow.add(condition.getChildText("condition"));		
+		tableModel.addRow(attRow);			
+	}	
+        
+        private Action newAnnotatedOCLPreCondition = new AbstractAction("New",new ImageIcon("resources/images/new.png")){
+
+		public void actionPerformed(ActionEvent e) {
+                    if (data != null){
+
+                        //1. Place a new annotation in the action
+                        Element annotation = (Element)commonData.getChild("definedNodes").getChild("elements")
+                        .getChild("model").getChild("annotatedoclcondition").clone();
+
+                        annotation.setAttribute("type", "pre");
+                        data.getChild("annotatedoclexpressions").addContent(annotation);				
+
+                        currentAnnotatedPreconditions.add(annotation);
+                        showAnnotatedPreCondition(annotation);
+
+
+                        if (selectedCell != null){
+                                ItGraph graph = (ItGraph)senderObject;
+                                selectedCell.setVisual();
+                                graph.repaintElement(selectedCell);
+                        }
+
+                        // repaint open diagrams
+                        ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+                        tabbed.repaintOpenDiagrams("stateMachineDiagram");
+                    }
+		}
+	};
+        
+        private Action deleteAnnotatedOCLPreCondition = new AbstractAction("Delete",new ImageIcon("resources/images/delete.png")){
+
+		public void actionPerformed(ActionEvent e) {
+                    if (data != null){
+
+                        int row = oclPreConditionTable.getSelectedRow();
+                        if (row > -1){
+                                DefaultTableModel tableModel = (DefaultTableModel)oclPreConditionTable.getModel();
+                                Element selectedNode = currentAnnotatedPreconditions.get(row);
+
+                                //delete current attribute from its class
+                                data.getChild("annotatedoclexpressions").removeContent(selectedNode);
+                                tableModel.removeRow(row);
+                                currentAnnotatedPreconditions.remove(row);
+
+
+                                if (selectedCell != null){
+                                        selectedCell.setVisual();
+                                        ItGraph graph = (ItGraph)senderObject;
+                                        graph.repaintElement(selectedCell);
+                                }
+
+                                // repaint open diagrams
+                                ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+                                tabbed.repaintOpenDiagrams("stateMachineDiagram");
+                        }
+                    }
+		}
+	};
+	
+	private Action editAnnotatedOCLPreCondition = new AbstractAction("Edit", new ImageIcon("resources/images/edit.png")){
+
+		public void actionPerformed(ActionEvent e) {			
+			if (oclPreConditionTable.getSelectedRow() > -1){				
+                            EditAnnotatedOCLDialog edit = new EditAnnotatedOCLDialog(
+                            currentAnnotatedPreconditions.get(oclPreConditionTable.getSelectedRow()),
+                            null, oclPreConditionTable, PropertiesTabbedPane.this);							
+                            edit.setVisible(true);
+			}
+		}
+	};
+        
+        private Action newAnnotatedOCLPostCondition = new AbstractAction("New",new ImageIcon("resources/images/new.png")){
+
+		public void actionPerformed(ActionEvent e) {
+			if (data != null){
+                            
+                            	//1. Place a new annotation in the action
+				Element annotation = (Element)commonData.getChild("definedNodes").getChild("elements")
+				.getChild("model").getChild("annotatedoclcondition").clone();
+				
+				annotation.setAttribute("type", "post");
+				data.getChild("annotatedoclexpressions").addContent(annotation);				
+				
+				currentAnnotatedPostconditions.add(annotation);
+                                showAnnotatedPostCondition(annotation);				
+				
+				if (selectedCell != null){
+					ItGraph graph = (ItGraph)senderObject;
+					selectedCell.setVisual();
+					graph.repaintElement(selectedCell);
+				}
+				
+				// repaint open diagrams
+				ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+				tabbed.repaintOpenDiagrams("stateMachineDiagram");
+                              
+			}
+		}
+	};
+        
+        private Action deleteAnnotatedOCLPostCondition = new AbstractAction("Delete",new ImageIcon("resources/images/delete.png")){
+
+		public void actionPerformed(ActionEvent e) {
+                    if (data != null){
+
+                        int row = oclPostConditionTable.getSelectedRow();
+                        if (row > -1){
+                                DefaultTableModel tableModel = (DefaultTableModel)oclPostConditionTable.getModel();
+                                Element selectedNode = currentAnnotatedPostconditions.get(row);
+
+                                //delete current attribute from its class
+                                data.getChild("annotatedoclexpressions").removeContent(selectedNode);
+                                tableModel.removeRow(row);
+                                currentAnnotatedPostconditions.remove(row);
+
+
+                                if (selectedCell != null){
+                                        selectedCell.setVisual();
+                                        ItGraph graph = (ItGraph)senderObject;
+                                        graph.repaintElement(selectedCell);
+                                }
+
+                                // repaint open diagrams
+                                ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+                                tabbed.repaintOpenDiagrams("stateMachineDiagram");
+                        }
+                    }
+		}
+	};
+	
+	private Action editAnnotatedOCLPostCondition = new AbstractAction("Edit", new ImageIcon("resources/images/edit.png")){
+
+		public void actionPerformed(ActionEvent e) {			
+			if (oclPostConditionTable.getSelectedRow() > -1){				
+                            EditAnnotatedOCLDialog edit = new EditAnnotatedOCLDialog(
+                            currentAnnotatedPostconditions.get(oclPostConditionTable.getSelectedRow()),
+                            null, oclPostConditionTable, PropertiesTabbedPane.this);							
+                            edit.setVisible(true);
+			}
+		}
+	};
+        
+        //Gustavo
+        private JPanel getActionEffectPanel(){  
+		actionEffectsPanel = new JPanel(new BorderLayout());
+		actionEffectsPanel.setPreferredSize(new Dimension(250,200));			
+
+		postConditionPanel = new ItPanel(new BorderLayout());
+		
 		ItHilightedDocument postConditionDocument = new ItHilightedDocument();
 		postConditionDocument.setHighlightStyle(ItHilightedDocument.OCL_STYLE);
 		postConditionTextPane = new JTextPane(postConditionDocument);
 		postConditionTextPane.addKeyListener(this);
-		preConditionTextPane.setFont(new Font("Courier", 0, 12));
+		postConditionTextPane.setFont(new Font("Courier", 0, 12));
 		JScrollPane postScrollText = new JScrollPane();
 		postScrollText.setViewportView(postConditionTextPane);
 		
-		
-		preConditionLabel = new JLabel("Pre conditions");
-		postConditionLabel = new JLabel("Post conditions");		
-		
+		postConditionLabel = new JLabel("Post-conditions");		
+		postOclConditionLabel = new JLabel("Annotated Post-Conditions");
 				
-		preConditionPanel.add(preConditionLabel, BorderLayout.NORTH);
-		preConditionPanel.add(preScrollText, BorderLayout.CENTER);
-		
-		preConditionPanel.setPreferredSize(new Dimension(250,160));
+		postConditionPanel.setPreferredSize(new Dimension(250,160));
 		
 		postConditionPanel.add(postConditionLabel, BorderLayout.NORTH);		
 		postConditionPanel.add(postScrollText, BorderLayout.CENTER);
 	
-		actionConditionsPanel.add(preConditionPanel, BorderLayout.NORTH);
-		actionConditionsPanel.add(postConditionPanel, BorderLayout.CENTER);
+		actionEffectsPanel.add(postConditionPanel, BorderLayout.NORTH);
+                
+                topPostOclConditionPanel = new ItPanel(new BorderLayout());
+		bottomPostOclConditionPanel = new ItPanel(new BorderLayout());
+		JButton button = null;
+                oclPostConditionToolBar = new JToolBar();
+		button = oclPostConditionToolBar.add(newAnnotatedOCLPostCondition);
+                button.setToolTipText("New Annotated OCL");
+		button = oclPostConditionToolBar.add(deleteAnnotatedOCLPostCondition);
+                button.setToolTipText("Delete selected Annotated OCL");
+		button = oclPostConditionToolBar.add(editAnnotatedOCLPostCondition);
+		button.setToolTipText("Edit selected Annotated OCL");
+		
+                //TABLE
+		DefaultTableModel tableOclModel = new DefaultTableModel();		
+		tableOclModel.addTableModelListener(this);
+		
+                oclPostConditionTable = new JTable(tableOclModel);
+                
+                //set size of all rows
+                oclPostConditionTable.setRowHeight(20);
+		JScrollPane scrollText = new JScrollPane();
+		scrollText.setViewportView(oclPostConditionTable);	
+			
+		
+		//Name column
+		tableOclModel.addColumn("Annotation");
 
-		return actionConditionsPanel;
+		
+		//Type column
+		tableOclModel.addColumn("OCL Expression");
+		
+		
+		//Initial Value column
+		//tableOclModel.addColumn("Initial Value");
+		
+		oclPostConditionType = new ItComboBox();		
+		oclPostConditionType.setEditable(true);
+                oclPostConditionType.addItem("");
+		oclPostConditionType.addItem("@start");
+		//oclPostConditionType.addItem("@end");
+		//oclPostConditionType.addItem("@overall");                      
+                
+		//TableColumn type = new TableColumn();
+		TableColumn type = oclPostConditionTable.getColumnModel().getColumn(0);		
+		type.setCellEditor(new DefaultCellEditor(oclPostConditionType));
+		
+		topPostOclConditionPanel.add(scrollText, BorderLayout.CENTER);		
+		bottomPostOclConditionPanel.add(oclPostConditionToolBar, BorderLayout.NORTH);
+	        topPostOclConditionPanel.add(postOclConditionLabel, BorderLayout.NORTH);
+		
+                actionEffectsPanel.add(topPostOclConditionPanel, BorderLayout.CENTER);
+		actionEffectsPanel.add(bottomPostOclConditionPanel, BorderLayout.SOUTH);
+
+		return actionEffectsPanel;
 	}
 	
 	private void setActionConditionPanel(){
-		preConditionTextPane.setText(data.getChildText("precondition"));		
+		preConditionTextPane.setText(data.getChildText("precondition"));               
 		postConditionTextPane.setText(data.getChildText("postcondition"));
+                
+                //annotated conditions
+                
+                //clean up tables
+                DefaultTableModel pretableModel = (DefaultTableModel)oclPreConditionTable.getModel();
+		//1.1 Clean up table
+		while (pretableModel.getRowCount() > 0){
+			pretableModel.removeRow(0);
+		}
+                DefaultTableModel posttableModel = (DefaultTableModel)oclPostConditionTable.getModel();
+		//1.1 Clean up table
+		while (posttableModel.getRowCount() > 0){
+			posttableModel.removeRow(0);
+		}
+                
+                
+                currentAnnotatedPreconditions.clear();
+                currentAnnotatedPostconditions.clear();
+                
+                
+                Element annotatedConditions = data.getChild("annotatedoclexpressions");
+                if (annotatedConditions != null){
+                    //System.out.println("Annotated precondidion node found");
+                                        
+                    //annotated preconditions
+                    List<?> prelist = null;	
+                    try {
+                            XPath path = new JDOMXPath("annotatedoclcondition[@type='pre']");
+                            prelist = path.selectNodes(annotatedConditions);
+                    } catch (JaxenException e2) {			
+                            e2.printStackTrace();
+                    }
+                    if (prelist != null){
+                        Iterator<?> conditions = prelist.iterator();
+                        while(conditions.hasNext()){
+                            Element condition = (Element)conditions.next();
+                            currentAnnotatedPreconditions.add(condition);
+                            showAnnotatedPreCondition(condition);
+                        }
+                    }
+                    
+                    List<?> postlist = null;	
+                    try {
+                            XPath path = new JDOMXPath("annotatedoclcondition[@type='post']");
+                            postlist = path.selectNodes(annotatedConditions);
+                    } catch (JaxenException e2) {			
+                            e2.printStackTrace();
+                    }
+                    if (postlist != null){
+                        Iterator<?> conditions = postlist.iterator();
+                        while(conditions.hasNext()){
+                            Element condition = (Element)conditions.next();
+                            currentAnnotatedPostconditions.add(condition);
+                            showAnnotatedPostCondition(condition);
+                        }
+                    }
+                    
+                    
+                    
+                }
+                else{
+                    annotatedConditions = new Element("annotatedoclexpressions");
+                    data.addContent(annotatedConditions);
+                }
+                
+                //annotated precondition
 	}
 	
 	private JPanel getRoleAPanel(){
@@ -1391,7 +1777,13 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		
 		//TOP
 		roleNameATextField = new JTextField(15);
-		roleNameATextField.addKeyListener(this);		
+		roleNameATextField.addKeyListener(this);
+                roleNameATextField.addFocusListener(new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {                                
+                      setTextComponentChange(e);
+                    }
+                  });
 		
 		JLabel classLabel = new JLabel("Class ");
 		JLabel roleNameLabel = new JLabel("Name ");
@@ -1496,7 +1888,13 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		
 		//TOP
 		roleNameBTextField = new JTextField(15);
-		roleNameBTextField.addKeyListener(this);		
+		roleNameBTextField.addKeyListener(this);
+                roleNameBTextField.addFocusListener(new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {                                
+                      setTextComponentChange(e);
+                    }
+                  });
 		
 		JLabel classLabel = new JLabel("Class ");
 		JLabel roleNameLabel = new JLabel("Name ");
@@ -1979,6 +2377,70 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	}
         
         
+        private JPanel getBasePDDLPanel(){
+			basePDDLPanel = new JPanel(new BorderLayout());
+			basePDDLPanel.setPreferredSize(new Dimension(250,200));			
+			
+			ItPanel nameBasePanel = new ItPanel(new BorderLayout());
+			ItPanel bottomBasePDDLPanel = new ItPanel(new BorderLayout());
+			ItPanel topBasePDDLPanel = new ItPanel(new BorderLayout());
+
+			
+			JLabel nameLabel = new JLabel("Name ");			
+			namePDDLTextField = new JTextField(15);
+			namePDDLTextField.addKeyListener(new KeyListener() {
+
+                            public void keyTyped(KeyEvent ke) {
+                                //throw new UnsupportedOperationException("Not supported yet.");
+                            }
+
+                            public void keyPressed(KeyEvent ke) {
+                                //throw new UnsupportedOperationException("Not supported yet.");
+                                if (ke.getKeyCode() == KeyEvent.VK_ENTER){
+                                    if (data.getName().equals("pddlproblem") || data.getName().equals("pddldomain")){
+                                        setPDDLFileNameChange(ke); 
+                                    }
+                                    
+                                }
+                            }
+
+                            public void keyReleased(KeyEvent ke) {
+                                //throw new UnsupportedOperationException("Not supported yet.");
+                            }
+                        });
+                        namePDDLTextField.addFocusListener(new FocusAdapter() {
+                            @Override
+                            public void focusLost(FocusEvent e) {                                
+                                if (data.getName().equals("pddlproblem") || data.getName().equals("pddldomain")){
+                                    setPDDLFileNameChange(e); 
+                                }
+                            }
+                          });                        
+			nameBasePanel.add(nameLabel, BorderLayout.WEST);
+			nameBasePanel.add(namePDDLTextField, BorderLayout.CENTER);
+			topBasePDDLPanel.add(nameBasePanel, BorderLayout.NORTH);
+			
+			
+			basePDDLPanel.add(topBasePDDLPanel, BorderLayout.NORTH);
+			basePDDLPanel.add(bottomBasePDDLPanel, BorderLayout.CENTER);
+		
+		return basePDDLPanel;
+	}
+	
+	private void setBasePDDLPanel(){
+		namePDDLTextField.setText(data.getChildText("name"));
+                
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 	public void showProperties(Object element, Object sender){
 		
 		//get the last selected tab
@@ -2078,6 +2540,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 				setActionConditionPanel();
 				this.addTab("Base", actionBasePanel);
 				this.addTab("Conditions", actionConditionsPanel);
+                                this.addTab("Effects", actionEffectsPanel);
 			}		
 			else if(data.getName().equals("classAssociation")){
 				//Base
@@ -2172,6 +2635,19 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
                                 //addTab("General Metrics & Criteria", metricsAndCriteriaPanel);
                                 addTab("General Metrics", metricsAndCriteriaPanel);
 			}
+                        else if(data.getName().equals("pddlproblem")){
+				getBasePDDLPanel();
+				setBasePDDLPanel();				
+				addTab("Base", basePDDLPanel);                                
+			}
+                        else if(data.getName().equals("pddldomain")){
+				getBasePDDLPanel();
+				setBasePDDLPanel();				
+				addTab("Base", basePDDLPanel);                                  
+			}
+                        else if(data.getName().equals("pddlproject") || data.getName().equals("problemInstances") || data.getName().equals("pddldomains")){
+				setNoSelection();                                
+			}
 			else{
 				getBasePanel();
 				setBasePanel();
@@ -2198,141 +2674,137 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		this.addTab("Base", panel);
 		
 	}
-	public void keyTyped(KeyEvent e) {
-		// do nothing
+        
+        
+        public void setTextComponentChange(ComponentEvent e){
+                if (e.getSource() == nameTextField){			                            
+                    String oldName = data.getChildText("name");
+                    String newName = nameTextField.getText();
+                    if (!data.getChildText("name").equals(newName)){
+                            boolean change = true;
+                            String type = data.getName();
+                            if(data.getName().equals("class") || data.getName().equals("object")){
+                                    // checks whether there is already an object or class with that name
+                                    Boolean hasSameName = null;
+                                    try {
+                                            XPath path = new JDOMXPath(type+"[lower-case(name)='"+ newName.toLowerCase() +"'" +
+                                                            "and @id!='"+ data.getAttributeValue("id") +"']");
+                                            hasSameName = (Boolean)path.booleanValueOf(data.getParentElement());
+                                    } catch (JaxenException e2) {			
+                                            e2.printStackTrace();
+                                    }
+
+                                    if(hasSameName.booleanValue()){
+                                            change = false;
+                                            String message = "";
+                                            if(type.equals("class")){
+                                                    message = "There is already a class named '"+
+                                                    newName +"'. A class name must be unique.";
+                                            }
+                                            else if(type.equals("object")){
+                                                    message = "There is already an object named '"+
+                                                    newName +"'. An object name must be unique.";
+                                            }
+
+                                            JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                            "<html><center>"+ message +"</center></html>",
+                                                            "Not Allowed Name",
+                                                            JOptionPane.WARNING_MESSAGE);
+                                    }
+
+
+                                    // checks the presence of "-" in the name
+                                    if(change && data.getName().equals("class") &&
+                                                    newName.indexOf("-") > -1){
+                                            change = false;
+                                            JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                            "<html><center>The character \"-\" " +
+                                                            "can not be used.</center></html>",
+                                                            "Not Allowed Character",
+                                                            JOptionPane.WARNING_MESSAGE);								
+                                            selectedCell.setUserObject(selectedCell.getData().getChildText("name"));							
+
+                                    }
+                            }
+
+                            else if(newName.trim().equals("")){
+                                    change = false;
+                                    JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                    "<html><center>Empty names are not allowed.</center></html>",
+                                                    "Empty name",
+                                                    JOptionPane.WARNING_MESSAGE);						
+                            }
+
+                            if(change){
+                                    // do the change
+                                    data.getChild("name").setText(newName);
+                                    if (selectedNode != null){
+                                            selectedNode.setUserObject(data.getChildText("name"));
+                                            DefaultTreeModel model = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
+                                            model.nodeChanged(selectedNode);                                            
+                                    }
+
+                                    if (selectedCell != null){
+                                            selectedCell.setUserObject(data.getChildText("name"));
+                                            DefaultGraphModel model = (DefaultGraphModel) ((ItGraph)senderObject).getModel();
+                                            Object[] changeds = new Object[1];
+                                            changeds[0] = selectedCell;
+                                            selectedCell.setVisual();
+                                            model.cellsChanged(changeds);
+                                    }
+                                    else if (selectedAssociation != null){
+                                            selectedAssociation.setUserObject(data.getChildText("name"));
+                                            DefaultGraphModel model = (DefaultGraphModel) ((ItGraph)senderObject).getModel();
+                                            Object[] changeds = new Object[1];
+                                            changeds[0] = selectedAssociation;
+                                            selectedAssociation.setVisual();
+                                            model.cellsChanged(changeds);
+                                    }
+
+                                    // repaint open diagrams
+                                    if(data.getName().equals("class") ||
+                                        data.getName().equals("classAssociation")){
+                                        ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+                                        tabbed.repaintOpenDiagrams("repositoryDiagram");
+                                        tabbed.repaintOpenDiagrams("objectDiagram");
+                                    }
+
+                                    else if(data.getName().equals("object") && reference.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
+
+                                        //Change the name in every attribute or parameterized attribute
+                                        Element domain = data.getParentElement().getParentElement().getParentElement();
+
+                                        //System.out.println(domain.getName());
+                                        List<?> result = null;
+                                        try {
+                                                XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object/attributes/attribute//value[text()='"+oldName+"'] | " +
+                                                                "planningProblems/problem/objectDiagrams/objectDiagram/objects/object/attributes/attribute//value[text()='"+oldName+"']");
+                                                result = path.selectNodes(domain);
+                                        } catch (JaxenException e2) {
+                                                e2.printStackTrace(); }
+                                        for (int i = 0; i < result.size(); i++){
+                                                Element value = (Element)result.get(i);
+                                                System.out.println("Mudei!");
+                                                value.setText(newName);
+                                        }
+
+
+                                        //repaint object diagrams
+                                        ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+                                        tabbed.repaintOpenDiagrams("objectDiagram");
+
+
+                                    }
+                            }
+                            else{
+                                    // retrieves the unchanged name
+                                    nameTextField.setText(data.getChildText("name"));
+                            }
+
+                    }				
+				
 		}
-
-	public void keyPressed(KeyEvent e) {		
-		if (e.getSource() == nameTextField){			
-			if (e.getKeyCode() == KeyEvent.VK_ENTER){
-                                String oldName = data.getChildText("name");
-				String newName = nameTextField.getText();
-				if (!data.getChildText("name").equals(newName)){
-					boolean change = true;
-					String type = data.getName();
-					if(data.getName().equals("class") || data.getName().equals("object")){
-						// checks whether there is already an object or class with that name
-						Boolean hasSameName = null;
-						try {
-							XPath path = new JDOMXPath(type+"[lower-case(name)='"+ newName.toLowerCase() +"'" +
-									"and @id!='"+ data.getAttributeValue("id") +"']");
-							hasSameName = (Boolean)path.booleanValueOf(data.getParentElement());
-						} catch (JaxenException e2) {			
-							e2.printStackTrace();
-						}
-						
-						if(hasSameName.booleanValue()){
-							change = false;
-							String message = "";
-							if(type.equals("class")){
-								message = "There is already a class named '"+
-								newName +"'. A class name must be unique.";
-							}
-							else if(type.equals("object")){
-								message = "There is already an object named '"+
-								newName +"'. An object name must be unique.";
-							}
-							
-							JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
-									"<html><center>"+ message +"</center></html>",
-									"Not Allowed Name",
-									JOptionPane.WARNING_MESSAGE);
-						}
-						
-						
-						// checks the presence of "-" in the name
-						if(change && data.getName().equals("class") &&
-								newName.indexOf("-") > -1){
-							change = false;
-							JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
-									"<html><center>The character \"-\" " +
-									"can not be used.</center></html>",
-									"Not Allowed Character",
-									JOptionPane.WARNING_MESSAGE);								
-							selectedCell.setUserObject(selectedCell.getData().getChildText("name"));							
-
-						}
-					}
-					
-					else if(newName.trim().equals("")){
-						change = false;
-						JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
-								"<html><center>Empty names are not allowed.</center></html>",
-								"Empty name",
-								JOptionPane.WARNING_MESSAGE);						
-					}
-					
-					if(change){
-						// do the change
-						data.getChild("name").setText(newName);
-						if (selectedNode != null){
-							selectedNode.setUserObject(data.getChildText("name"));
-							DefaultTreeModel model = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
-							model.nodeChanged(selectedNode);
-						}
-						
-						if (selectedCell != null){
-							selectedCell.setUserObject(data.getChildText("name"));
-							DefaultGraphModel model = (DefaultGraphModel) ((ItGraph)senderObject).getModel();
-							Object[] changeds = new Object[1];
-							changeds[0] = selectedCell;
-							selectedCell.setVisual();
-							model.cellsChanged(changeds);
-						}
-						else if (selectedAssociation != null){
-							selectedAssociation.setUserObject(data.getChildText("name"));
-							DefaultGraphModel model = (DefaultGraphModel) ((ItGraph)senderObject).getModel();
-							Object[] changeds = new Object[1];
-							changeds[0] = selectedAssociation;
-							selectedAssociation.setVisual();
-							model.cellsChanged(changeds);
-						}
-						
-						// repaint open diagrams
-						if(data.getName().equals("class") ||
-                                                    data.getName().equals("classAssociation")){
-                                                    ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-                                                    tabbed.repaintOpenDiagrams("repositoryDiagram");
-                                                    tabbed.repaintOpenDiagrams("objectDiagram");
-						}
-						
-						else if(data.getName().equals("object") && reference.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
-
-                                                    //Change the name in every attribute or parameterized attribute
-                                                    Element domain = data.getParentElement().getParentElement().getParentElement();
-
-                                                    //System.out.println(domain.getName());
-                                                    List<?> result = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object/attributes/attribute//value[text()='"+oldName+"'] | " +
-                                                                            "planningProblems/problem/objectDiagrams/objectDiagram/objects/object/attributes/attribute//value[text()='"+oldName+"']");
-                                                            result = path.selectNodes(domain);
-                                                    } catch (JaxenException e2) {
-                                                            e2.printStackTrace(); }
-                                                    for (int i = 0; i < result.size(); i++){
-                                                            Element value = (Element)result.get(i);
-                                                            System.out.println("Mudei!");
-                                                            value.setText(newName);
-                                                    }
-
-
-                                                    //repaint object diagrams
-                                                    ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-                                                    tabbed.repaintOpenDiagrams("objectDiagram");
-
-
-						}
-					}
-					else{
-						// retrieves the unchanged name
-						nameTextField.setText(data.getChildText("name"));
-					}
-					
-				}				
-			}	
-		}
-		
-		else if(e.getSource() == roleNameATextField && e.getKeyCode() == KeyEvent.VK_ENTER){
+                else if(e.getSource() == roleNameATextField){
 			
 			Element associationEndA = null;
 			try {
@@ -2372,7 +2844,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			}
 		}
 		
-		else if(e.getSource() == roleNameBTextField && e.getKeyCode() == KeyEvent.VK_ENTER){
+		else if(e.getSource() == roleNameBTextField){
 			
 			Element associationEndB = null;
 			try {
@@ -2413,7 +2885,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			}
 		}
 		
-		else if(e.getSource() == objectDiagramTextField && e.getKeyCode() == KeyEvent.VK_ENTER){
+		else if(e.getSource() == objectDiagramTextField){
 			if (data != null){
 				data.getChild("name").setText(objectDiagramTextField.getText());
 				if (selectedNode != null){
@@ -2430,12 +2902,132 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 			
 		}
 		
-		else if(e.getSource() == operatorList && e.getKeyCode() == KeyEvent.VK_ENTER && 
-				operatorList.getSelectedIndex() > -1){
+		else if(e.getSource() == operatorList && operatorList.getSelectedIndex() > -1){
 			EditDialog edit = new EditDialog(currentOperators.get(operatorList.getSelectedIndex()), null, operatorList, PropertiesTabbedPane.this);
 			edit.setVisible(true);
 		}
+                
+                
+        }
+        
+        public void setPDDLFileNameChange(ComponentEvent e){
+                    if (e.getSource() == namePDDLTextField){                        
+                        String oldName = data.getChildText("name");
+                        String newName = namePDDLTextField.getText().trim();
+                        
+                        if (newName.equals("") || newName.equals(".pddl")){
+                            newName = oldName;
+                            namePDDLTextField.setText(newName);                            
+                        }
+                        
+                        if (!newName.endsWith(".pddl")){
+                            newName += ".pddl";
+                            namePDDLTextField.setText(newName);                            
+                        }
+                        
+                        if (!data.getChildText("name").equals(newName)){ 
+                            System.out.println("change name");
+                            
+                            File oldfile = null;
+                            File newfile = null;
+                            
+                            if (data.getName().equals("pddlproblem")){
+                                String fulloldfilename = data.getAttributeValue("file");
+                                oldfile = new File(fulloldfilename);
+                                
+                                String fileabspath = oldfile.getAbsolutePath().replaceFirst(oldName, "");
+                                //System.out.println(fileabspath);
+                                String fullnewfilename = fileabspath + newName;                                
+                                newfile = new File(fullnewfilename);
+                                
+                                boolean RenameOk = oldfile.renameTo(newfile);
 
+                                if(RenameOk){
+                                    data.getChild("name").setText(newName);
+                                    data.setAttribute("filename", newName);
+                                    data.setAttribute("file", fullnewfilename);
+                                    //change 
+
+                                }
+                                else{
+                                    namePDDLTextField.setText(oldName); 
+                                    JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                    "<html>System was unable to rename the problem file. Please check file permission.</html>",
+                                                    "Domain file rename",
+                                                    JOptionPane.WARNING_MESSAGE);
+                                }
+                                
+                             }
+                            else if (data.getName().equals("pddldomain")){
+                                                               
+                                ItTreeNode projectNode = ItSIMPLE.getInstance().getItTree().findProjectNode(data.getDocument().getRootElement());
+                                Element project = projectNode.getData();
+                                String tpath = projectNode.getReference().getChildText("filePath");
+                                File theitProjectFile = new File(tpath);
+                                tpath = tpath.replaceFirst(theitProjectFile.getName(), "");
+                                
+                                String fulloldfilename = tpath + oldName;
+                                String  fullnewfilename = tpath + newName;
+                                oldfile = new File(fulloldfilename);
+                                newfile = new File(fullnewfilename);
+                                
+                                boolean RenameOk = oldfile.renameTo(newfile);
+
+                                if(RenameOk){
+                                    data.getChild("name").setText(newName);
+                                    
+                                    //save project file itProject.xml
+                                    //Clean problems instances
+                                    Element projectclone = (Element)project.clone();
+                                    projectclone.getChild("problemInstances").removeChildren("pddlproblem");
+                                    projectclone.getChild("generalInformation").removeChildren("id");
+                                    projectclone.getChild("pddldomains").getChild("pddldomain").removeChildren("content");
+                                    String iprojectcontent = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> \n" + XMLUtilities.toString(projectclone);
+                                    //Save iProject.xml file
+                                    try {
+                                        FileWriter file = new FileWriter(projectNode.getReference().getChildText("filePath"));
+                                        file.write(iprojectcontent);
+                                        file.close();
+                                    } catch (IOException e1) {
+                                    }                                    
+
+                                    
+                                }
+                                else{
+                                    namePDDLTextField.setText(oldName); 
+                                    JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                    "<html>System was unable to rename the domain file. Please check file permission.</html>",
+                                                    "Problem file rename",
+                                                    JOptionPane.WARNING_MESSAGE);
+                                }                                
+
+                                
+                            }
+                            
+                            //make change in the tree node
+                            if (selectedNode != null){
+                                    selectedNode.setUserObject(data.getChildText("name"));
+                                    DefaultTreeModel model = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
+                                    model.nodeChanged(selectedNode);                                            
+                            }                            
+                            
+                            
+                        }
+                        
+                    }
+        }
+    
+        
+        
+        
+	public void keyTyped(KeyEvent e) {
+		// do nothing
+		}
+
+	public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                setTextComponentChange(e); 
+            }
 		
 	}
 
@@ -3246,8 +3838,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 
 		public void actionPerformed(ActionEvent e) {			
 			if (attributeTable.getSelectedRow() > -1){				
-				EditDialog edit = new EditDialog(currentAttributes.get(attributeTable.getSelectedRow()), null, attributeTable, PropertiesTabbedPane.this);			
-				
+				EditDialog edit = new EditDialog(currentAttributes.get(attributeTable.getSelectedRow()), null, attributeTable, PropertiesTabbedPane.this);							
 				edit.setVisible(true);
 			}
 		}
@@ -3550,122 +4141,122 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 
 	public void tableChanged(TableModelEvent e) {
 		if (e.getSource() == attributeTable.getModel()){
-			int row = e.getFirstRow();
-	        int column = e.getColumn();        
-	        if(row > -1 && column > -1 && attributeType.getSelectedIndex() > -1){
-	        	TableModel model = (TableModel)e.getSource();
-	            Element selectedAttribute = currentAttributes.get(row);
-	            String data = (String)model.getValueAt(row, column);
-	            switch(column){
-	            case 0:{// name
-	            	
-	            	// check the presence of "-"
-	            	if(data.indexOf("-") > -1){
-						JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
-								"<html><center>The character \"-\" " +
-								"can not be used.</center></html>",
-								"Not Allowed Character",
-								JOptionPane.WARNING_MESSAGE);	
-						
-						model.setValueAt(selectedAttribute.getChildText("name"), row, column);
-	            	}
-	            	
-	            	selectedAttribute.getChild("name").setText(data);
-	            	
-	            	ItTreeNode attrNode = ItSIMPLE.getInstance().getItTree().findNodeFromData(selectedAttribute.getDocument().getRootElement(), selectedAttribute);
-	            	attrNode.setUserObject(data);
-	            	DefaultTreeModel treeModel = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
-	            	treeModel.nodeChanged(attrNode);
-	            }
-	            break;
-	            case 1:{// type	            	
-	            	Element Class = (Element)attributeType.getDataItem(attributeType.getSelectedIndex());
-	            	if(Class != null){
-	            		if(!Class.getAttributeValue("id").equals(selectedAttribute.getChildText("type"))){
-	            			selectedAttribute.getChild("type").setText(Class.getAttributeValue("id"));
-	    	            	// sets the initial value as null
-	    	            	selectedAttribute.getChild("initialValue").setText("");
-	    	            	model.setValueAt("",row,column+1);
-	            		}            		
-	            	}
-	            	else{
-	            		selectedAttribute.getChild("type").setText("");
-	            	}
-	            }
-	            break;
-	            case 2:{// initial value
-	            	if (!data.trim().equals("")){
-	            		//Check if it is a valid value only for the primitive types
-		            	//Get the Attribute Type
-		        		Element typeClass = null;
-		    			try {
-		    				XPath path = new JDOMXPath("project/elements/classes/class[@id="+selectedAttribute.getChildText("type")+"]");
-		    				typeClass = (Element)path.selectSingleNode(selectedAttribute.getDocument());
-		    			} catch (JaxenException e2) {			
-		    				e2.printStackTrace();
-		    			}
-		    			//Check value
-		    			if (typeClass != null){
-		    				
-		    				if (typeClass.getChildText("type").equals("Primitive")){
-		    					int primitiveType = Integer.parseInt(typeClass.getAttributeValue("id"));
-		    		            switch(primitiveType){
-			    		            case 1:{// boolean
-			    	            		data = ((String)model.getValueAt(row, column)).toLowerCase();
-			    		            	if (data.equals("true") || data.equals("false")){
-			    		            		selectedAttribute.getChild("initialValue").setText(data);
-			    		            	}
-			    		            	else{
-			    		            		model.setValueAt("",row, column);
-											JOptionPane.showMessageDialog(this,
-													"<html><center>The entered value is an invalid boolean value.</center></html>",
-													"Invalid Boolean Value",
-													JOptionPane.WARNING_MESSAGE);
-			    		            	}
-			    		            }
-			    		            break;
-			    		            case 2:{// Integer			    		            	
-			    		            	//int intType = Integer.parseInt(data);			    		            	
-			    		            	selectedAttribute.getChild("initialValue").setText(data);
-			    		            	
-			    		            }
-			    		            break;
-			    		            case 3:{// Float
-			    		            	selectedAttribute.getChild("initialValue").setText(data);
-			    		            }
-			    		            break;	
-			    		            case 4:{// String
-			    		            	selectedAttribute.getChild("initialValue").setText(data);
-			    		            }
-			    		            break;					    		            
-		    		            
-		    		            }
-		    				}
-		    				
-		    				else{
-		    					selectedAttribute.getChild("initialValue").setText(data);
-		    				}
-		    			}		    			
-	            	}
-	            	else
-	            		selectedAttribute.getChild("initialValue").setText("");
-	            }
-	            break;
-	            }
-	        	if (selectedCell != null){
-	        		ItGraph graph = (ItGraph) senderObject;        		
-	            	selectedCell.setVisual();
-	            	graph.repaintElement(selectedCell);
-	            	
-	            	// repaint open diagrams
-	            	ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-	            	tabbed.repaintOpenDiagrams("repositoryDiagram");
-	            	tabbed.repaintOpenDiagrams("objectDiagram");	            	
-	            }
-	        } 
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();        
+                    if(row > -1 && column > -1 && attributeType.getSelectedIndex() > -1){
+                            TableModel model = (TableModel)e.getSource();
+                        Element selectedAttribute = currentAttributes.get(row);
+                        String data = (String)model.getValueAt(row, column);
+                        switch(column){
+                        case 0:{// name
+
+                            // check the presence of "-"
+                            if(data.indexOf("-") > -1){
+                                                    JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                                    "<html><center>The character \"-\" " +
+                                                                    "can not be used.</center></html>",
+                                                                    "Not Allowed Character",
+                                                                    JOptionPane.WARNING_MESSAGE);	
+
+                                                    model.setValueAt(selectedAttribute.getChildText("name"), row, column);
+                            }
+
+                            selectedAttribute.getChild("name").setText(data);
+
+                            ItTreeNode attrNode = ItSIMPLE.getInstance().getItTree().findNodeFromData(selectedAttribute.getDocument().getRootElement(), selectedAttribute);
+                            attrNode.setUserObject(data);
+                            DefaultTreeModel treeModel = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
+                            treeModel.nodeChanged(attrNode);
+                        }
+                        break;
+                        case 1:{// type	            	
+                            Element Class = (Element)attributeType.getDataItem(attributeType.getSelectedIndex());
+                            if(Class != null){
+                                    if(!Class.getAttributeValue("id").equals(selectedAttribute.getChildText("type"))){
+                                            selectedAttribute.getChild("type").setText(Class.getAttributeValue("id"));
+                                    // sets the initial value as null
+                                    selectedAttribute.getChild("initialValue").setText("");
+                                    model.setValueAt("",row,column+1);
+                                    }            		
+                            }
+                            else{
+                                    selectedAttribute.getChild("type").setText("");
+                            }
+                        }
+                        break;
+                        case 2:{// initial value
+                            if (!data.trim().equals("")){
+                                    //Check if it is a valid value only for the primitive types
+                                    //Get the Attribute Type
+                                            Element typeClass = null;
+                                            try {
+                                                    XPath path = new JDOMXPath("project/elements/classes/class[@id="+selectedAttribute.getChildText("type")+"]");
+                                                    typeClass = (Element)path.selectSingleNode(selectedAttribute.getDocument());
+                                            } catch (JaxenException e2) {			
+                                                    e2.printStackTrace();
+                                            }
+                                            //Check value
+                                            if (typeClass != null){
+
+                                                    if (typeClass.getChildText("type").equals("Primitive")){
+                                                            int primitiveType = Integer.parseInt(typeClass.getAttributeValue("id"));
+                                                switch(primitiveType){
+                                                        case 1:{// boolean
+                                                            data = ((String)model.getValueAt(row, column)).toLowerCase();
+                                                            if (data.equals("true") || data.equals("false")){
+                                                                    selectedAttribute.getChild("initialValue").setText(data);
+                                                            }
+                                                            else{
+                                                                    model.setValueAt("",row, column);
+                                                                                            JOptionPane.showMessageDialog(this,
+                                                                                                            "<html><center>The entered value is an invalid boolean value.</center></html>",
+                                                                                                            "Invalid Boolean Value",
+                                                                                                            JOptionPane.WARNING_MESSAGE);
+                                                            }
+                                                        }
+                                                        break;
+                                                        case 2:{// Integer			    		            	
+                                                            //int intType = Integer.parseInt(data);			    		            	
+                                                            selectedAttribute.getChild("initialValue").setText(data);
+
+                                                        }
+                                                        break;
+                                                        case 3:{// Float
+                                                            selectedAttribute.getChild("initialValue").setText(data);
+                                                        }
+                                                        break;	
+                                                        case 4:{// String
+                                                            selectedAttribute.getChild("initialValue").setText(data);
+                                                        }
+                                                        break;					    		            
+
+                                                }
+                                                    }
+
+                                                    else{
+                                                            selectedAttribute.getChild("initialValue").setText(data);
+                                                    }
+                                            }		    			
+                            }
+                            else
+                                    selectedAttribute.getChild("initialValue").setText("");
+                        }
+                        break;
+                        }
+                            if (selectedCell != null){
+                                    ItGraph graph = (ItGraph) senderObject;        		
+                            selectedCell.setVisual();
+                            graph.repaintElement(selectedCell);
+
+                            // repaint open diagrams
+                            ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+                            tabbed.repaintOpenDiagrams("repositoryDiagram");
+                            tabbed.repaintOpenDiagrams("objectDiagram");	            	
+                        }
+                    } 
 		}
 		
-		else if(e.getSource() == objectAttributeTable.getModel()){
+		else if(objectAttributeTable != null && e.getSource() == objectAttributeTable.getModel()){
 
                     //selectedCell.setUserObject(data.getChildText("name"));
 
@@ -3816,32 +4407,66 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 		
 		else if(e.getSource() == literalsTableModel){
 			int row = e.getFirstRow();
-	        int column = e.getColumn();
-	        if(row > -1 && column == 0){	        	
-	            Element selectedLiteral = currentLiterals.get(row);
-	            String name = (String)literalsTableModel.getValueAt(row, column);	           
-	            	
-            	// check the presence of "-"
-            	if(name.indexOf("-") > -1){
-					JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
-							"<html><center>The character \"-\" " +
-							"can not be used.</center></html>",
-							"Not Allowed Character",
-							JOptionPane.WARNING_MESSAGE);	
-					
-					literalsTableModel.setValueAt(selectedLiteral.getChildText("name"), row, column);
-            	}
-            	
-            	selectedLiteral.getChild("name").setText(name);
+                    int column = e.getColumn();
+                    if(row > -1 && column == 0){	        	
+                        Element selectedLiteral = currentLiterals.get(row);
+                        String name = (String)literalsTableModel.getValueAt(row, column);	           
+
+                        // check the presence of "-"
+                        if(name.indexOf("-") > -1){
+                                                JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+                                                                "<html><center>The character \"-\" " +
+                                                                "can not be used.</center></html>",
+                                                                "Not Allowed Character",
+                                                                JOptionPane.WARNING_MESSAGE);	
+
+                                                literalsTableModel.setValueAt(selectedLiteral.getChildText("name"), row, column);
+                        }
+
+                        selectedLiteral.getChild("name").setText(name);
             	
 	        	if (selectedCell != null){
-	        		ItGraph graph = (ItGraph) senderObject;        		
-	            	selectedCell.setVisual();
-	            	graph.repaintElement(selectedCell);
-	            }
-            }
+                            ItGraph graph = (ItGraph) senderObject;        		
+                            selectedCell.setVisual();
+                            graph.repaintElement(selectedCell);
+                        }
+                    }
 
 		}
+                else if(e.getSource() == oclPreConditionTable.getModel()){
+                    int row = e.getFirstRow();
+                    int col = e.getColumn();
+                    if (row > -1 && col > -1){
+                        TableModel model = (TableModel)e.getSource();
+                        String strdata = (String) model.getValueAt(row, col);
+                        Element selectedAnnotation = currentAnnotatedPreconditions.get(row);
+                        //annottaion
+                        if (col == 0){
+                            selectedAnnotation.getChild("annotation").setText(strdata);
+                        }
+                        //condition
+                        else if (col == 1){
+                            selectedAnnotation.getChild("condition").setText(strdata);
+                        }
+                    }                    
+                }
+                else if(e.getSource() == oclPostConditionTable.getModel()){
+                    int row = e.getFirstRow();
+                    int col = e.getColumn();
+                    if (row > -1 && col > -1){
+                        TableModel model = (TableModel)e.getSource();
+                        String strdata = (String) model.getValueAt(row, col);
+                        Element selectedAnnotation = currentAnnotatedPostconditions.get(row);
+                        //annottaion
+                        if (col == 0){
+                            selectedAnnotation.getChild("annotation").setText(strdata);
+                        }
+                        //condition
+                        else if (col == 1){
+                            selectedAnnotation.getChild("condition").setText(strdata);
+                        }
+                    }                    
+                }
 
 	}
 	

@@ -1,7 +1,7 @@
 /***
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 *
-* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
 *
 *
 * This file is part of itSIMPLE.
@@ -79,10 +79,10 @@ public class EditLifelineDialog extends JDialog{
     //Intervals
     private ItPanel intervalsPanel;
     private JTextField ruleField;
-	private JToolBar intervalsToolBar = null;
-	private JList intervalsList = null;
-	private DefaultListModel intervalsListModel = null;
-	private ArrayList<Element> currentIntervals =null;
+    private JToolBar intervalsToolBar = null;
+    private JList intervalsList = null;
+    private DefaultListModel intervalsListModel = null;
+    private ArrayList<Element> currentIntervals =null;
     private ItPanel editAndNewIntervalPanel;
     private Element selectedIntervalData = null;
     private JTextField rule;
@@ -90,6 +90,7 @@ public class EditLifelineDialog extends JDialog{
     private JComboBox lowerboundValue;
     private JComboBox upperboundType;
     private JComboBox upperboundValue;
+    private JComboBox condeffectType; //indicates either the interval is a precondition or effect
 
 
     @SuppressWarnings("static-access")
@@ -106,9 +107,9 @@ public class EditLifelineDialog extends JDialog{
         this.parent = parent;
 
 
-		this.setSize(520,350);
-		this.setLocation(280,200);
-		this.add(getMainPanel(), BorderLayout.CENTER);
+        this.setSize(520,450);
+        this.setLocation(280,200);
+        this.add(getMainPanel(), BorderLayout.CENTER);
 
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -181,20 +182,20 @@ public class EditLifelineDialog extends JDialog{
     private ItPanel getIntervalsPanel() {
         intervalsPanel  = new ItPanel(new BorderLayout());
 
-		//preferenceFunctionsPanel.setPreferredSize(new Dimension(250,200));
+        //preferenceFunctionsPanel.setPreferredSize(new Dimension(250,200));
 
-		ItPanel top = new ItPanel(new BorderLayout());
-		ItPanel bottom = new ItPanel(new BorderLayout());
+        ItPanel top = new ItPanel(new BorderLayout());
+        ItPanel bottom = new ItPanel(new BorderLayout());
         ItPanel listPanel = new ItPanel(new BorderLayout());
 
         top.add(new JLabel("Time intervals:"), BorderLayout.NORTH);
 
-		//Time Interval tree
+	//Time Interval tree
         intervalsListModel = new DefaultListModel();
         intervalsList = new JList(intervalsListModel);
-		ItListRenderer renderer = new ItListRenderer();
+	ItListRenderer renderer = new ItListRenderer();
         renderer.setIcon(new ImageIcon("resources/images/operator.png"));
-		intervalsList.setCellRenderer(renderer);
+	intervalsList.setCellRenderer(renderer);
         intervalsList.setBackground(Color.WHITE);
 
         intervalsList.addListSelectionListener(new ListSelectionListener(){
@@ -217,32 +218,37 @@ public class EditLifelineDialog extends JDialog{
         });
 
 
-		JScrollPane scrollText = new JScrollPane();
-		scrollText.setViewportView(intervalsList);
+        JScrollPane scrollText = new JScrollPane();
+        scrollText.setViewportView(intervalsList);
 
 
         buildTimeIntervalsList();
-		top.add(scrollText, BorderLayout.CENTER);
+	top.add(scrollText, BorderLayout.CENTER);
 
         //tool bar with buttons
         intervalsToolBar = new JToolBar();
-		intervalsToolBar.add(newTimeInterval).setToolTipText("New time interval");
-		intervalsToolBar.add(deleteTimeInterval).setToolTipText("Delete time interval");
+        intervalsToolBar.add(newTimeInterval).setToolTipText("New time interval");
+        intervalsToolBar.add(deleteTimeInterval).setToolTipText("Delete time interval");
         
         intervalsToolBar.setFloatable(false);
 
-		bottom.add(intervalsToolBar, BorderLayout.NORTH);
+        top.add(intervalsToolBar, BorderLayout.SOUTH);
+	//bottom.add(intervalsToolBar, BorderLayout.NORTH);
 
         listPanel.add(top, BorderLayout.CENTER);
+        
         listPanel.add(bottom, BorderLayout.SOUTH);
 
+        
+        
         // Edit Interval panel
         //The time interval itself
         editAndNewIntervalPanel = new ItPanel(new BorderLayout());
-        editAndNewIntervalPanel.setPreferredSize(new Dimension(250,65));
-        editAndNewIntervalPanel.add(new JLabel("Value: "), BorderLayout.WEST);
+        editAndNewIntervalPanel.setPreferredSize(new Dimension(250,110));
+        
+        
         rule =  new JTextField();
-        rule.setPreferredSize(new Dimension(250,40));
+        rule.setPreferredSize(new Dimension(250,30));
         rule.addKeyListener(new KeyAdapter(){
             @Override
                         //public void keyPressed(KeyEvent e) {
@@ -251,8 +257,14 @@ public class EditLifelineDialog extends JDialog{
                 intervalsListModel.set(intervalsList.getSelectedIndex(), getIntervalLabel(selectedIntervalData));
             }
         });
-
-        editAndNewIntervalPanel.add(rule, BorderLayout.CENTER);
+        //editAndNewIntervalPanel.add(new JLabel("Value: "), BorderLayout.WEST);
+        //editAndNewIntervalPanel.add(rule, BorderLayout.CENTER);
+        
+        ItPanel rulevalue = new ItPanel(new BorderLayout());
+        rulevalue.add(new JLabel("Value: "), BorderLayout.WEST);
+        rulevalue.add(rule, BorderLayout.CENTER);
+        editAndNewIntervalPanel.add(rulevalue, BorderLayout.NORTH);
+        
 
 
         //The Intervals
@@ -260,8 +272,8 @@ public class EditLifelineDialog extends JDialog{
         JLabel intervalLabel = new JLabel("Interval: ");
 
         lowerboundType = new JComboBox();
-		lowerboundType.addItem("[");
-		lowerboundType.addItem("(");
+        lowerboundType.addItem("[");
+        lowerboundType.addItem("(");
         lowerboundType.addItemListener(new ItemListener(){
                 public void itemStateChanged(ItemEvent e) {
                         String selection = (String)lowerboundType.getSelectedItem();
@@ -276,8 +288,8 @@ public class EditLifelineDialog extends JDialog{
         });
 
         lowerboundValue = new JComboBox();
-		lowerboundValue.addItem("");
-		lowerboundValue.addItem("0");
+        lowerboundValue.addItem("");
+        lowerboundValue.addItem("0");
         lowerboundValue.addItem("-1");
         lowerboundValue.addItem("1");
         lowerboundValue.addItem("2");
@@ -294,8 +306,8 @@ public class EditLifelineDialog extends JDialog{
         JLabel commaLabel = new JLabel(" , ");
 
         upperboundType = new JComboBox();
-		upperboundType.addItem("]");
-		upperboundType.addItem(")");
+        upperboundType.addItem("]");
+        upperboundType.addItem(")");
         upperboundType.addItemListener(new ItemListener(){
                 public void itemStateChanged(ItemEvent e) {
                         String selection = (String)upperboundType.getSelectedItem();
@@ -310,8 +322,8 @@ public class EditLifelineDialog extends JDialog{
         });
 
         upperboundValue = new JComboBox();
-		upperboundValue.addItem("");
-		upperboundValue.addItem("0");
+        upperboundValue.addItem("");
+        upperboundValue.addItem("0");
         upperboundValue.addItem("1");
         upperboundValue.addItem("2");
         upperboundValue.setEditable(true);
@@ -333,8 +345,28 @@ public class EditLifelineDialog extends JDialog{
 
 
         SpringUtilities.makeCompactGrid(bounds, 1, 6, 5, 5, 5, 5);
-        editAndNewIntervalPanel.add(bounds, BorderLayout.SOUTH);
+        //editAndNewIntervalPanel.add(bounds, BorderLayout.SOUTH);
+        editAndNewIntervalPanel.add(bounds, BorderLayout.CENTER);
 
+        
+        ItPanel condeffect = new ItPanel(new BorderLayout());
+        //condeffect.setPreferredSize(new Dimension(250,100));
+        condeffect.add(new JLabel("Type: "), BorderLayout.WEST);
+        condeffectType = new JComboBox();
+        condeffectType.addItem("precondition");
+        condeffectType.addItem("effect");
+        condeffectType.addItemListener(new ItemListener(){
+                public void itemStateChanged(ItemEvent e) {
+                        String selection = (String)condeffectType.getSelectedItem();
+                        selectedIntervalData.getChild("type").setText(selection);
+                }
+
+        });
+        condeffect.add(condeffectType, BorderLayout.CENTER);                
+        
+        editAndNewIntervalPanel.add(condeffect, BorderLayout.SOUTH);
+        
+        
 
         editAndNewIntervalPanel.setVisible(false);
 
@@ -342,6 +374,8 @@ public class EditLifelineDialog extends JDialog{
         intervalsPanel.add(editAndNewIntervalPanel, BorderLayout.SOUTH);
 
 
+
+        
         return intervalsPanel;
     }
 
@@ -380,11 +414,21 @@ public class EditLifelineDialog extends JDialog{
            rule.setText(selectedIntervalData.getChildText("value"));
            Element lowerbound = selectedIntervalData.getChild("durationConstratint").getChild("lowerbound");
            Element upperbound = selectedIntervalData.getChild("durationConstratint").getChild("upperbound");
+           
+           Element thetype = null;
+           if (selectedIntervalData.getChild("type") == null){
+               thetype = new Element("type");
+               thetype.setText("precondition");
+               selectedIntervalData.addContent(thetype);
+           }
+           else{
+               thetype = selectedIntervalData.getChild("type");
+           }
            lowerboundType.setSelectedIndex((lowerbound.getAttributeValue("included").equals("true")? 0 : 1));
            upperboundType.setSelectedIndex((upperbound.getAttributeValue("included").equals("true")? 0 : 1));
            lowerboundValue.setSelectedItem(lowerbound.getAttributeValue("value"));
            upperboundValue.setSelectedItem(upperbound.getAttributeValue("value"));
-
+           condeffectType.setSelectedIndex((thetype.getText().equals("precondition")? 0 : 1));
         }
 
     }

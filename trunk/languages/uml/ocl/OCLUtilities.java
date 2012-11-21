@@ -75,7 +75,8 @@ public class OCLUtilities {
 			actionNode = (Element)commonData.getChild("internalUse").getChild("action").clone();
 
 			Element preconditionNode = actionNode.getChild("preconditions");
-			Element postconditionNode = actionNode.getChild("postconditions");			
+			Element postconditionNode = actionNode.getChild("postconditions");
+                        Element annotatedconditionNode = actionNode.getChild("annotatedoclexpressions");
 			
 			//1. Get Operator parameters
 			String strParameters = "";
@@ -129,9 +130,12 @@ public class OCLUtilities {
 				//new condition section in the action template
 				Element diagramPreConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
 				Element diagramPostConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
+                                Element diagramAnnotatedConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
 				
 				preconditionNode.addContent(diagramPreConditions);
 				postconditionNode.addContent(diagramPostConditions);
+                                annotatedconditionNode.addContent(diagramAnnotatedConditions);
+                                
 				
 				//get the class of the diagram
 				if (!stateMachine.getChildText("class").trim().equals("")){
@@ -144,7 +148,8 @@ public class OCLUtilities {
 					}
 					if (tyClass != null){
 						diagramPreConditions.setAttribute("class",tyClass.getChildText("name"));
-						diagramPostConditions.setAttribute("class",tyClass.getChildText("name"));						
+						diagramPostConditions.setAttribute("class",tyClass.getChildText("name"));
+                                                diagramAnnotatedConditions.setAttribute("class",tyClass.getChildText("name"));
 					}				
 				}
 				
@@ -160,7 +165,7 @@ public class OCLUtilities {
 					e2.printStackTrace();
 				}
 				//3.2.2 Deal with each transition of the selected action in the following cases:
-				//	case 1: one transition only - simple
+				//  case 1: one transition only - simple
 				//  case 2: many transitions - work with general structure (operator OR in preconditions and IF THEN ENDIF in postconditions)
 	
 				Element conditionGroup = new Element("conditionGroup");
@@ -246,6 +251,7 @@ public class OCLUtilities {
 					String preconditionStr = "";
 					if(!eachStatePreCondition.getText().trim().equals(""))
 						preconditionStr = eachStatePreCondition.getText().trim();
+                                        
 					if(!eachActionPreCondition.getText().trim().equals("")){
 						if (!preconditionStr.trim().equals("")){
 							preconditionStr = preconditionStr + " and " +eachActionPreCondition.getText().trim(); 
@@ -273,6 +279,18 @@ public class OCLUtilities {
 					
 					if (!groupPre.getText().trim().equals("")) preconditionGroup.addContent(groupPre);
 					if (!groupPost.getText().trim().equals("")) postconditionGroup.addContent(groupPost);
+                                        
+                                        
+                                        //Get annotated pre- and post-conditions
+                                        Element annotatedConditions = eachAction.getChild("annotatedoclexpressions");
+                                        if (annotatedConditions!=null){
+                                            for (Iterator it = annotatedConditions.getChildren().iterator(); it.hasNext();) {
+                                                Element eachannot = (Element)it.next();
+                                                diagramAnnotatedConditions.addContent((Element)eachannot.clone());
+                                            }  
+                                        }
+                                       
+                                        
 					
 			
 				}// End of transition iteration			

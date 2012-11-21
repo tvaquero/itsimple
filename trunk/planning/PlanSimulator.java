@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo
 * 
 *
 * This file is part of itSIMPLE.
@@ -26,19 +26,16 @@
 
 package planning;
 
-import languages.uml.ocl.OCLUtilities;
-import languages.uml.ocl.ExpressionTreeBuilder;
 import itSIMPLE.ItSIMPLE;
-import languages.xml.XMLUtilities;
-
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import javax.swing.JLabel;
-
+import languages.uml.ocl.ExpressionTreeBuilder;
+import languages.uml.ocl.OCLUtilities;
+import languages.xml.XMLUtilities;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 import org.jaxen.jdom.JDOMXPath;
@@ -73,89 +70,165 @@ public class PlanSimulator {
      * @return
      */
     public static Element nextState(String action, List<String> parameters, Element snapshot, Element domain, Element project){
-		//System.out.println("Action: " + action + " " +parameters);
-		
-		Element next = null;		
-		//1. look for the operator in the domain
-		Element domainOperator = null;
-		try {
-			XPath path = new JDOMXPath("elements/classes/class/operators/operator[lower-case(name)='"+ action.toLowerCase() +"']");			
-			domainOperator = (Element)path.selectSingleNode(project);
-			
-		} catch (JaxenException e) {			
-			e.printStackTrace();
-		}
-		if(domainOperator != null){
-			//2. initialize an action node
-			Element instanceAction = new Element("action");
-			instanceAction.addContent((Element)domainOperator.getChild("name").clone());
-			Element instanceParameters = new Element("parameters");
-			int index = 0;
-			for (Iterator<?> iter = domainOperator.getChild("parameters").getChildren("parameter").iterator(); iter.hasNext();) {
-				Element opParam = (Element) iter.next();
-				Element instanceParam = new Element("parameter");
-				
-				Element paramValue = new Element("value");
-				paramValue.setText(parameters.get(index++));
-				instanceParam.addContent((Element)opParam.getChild("name").clone());
-				instanceParam.addContent((Element)opParam.getChild("type").clone());
-				instanceParam.addContent(paramValue);
-				
-				instanceParameters.addContent(instanceParam);
-			}
-			instanceAction.addContent(instanceParameters);
-			instanceAction.addContent(new Element("precondition"));
-			instanceAction.addContent(new Element("postcondition"));
+        //System.out.println("Action: " + action + " " +parameters);
 
-			
-			//3. look for the same action at the state diagrams
-			Element actionConditions = OCLUtilities.buildConditions(domainOperator);
+        
+        
+        Element next = null;		
+        //1. look for the operator in the domain
+        Element domainOperator = null;
+        try {
+                XPath path = new JDOMXPath("elements/classes/class/operators/operator[lower-case(name)='"+ action.toLowerCase() +"']");			
+                domainOperator = (Element)path.selectSingleNode(project);
+
+        } catch (JaxenException e) {			
+                e.printStackTrace();
+        }
+        if(domainOperator != null){
+            //2. initialize an action node
+            Element instanceAction = new Element("action");
+            instanceAction.addContent((Element)domainOperator.getChild("name").clone());
+            
+
+            //3. look for the same action at the state diagrams
+            Element actionConditions = OCLUtilities.buildConditions(domainOperator);
 
             //XMLUtilities.printXML(actionConditions);
 			
-			//4. build the post condition
-			List<?> conditions = null;
-			try {
-				XPath path = new JDOMXPath("postconditions/descendant::condition");			
-				conditions = path.selectNodes(actionConditions);			
-			} catch (JaxenException e) {			
-				e.printStackTrace();
-			}
-			String oclExpression = "";
-			for (Iterator<?> iter = conditions.iterator(); iter.hasNext();) {
-				Element condition = (Element) iter.next();
-				oclExpression += condition.getText().trim();
-				
-				if(iter.hasNext()){
-					oclExpression += " and ";
-				}
-			}
+            //4. build the precondition and postcondition
+            List<?> preconditions = null;
+            try {
+                    XPath path = new JDOMXPath("preconditions/descendant::condition");			
+                    preconditions = path.selectNodes(actionConditions);			
+            } catch (JaxenException e) {			
+                    e.printStackTrace();
+            }
+            String oclpreExpression = "";
+            for (Iterator<?> iter = preconditions.iterator(); iter.hasNext();) {
+                    Element condition = (Element) iter.next();
+                    oclpreExpression += condition.getText().trim();
 
-			//System.out.println(oclExpression);
-			//5. create the expression tree
-			ExpressionTreeBuilder treeBuilder = new ExpressionTreeBuilder(oclExpression);			
-			Element expTree = treeBuilder.getExpressionTree();
-			//XMLUtilities.printXML(expTree);
+                    if(iter.hasNext()){
+                            oclpreExpression += " and ";
+                    }
+            }
+            
+            
+            List<?> postconditions = null;
+            try {
+                    XPath path = new JDOMXPath("postconditions/descendant::condition");			
+                    postconditions = path.selectNodes(actionConditions);			
+            } catch (JaxenException e) {			
+                    e.printStackTrace();
+            }
+            String oclpostExpression = "";
+            for (Iterator<?> iter = postconditions.iterator(); iter.hasNext();) {
+                    Element condition = (Element) iter.next();
+                    oclpostExpression += condition.getText().trim();
+
+                    if(iter.hasNext()){
+                            oclpostExpression += " and ";
+                    }
+            }
+            
+            
+
+            
+            //System.out.println(oclpreExpression);
+            //System.out.println(oclpostExpression);
+            //5. create the expression tree
+            
+            ExpressionTreeBuilder pretreeBuilder = new ExpressionTreeBuilder(oclpreExpression);			
+            Element preexpTree = pretreeBuilder.getExpressionTree();
+            //XMLUtilities.printXML(preexpTree);            
+            
+            ExpressionTreeBuilder treeBuilder = new ExpressionTreeBuilder(oclpostExpression);			
+            Element expTree = treeBuilder.getExpressionTree();
+            //XMLUtilities.printXML(expTree);
+            
+            
+            //6.0 set up action parameters.
+            Element instanceParameters = new Element("parameters");            
+            int index = 0;
+            
+            //if expressions use 'self', add the class to the parameter list
+            //look for self parameterin the precondition
+            Element selfParamNodePre = null;
+            try {
+                    XPath path = new JDOMXPath("descendant::node[@data='self' and @instance='f']");			
+                    selfParamNodePre = (Element)path.selectSingleNode(preexpTree);			
+            } catch (JaxenException e) {			
+                    e.printStackTrace();
+            }
+            //look for self parameterin the postcondition
+            Element selfParamNodePost = null;
+            try {
+                    XPath path = new JDOMXPath("descendant::node[@data='self' and @instance='f']");			
+                    selfParamNodePost = (Element)path.selectSingleNode(expTree);			
+            } catch (JaxenException e) {			
+                    e.printStackTrace();
+            }
+            if (selfParamNodePre != null || selfParamNodePost != null){
+            
+                
+                Element instanceParam = new Element("parameter");
+                //System.out.println("added\n");
+                    
+                Element paramName = new Element("name");
+                paramName.setText("self");
+                Element paramType = new Element("type");
+                paramType.setText(domainOperator.getParentElement().getParentElement().getAttributeValue("id"));
+                Element paramValue = new Element("value");
+                paramValue.setText(parameters.get(index++));
+
+                instanceParam.addContent(paramName);
+                instanceParam.addContent(paramType);
+                instanceParam.addContent(paramValue);
+
+                instanceParameters.addContent(instanceParam);
+                
+            }
+            
+            for (Iterator<?> iter = domainOperator.getChild("parameters").getChildren("parameter").iterator(); iter.hasNext();) {
+                    Element opParam = (Element) iter.next();
+                    Element instanceParam = new Element("parameter");
+
+                    Element paramValue = new Element("value");
+                    paramValue.setText(parameters.get(index++));
+                    instanceParam.addContent((Element)opParam.getChild("name").clone());
+                    instanceParam.addContent((Element)opParam.getChild("type").clone());
+                    instanceParam.addContent(paramValue);
+
+                    instanceParameters.addContent(instanceParam);
+            }
+            instanceAction.addContent(instanceParameters);
+            instanceAction.addContent(new Element("precondition"));
+            instanceAction.addContent(new Element("postcondition"));
+            //XMLUtilities.printXML(instanceAction);
+            
+            
+            
 			
-			//6. replace the parameters values
-			for (Iterator<?> iter = instanceAction.getChild("parameters").getChildren("parameter").iterator(); iter.hasNext();) {
-				Element parameter = (Element) iter.next();
-				// look for the parameters in the tree
-				List<?> expTreeParameters = null;
-				try {
-					XPath path = new JDOMXPath("descendant::node[@data='"+ parameter.getChildText("name")
-							+"' and @instance='f']");			
-					expTreeParameters = path.selectNodes(expTree);			
-				} catch (JaxenException e) {			
-					e.printStackTrace();
-				}
-				for (Iterator<?> iterator = expTreeParameters.iterator(); iterator.hasNext();) {
-					Element expTreeParam = (Element) iterator.next();
-					expTreeParam.setAttribute("data", parameter.getChildText("value"));
-					expTreeParam.setAttribute("instance", "t");
-				}
-			}			
-			//XMLUtilities.printXML(expTree);
+            //6.1 replace the parameters values
+            for (Iterator<?> iter = instanceAction.getChild("parameters").getChildren("parameter").iterator(); iter.hasNext();) {
+                    Element parameter = (Element) iter.next();
+                    //XMLUtilities.printXML(parameter);
+                    // look for the parameters in the tree
+                    List<?> expTreeParameters = null;
+                    try {
+                            XPath path = new JDOMXPath("descendant::node[@data='"+ parameter.getChildText("name")
+                                            +"' and @instance='f']");			
+                            expTreeParameters = path.selectNodes(expTree);			
+                    } catch (JaxenException e) {			
+                            e.printStackTrace();
+                    }
+                    for (Iterator<?> iterator = expTreeParameters.iterator(); iterator.hasNext();) {
+                            Element expTreeParam = (Element) iterator.next();
+                            expTreeParam.setAttribute("data", parameter.getChildText("value"));
+                            expTreeParam.setAttribute("instance", "t");
+                    }
+            }			
+            //XMLUtilities.printXML(expTree);
 			
 			
 			//7. evaluate the expression tree
@@ -194,52 +267,52 @@ public class PlanSimulator {
 					String attrOrAssocName;
 					
 					if(attrOrAssocData.indexOf('(') > 0){
-						// the attribute is parameterized
-						// replace the parameter values
-						attrOrAssocName = attrOrAssocData.substring(0, attrOrAssocData.indexOf('('));
-						String attrParameters = attrOrAssocData.substring(attrOrAssocData.indexOf('(')+1, attrOrAssocData.lastIndexOf(')'));
-						String attrValues = "(";
-						StringTokenizer st = new StringTokenizer(attrParameters, ",");
-						while(st.hasMoreTokens()){
-							String parameter = st.nextToken().trim().toLowerCase();
-							Element instanceParameter = null;
-							try {
-								XPath path = new JDOMXPath("parameter[lower-case(name)='"+ parameter +"']");			
-								instanceParameter = (Element)path.selectSingleNode(instanceParameters);						
-							} catch (JaxenException e) {			
-								e.printStackTrace();
-							}
-							if(instanceParameter != null){
-								attrValues += instanceParameter.getChildText("value");
-								
-								if(st.hasMoreTokens()){
-									attrValues += ",";
-								}
-							}
-							else{
-								//System.out.println("Parameter \""+ parameter +"\" not found in parameters list.");
-                                //TODO: Check if it is a literal
-                                Element literal = null;
-                                try {
-                                    XPath path = new JDOMXPath("project/elements/classes/enumeration/literals/literal[lower-case(name)='"+ parameter +"']");
-                                    literal = (Element)path.selectSingleNode(domain.getDocument());
-                                } catch (JaxenException e) {
-                                    e.printStackTrace();
-                                }
-                                if(literal!=null){
-                                    attrValues += parameter;
-                                }else{
-                                    attrValues += "#error";
-                                }
+                                            // the attribute is parameterized
+                                            // replace the parameter values
+                                            attrOrAssocName = attrOrAssocData.substring(0, attrOrAssocData.indexOf('('));
+                                            String attrParameters = attrOrAssocData.substring(attrOrAssocData.indexOf('(')+1, attrOrAssocData.lastIndexOf(')'));
+                                            String attrValues = "(";
+                                            StringTokenizer st = new StringTokenizer(attrParameters, ",");
+                                            while(st.hasMoreTokens()){
+                                                    String parameter = st.nextToken().trim().toLowerCase();
+                                                    Element instanceParameter = null;
+                                                    try {
+                                                            XPath path = new JDOMXPath("parameter[lower-case(name)='"+ parameter +"']");			
+                                                            instanceParameter = (Element)path.selectSingleNode(instanceParameters);						
+                                                    } catch (JaxenException e) {			
+                                                            e.printStackTrace();
+                                                    }
+                                                    if(instanceParameter != null){
+                                                            attrValues += instanceParameter.getChildText("value");
 
-								
-							}
-						}
-						attrValues += ")";
-						
-						String newAttrData = attrOrAssocName + attrValues;
-						attrOrAssoc.setAttribute("data", newAttrData);
-						attrOrAssoc.setAttribute("instance", "t");
+                                                            if(st.hasMoreTokens()){
+                                                                    attrValues += ",";
+                                                            }
+                                                    }
+                                                    else{
+                                                        //System.out.println("Parameter \""+ parameter +"\" not found in parameters list.");
+                                                        //TODO: Check if it is a literal
+                                                        Element literal = null;
+                                                        try {
+                                                            XPath path = new JDOMXPath("project/elements/classes/enumeration/literals/literal[lower-case(name)='"+ parameter +"']");
+                                                            literal = (Element)path.selectSingleNode(domain.getDocument());
+                                                        } catch (JaxenException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        if(literal!=null){
+                                                            attrValues += parameter;
+                                                        }else{
+                                                            attrValues += "#error";
+                                                        }
+
+
+                                                    }
+                                            }
+                                            attrValues += ")";
+
+                                            String newAttrData = attrOrAssocName + attrValues;
+                                            attrOrAssoc.setAttribute("data", newAttrData);
+                                            attrOrAssoc.setAttribute("instance", "t");
 					}
 					else{
 						attrOrAssocName = attrOrAssocData;
@@ -260,7 +333,8 @@ public class PlanSimulator {
 							e.printStackTrace();
 						}
 						if(modelAttrOrAssoc != null){
-							Element newRight = evaluateExpressionNode(right, instanceParameters, snapshot, domain, project);							
+							//Element newRight = evaluateExpressionNode(right, instanceParameters, snapshot, domain, project);							
+                                                        Element newRight = evaluateExpressionNodeInSnapshot(right, instanceParameters, snapshot, domain, project);							
 							
 							if(modelAttrOrAssoc.getChild("type") != null && 
 									modelAttrOrAssoc.getChildText("type").equals("2")){//int
@@ -292,7 +366,8 @@ public class PlanSimulator {
 						// forAll
 						if(right.getAttributeValue("data").equals("forAll")){
 							// the left node represents a lisf of objects
-							Element newLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+							//Element newLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+                                                        Element newLeft = evaluateExpressionNodeInSnapshot(left, instanceParameters, snapshot, domain, project);
 														
 							// get forAll parameters (only one is supported currently)
 							List<?> forAllParameters = null;
@@ -463,7 +538,8 @@ public class PlanSimulator {
 			}
 			for (Iterator<?> iter = attributions.iterator(); iter.hasNext();) {
 				Element node = (Element) iter.next();
-				if(node.getAttributeValue("data").equals("=")){
+                                //XMLUtilities.printXML(node);	
+                            if(node.getAttributeValue("data").equals("=")){
 					Element left = (Element)node.getChildren().get(0);
 					Element right = (Element)node.getChildren().get(1);
 					
@@ -651,6 +727,9 @@ public class PlanSimulator {
 												
 												
 												if(targetAssociationEnd != null){
+                        
+                                                                                                        //XMLUtilities.printXML(oclNode);
+                                                                                                        //XMLUtilities.printXML(domainObject);
 													//rolename
 													String objectAssociationEndID = (targetAssociationEnd.getAttributeValue("id").equals("1")) ?"2" :"1";
 													Element objectAssociation = null;
@@ -663,7 +742,9 @@ public class PlanSimulator {
 														e.printStackTrace();
 													}
 													if(right.getAttributeValue("data").toLowerCase().equals("null")){
+                                                                                                            //System.out.print("remove");
 														if(objectAssociation != null){
+                                                                                                                    //XMLUtilities.printXML(objectAssociation);
 															// delete the object association
 															Element associations = objectAssociation.getParentElement();
 															associations.removeContent(objectAssociation);
@@ -674,8 +755,8 @@ public class PlanSimulator {
 													else if(right.getAttributeValue("data").equals("set")){
 														// the only currently supported structure is: a.b = a.b->including/excluding(c)
 														
-														Element evalLeft = evaluateExpressionNode(left, instanceParameters, 
-																snapshot, domain, project);														
+														//Element evalLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+                                                                                                                Element evalLeft = evaluateExpressionNodeInSnapshot(left, instanceParameters, snapshot, domain, project);
 														
 														List<?> leftChildren = evalLeft.getChildren();
 														List<?> rightChildren = right.getChildren();
@@ -845,9 +926,9 @@ public class PlanSimulator {
 														
 														Element nodeToInclude = right.getChild("node");
 														
-														Element evalLeft = evaluateExpressionNode(left, instanceParameters, 
-																snapshot, domain, project);
-														Element sameNode = null;
+														//Element evalLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+                                                                                                                Element evalLeft = evaluateExpressionNodeInSnapshot(left, instanceParameters, snapshot, domain, project);
+                                                                                                                Element sameNode = null;
 														try {
 															XPath path = new JDOMXPath("node[@data='"+ 
 																	nodeToInclude.getAttributeValue("data") +"']");														
@@ -935,8 +1016,8 @@ public class PlanSimulator {
 														
 														Element nodeToExclude = right.getChild("node");
 														
-														Element evalLeft = evaluateExpressionNode(left, instanceParameters, 
-																snapshot, domain, project);
+														//Element evalLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+                                                                                                                Element evalLeft = evaluateExpressionNodeInSnapshot(left, instanceParameters, snapshot, domain, project);
 														Element sameNode = null;
 														try {
 															XPath path = new JDOMXPath("node[@data='"+ 
@@ -1615,12 +1696,14 @@ public class PlanSimulator {
 			Element left = (Element)node.getChildren().get(0);
 			Element right = (Element)node.getChildren().get(1);
 			String rightData = right.getAttributeValue("data");
-			Element set = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+			//Element set = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+                        Element set = evaluateExpressionNodeInSnapshot(left, instanceParameters, snapshot, domain, project);
 
 			// with including or excluding, it will return the result of the set
 			// after the inclusion or exclusion
 			if(rightData.equals("including") || rightData.equals("excluding")){		
-				Element param = evaluateExpressionNode(right.getChild("node"), instanceParameters, snapshot, domain, project);
+				//Element param = evaluateExpressionNode(right.getChild("node"), instanceParameters, snapshot, domain, project);
+                                Element param = evaluateExpressionNodeInSnapshot(right.getChild("node"), instanceParameters, snapshot, domain, project);
 				if(rightData.equals("including")){
 					// add the node to the set
 					set.addContent(param);
@@ -1656,13 +1739,16 @@ public class PlanSimulator {
 			Element left = (Element)node.getChildren().get(0);
 			Element right = (Element)node.getChildren().get(1);
 
-            //XMLUtilities.printXML(left);
-            //XMLUtilities.printXML(right);
+                        //XMLUtilities.printXML(left);
+                        //XMLUtilities.printXML(right);
 
-			Element evalLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
-			Element evalRight = evaluateExpressionNode(right, instanceParameters, snapshot, domain, project);
-            //XMLUtilities.printXML(evalLeft);
-            //XMLUtilities.printXML(evalRight);
+			//Element evalLeft = evaluateExpressionNode(left, instanceParameters, snapshot, domain, project);
+                        Element evalLeft = evaluateExpressionNodeInSnapshot(left, instanceParameters, snapshot, domain, project);
+			//Element evalRight = evaluateExpressionNode(right, instanceParameters, snapshot, domain, project);
+                        Element evalRight = evaluateExpressionNodeInSnapshot(right, instanceParameters, snapshot, domain, project);
+                        
+                        //XMLUtilities.printXML(evalLeft);
+                        //XMLUtilities.printXML(evalRight);
 			
 			evaluatedNode = (Element)node.clone();
 			evaluatedNode.removeContent();
@@ -1846,7 +1932,7 @@ public class PlanSimulator {
 
 
     /**
-     * This method evaluate a expression node in a given snaphot based considering
+     * This method evaluate a expression node in a given snapshot based considering
      * a list of action's parameters (if such list exists). If the list do not exist
      * it will look for key elements in the domain.
      * @param node
@@ -2480,63 +2566,63 @@ public class PlanSimulator {
 
         //hold problem, domain and project
         theproblem = problem;
-		thedomain = problem.getParentElement().getParentElement();
-		theproject = problem.getDocument().getRootElement();
+        thedomain = problem.getParentElement().getParentElement();
+        theproject = problem.getDocument().getRootElement();
 
 		//set movie node
         Element movie = new Element("movie");
 	
         //GET MOVIE
-		// get init snapshot
-		Element currentSnapshot = null;
-		try {
-			XPath path = new JDOMXPath(
-					"objectDiagrams/objectDiagram[sequenceReference='init']");
-			currentSnapshot = (Element) path.selectSingleNode(problem);
-		} catch (JaxenException e) {
-			e.printStackTrace();
-		}
-	
-		if(currentSnapshot != null){
+        // get init snapshot
+        Element currentSnapshot = null;
+        try {
+            XPath path = new JDOMXPath("objectDiagrams/objectDiagram[sequenceReference='init']");
+            currentSnapshot = (Element) path.selectSingleNode(problem);
+        } catch (JaxenException e) {
+            e.printStackTrace();
+        }
+
+        if(currentSnapshot != null){
             // add it to movie (first scene)
             currentSnapshot = (Element)currentSnapshot.clone();
             movie.addContent(currentSnapshot);
 
-			// set id = 1 (first scene)
-			currentSnapshot.setAttribute("id", "1");
+            // set id = 1 (first scene)
+            currentSnapshot.setAttribute("id", "1");
 
             // get metrics from inital snapshot
             //gatherMetricsDataset(metrics, null, currentSnapshot);
 			
-			// iterate over all actions in xmlPlan
-			List<?> actions = xmlPlan.getChild("plan").getChildren("action");
-			// diagrams sequence
-			int i = 2;
-			
-			JLabel status = ItSIMPLE.getInstance().getPlanSimStatusBar();
-			status.setText("Status: Generating movie... (0%)");
-			int progressIndex = 0;
-			
-			for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
-				Element action = (Element) iter.next();
-				// get next snap shot
-				String actionName = action.getAttributeValue("id");
-				List<String> actionParams = new ArrayList<String>();
-				for (Iterator<?> iterator = action.getChild("parameters")
-						.getChildren("parameter").iterator(); iterator
-						.hasNext();) {
-					Element param = (Element) iterator.next();
-					actionParams.add(param.getAttributeValue("id"));
-				}
-				//	objectDiagrams	domain
-				Element domain = problem.getParentElement()
-						.getParentElement();
-				Element project = problem.getDocument().getRootElement();
+            // iterate over all actions in xmlPlan
+            List<?> actions = xmlPlan.getChild("plan").getChildren("action");
+            // diagrams sequence
+            int i = 2;
 
-				currentSnapshot = nextState(actionName, actionParams,
-						currentSnapshot, domain, project);
-				// set the id
-				currentSnapshot.setAttribute("id", String.valueOf(i++));
+            JLabel status = ItSIMPLE.getInstance().getPlanSimStatusBar();
+            status.setText("Status: Generating movie... (0%)");
+            int progressIndex = 0;
+			
+            for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
+                Element action = (Element) iter.next();
+                // get next snap shot
+                String actionName = action.getAttributeValue("id");
+                List<String> actionParams = new ArrayList<String>();
+                for (Iterator<?> iterator = action.getChild("parameters")
+                                .getChildren("parameter").iterator(); iterator
+                                .hasNext();) {
+                        Element param = (Element) iterator.next();
+                        actionParams.add(param.getAttributeValue("id"));
+                }
+                //	objectDiagrams	domain
+                Element domain = problem.getParentElement().getParentElement();
+                Element project = problem.getDocument().getRootElement();
+
+                //generates next state
+                currentSnapshot = nextState(actionName, actionParams, currentSnapshot, domain, project);
+                
+                
+                // set the id
+                currentSnapshot.setAttribute("id", String.valueOf(i++));
 				
                 
                 //get action start time (restricted so far to INTEGER
@@ -2555,22 +2641,22 @@ public class PlanSimulator {
                 int snapshotRef  = startTime + duration;
 
                 // set the sequence time
-				//currentSnapshot.getChild("sequenceReference").setText(action.getChildText("startTime"));
+		//currentSnapshot.getChild("sequenceReference").setText(action.getChildText("startTime"));
                 currentSnapshot.getChild("sequenceReference").setText(Integer.toString(snapshotRef));
 				
-				movie.addContent(currentSnapshot);
+		movie.addContent(currentSnapshot);
 
                 // get metrics from inital snapshot
                 //gatherMetricsDataset(metrics, action, currentSnapshot);
 
                 // refresh the status bar
-				int progressPercentage = (int)((double)++progressIndex/(double)actions.size() * 100);
-				status.setText("Status: Generating movie... ("+ progressPercentage +"%)");
+                int progressPercentage = (int)((double)++progressIndex/(double)actions.size() * 100);
+                status.setText("Status: Generating movie... ("+ progressPercentage +"%)");
 
-			}
+            }
 			
-			status.setText("Status: Done generating movie!");
-		}
+            status.setText("Status: Done generating movie!");
+	}
 
         //XMLUtilities.printXML(metrics);
 
@@ -2579,9 +2665,9 @@ public class PlanSimulator {
         //xmlPlan.removeChildren("metrics"); //clear metrics
         //xmlPlan.addContent(metrics); //put the metrics in the plan
 
-		//XMLUtilities.printXML(movie);
-		return movie;
-	}
+            //XMLUtilities.printXML(movie);
+            return movie;
+    }
 
 	
 	public static void buildPlanAnalysisDataset(Element analysis, Element xmlPlan, Element problem){

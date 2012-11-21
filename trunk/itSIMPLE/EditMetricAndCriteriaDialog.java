@@ -634,9 +634,10 @@ public class EditMetricAndCriteriaDialog extends JDialog implements TableModelLi
                 // Edit Function panel
                 //The function/expression itself
                 editAndNewFunctionPanel = new ItPanel(new BorderLayout());
-                editAndNewFunctionPanel.setPreferredSize(new Dimension(250,60));	
+                editAndNewFunctionPanel.setPreferredSize(new Dimension(250,70));
                 editAndNewFunctionPanel.add(new JLabel("Function: f(x)="), BorderLayout.WEST);
                 rule =  new JTextField();
+                //rule.setPreferredSize(new Dimension(100, 30));
                 rule.addKeyListener(new KeyAdapter(){
 			@Override
                         //public void keyPressed(KeyEvent e) {

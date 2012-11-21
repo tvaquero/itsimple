@@ -3,7 +3,7 @@
 <commonData>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.5.10</version>
+		<version>4.0.00</version>
 	</generalInformation>
 	<definedNodes>
 		<elements>
@@ -297,6 +297,7 @@
 					<description/>
 					<precondition/>
 					<postcondition/>
+                                        <annotatedoclexpressions/>                                        
 					<associationEnds>
 						<actionEnd navigation="false" element="state" element-id="" id="1"/>
 						<actionEnd navigation="true" element="state" element-id="" id="2"/>
@@ -457,10 +458,15 @@
                                         <upperbound value="" included="true"/>
                                         <annotation/>
                                     </durationConstratint>
+                                    <type>precondition</type>
                                     <timeConstraint/>
                                     <stimulus class="" action=""/>
                                     <value/>
                                 </timeInterval>
+                                <annotatedoclcondition type="">		
+                                        <annotation/>
+                                        <condition/>
+                                </annotatedoclcondition>                                
 			</model>
 			<structure>
 				<domain id="">
@@ -614,6 +620,7 @@
 			<parameters/>
 			<preconditions/>
 			<postconditions/>
+                        <annotatedoclexpressions/>
 		</action>
 		<conditions class=""/>
 	</internalUse>

@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2009 Universidade de Sao Paulo
+* Copyright (C) 2007-2011 University of Sao Paulo, University of Toronto
 * 
 *
 * This file is part of itSIMPLE.
@@ -1062,7 +1062,7 @@ public class ItGraphUI extends BasicGraphUI {
 						// this array saves the class and the number of objects to be created
 						// parameters[0]: class data or "No class"
 						// parameters[1]: number of objects
-						Object[] parameters = new Object[2];
+						Object[] parameters = new Object[3];
 						
                                                 int xpos = itGraph.getLocation().x;
                                                 int ypos = itGraph.getLocation().y;
@@ -1071,9 +1071,10 @@ public class ItGraphUI extends BasicGraphUI {
 						dialog.setVisible(true);
 
 						
-						if(parameters[0] != null && parameters[1] != null){									
-							
-							int numberOfObjects = Integer.parseInt((String)parameters[1]);
+						if(parameters[0] != null){
+                                                    //if the user specified the number of objects
+                                                    if (parameters[1] != null){
+                                                        int numberOfObjects = Integer.parseInt((String)parameters[1]);
 							Element domain = diagram.getParentElement().getParentElement();
 							Element objectCommonData = commonData.getChild("definedNodes").getChild("elements")
 																		.getChild("model").getChild("object");
@@ -1181,7 +1182,128 @@ public class ItGraphUI extends BasicGraphUI {
 								treeModel.insertNodeInto(objectNode, diagramNode, diagramNode.getChildCount());
 								
 							}
-							
+                                                        
+                                                    } 
+                                                    //If the user specified the list of names
+                                                    else if(parameters[2] != null){
+                                                        //System.out.println(parameters[2]);
+                                                        List namesOfObjects = (List)parameters[2];
+                                                        
+							Element domain = diagram.getParentElement().getParentElement();
+							Element objectCommonData = commonData.getChild("definedNodes").getChild("elements")
+																		.getChild("model").getChild("object");
+							Element objectReferenceCommonData = commonData.getChild("definedNodes").getChild("elements").getChild("references").getChild("object");
+                                                        int i = 0;
+							for (Iterator it = namesOfObjects.iterator(); it.hasNext();) {
+                
+                                                                String name = (String)it.next();
+								Element objectData = (Element)objectCommonData.clone();
+								
+								Element objectReference = (Element)objectReferenceCommonData.clone();						
+								
+								String id = String.valueOf(XMLUtilities.getId(domain.getChild("elements").getChild("objects")));
+								
+								objectData.setAttribute("id", id);
+								objectReference.setAttribute("id", id);
+								
+								objectData.getChild("name").setText(name.trim());
+								// the objects will be crated in cascate
+								objectReference.getChild("graphics").getChild("position").setAttribute("x", String.valueOf(e.getX()+i*10));
+								objectReference.getChild("graphics").getChild("position").setAttribute("y", String.valueOf(e.getY()+i*10));							
+								
+								
+								Element objectClass = null;
+								if(!parameters[0].equals("Undefined")){								
+									// there is a defined class
+									Element classData = (Element)parameters[0];								
+									objectData.getChild("class").setText(classData.getAttributeValue("id"));
+									
+									// make the object bigger
+									objectReference.getChild("graphics").getChild("size").setAttribute("width", "120");
+									objectReference.getChild("graphics").getChild("size").setAttribute("height", "80");
+									
+									//sets the class
+									objectClass = (Element)parameters[0];
+									
+									// populate the object attributes (class and its parents attributes)								
+									
+									//1. Get all class parents and their attributes
+									ArrayList<Element> parentList = new ArrayList<Element>();
+									ArrayList<Element> attributeList = new ArrayList<Element>();
+									boolean hasParent = true;
+									Element parent = classData;
+									while (hasParent && parent != null){
+										//check if it's not a primitive class
+										if (!parent.getChildText("type").equals("Primitive")){
+											parentList.add(parent);
+											
+											//1.1 List attributes
+											Iterator attributes = parent.getChild("attributes").getChildren("attribute").iterator();
+											while(attributes.hasNext()){
+												Element attribute = (Element)attributes.next();
+												attributeList.add(attribute);										
+											}	
+											//1.2 Checks if there is a parent class
+											if (!parent.getChild("generalization").getAttributeValue("id").equals("")){
+												parent = XMLUtilities.getElement(parent.getParentElement(), parent.getChild("generalization").getAttributeValue("id"));
+												hasParent = true;
+											}
+											else{
+												hasParent = false;
+												parent = null;
+											}
+										}
+										else{
+											hasParent = false;									
+										}	
+									}
+									
+									//2. Get the object and put the new attributes								
+									
+									//for (int i = 0; i < result.size(); i++){
+										//Element object = (Element)result.get(i);
+										//objectData.getChild("attributes").removeContent();
+										//Build each attribute reference
+										for (Iterator iter = attributeList.iterator(); iter.hasNext();) {
+											Element currentAtt = (Element) iter.next();
+											
+											Element attributeReference = (Element)commonData.getChild("definedNodes").getChild("elements")
+											.getChild("references").getChild("attribute").clone();
+											
+											attributeReference.setAttribute("class", currentAtt.getParentElement().getParentElement().getAttributeValue("id"));
+											attributeReference.setAttribute("id", currentAtt.getAttributeValue("id"));
+
+                                                                                        //put the initial value only at the object diagrams, not in the repository.
+                                                                                        if (diagram.getName().equals("objectDiagram")){
+                                                                                            //put the initial value
+                                                                                            if (!currentAtt.getChildText("initialValue").equals("")){
+                                                                                                    attributeReference.getChild("value").setText(currentAtt.getChildText("initialValue"));
+                                                                                            }
+                                                                                        }
+											objectReference.getChild("attributes").addContent(attributeReference);
+										}	
+
+								}
+
+								
+								
+								domain.getChild("elements").getChild("objects").addContent(objectData);
+								diagram.getChild("objects").addContent(objectReference);						
+								
+								ObjectCell object = new ObjectCell(objectData, objectReference, objectClass);										
+								graph.getGraphLayoutCache().insert(object);
+								
+								ItTreeNode objectNode = new ItTreeNode(objectData.getChildText("name"), objectData, objectReference, null);
+								objectNode.setIcon(new ImageIcon("resources/images/object.png"));
+								treeModel.insertNodeInto(objectNode, diagramNode, diagramNode.getChildCount());
+                                                                
+                                                                i++;
+								
+							}
+                                                        
+                                                        
+                                                    }
+													
 						}
 						
 						toolBar.setSelectedButton(ItToolBar.SELECT);
