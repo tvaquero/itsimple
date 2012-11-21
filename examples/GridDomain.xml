@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Grid Domain</name>
-	<description>There is a square grid of locations. A robot can move one grid square at a time horizontally and vertically. If a square is locked, the robot can move to it only by unlocking it, which requires having a key of the same shape as the lock. 
-The goal is to get keys from various locations to various new locations. This domain was created by Jana Koehler, based on an earlier domain by Drew McDermott.
-
-Extracted from IPC-1 (1998)</description>
+	<description>This domain was extracted from IPC-1 (1998) and was created by Jana Koehler, based on an earlier domain by Drew McDermott.
+There is a square grid of locations. A robot can move one grid square at a time horizontally and vertically. If a square is locked, the robot can move to it only by unlocking it, which requires having a key of the same shape as the lock. 
+The goal is to get keys from various locations to various new locations.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
 		<version>3.1.10</version>
@@ -894,13 +893,13 @@ Extracted from IPC-1 (1998)</description>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="541" y="93" />
+									<position x="504" y="16" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="1500" y="16" />
+									<position x="893" y="23" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="-354" y="13" />
@@ -957,7 +956,7 @@ Extracted from IPC-1 (1998)</description>
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="1108" y="-30" />
+									<position x="954" y="-42" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />

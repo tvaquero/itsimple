@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-	<name>Elevator Domain v1</name>
+	<name>Elevator Domain v01</name>
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
@@ -30,59 +30,7 @@
 				<type />
 				<stereotype />
 				<attributes>
-					<attribute id="1">
-						<name>capacity</name>
-						<type>2</type>
-						<description />
-						<multiplicity />
-						<initialValue />
-						<changeability />
-						<parameters />
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</attribute>
 					<attribute id="2">
-						<name>stopped</name>
-						<type>1</type>
-						<description />
-						<multiplicity />
-						<initialValue />
-						<changeability />
-						<parameters />
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</attribute>
-					<attribute id="3">
-						<name>movingUp</name>
-						<type>1</type>
-						<description />
-						<multiplicity />
-						<initialValue />
-						<changeability />
-						<parameters />
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</attribute>
-					<attribute id="4">
-						<name>movingDown</name>
-						<type>1</type>
-						<description />
-						<multiplicity />
-						<initialValue />
-						<changeability />
-						<parameters />
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</attribute>
-					<attribute id="5">
 						<name>doorOpen</name>
 						<type>1</type>
 						<description />
@@ -95,7 +43,20 @@
 							<color />
 						</graphics>
 					</attribute>
-					<attribute id="6">
+					<attribute id="3">
+						<name>capacity</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability>frozen</changeability>
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
+					<attribute id="4">
 						<name>currentLoad</name>
 						<type>2</type>
 						<description />
@@ -111,10 +72,10 @@
 				</attributes>
 				<operators>
 					<operator id="1">
-						<name>goUp</name>
+						<name>moveUp</name>
 						<description />
-						<timeConstraints timed="true">
-							<duration>2</duration>
+						<timeConstraints timed="false">
+							<duration />
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
@@ -124,12 +85,12 @@
 							</parameter>
 							<parameter id="2">
 								<name>from</name>
-								<type>24</type>
+								<type>23</type>
 								<defaultValue />
 							</parameter>
 							<parameter id="3">
 								<name>to</name>
-								<type>24</type>
+								<type>23</type>
 								<defaultValue />
 							</parameter>
 						</parameters>
@@ -139,10 +100,10 @@
 						</graphics>
 					</operator>
 					<operator id="2">
-						<name>goDown</name>
+						<name>moveDown</name>
 						<description />
-						<timeConstraints timed="true">
-							<duration>2</duration>
+						<timeConstraints timed="false">
+							<duration />
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
@@ -152,35 +113,12 @@
 							</parameter>
 							<parameter id="2">
 								<name>from</name>
-								<type>24</type>
+								<type>23</type>
 								<defaultValue />
 							</parameter>
 							<parameter id="3">
 								<name>to</name>
-								<type>24</type>
-								<defaultValue />
-							</parameter>
-						</parameters>
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</operator>
-					<operator id="3">
-						<name>stop</name>
-						<description />
-						<timeConstraints timed="true">
-							<duration>6</duration>
-						</timeConstraints>
-						<parameters>
-							<parameter id="1">
-								<name>e</name>
-								<type>21</type>
-								<defaultValue />
-							</parameter>
-							<parameter id="2">
-								<name>f</name>
-								<type>24</type>
+								<type>23</type>
 								<defaultValue />
 							</parameter>
 						</parameters>
@@ -192,8 +130,8 @@
 					<operator id="4">
 						<name>openDoor</name>
 						<description />
-						<timeConstraints timed="true">
-							<duration>2</duration>
+						<timeConstraints timed="false">
+							<duration />
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
@@ -210,59 +148,13 @@
 					<operator id="5">
 						<name>closeDoor</name>
 						<description />
-						<timeConstraints timed="true">
-							<duration>2</duration>
+						<timeConstraints timed="false">
+							<duration />
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
 								<name>e</name>
 								<type>21</type>
-								<defaultValue />
-							</parameter>
-						</parameters>
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</operator>
-					<operator id="6">
-						<name>startMovingUp</name>
-						<description />
-						<timeConstraints timed="true">
-							<duration>0.5</duration>
-						</timeConstraints>
-						<parameters>
-							<parameter id="1">
-								<name>e</name>
-								<type>21</type>
-								<defaultValue />
-							</parameter>
-							<parameter id="2">
-								<name>f</name>
-								<type>24</type>
-								<defaultValue />
-							</parameter>
-						</parameters>
-						<constraints />
-						<graphics>
-							<color />
-						</graphics>
-					</operator>
-					<operator id="7">
-						<name>startMovingDown</name>
-						<description />
-						<timeConstraints timed="true">
-							<duration>0.5</duration>
-						</timeConstraints>
-						<parameters>
-							<parameter id="1">
-								<name>e</name>
-								<type>21</type>
-								<defaultValue />
-							</parameter>
-							<parameter id="2">
-								<name>f</name>
-								<type>24</type>
 								<defaultValue />
 							</parameter>
 						</parameters>
@@ -272,7 +164,7 @@
 						</graphics>
 					</operator>
 				</operators>
-				<generalization element="" id="">
+				<generalization element="class" id="">
 					<name />
 					<graphics>
 						<labels>
@@ -301,11 +193,11 @@
 				<attributes>
 					<attribute id="1">
 						<name>origin</name>
-						<type>24</type>
+						<type>23</type>
 						<description />
 						<multiplicity />
 						<initialValue />
-						<changeability />
+						<changeability>frozen</changeability>
 						<parameters />
 						<constraints />
 						<graphics>
@@ -314,11 +206,11 @@
 					</attribute>
 					<attribute id="2">
 						<name>destin</name>
-						<type>24</type>
+						<type>23</type>
 						<description />
 						<multiplicity />
 						<initialValue />
-						<changeability />
+						<changeability>frozen</changeability>
 						<parameters />
 						<constraints />
 						<graphics>
@@ -356,8 +248,8 @@
 					<operator id="1">
 						<name>board</name>
 						<description />
-						<timeConstraints timed="true">
-							<duration>5</duration>
+						<timeConstraints timed="false">
+							<duration />
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
@@ -372,7 +264,7 @@
 							</parameter>
 							<parameter id="3">
 								<name>f</name>
-								<type>24</type>
+								<type>23</type>
 								<defaultValue />
 							</parameter>
 						</parameters>
@@ -384,8 +276,8 @@
 					<operator id="2">
 						<name>debark</name>
 						<description />
-						<timeConstraints timed="true">
-							<duration>5</duration>
+						<timeConstraints timed="false">
+							<duration />
 						</timeConstraints>
 						<parameters>
 							<parameter id="1">
@@ -400,7 +292,7 @@
 							</parameter>
 							<parameter id="3">
 								<name>f</name>
-								<type>24</type>
+								<type>23</type>
 								<defaultValue />
 							</parameter>
 						</parameters>
@@ -410,7 +302,7 @@
 						</graphics>
 					</operator>
 				</operators>
-				<generalization element="" id="">
+				<generalization element="class" id="">
 					<name />
 					<graphics>
 						<labels>
@@ -425,20 +317,20 @@
 				</generalization>
 				<constraints />
 				<graphics>
-					<icon>BusinessMan.png</icon>
+					<icon>agent1.png</icon>
 					<position x="" y="" />
 					<size width="" height="" />
 					<color />
 				</graphics>
 			</class>
-			<class id="24">
+			<class id="23">
 				<name>Floor</name>
 				<description />
 				<type />
 				<stereotype />
 				<attributes />
 				<operators />
-				<generalization element="" id="">
+				<generalization element="class" id="">
 					<name />
 					<graphics>
 						<labels>
@@ -474,7 +366,7 @@
 							<value>0..*</value>
 						</multiplicity>
 					</associationEnd>
-					<associationEnd navigation="true" element="class" element-id="24" id="2">
+					<associationEnd navigation="true" element="class" element-id="23" id="2">
 						<type>simple</type>
 						<rolename>
 							<value>at</value>
@@ -489,23 +381,23 @@
 				</changeability>
 				<constraints />
 			</classAssociation>
-			<classAssociation id="3">
+			<classAssociation id="2">
 				<name>next</name>
 				<description />
 				<associationEnds>
-					<associationEnd navigation="true" element="class" element-id="24" id="1">
+					<associationEnd navigation="true" element="class" element-id="23" id="1">
 						<type>simple</type>
 						<rolename>
-							<value>nextDown</value>
+							<value>nextUp</value>
 						</rolename>
 						<multiplicity>
 							<value>0..1</value>
 						</multiplicity>
 					</associationEnd>
-					<associationEnd navigation="true" element="class" element-id="24" id="2">
+					<associationEnd navigation="true" element="class" element-id="23" id="2">
 						<type>simple</type>
 						<rolename>
-							<value>nextUp</value>
+							<value>nextDown</value>
 						</rolename>
 						<multiplicity>
 							<value>0..1</value>
@@ -517,7 +409,7 @@
 				</changeability>
 				<constraints />
 			</classAssociation>
-			<classAssociation id="7">
+			<classAssociation id="3">
 				<name>inside</name>
 				<description />
 				<associationEnds>
@@ -555,143 +447,157 @@
 				<actors>
 					<actor id="1">
 						<name>Elevator</name>
-						<description />
+						<description>This agent is responsible for moving the passengers among the floors.</description>
 						<graphics>
 							<icon>Speed1Large.png</icon>
-							<position x="270" y="202" />
-							<size width="70" height="80" />
+							<position x="225" y="180" />
+							<size width="83" height="83" />
 							<color />
 						</graphics>
 					</actor>
 					<actor id="2">
 						<name>Passenger</name>
-						<description />
+						<description>This agent boards in or debark from the elevator, so he can be transported from one floor to another.</description>
 						<graphics>
 							<icon>agent1.png</icon>
-							<position x="703" y="213" />
-							<size width="70" height="80" />
+							<position x="532" y="179" />
+							<size width="78" height="80" />
 							<color />
 						</graphics>
 					</actor>
 				</actors>
 				<useCases>
-					<useCase id="1">
-						<name>Board in elevator</name>
-						<description />
+					<useCase id="2">
+						<name>Move to lower floor</name>
+						<description>The agent elevator moves from the origin floor to the destination floor, which is immediately down.</description>
+						<definition>
+							<precondition>- the elevator must be at the origin floor;
+- the destination floor must be the immediately lower floor;
+- the elevator door must be closed.</precondition>
+							<postcondition />
+							<invariants>- the elevator door remains closed;
+- the elevator load doesn't change.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
 						<graphics>
 							<icon />
-							<position x="498" y="27" />
+							<position x="38" y="319" />
 							<size width="150" height="80" />
 							<color />
 						</graphics>
 					</useCase>
-					<useCase id="2">
-						<name>Debark from elevator</name>
-						<description />
+					<useCase id="3">
+						<name>Board</name>
+						<description>The agent passenger boards in an elevator at his origin floor.</description>
+						<definition>
+							<precondition>- the elevator must be at the passenger's origin floor;
+- the elevator door must be open.
+- the passenger must be outside an elevator;
+- the passenger must be not served, i. e., he must be at his origin floor.</precondition>
+							<postcondition>- the passenger is inside the elevator;&#xD;
+- the elevator load increases.</postcondition>
+							<invariants>- the passenger and the elevator remain at the same floor.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
 						<graphics>
 							<icon />
-							<position x="519" y="396" />
-							<size width="150" height="80" />
+							<position x="508" y="393" />
+							<size width="118" height="69" />
 							<color />
 						</graphics>
 					</useCase>
 					<useCase id="4">
-						<name>Move to another floor</name>
-						<description />
-						<graphics>
-							<icon />
-							<position x="66" y="202" />
-							<size width="150" height="80" />
-							<color />
-						</graphics>
+						<name>Debark</name>
+						<description>The agent passenger debarks from the elevator at his destination floor.</description>
 						<definition>
-							<precondition />
-							<postcondition />
+							<precondition>- the passenger must be inside the elevator;&#xD;
+- the elevator door must be open;&#xD;
+- the elevator must be at the passenger's destination floor.</precondition>
+							<postcondition>- the passenger is outside the elevator;&#xD;
+- the passenger is served;&#xD;
+- the elvator load decreases.</postcondition>
 							<invariants />
 							<temporalConstraints />
 							<flowOfEvents />
 							<additionalIformation />
 							<issues />
 						</definition>
-					</useCase>
-					<useCase id="5">
-						<name>Stop</name>
-						<description />
 						<graphics>
 							<icon />
-							<position x="337" y="82" />
-							<size width="150" height="80" />
+							<position x="507" y="10" />
+							<size width="122" height="71" />
 							<color />
 						</graphics>
 					</useCase>
-					<useCase id="6">
+					<useCase id="5">
 						<name>Open door</name>
-						<description />
+						<description>The agent elevator door opens.</description>
+						<definition>
+							<precondition>- the elevator door must be closed.</precondition>
+							<postcondition>- the elevator door is open.</postcondition>
+							<invariants>- the elevator remains at the same floor;
+- the elevator load doesn't change.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
 						<graphics>
 							<icon />
-							<position x="436" y="208" />
-							<size width="150" height="80" />
+							<position x="367" y="113" />
+							<size width="121" height="64" />
 							<color />
 						</graphics>
 					</useCase>
 					<useCase id="7">
-						<name>Close door</name>
-						<description />
+						<name>Move to upper floor</name>
+						<description>The agent elevator moves from the origin floor to the destination floor, which is immediately up.</description>
+						<definition>
+							<precondition>- the elevator must be at the origin floor;
+- the destination floor must be the immediately upper floor;
+- the elevator door must be closed.</precondition>
+							<postcondition>- the elevator is at the destination floor, i. e., it has moved one floor up.</postcondition>
+							<invariants>- the elevator door remains closed;
+- the elevator load doesn't change.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
 						<graphics>
 							<icon />
-							<position x="342" y="336" />
+							<position x="34" y="101" />
 							<size width="150" height="80" />
+							<color />
+						</graphics>
+					</useCase>
+					<useCase id="8">
+						<name>Close door</name>
+						<description>The agent elevator door closes.</description>
+						<definition>
+							<precondition>- the elevator door must be open.</precondition>
+							<postcondition>- the elevator door is closed.</postcondition>
+							<invariants>- the elevator load doesn't change.</invariants>
+							<temporalConstraints />
+							<flowOfEvents />
+							<additionalIformation />
+							<issues />
+						</definition>
+						<graphics>
+							<icon />
+							<position x="367" y="321" />
+							<size width="118" height="67" />
 							<color />
 						</graphics>
 					</useCase>
 				</useCases>
 				<associations>
-					<useCaseAssociation id="1">
-						<name />
-						<description />
-						<associationEnds>
-							<associationEnd navigation="false" element="useCase" element-id="1" id="1">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-							<associationEnd navigation="false" element="actor" element-id="2" id="2">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
-								</label>
-							</labels>
-							<points />
-							<color />
-							<lineStyle />
-						</graphics>
-					</useCaseAssociation>
 					<useCaseAssociation id="2">
 						<name />
 						<description />
@@ -705,7 +611,7 @@
 									<value />
 								</multiplicity>
 							</associationEnd>
-							<associationEnd navigation="false" element="actor" element-id="2" id="2">
+							<associationEnd navigation="false" element="actor" element-id="1" id="2">
 								<type />
 								<rolename>
 									<value />
@@ -738,7 +644,195 @@
 							<lineStyle />
 						</graphics>
 					</useCaseAssociation>
+					<useCaseAssociation id="3">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="1" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="3" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points>
+								<point x="267" y="426" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
 					<useCaseAssociation id="4">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="useCase" element-id="3" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="actor" element-id="2" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="5">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="actor" element-id="1" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="useCase" element-id="4" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points>
+								<point x="272" y="43" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="6">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="useCase" element-id="4" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="false" element="actor" element-id="2" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</useCaseAssociation>
+					<useCaseAssociation id="7">
 						<name />
 						<description />
 						<associationEnds>
@@ -784,149 +878,11 @@
 							<lineStyle />
 						</graphics>
 					</useCaseAssociation>
-					<useCaseAssociation id="5">
+					<dependency id="9">
 						<name />
 						<description />
 						<associationEnds>
-							<associationEnd navigation="false" element="actor" element-id="1" id="1">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-							<associationEnd navigation="false" element="useCase" element-id="6" id="2">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
-								</label>
-							</labels>
-							<points />
-							<color />
-							<lineStyle />
-						</graphics>
-					</useCaseAssociation>
-					<useCaseAssociation id="6">
-						<name />
-						<description />
-						<associationEnds>
-							<associationEnd navigation="false" element="actor" element-id="1" id="1">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-							<associationEnd navigation="false" element="useCase" element-id="7" id="2">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
-								</label>
-							</labels>
-							<points />
-							<color />
-							<lineStyle />
-						</graphics>
-					</useCaseAssociation>
-					<useCaseAssociation id="7">
-						<name />
-						<description />
-						<associationEnds>
-							<associationEnd navigation="false" element="actor" element-id="1" id="1">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-							<associationEnd navigation="false" element="useCase" element-id="4" id="2">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
-								</label>
-							</labels>
-							<points />
-							<color />
-							<lineStyle />
-						</graphics>
-					</useCaseAssociation>
-					<dependency id="8">
-						<name />
-						<description />
-						<associationEnds>
-							<associationEnd navigation="false" element="useCase" element-id="6" id="1">
+							<associationEnd navigation="false" element="useCase" element-id="3" id="1">
 								<type />
 								<rolename>
 									<value />
@@ -968,7 +924,53 @@
 							<lineStyle />
 						</graphics>
 					</dependency>
-					<dependency id="9">
+					<dependency id="10">
+						<name />
+						<description />
+						<associationEnds>
+							<associationEnd navigation="false" element="useCase" element-id="4" id="1">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+							<associationEnd navigation="true" element="useCase" element-id="5" id="2">
+								<type />
+								<rolename>
+									<value />
+								</rolename>
+								<multiplicity>
+									<value />
+								</multiplicity>
+							</associationEnd>
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="" y="" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</dependency>
+					<useCaseAssociation id="11">
 						<name />
 						<description />
 						<associationEnds>
@@ -981,7 +983,7 @@
 									<value />
 								</multiplicity>
 							</associationEnd>
-							<associationEnd navigation="true" element="useCase" element-id="6" id="2">
+							<associationEnd navigation="false" element="actor" element-id="1" id="2">
 								<type />
 								<rolename>
 									<value />
@@ -1013,8 +1015,8 @@
 							<color />
 							<lineStyle />
 						</graphics>
-					</dependency>
-					<useCaseAssociation id="10">
+					</useCaseAssociation>
+					<useCaseAssociation id="12">
 						<name />
 						<description />
 						<associationEnds>
@@ -1027,103 +1029,7 @@
 									<value />
 								</multiplicity>
 							</associationEnd>
-							<associationEnd navigation="false" element="useCase" element-id="1" id="2">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="500" y="-15" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
-								</label>
-							</labels>
-							<points>
-								<point x="307" y="66" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</useCaseAssociation>
-					<useCaseAssociation id="11">
-						<name />
-						<description />
-						<associationEnds>
-							<associationEnd navigation="false" element="actor" element-id="1" id="1">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-							<associationEnd navigation="false" element="useCase" element-id="2" id="2">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="500" y="-15" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="" y="" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="" y="" />
-								</label>
-							</labels>
-							<points>
-								<point x="307" y="445" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</useCaseAssociation>
-					<dependency id="12">
-						<name />
-						<description />
-						<associationEnds>
-							<associationEnd navigation="false" element="useCase" element-id="1" id="1">
-								<type />
-								<rolename>
-									<value />
-								</rolename>
-								<multiplicity>
-									<value />
-								</multiplicity>
-							</associationEnd>
-							<associationEnd navigation="true" element="useCase" element-id="6" id="2">
+							<associationEnd navigation="false" element="useCase" element-id="8" id="2">
 								<type />
 								<rolename>
 									<value />
@@ -1155,12 +1061,12 @@
 							<color />
 							<lineStyle />
 						</graphics>
-					</dependency>
+					</useCaseAssociation>
 					<dependency id="13">
 						<name />
 						<description />
 						<associationEnds>
-							<associationEnd navigation="false" element="useCase" element-id="2" id="1">
+							<associationEnd navigation="false" element="useCase" element-id="8" id="1">
 								<type />
 								<rolename>
 									<value />
@@ -1169,7 +1075,7 @@
 									<value />
 								</multiplicity>
 							</associationEnd>
-							<associationEnd navigation="true" element="useCase" element-id="6" id="2">
+							<associationEnd navigation="true" element="useCase" element-id="5" id="2">
 								<type />
 								<rolename>
 									<value />
@@ -1214,24 +1120,24 @@
 					<class id="21">
 						<graphics>
 							<icon />
-							<position x="13" y="75" />
-							<size width="280" height="310" />
+							<position x="22" y="55" />
+							<size width="267" height="207" />
 							<color />
 						</graphics>
 					</class>
 					<class id="22">
 						<graphics>
 							<icon />
-							<position x="463" y="205" />
-							<size width="264" height="183" />
+							<position x="352" y="265" />
+							<size width="248" height="201" />
 							<color />
 						</graphics>
 					</class>
-					<class id="24">
+					<class id="23">
 						<graphics>
 							<icon />
-							<position x="522" y="61" />
-							<size width="133" height="100" />
+							<position x="408" y="93" />
+							<size width="131" height="131" />
 							<color />
 						</graphics>
 					</class>
@@ -1241,26 +1147,55 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="499" y="-12" />
+									<position x="500" y="-15" />
 								</label>
 								<label type="rolename" identifier="1">
-									<position x="100" y="15" />
+									<position x="" y="" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="900" y="15" />
+									<position x="" y="" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="188" y="-15" />
+									<position x="" y="" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
+									<position x="" y="" />
+								</label>
+								<label type="changeability" identifier="">
+									<position x="" y="" />
+								</label>
+							</labels>
+							<points />
+							<color />
+							<lineStyle />
+						</graphics>
+					</classAssociation>
+					<classAssociation id="2">
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="644" y="-71" />
+								</label>
+								<label type="rolename" identifier="1">
+									<position x="-347" y="7" />
+								</label>
+								<label type="rolename" identifier="2">
+									<position x="1496" y="-7" />
+								</label>
+								<label type="multiplicity" identifier="1">
+									<position x="173" y="-19" />
+								</label>
+								<label type="multiplicity" identifier="2">
+									<position x="1080" y="-17" />
 								</label>
 								<label type="changeability" identifier="">
 									<position x="500" y="15" />
 								</label>
 							</labels>
 							<points>
-								<point x="361" y="140" />
+								<point x="459" y="44" />
+								<point x="570" y="44" />
+								<point x="570" y="135" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1270,57 +1205,26 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="-413" y="-62" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="-662" y="34" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="1586" y="-19" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="34" y="-23" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
-								</label>
-								<label type="changeability" identifier="">
-									<position x="500" y="15" />
-								</label>
-							</labels>
-							<points>
-								<point x="642" y="33" />
-								<point x="704" y="33" />
-								<point x="704" y="100" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</classAssociation>
-					<classAssociation id="7">
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="500" y="-15" />
+									<position x="635" y="-52" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="900" y="15" />
+									<position x="1101" y="-26" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="100" y="-15" />
+									<position x="91" y="2" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
+									<position x="903" y="0" />
 								</label>
 								<label type="changeability" identifier="">
 									<position x="500" y="15" />
 								</label>
 							</labels>
 							<points>
-								<point x="352" y="259" />
+								<point x="123" y="373" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1334,38 +1238,38 @@
 			<stateMachineDiagram id="1">
 				<class>22</class>
 				<name>State Machine Diagram - Passenger</name>
-				<description>This diagram shows the sequence of states for the class Passenger during its life in response to stimuli, together with its response and actions</description>
+				<description />
 				<states>
 					<state id="1">
-						<name>Passenger waiting for the elevator</name>
+						<name>Passenger waiting for an elevator</name>
 						<description />
 						<condition>p.boarded = false and p.served = false and p.inside = null</condition>
 						<graphics>
 							<icon />
-							<position x="86" y="81" />
-							<size width="297" height="60" />
+							<position x="197" y="104" />
+							<size width="374" height="64" />
 							<color />
 						</graphics>
 					</state>
 					<state id="2">
-						<name>Passeger boarded in a elevator</name>
+						<name>Passenger boarded in an elevator</name>
 						<description />
 						<condition>p.boarded = true and p.served = false and p.inside = e</condition>
 						<graphics>
 							<icon />
-							<position x="87" y="176" />
-							<size width="294" height="60" />
+							<position x="206" y="199" />
+							<size width="358" height="60" />
 							<color />
 						</graphics>
 					</state>
 					<state id="3">
-						<name>Passenger served at his/her destin floor</name>
+						<name>Passenger served</name>
 						<description />
 						<condition>p.boarded = false and p.served = true and p.inside = null</condition>
 						<graphics>
 							<icon />
-							<position x="80" y="272" />
-							<size width="311" height="60" />
+							<position x="202" y="299" />
+							<size width="381" height="60" />
 							<color />
 						</graphics>
 					</state>
@@ -1374,7 +1278,7 @@
 						<description />
 						<graphics>
 							<icon>initialState.png</icon>
-							<position x="223" y="33" />
+							<position x="371" y="56" />
 							<size width="24" height="28" />
 						</graphics>
 					</initialState>
@@ -1383,7 +1287,7 @@
 						<description />
 						<graphics>
 							<icon>finalState.png</icon>
-							<position x="224" y="361" />
+							<position x="382" y="390" />
 							<size width="24" height="28" />
 						</graphics>
 					</finalState>
@@ -1393,7 +1297,7 @@
 						<reference class="22" operator="1" />
 						<name />
 						<description />
-						<precondition>p.origin = f</precondition>
+						<precondition>p.origin = f and e.at = f</precondition>
 						<postcondition />
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="1" id="1" />
@@ -1402,7 +1306,7 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="443" y="-173" />
+									<position x="546" y="-180" />
 								</label>
 							</labels>
 							<points />
@@ -1414,7 +1318,7 @@
 						<reference class="22" operator="2" />
 						<name />
 						<description />
-						<precondition>p.destin = f</precondition>
+						<precondition>p.destin = f and e.at = f</precondition>
 						<postcondition />
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="2" id="1" />
@@ -1423,10 +1327,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="516" y="-178" />
+									<position x="475" y="-177" />
 								</label>
 							</labels>
-							<points />
+							<points>
+								<point x="392" y="272" />
+							</points>
 							<color />
 							<lineStyle />
 						</graphics>
@@ -1479,160 +1385,42 @@
 			<stateMachineDiagram id="2">
 				<class>21</class>
 				<name>State Machine Diagram - Elevator</name>
-				<description>This diagram shows the sequence of states for the class Elevator during its life in response to stimuli, together with its response and actions</description>
+				<description />
 				<states>
-					<state id="1">
-						<name>Elevator with closed door stopped at a floor</name>
-						<description />
-						<condition>e.stopped = true and e.movingUp = false and
-e.movingDown = false and e.doorOpen = false</condition>
-						<graphics>
-							<icon />
-							<position x="260" y="271" />
-							<size width="283" height="60" />
-							<color />
-						</graphics>
-					</state>
 					<state id="2">
-						<name>Elevator moving up</name>
+						<name>Elevator with closed door</name>
 						<description />
-						<condition>e.stopped = false and e.movingUp = true and
-e.movingDown = false and e.doorOpen = false</condition>
+						<condition>e.doorOpen = false</condition>
 						<graphics>
 							<icon />
-							<position x="468" y="98" />
-							<size width="266" height="60" />
+							<position x="258" y="193" />
+							<size width="357" height="60" />
 							<color />
 						</graphics>
 					</state>
 					<state id="3">
-						<name>Elevator moving down</name>
+						<name>Elevator with open door</name>
 						<description />
-						<condition>e.stopped = false and e.movingUp = false and
-e.movingDown = true and e.doorOpen = false</condition>
+						<condition>e.doorOpen = true</condition>
 						<graphics>
 							<icon />
-							<position x="83" y="76" />
-							<size width="264" height="60" />
+							<position x="711" y="194" />
+							<size width="235" height="60" />
 							<color />
 						</graphics>
 					</state>
-					<state id="4">
-						<name>Elevator with open door stopped at a floor</name>
-						<description />
-						<condition>e.stopped = true and e.movingUp = false and
-e.movingDown = false and e.doorOpen = true</condition>
-						<graphics>
-							<icon />
-							<position x="217" y="479" />
-							<size width="297" height="60" />
-							<color />
-						</graphics>
-					</state>
-					<initialState id="5">
+					<initialState id="4">
 						<name />
 						<description />
 						<graphics>
 							<icon>initialState.png</icon>
-							<position x="112" y="493" />
+							<position x="985" y="209" />
 							<size width="24" height="28" />
 						</graphics>
 					</initialState>
 				</states>
 				<associations>
 					<action id="1">
-						<reference class="21" operator="6" />
-						<name />
-						<description />
-						<precondition>e.at = f</precondition>
-						<postcondition />
-						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="1" id="1" />
-							<actionEnd navigation="true" element="state" element-id="2" id="2" />
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="235" y="-10" />
-								</label>
-							</labels>
-							<points>
-								<point x="505" y="197" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</action>
-					<action id="2">
-						<reference class="21" operator="7" />
-						<name />
-						<description />
-						<precondition>e.at = f</precondition>
-						<postcondition />
-						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="1" id="1" />
-							<actionEnd navigation="true" element="state" element-id="3" id="2" />
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="805" y="23" />
-								</label>
-							</labels>
-							<points>
-								<point x="276" y="191" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</action>
-					<action id="3">
-						<reference class="21" operator="3" />
-						<name />
-						<description />
-						<precondition>e.at = f</precondition>
-						<postcondition />
-						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="2" id="1" />
-							<actionEnd navigation="true" element="state" element-id="1" id="2" />
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="152" y="0" />
-								</label>
-							</labels>
-							<points>
-								<point x="700" y="296" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</action>
-					<action id="4">
-						<reference class="21" operator="3" />
-						<name />
-						<description />
-						<precondition>e.at = f</precondition>
-						<postcondition />
-						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="3" id="1" />
-							<actionEnd navigation="true" element="state" element-id="1" id="2" />
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="623" y="90" />
-								</label>
-							</labels>
-							<points>
-								<point x="149" y="304" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</action>
-					<action id="5">
 						<reference class="21" operator="1" />
 						<name />
 						<description />
@@ -1645,96 +1433,50 @@ e.movingDown = false and e.doorOpen = true</condition>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="400" y="-48" />
+									<position x="428" y="-38" />
 								</label>
 							</labels>
 							<points>
-								<point x="572" y="68" />
-								<point x="637" y="68" />
+								<point x="277" y="168" />
+								<point x="396" y="168" />
 							</points>
 							<color />
 							<lineStyle />
 						</graphics>
 					</action>
-					<action id="6">
+					<action id="2">
 						<reference class="21" operator="2" />
 						<name />
 						<description />
 						<precondition>e.at = from and from.nextDown = to</precondition>
 						<postcondition>e.at = to</postcondition>
 						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="3" id="1" />
-							<actionEnd navigation="true" element="state" element-id="3" id="2" />
+							<actionEnd navigation="false" element="state" element-id="2" id="1" />
+							<actionEnd navigation="true" element="state" element-id="2" id="2" />
 						</associationEnds>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="1257" y="-61" />
+									<position x="403" y="43" />
 								</label>
 							</labels>
 							<points>
-								<point x="167" y="30" />
-								<point x="233" y="30" />
+								<point x="281" y="281" />
+								<point x="400" y="281" />
 							</points>
 							<color />
 							<lineStyle />
 						</graphics>
 					</action>
-					<action id="7">
+					<action id="3">
 						<reference class="21" operator="4" />
 						<name />
 						<description />
 						<precondition />
 						<postcondition />
 						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="1" id="1" />
-							<actionEnd navigation="true" element="state" element-id="4" id="2" />
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="483" y="67" />
-								</label>
-							</labels>
-							<points>
-								<point x="305" y="352" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</action>
-					<action id="8">
-						<reference class="21" operator="5" />
-						<name />
-						<description />
-						<precondition />
-						<postcondition />
-						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="4" id="1" />
-							<actionEnd navigation="true" element="state" element-id="1" id="2" />
-						</associationEnds>
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="543" y="61" />
-								</label>
-							</labels>
-							<points>
-								<point x="470" y="390" />
-							</points>
-							<color />
-							<lineStyle />
-						</graphics>
-					</action>
-					<action id="11">
-						<reference class="" operator="" />
-						<name />
-						<description />
-						<precondition />
-						<postcondition />
-						<associationEnds>
-							<actionEnd navigation="false" element="initialState" element-id="5" id="1" />
-							<actionEnd navigation="true" element="state" element-id="4" id="2" />
+							<actionEnd navigation="false" element="state" element-id="2" id="1" />
+							<actionEnd navigation="true" element="state" element-id="3" id="2" />
 						</associationEnds>
 						<graphics>
 							<labels>
@@ -1743,55 +1485,101 @@ e.movingDown = false and e.doorOpen = true</condition>
 								</label>
 							</labels>
 							<points>
-								<point x="164" y="507" />
+								<point x="669" y="207" />
 							</points>
 							<color />
 							<lineStyle />
 						</graphics>
 					</action>
-					<action id="12">
-						<reference class="22" operator="2" />
+					<action id="4">
+						<reference class="21" operator="5" />
 						<name />
 						<description />
-						<precondition>e.at = f</precondition>
-						<postcondition>e.currentLoad = e.currentLoad - 1</postcondition>
+						<precondition />
+						<postcondition />
 						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="4" id="1" />
-							<actionEnd navigation="true" element="state" element-id="4" id="2" />
+							<actionEnd navigation="false" element="state" element-id="3" id="1" />
+							<actionEnd navigation="true" element="state" element-id="2" id="2" />
 						</associationEnds>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="1743" y="-52" />
+									<position x="500" y="-15" />
 								</label>
 							</labels>
 							<points>
-								<point x="563" y="490" />
-								<point x="563" y="529" />
+								<point x="675" y="242" />
 							</points>
 							<color />
 							<lineStyle />
 						</graphics>
 					</action>
-					<action id="13">
+					<action id="5">
+						<reference class="" operator="" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition />
+						<associationEnds>
+							<actionEnd navigation="false" element="initialState" element-id="4" id="1" />
+							<actionEnd navigation="true" element="state" element-id="3" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="500" y="-15" />
+								</label>
+							</labels>
+							<points>
+								<point x="992" y="222" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="6">
 						<reference class="22" operator="1" />
 						<name />
 						<description />
-						<precondition>e.capacity &gt; e.currentLoad and  e.at = f</precondition>
-						<postcondition>e.currentLoad = e.currentLoad + 1</postcondition>
+						<precondition>e.currentLoad &lt; e.capacity</precondition>
+						<postcondition>e.currentLoad = e.currentLoad +1</postcondition>
 						<associationEnds>
-							<actionEnd navigation="false" element="state" element-id="4" id="1" />
-							<actionEnd navigation="true" element="state" element-id="4" id="2" />
+							<actionEnd navigation="false" element="state" element-id="3" id="1" />
+							<actionEnd navigation="true" element="state" element-id="3" id="2" />
 						</associationEnds>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="225" y="-58" />
+									<position x="1282" y="-45" />
 								</label>
 							</labels>
 							<points>
-								<point x="333" y="581" />
-								<point x="240" y="581" />
+								<point x="831" y="165" />
+								<point x="909" y="165" />
+							</points>
+							<color />
+							<lineStyle />
+						</graphics>
+					</action>
+					<action id="7">
+						<reference class="22" operator="2" />
+						<name />
+						<description />
+						<precondition />
+						<postcondition>e.currentLoad = e.currentLoad - 1</postcondition>
+						<associationEnds>
+							<actionEnd navigation="false" element="state" element-id="3" id="1" />
+							<actionEnd navigation="true" element="state" element-id="3" id="2" />
+						</associationEnds>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="564" y="45" />
+								</label>
+							</labels>
+							<points>
+								<point x="837" y="282" />
+								<point x="915" y="282" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1804,7 +1592,7 @@ e.movingDown = false and e.doorOpen = true</condition>
 		<activityDiagrams />
 		<planningDomains>
 			<domain id="1">
-				<name>Planning Domain</name>
+				<name>Elevator Domain 1</name>
 				<description />
 				<elements>
 					<objects>
@@ -1820,8 +1608,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 							</graphics>
 						</object>
 						<object id="2">
-							<name>f0</name>
-							<class>24</class>
+							<name>f1</name>
+							<class>23</class>
 							<description />
 							<graphics>
 								<icon />
@@ -1831,8 +1619,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 							</graphics>
 						</object>
 						<object id="3">
-							<name>f1</name>
-							<class>24</class>
+							<name>f2</name>
+							<class>23</class>
 							<description />
 							<graphics>
 								<icon />
@@ -1842,8 +1630,19 @@ e.movingDown = false and e.doorOpen = true</condition>
 							</graphics>
 						</object>
 						<object id="4">
-							<name>f2</name>
-							<class>24</class>
+							<name>f3</name>
+							<class>23</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="5">
+							<name>f4</name>
+							<class>23</class>
 							<description />
 							<graphics>
 								<icon />
@@ -1853,8 +1652,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 							</graphics>
 						</object>
 						<object id="6">
-							<name>f3</name>
-							<class>24</class>
+							<name>f5</name>
+							<class>23</class>
 							<description />
 							<graphics>
 								<icon />
@@ -1864,6 +1663,17 @@ e.movingDown = false and e.doorOpen = true</condition>
 							</graphics>
 						</object>
 						<object id="7">
+							<name>f6</name>
+							<class>23</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="8">
 							<name>p1</name>
 							<class>22</class>
 							<description />
@@ -1874,7 +1684,7 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<color />
 							</graphics>
 						</object>
-						<object id="8">
+						<object id="9">
 							<name>p2</name>
 							<class>22</class>
 							<description />
@@ -1885,7 +1695,7 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<color />
 							</graphics>
 						</object>
-						<object id="9">
+						<object id="10">
 							<name>p3</name>
 							<class>22</class>
 							<description />
@@ -1896,9 +1706,20 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<color />
 							</graphics>
 						</object>
-						<object id="10">
-							<name>f4</name>
-							<class>24</class>
+						<object id="11">
+							<name>p4</name>
+							<class>22</class>
+							<description />
+							<graphics>
+								<icon />
+								<position x="" y="" />
+								<size width="" height="" />
+								<color />
+							</graphics>
+						</object>
+						<object id="12">
+							<name>p5</name>
+							<class>22</class>
 							<description />
 							<graphics>
 								<icon />
@@ -1916,38 +1737,20 @@ e.movingDown = false and e.doorOpen = true</condition>
 						<objects>
 							<object id="1">
 								<attributes>
-									<attribute class="21" id="1">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-									<attribute class="21" id="2">
-										<value />
+									<attribute class="21" id="4">
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="21" id="3">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
-									<attribute class="21" id="4">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-									<attribute class="21" id="5">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-									<attribute class="21" id="6">
-										<value />
+									<attribute class="21" id="2">
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
@@ -1955,8 +1758,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 								</attributes>
 								<graphics>
 									<icon />
-									<position x="59" y="567" />
-									<size width="164" height="155" />
+									<position x="27" y="404" />
+									<size width="141" height="115" />
 									<color />
 								</graphics>
 							</object>
@@ -1964,8 +1767,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<attributes />
 								<graphics>
 									<icon />
-									<position x="339" y="601" />
-									<size width="151" height="84" />
+									<position x="207" y="458" />
+									<size width="108" height="59" />
 									<color />
 								</graphics>
 							</object>
@@ -1973,8 +1776,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<attributes />
 								<graphics>
 									<icon />
-									<position x="341" y="455" />
-									<size width="143" height="81" />
+									<position x="207" y="367" />
+									<size width="100" height="60" />
 									<color />
 								</graphics>
 							</object>
@@ -1982,8 +1785,17 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<attributes />
 								<graphics>
 									<icon />
-									<position x="339" y="320" />
-									<size width="146" height="81" />
+									<position x="212" y="283" />
+									<size width="100" height="59" />
+									<color />
+								</graphics>
+							</object>
+							<object id="5">
+								<attributes />
+								<graphics>
+									<icon />
+									<position x="213" y="203" />
+									<size width="100" height="60" />
 									<color />
 								</graphics>
 							</object>
@@ -1991,67 +1803,42 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<attributes />
 								<graphics>
 									<icon />
-									<position x="342" y="163" />
-									<size width="141" height="78" />
+									<position x="209" y="113" />
+									<size width="100" height="59" />
 									<color />
 								</graphics>
 							</object>
 							<object id="7">
-								<attributes>
-									<attribute class="22" id="4">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-									<attribute class="22" id="3">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-									<attribute class="22" id="2">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-									<attribute class="22" id="1">
-										<value />
-										<graphics>
-											<color />
-										</graphics>
-									</attribute>
-								</attributes>
+								<attributes />
 								<graphics>
 									<icon />
-									<position x="567" y="93" />
-									<size width="143" height="118" />
+									<position x="209" y="20" />
+									<size width="100" height="61" />
 									<color />
 								</graphics>
 							</object>
 							<object id="8">
 								<attributes>
 									<attribute class="22" id="4">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="22" id="3">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="22" id="2">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="22" id="1">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
@@ -2059,33 +1846,33 @@ e.movingDown = false and e.doorOpen = true</condition>
 								</attributes>
 								<graphics>
 									<icon />
-									<position x="568" y="234" />
-									<size width="143" height="120" />
+									<position x="367" y="77" />
+									<size width="143" height="131" />
 									<color />
 								</graphics>
 							</object>
 							<object id="9">
 								<attributes>
 									<attribute class="22" id="4">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="22" id="3">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="22" id="2">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
 									</attribute>
 									<attribute class="22" id="1">
-										<value />
+										<value repository="false" />
 										<graphics>
 											<color />
 										</graphics>
@@ -2093,17 +1880,110 @@ e.movingDown = false and e.doorOpen = true</condition>
 								</attributes>
 								<graphics>
 									<icon />
-									<position x="570" y="374" />
-									<size width="142" height="120" />
+									<position x="368" y="229" />
+									<size width="148" height="136" />
 									<color />
 								</graphics>
 							</object>
 							<object id="10">
-								<attributes />
+								<attributes>
+									<attribute class="22" id="4">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="1">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
 								<graphics>
 									<icon />
-									<position x="341" y="28" />
-									<size width="139" height="79" />
+									<position x="368" y="383" />
+									<size width="155" height="134" />
+									<color />
+								</graphics>
+							</object>
+							<object id="11">
+								<attributes>
+									<attribute class="22" id="4">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="1">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="547" y="74" />
+									<size width="144" height="134" />
+									<color />
+								</graphics>
+							</object>
+							<object id="12">
+								<attributes>
+									<attribute class="22" id="4">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="3">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="2">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+									<attribute class="22" id="1">
+										<value repository="false" />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
+								</attributes>
+								<graphics>
+									<icon />
+									<position x="553" y="228" />
+									<size width="139" height="133" />
 									<color />
 								</graphics>
 							</object>
@@ -2115,8 +1995,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 				<constraints />
 				<planningProblems>
 					<problem id="1">
-						<name>Three Passengers 6 floors 1 elevator</name>
-						<description>This problem has one building, three passenger to be served, six floors and a single elevator. The goal is serve all the passenger to their destin floor.</description>
+						<name>one elevator six floors five passengers</name>
+						<description />
 						<objectDiagrams>
 							<objectDiagram id="1">
 								<name>Snapshot</name>
@@ -2125,38 +2005,20 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<objects>
 									<object id="1">
 										<attributes>
-											<attribute class="21" id="1">
-												<value>3</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="21" id="2">
-												<value>true</value>
+											<attribute class="21" id="4">
+												<value>0</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
 											<attribute class="21" id="3">
-												<value>false</value>
+												<value>4</value>
 												<graphics>
 													<color />
 												</graphics>
 											</attribute>
-											<attribute class="21" id="4">
+											<attribute class="21" id="2">
 												<value>false</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="21" id="5">
-												<value>false</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="21" id="6">
-												<value>0</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -2164,8 +2026,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="65" y="565" />
-											<size width="164" height="155" />
+											<position x="10" y="276" />
+											<size width="141" height="115" />
 											<color />
 										</graphics>
 									</object>
@@ -2173,8 +2035,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 										<attributes />
 										<graphics>
 											<icon />
-											<position x="339" y="601" />
-											<size width="151" height="84" />
+											<position x="204" y="525" />
+											<size width="108" height="59" />
 											<color />
 										</graphics>
 									</object>
@@ -2182,8 +2044,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 										<attributes />
 										<graphics>
 											<icon />
-											<position x="341" y="455" />
-											<size width="143" height="81" />
+											<position x="211" y="427" />
+											<size width="100" height="60" />
 											<color />
 										</graphics>
 									</object>
@@ -2191,8 +2053,17 @@ e.movingDown = false and e.doorOpen = true</condition>
 										<attributes />
 										<graphics>
 											<icon />
-											<position x="339" y="320" />
-											<size width="146" height="81" />
+											<position x="212" y="325" />
+											<size width="100" height="59" />
+											<color />
+										</graphics>
+									</object>
+									<object id="5">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="213" y="221" />
+											<size width="100" height="60" />
 											<color />
 										</graphics>
 									</object>
@@ -2200,12 +2071,21 @@ e.movingDown = false and e.doorOpen = true</condition>
 										<attributes />
 										<graphics>
 											<icon />
-											<position x="342" y="163" />
-											<size width="141" height="78" />
+											<position x="209" y="110" />
+											<size width="100" height="59" />
 											<color />
 										</graphics>
 									</object>
 									<object id="7">
+										<attributes />
+										<graphics>
+											<icon />
+											<position x="209" y="4" />
+											<size width="100" height="61" />
+											<color />
+										</graphics>
+									</object>
+									<object id="8">
 										<attributes>
 											<attribute class="22" id="4">
 												<value>false</value>
@@ -2226,7 +2106,7 @@ e.movingDown = false and e.doorOpen = true</condition>
 												</graphics>
 											</attribute>
 											<attribute class="22" id="1">
-												<value>f0</value>
+												<value>f6</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -2234,12 +2114,46 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="567" y="93" />
-											<size width="143" height="118" />
+											<position x="367" y="77" />
+											<size width="170" height="144" />
 											<color />
 										</graphics>
 									</object>
-									<object id="8">
+									<object id="9">
+										<attributes>
+											<attribute class="22" id="4">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>f6</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="1">
+												<value>f4</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="368" y="229" />
+											<size width="169" height="151" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
 										<attributes>
 											<attribute class="22" id="4">
 												<value>false</value>
@@ -2268,12 +2182,46 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="568" y="234" />
-											<size width="143" height="120" />
+											<position x="368" y="383" />
+											<size width="171" height="146" />
 											<color />
 										</graphics>
 									</object>
-									<object id="9">
+									<object id="11">
+										<attributes>
+											<attribute class="22" id="4">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value>false</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value>f5</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="1">
+												<value>f2</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="547" y="74" />
+											<size width="169" height="145" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
 										<attributes>
 											<attribute class="22" id="4">
 												<value>false</value>
@@ -2294,7 +2242,7 @@ e.movingDown = false and e.doorOpen = true</condition>
 												</graphics>
 											</attribute>
 											<attribute class="22" id="1">
-												<value>f0</value>
+												<value>f1</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -2302,47 +2250,14 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="570" y="374" />
-											<size width="142" height="120" />
-											<color />
-										</graphics>
-									</object>
-									<object id="10">
-										<attributes />
-										<graphics>
-											<icon />
-											<position x="341" y="28" />
-											<size width="139" height="79" />
+											<position x="561" y="246" />
+											<size width="168" height="140" />
 											<color />
 										</graphics>
 									</object>
 								</objects>
 								<associations>
 									<objectAssociation id="1">
-										<classAssociation>3</classAssociation>
-										<description />
-										<associationEnds>
-											<objectAssociationEnd element="object" element-id="2" id="1" />
-											<objectAssociationEnd element="object" element-id="3" id="2" />
-										</associationEnds>
-										<graphics>
-											<labels>
-												<label type="main" identifier="">
-													<position x="500" y="-15" />
-												</label>
-												<label type="rolename" identifier="1">
-													<position x="" y="" />
-												</label>
-												<label type="rolename" identifier="2">
-													<position x="" y="" />
-												</label>
-											</labels>
-											<points />
-											<color />
-											<lineStyle />
-										</graphics>
-									</objectAssociation>
-									<objectAssociation id="3">
 										<classAssociation>1</classAssociation>
 										<description />
 										<associationEnds>
@@ -2361,22 +2276,72 @@ e.movingDown = false and e.doorOpen = true</condition>
 													<position x="" y="" />
 												</label>
 											</labels>
+											<points>
+												<point x="176" y="546" />
+											</points>
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="2">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="3" id="1" />
+											<objectAssociationEnd element="object" element-id="2" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
+											<points />
+											<color />
+											<lineStyle />
+										</graphics>
+									</objectAssociation>
+									<objectAssociation id="3">
+										<classAssociation>2</classAssociation>
+										<description />
+										<associationEnds>
+											<objectAssociationEnd element="object" element-id="4" id="1" />
+											<objectAssociationEnd element="object" element-id="3" id="2" />
+										</associationEnds>
+										<graphics>
+											<labels>
+												<label type="main" identifier="">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="1">
+													<position x="" y="" />
+												</label>
+												<label type="rolename" identifier="2">
+													<position x="" y="" />
+												</label>
+											</labels>
 											<points />
 											<color />
 											<lineStyle />
 										</graphics>
 									</objectAssociation>
 									<objectAssociation id="4">
-										<classAssociation>3</classAssociation>
+										<classAssociation>2</classAssociation>
 										<description />
 										<associationEnds>
-											<objectAssociationEnd element="object" element-id="3" id="1" />
+											<objectAssociationEnd element="object" element-id="5" id="1" />
 											<objectAssociationEnd element="object" element-id="4" id="2" />
 										</associationEnds>
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2391,16 +2356,16 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</graphics>
 									</objectAssociation>
 									<objectAssociation id="5">
-										<classAssociation>3</classAssociation>
+										<classAssociation>2</classAssociation>
 										<description />
 										<associationEnds>
 											<objectAssociationEnd element="object" element-id="6" id="1" />
-											<objectAssociationEnd element="object" element-id="10" id="2" />
+											<objectAssociationEnd element="object" element-id="5" id="2" />
 										</associationEnds>
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2415,10 +2380,10 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</graphics>
 									</objectAssociation>
 									<objectAssociation id="6">
-										<classAssociation>3</classAssociation>
+										<classAssociation>2</classAssociation>
 										<description />
 										<associationEnds>
-											<objectAssociationEnd element="object" element-id="4" id="1" />
+											<objectAssociationEnd element="object" element-id="7" id="1" />
 											<objectAssociationEnd element="object" element-id="6" id="2" />
 										</associationEnds>
 										<graphics>
@@ -2446,40 +2411,6 @@ e.movingDown = false and e.doorOpen = true</condition>
 								<sequenceReference>goal</sequenceReference>
 								<description />
 								<objects>
-									<object id="7">
-										<attributes>
-											<attribute class="22" id="4">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="22" id="3">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="22" id="2">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="22" id="1">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-										</attributes>
-										<graphics>
-											<icon />
-											<position x="162" y="45" />
-											<size width="143" height="118" />
-											<color />
-										</graphics>
-									</object>
 									<object id="8">
 										<attributes>
 											<attribute class="22" id="4">
@@ -2509,8 +2440,8 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="163" y="186" />
-											<size width="143" height="120" />
+											<position x="98" y="30" />
+											<size width="143" height="131" />
 											<color />
 										</graphics>
 									</object>
@@ -2543,8 +2474,110 @@ e.movingDown = false and e.doorOpen = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="165" y="326" />
-											<size width="142" height="120" />
+											<position x="99" y="182" />
+											<size width="148" height="136" />
+											<color />
+										</graphics>
+									</object>
+									<object id="10">
+										<attributes>
+											<attribute class="22" id="4">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="99" y="336" />
+											<size width="155" height="134" />
+											<color />
+										</graphics>
+									</object>
+									<object id="11">
+										<attributes>
+											<attribute class="22" id="4">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="278" y="27" />
+											<size width="144" height="134" />
+											<color />
+										</graphics>
+									</object>
+									<object id="12">
+										<attributes>
+											<attribute class="22" id="4">
+												<value>true</value>
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="3">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="2">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+											<attribute class="22" id="1">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
+										</attributes>
+										<graphics>
+											<icon />
+											<position x="284" y="181" />
+											<size width="139" height="133" />
 											<color />
 										</graphics>
 									</object>

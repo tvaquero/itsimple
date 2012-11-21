@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -26,6 +26,10 @@
 
 package itSIMPLE;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import javax.swing.ImageIcon;
@@ -33,11 +37,13 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import languages.xml.XMLUtilities;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 import org.jaxen.jdom.JDOMXPath;
 import org.jdom.Attribute;
 import org.jdom.Element;
+import util.filefilter.PDDLFileFilter;
 
 /**
  * A JTree extension which uses XML structures to to manage its data.
@@ -243,7 +249,110 @@ public class ItTree extends JTree{
 		}
 	}
 	
-	/**
+
+
+	public void buildPDDLNode(Element xmlProject, ItTreeNode treeProject, String path){
+
+
+                //domain files
+		Iterator domainsIterator = xmlProject.getChild("pddldomains").getChildren().iterator();
+		while(domainsIterator.hasNext()){
+			Element pddldomain = (Element) domainsIterator.next();
+                        ItTreeNode treePDDL = new ItTreeNode(pddldomain.getChildText("name"),pddldomain, null, null);
+			treePDDL.setIcon(new ImageIcon("resources/images/domain.png"));
+			treeModel.insertNodeInto(treePDDL, treeProject, treeProject.getChildCount());
+			
+
+		}
+
+                //Problem Instance files
+                Element problemInstancesRoot = xmlProject.getChild("problemInstances");
+                ItTreeNode treeProblemInstPDDL = new ItTreeNode("Problem Instances", problemInstancesRoot, null, null);
+		treeProblemInstPDDL.setIcon(new ImageIcon("resources/images/openreport.png"));
+		treeModel.insertNodeInto(treeProblemInstPDDL, treeProject, treeProject.getChildCount());
+                
+                
+                File theproject = new File(path);
+                //File folder = new File(theproject.getParent());
+                File folder = theproject.getParentFile();
+
+                FilenameFilter filter = new FilenameFilter() {
+                    public boolean accept(File dir, String name)
+                    {
+                            if (name != null &&
+                                name.toLowerCase().endsWith(".pddl"))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+
+                };
+
+                //PDDLFileFilter ff = new PDDLFileFilter();
+                File[] listOfFiles = folder.listFiles(filter);
+
+                //sorting the files (alphabetical order)
+                Arrays.sort(listOfFiles, new Comparator<File>() {
+                     public int compare(File a, File b) {
+                       return a.getName().compareTo(b.getName());
+                     }
+                   });
+                
+
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    File eachfile = listOfFiles[i];
+                    //System.out.println("File " + eachfile.getName());
+                    String filename = eachfile.getName();
+                    
+                    //check if file is a domain file                    
+                    Element pddldomainNode = null;
+                    try {
+                            XPath dpath = new JDOMXPath("pddlproject/pddldomains/pddldomain[name='"+ filename +"']");
+                            pddldomainNode = (Element)dpath.selectSingleNode(xmlProject.getDocument());
+
+                    } catch (JaxenException e1) {
+                            e1.printStackTrace();
+                    }
+
+                    if (pddldomainNode == null){
+                        Element problemInstance = new Element("pddlproblem");
+                        //problemInstance.setText(filename);
+                        problemInstance.setAttribute("filename", filename);
+                        problemInstance.setAttribute("file", eachfile.getAbsolutePath());
+                        Element thename = new Element("name");
+                        thename.setText(filename);
+                        problemInstance.addContent(thename);
+                        problemInstancesRoot.addContent(problemInstance);
+
+                        ItTreeNode nodeProblemInstPDDL = new ItTreeNode(filename,problemInstance, null, null);
+                        nodeProblemInstPDDL.setIcon(new ImageIcon("resources/images/problem.png"));
+                        treeModel.insertNodeInto(nodeProblemInstPDDL, treeProblemInstPDDL, treeProblemInstPDDL.getChildCount());
+
+                    }
+
+                    
+                }
+
+                
+
+
+
+                
+
+
+
+
+
+	}
+
+
+
+
+        /**
 	 * Builds the tree node representing the project,
 	 * which is structured in a XML type file
 	 * 
@@ -252,7 +361,10 @@ public class ItTree extends JTree{
 	 * 	 		   where the project is saved
 	 */
 	public void buildStructure(Element xmlProject, String path){
-		if (xmlProject != null){			
+		if (xmlProject != null){
+
+
+
 			ItTreeNode root = (ItTreeNode)treeModel.getRoot();
 			
 			/*
@@ -288,10 +400,21 @@ public class ItTree extends JTree{
 			projectHeader.addContent(filePath);
 			
 			ItTreeNode treeProject = new ItTreeNode(xmlProject.getChildText("name"), xmlProject, projectHeader, null);
-			treeProject.setIcon(new ImageIcon("resources/images/project.png"));
+			//treeProject.setIcon(new ImageIcon("resources/images/project.png"));
 			treeModel.insertNodeInto(treeProject, root, root.getChildCount());			
+
+                        if (xmlProject.getName().equals("project")){
+                            treeProject.setIcon(new ImageIcon("resources/images/project.png"));
+                            buildDiagramNode(xmlProject, treeProject);
+                        }
+                        else if (xmlProject.getName().equals("pddlproject")){
+                            //System.out.println(path);
+                            treeProject.setIcon(new ImageIcon("resources/images/virtualprototype.png"));
+                            //System.out.println("PDDL project open");
+                            buildPDDLNode(xmlProject, treeProject, path);
+                        }
+
 			
-			buildDiagramNode(xmlProject, treeProject);
 				
 		}
 	}
@@ -487,5 +610,16 @@ public class ItTree extends JTree{
 			treeModel.removeNodeFromParent(node);
 		}
 	}
+
+	public void rebuildProjectNode(Element projectxml, ItTreeNode projectNode){
+        //clear and rebuild tree
+            while (projectNode.getChildCount() > 0) {
+                ItTreeNode object = (ItTreeNode)this.getModel().getChild(projectNode, 0);
+                treeModel.removeNodeFromParent(object);                
+            }
+            this.buildDiagramNode(projectxml, projectNode);
+	}        
+        
+        
 	
 }

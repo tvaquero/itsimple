@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
 * 
 *
 * This file is part of itSIMPLE.
@@ -57,7 +57,7 @@ public class ToXPDDL {
 	public static final String PDDL_2_2 = "pddl22";
 	public static final String PDDL_3_0 = "pddl30";
 	public static final String PDDL_3_1 = "pddl31";
-	public static final String TIME_METRIC_REPLACEMENT = "total#time";	
+	public static final String TIME_METRIC_REPLACEMENT = "total#time";
 	
 	private static List<Element> constraintsList = new ArrayList<Element>();
 
@@ -71,9 +71,7 @@ public class ToXPDDL {
 		try {
 			xpddlNodes = (Element)XMLUtilities.readFromFile("resources/settings/commonData.xml").getRootElement().getChild("xpddlNodes").clone();
 		} catch (JDOMException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
 		if(xpddlNodes != null){
@@ -623,9 +621,6 @@ public class ToXPDDL {
 			}
 
 			//4.2.3 argument n
-
-
-			
                         Element attributeType = null;
                         try {
                                 XPath path = new JDOMXPath("project/elements/classes/*[@id='" + attribute.getChildText("type") + "']");
@@ -903,6 +898,7 @@ public class ToXPDDL {
 				}	
 			}
                 }
+                
                 //6.3 OCL Contraints on classes (inv:)
                 if (pddlVersion.equals(PDDL_3_0) || pddlVersion.equals(PDDL_3_1)){
 
@@ -930,7 +926,8 @@ public class ToXPDDL {
                 }
 		
 		
-		//7. Actions 
+		//7. Actions
+                //Tiago
 		List<?> operators = null;
 		try {
 			XPath path = new JDOMXPath("project/elements/classes/class/operators/operator");
@@ -958,7 +955,12 @@ public class ToXPDDL {
                             Element action = (Element)xpddlNodes.getChild("action").clone();
                             action.setAttribute("name", operator.getChildText("name"));			
 
+                            
+                            
+                            
                             //7.1 Parameters
+                            
+                            //7.1.2 declared parameters
                             for (Iterator<?> iterator = operator.getChild("parameters").getChildren("parameter").iterator(); iterator.hasNext();) {
                                     Element parameter = (Element) iterator.next();
                                     Element parameterClass = null;
@@ -996,6 +998,7 @@ public class ToXPDDL {
                                     Element duration = new Element("duration");
                                     Element value = new Element("value");
                                     String durationStr = operator.getChild("timeConstraints").getChildText("duration");
+                                    
                                     if (durationStr.trim().equals("")){
                                         //see if it can be found in the timing diagram
                                         if (timingDiagram!=null){
@@ -1005,7 +1008,8 @@ public class ToXPDDL {
 
                                     if(durationStr.trim().equals("")){
                                             value.setAttribute("number", "0");
-                                            System.out.println("WARNING: duration of durative action \""+ operator.getChildText("name")+ "\" not specified.\n");
+                                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) WARNING: duration of durative-action \""+ operator.getChildText("name")+ "\" not specified.\n");
+                                            System.out.println("WARNING: duration of action \""+ operator.getChildText("name")+ "\" not specified.\n");
                                     }
                                     else{
                                             try {
@@ -1014,7 +1018,8 @@ public class ToXPDDL {
                                                     duration.addContent(value);
                                             }
                                             catch(Exception e){
-                                                    System.out.println("This is not a number!");
+                                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) Warning: "+durationStr+ " is not a number at " +operator.getChildText("name")+".\n");
+                                                    System.out.println("This is not a number!\n");
                                                     ExpressionTreeBuilder builder = new ExpressionTreeBuilder(durationStr);
                                                     Element durationExpressionTree = builder.getExpressionTree();
                                                     Element durationExpresion = buildCondition(durationExpressionTree, action, null, PRECONDITION);
@@ -1034,6 +1039,9 @@ public class ToXPDDL {
                             String constraintsExpression = operator.getChildText("constraints").trim();
                             String precondition;
                             String postcondition;
+                            
+                            Element annotatedConditions = null;
+                            
 
                             if(!constraintsExpression.equals("")){
                                     // precondition
@@ -1055,6 +1063,8 @@ public class ToXPDDL {
                             }
                             else{
                                     Element actionNode = OCLUtilities.buildConditions(operator);
+                                    //XMLUtilities.printXML(actionNode);
+                                    //System.out.println("---------------------------\n \n");
 
                                     //7.2.1 Preconditions
                                     List<?> preconditions = null;
@@ -1091,6 +1101,8 @@ public class ToXPDDL {
                                                             postcondition += " and ";
                                             }
                                     }
+                                    
+                                    annotatedConditions = actionNode.getChild("annotatedoclexpressions");
 
                             }
 
@@ -1107,7 +1119,9 @@ public class ToXPDDL {
                                             //XMLUtilities.printXML(preconditionExpressionTree);
                                     }
                                     catch(Exception e){
-                                            e.printStackTrace();                                            
+                                            e.printStackTrace();
+                                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: error on action: \"" + action.getAttributeValue("name") + "\", with the precondition: \"" + precondition + "\"." +
+                                                            "\nInvalid or unsupported syntax.\n");
                                             System.err.println("Error on action: \"" + action.getAttributeValue("name") + "\", with the precondition: \"" + precondition + "\"." +
                                                             "\nInvalid or unsupported syntax.\n");
                                     }
@@ -1127,15 +1141,21 @@ public class ToXPDDL {
                                     }
                                     catch(Exception e){
                                             e.printStackTrace();
+                                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: error on action: \"" + action.getAttributeValue("name") + "\", with the postcondition: \"" + postcondition + "\"." +
+                                                            "\nInvalid or unsupported syntax.\n");
                                             System.err.println("Error on action: \"" + action.getAttributeValue("name") + "\", with the postcondition: \"" + postcondition + "\"." +
                                                             "\nInvalid or unsupported syntax.\n");
                                     }
                             }
+                            
                             if(precondition.trim().equals("") && postcondition.trim().equals("")){
-                                    System.out.println("WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
+                                ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
+                                                    "\" not defined.\n");
+                                System.out.println("WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
                                                     "\" not defined.\n");
                             }
 
+                            
                             // 7.3.3 Analyze preconditions and postconditions for additional statements in postcondition
                             // get all predicates in effect with more than one parameter
                             List<?> effectPredicates = null;
@@ -1148,12 +1168,26 @@ public class ToXPDDL {
 
                             for (Iterator<?> iterator = effectPredicates.iterator(); iterator.hasNext();) {
                                     Element predicate = (Element) iterator.next();
-
+                                   
+                                    
                                     // if the predicate is denied or is a condition to a when node, do nothing
                                     if(!predicate.getParentElement().getName().equals("not")){
+                                        
+                                        //If a parameter is beein included (incluing) to the predicate list the we should not c
+                                        // consider it for negating in the postcondition.
+                                        boolean isIncluding = false;
+                                        Element theLastParameter = ((Element)predicate.getChildren().get(predicate.getChildren().size()-1));                                        
+                                        if (theLastParameter.getAttribute("opn") != null && theLastParameter.getAttributeValue("opn").equals("including")){
+                                            isIncluding = true;
+                                            //remove the mark (at opn) that says the the parameter is been included
+                                            theLastParameter.removeAttribute("opn");
+                                        }
+                                        //XMLUtilities.printXML(predicate);
+                                        //If it is is not a including case, then we can proceed.
+                                        if (!isIncluding){
 
                                             // build the query to find the same predicate with xpath
-                                            // only the last parameter must be diferent
+                                            // only the last parameter must be different
                                             String query = "descendant::predicate[@id='"+ predicate.getAttributeValue("id") +"'";
                                             List<?> parameters = predicate.getChildren();
                                             int index = 1;
@@ -1171,7 +1205,10 @@ public class ToXPDDL {
                                             Element parent = predicate.getParentElement();
                                             while(!parent.getName().equals("when") && !parent.getName().equals("effect")){
                                                     parent = parent.getParentElement();
-                                            }
+                                            }                                            
+                                            //XMLUtilities.printXML(predicate);
+                                            //XMLUtilities.printXML(parent);
+                                            
                                             if(parent.getName().equals("effect")){
                                                     // the predicate isn't inside a when node
 
@@ -1193,7 +1230,9 @@ public class ToXPDDL {
                                                             // checks if the last parameter is the same; if so, do nothing
                                                             Element lastParameter = (Element)predicate.getChildren().get(parameters.size()-1);
                                                             Element lastPrecondParameter = (Element)precondPredicate.getChildren().get(parameters.size()-1);
+                                                            
                                                             if(!lastParameter.getAttributeValue("id").equals(lastPrecondParameter.getAttributeValue("id"))){
+                                                                
                                                                     // get the conditions for a when node in post condition
                                                                     List<?> conditions = buildWhenCondition(precondPredicate);
 
@@ -1214,6 +1253,7 @@ public class ToXPDDL {
                                                                                     // just add the not in the and node
                                                                                     predicateParent.addContent(not);
                                                                             }
+                                                                            //XMLUtilities.printXML(predicateParent);
 
                                                                     }
                                                                     else{
@@ -1368,12 +1408,13 @@ public class ToXPDDL {
                                                             }
                                                     }
                                             }
+                                        }
                                     }
                             }
 
 
 
-    //			 7.4 Deal with null values
+    //                      7.4 Deal with null values
                             // option 1: eliminate null values
                             // option 2: change null values for not(exists()) in preconditions and forall(not()) in postconditions
                             int option = 1;// initially, there is only option 1
@@ -1607,16 +1648,74 @@ public class ToXPDDL {
                             }
 
                             //7.5. Symplify operations
-                            simplifyOperations(action);			
+                            simplifyOperations(action);
+                            
+                            
+                            //Tiago
+                            //7.6 Create list of annotated precondition 
+                            List<Element> annotatedPreXPDDLList = new ArrayList<Element>();
+                            List<Element> annotatedPostXPDDLList = new ArrayList<Element>();
+                            
+                            
+                            if (annotatedConditions!=null){
+                                for (Iterator<Element> it = annotatedConditions.getChildren().iterator(); it.hasNext();) {
+                                    Element conditions = it.next();
+                                    for (Iterator<Element> it1 = conditions.getChildren().iterator(); it1.hasNext();) {
+                                        Element annotatedCondition = it1.next();
+                                        if (!annotatedCondition.getChildText("condition").trim().equals("")){
+                                            
+                                            Element ann = new Element("condition");
+                                            ann.setAttribute("annotation", annotatedCondition.getChildText("annotation"));
 
+                                            if (annotatedCondition.getAttributeValue("type").equals("pre")){
+                                                String annprecondition = annotatedCondition.getChildText("condition").trim();
+                                                if (annprecondition.indexOf("&#xd;") > -1){				
+                                                        annprecondition.replaceAll("&#xd;", " "); // return carriage in xml
+                                                }
+                                                
+                                                ExpressionTreeBuilder builder = new ExpressionTreeBuilder(annprecondition);
+                                                Element annotatedconditionExpressionTree = builder.getExpressionTree();
+                                                //XMLUtilities.printXML(annotatedconditionExpressionTree);  
+                                                Element thecondition = buildCondition(annotatedconditionExpressionTree, action, null, PRECONDITION);
+                                                if (thecondition!=null){
+                                                    ann.addContent(thecondition);
+                                                    annotatedPreXPDDLList.add(ann);
+                                                    //XMLUtilities.printXML(thecondition);
+                                                }                                                
+                                                
+                                                
+                                            }
+                                            else if (annotatedCondition.getAttributeValue("type").equals("post")){
+                                                
+                                                String annpostcondition = annotatedCondition.getChildText("condition").trim();
+                                                if (annpostcondition.indexOf("&#xd;") > -1){				
+                                                        annpostcondition.replaceAll("&#xd;", " "); // return carriage in xml
+                                                }
+                                                ExpressionTreeBuilder builder = new ExpressionTreeBuilder(annpostcondition);
+                                                Element annotatedconditionExpressionTree = builder.getExpressionTree();
+                                                //XMLUtilities.printXML(annotatedconditionExpressionTree);
+                                                Element effect = buildCondition(annotatedconditionExpressionTree, action, null, POSTCONDITION);
+                                                if (effect!=null){
+                                                    ann.addContent(effect);
+                                                    annotatedPostXPDDLList.add(ann);
+                                                    //XMLUtilities.printXML(effect);
+                                                }
+                                                                                             
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            //Tiago
                             // 7.6 durative actions (preliminary version)
                             if(isDurative){				
                                     // set precondition node to condition
                                     action.getChild("precondition").setName("condition");
 
-
-
-                                    // add at start node in precondition and at-end node in effect
+                                    //PRECONDITION
+                                    // add at start node in precondition
                                     Element condition = action.getChild("condition");	
                                     if(condition.getChildren().size() > 0){
                                             
@@ -1629,16 +1728,63 @@ public class ToXPDDL {
                                             else{
                                                 Element atStart = new Element("at-start");
                                                 atStart.addContent(((Element)condition.getChildren().get(0)).detach());
-                                                condition.addContent(atStart);
+                                                condition.addContent(atStart);                                                
                                             }
 
                                     }
 
+                                    //add timed pre-conditions (@end or at-end or at end)
+                                    for (Iterator<Element> it = annotatedPreXPDDLList.iterator(); it.hasNext();) {
+                                        Element element = it.next();
+                                        //XMLUtilities.printXML(element);
+                                                
+                                        String theannotation = element.getAttributeValue("annotation");
+                                        boolean canAddIt = false;
+                                        Element specificAnnotation = null;
+                                        if (theannotation.equals("@end") || theannotation.equals("at end") || theannotation.equals("at-end") ){                                        
+                                            specificAnnotation = new Element("at-end");
+                                            canAddIt = true;
+                                        }
+                                        else if (theannotation.equals("@overall") || theannotation.equals("@all") || theannotation.equals("over all") || theannotation.equals("over-all") ){
+                                            specificAnnotation = new Element("over-all");
+                                            canAddIt = true;
+                                        }
+                                        else if (theannotation.equals("@start") || theannotation.equals("at start") || theannotation.equals("at-start") ){
+                                            specificAnnotation = new Element("at-start");
+                                            canAddIt = true;
+                                        }                                            
+                                        if (canAddIt){
+                                            Element xppdcondition= (Element)element.getChildren().get(0);
+                                            specificAnnotation.addContent((Element)xppdcondition.clone());
+                                            
+                                            //In order to add the node the condition must either empty, or with an end 
+                                            // already, otherwise we have to create the 'and' node the insert the new condition
+                                            if (condition.getChildren().isEmpty()){
+                                                condition.addContent(specificAnnotation);                                                
+                                            }
+                                            else if ( ((Element)condition.getChildren().get(0)).getName().equals("and")) {
+                                                Element theAndNode = (Element)condition.getChildren().get(0);
+                                                theAndNode.addContent(specificAnnotation);
+                                            }else{
+                                                Element atAnd = new Element("and");
+                                                atAnd.addContent(((Element)condition.getChildren().get(0)).detach());
+                                                atAnd.addContent(specificAnnotation); 
+                                                condition.addContent(atAnd);
+                                                                                               
+                                            }    
+                                        }
+                                    
+                                    }
+                                
+                                    
+                                    
 
+                                    //EFFECT
+                                    //add at-end node in the effect
                                     Element effect = action.getChild("effect");
                                     if(effect.getChildren().size() > 0){
                                             if (timingDiagram!=null){
-                                                //check if it is the condition
+                                                //check if it is the effects
                                                 setTimeIndexToConditions(timingDiagram, operator, effect);
                                             }
                                             else{
@@ -1648,7 +1794,79 @@ public class ToXPDDL {
                                             }
                                             
                                     }
+                                    
+                                    //add timed pre-conditions (@start or at-start or at start)
+                                    for (Iterator<Element> it = annotatedPostXPDDLList.iterator(); it.hasNext();) {
+                                        Element element = it.next();
+                                        //XMLUtilities.printXML(element);
+                                                
+                                        String theannotation = element.getAttributeValue("annotation");
+                                        boolean canAddIt = false;
+                                        Element specificAnnotation = null;
+                                        if (theannotation.equals("@end") || theannotation.equals("at end") || theannotation.equals("at-end") ){                                        
+                                            specificAnnotation = new Element("at-end");
+                                            canAddIt = true;
+                                        }
+                                        //Overall is not allowed for effects
+                                        //else if (theannotation.equals("@overall") || theannotation.equals("over all") || theannotation.equals("over-all") ){
+                                        //    specificAnnotation = new Element("over-all");
+                                        //    canAddIt = true;
+                                        //}
+                                        else if (theannotation.equals("@start") || theannotation.equals("at start") || theannotation.equals("at-start") ){
+                                            specificAnnotation = new Element("at-start");
+                                            canAddIt = true;
+                                        }                                            
+                                        if (canAddIt){
+                                            Element xppdcondition= (Element)element.getChildren().get(0);
+                                            specificAnnotation.addContent((Element)xppdcondition.clone());
+                                            
+                                            //In order to add the node the condition must either empty, or with an end 
+                                            // already, otherwise we have to create the 'and' node the insert the new condition
+                                            if (effect.getChildren().isEmpty()){
+                                                effect.addContent(specificAnnotation);                                                
+                                            }
+                                            else if ( ((Element)effect.getChildren().get(0)).getName().equals("and")) {
+                                                Element theAndNode = (Element)effect.getChildren().get(0);
+                                                theAndNode.addContent(specificAnnotation);
+                                            }else{
+                                                Element atAnd = new Element("and");
+                                                atAnd.addContent(((Element)effect.getChildren().get(0)).detach());
+                                                atAnd.addContent(specificAnnotation);
+                                                effect.addContent(atAnd);                                                                                                
+                                            }    
+                                        }
+                                    
+                                    } 
+
                             }
+                            
+                            //9 Look up for 'self' in the action's pre and post conditions
+                            List<Element> selfparcond = null;			
+                            try {
+                                    XPath path = new JDOMXPath("descendant::parameter[@id='self']");
+                                    selfparcond = path.selectNodes(action);
+                            } catch (JaxenException e) {			
+                                    e.printStackTrace();
+                            }
+                            
+                            Element selfparameter = null;			
+                            try {
+                                    XPath path = new JDOMXPath("parameters/parameter[@name='self']");
+                                    selfparameter = (Element)path.selectSingleNode(action);
+                            } catch (JaxenException e) {			
+                                    e.printStackTrace();
+                            }
+                            //If the parameter was not created already and the user used the keyword self in the conditions 
+                            // the we have to add the parameter
+                            if (selfparameter == null && selfparcond.size() > 0){
+                                selfparameter = new Element("parameter");
+                                selfparameter.setAttribute("name", "self");
+                                selfparameter.setAttribute("type",  operator.getParentElement().getParentElement().getChildText("name"));
+                                action.getChild("parameters").addContent(0, selfparameter);                                
+                            }
+                                                        
+                            
+                            
                             //XMLUtilities.printXML(action);
 
 
@@ -1684,9 +1902,9 @@ public class ToXPDDL {
 			
 		//10.4 Negative-preconditions		
 		result = null;
-		// look for a 'not' in the precondition
+		// look for a 'not' in the precondition and in the condition (time)
 		try {
-			XPath path = new JDOMXPath("actions/action/precondition/descendant::not");
+			XPath path = new JDOMXPath("actions/action/precondition/descendant::not | actions/durative-action/condition/descendant::not ");
 			result = path.selectNodes(xpddlDomain);
 		} catch (JaxenException e) {			
 			e.printStackTrace();
@@ -1694,12 +1912,14 @@ public class ToXPDDL {
 		if(result.size() > 0){
 			xpddlDomain.getChild("requirements").addContent(new Element("negative-preconditions"));
 		}
+                result = null;
 
-		//10.5 disjunctive-preconditions		
+
+		//10.5 disjunctive-preconditions 		
 		result = null;
-		// look for a 'or' in the precondition
+		// look for a 'or' in the precondition and in the consition (time)
 		try {
-			XPath path = new JDOMXPath("actions/action/precondition/descendant::or");
+			XPath path = new JDOMXPath("actions/action/precondition/descendant::or | actions/durative-action/condition/descendant::or");
 			result = path.selectNodes(xpddlDomain);
 		} catch (JaxenException e) {			
 			e.printStackTrace();
@@ -1707,11 +1927,13 @@ public class ToXPDDL {
 		if(result.size() > 0){
 			xpddlDomain.getChild("requirements").addContent(new Element("disjunctive-preconditions"));
 		}
+                result = null;
 		
-		//10.6 Equality		
+		//10.6 Equality
+                result = null;
 		// look for 'equals' nodes with both children named 'parameter'
 		try {
-			XPath path = new JDOMXPath("actions/action/descendant::equals[count(parameter)=2]");	
+			XPath path = new JDOMXPath("actions/action/descendant::equals[count(parameter)=2] | actions/durative-action/descendant::equals[count(parameter)=2]");	
 			result = path.selectNodes(xpddlDomain);
 		} catch (JaxenException e) {			
 			e.printStackTrace();
@@ -1725,7 +1947,9 @@ public class ToXPDDL {
 		result = null;
 		// look for 'exists' and 'forall' in the actions and cosntraints
 		try {
-			XPath path = new JDOMXPath("actions/action/descendant::exists | actions/action/descendant::forall | " +
+			//XPath path = new JDOMXPath("actions/action/descendant::exists | actions/action/descendant::forall | " +
+			//		"constraints/descendant::exists | constraints/descendant::forall");
+                        XPath path = new JDOMXPath("actions/descendant::exists | actions/descendant::forall | " +
 					"constraints/descendant::exists | constraints/descendant::forall");
 			result = path.selectNodes(xpddlDomain);
 		} catch (JaxenException e) {			
@@ -1737,9 +1961,10 @@ public class ToXPDDL {
 		
 		//10.8 conditional-effects		
 		result = null;
-		// look for a 'when' in the action
+		// look for a 'when' in the action or durative-action
 		try {
-			XPath path = new JDOMXPath("actions/action/descendant::when");
+			//XPath path = new JDOMXPath("actions/action/descendant::when");
+                        XPath path = new JDOMXPath("actions/descendant::when");
 			result = path.selectNodes(xpddlDomain);
 		} catch (JaxenException e) {			
 			e.printStackTrace();
@@ -1761,6 +1986,7 @@ public class ToXPDDL {
 			xpddlDomain.getChild("requirements").addContent(new Element("durative-actions"));
 		}		
 		
+                
 		//10.10 Constraints		
 		if(xpddlDomain.getChild("constraints").getChildren().size() > 0){
 			xpddlDomain.getChild("requirements").addContent(new Element("constraints"));
@@ -1853,7 +2079,7 @@ public class ToXPDDL {
 						node = new Element("parameter");
 						node.setAttribute("id", "null");
 					}
-                    else if(data.equals("self")){
+                                        else if(data.equals("self")){
 						node = new Element("parameter");
 						node.setAttribute("id", data);
 					}
@@ -1881,43 +2107,50 @@ public class ToXPDDL {
 								// for each parameter, create a node
 								String parameterStr = st.nextToken().trim();
 
-                                //Element xpddlParameter = new Element("parameter");
-                                //xpddlParameter.setAttribute("id", parameterStr);
-                                //node.addContent(xpddlParameter);
+                                                                //Element xpddlParameter = new Element("parameter");
+                                                                //xpddlParameter.setAttribute("id", parameterStr);
+                                                                //node.addContent(xpddlParameter);
 
-                                //TODO: we need to check if this is a parameter,, an object in a problem
+                                                                //TODO: we need to check if this is a parameter,, an object in a problem
 
-                                if (action != null){
-                                    //check if this is a constant
-                                   Element constant = null;
-                                    try {
-                                        XPath path = new JDOMXPath("constants/constant[@name='" + parameterStr + "']");
-                                        constant = (Element) path.selectSingleNode(xpddlDomain);
-                                    } catch (JaxenException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if (constant != null) {//it is a constant
-                                        Element xpddlParameter = new Element("object");
-                                        xpddlParameter.setAttribute("id", parameterStr);
-                                        node.addContent(xpddlParameter);
-                                    }else{
-                                       Element xpddlParameter = new Element("parameter");
-                                       xpddlParameter.setAttribute("id", parameterStr);
-                                       node.addContent(xpddlParameter);
-                                    }
-                                }
-                                else{//if it is not in a action context
-                                    Element xpddlParameter = new Element("object");
-                                    xpddlParameter.setAttribute("id", parameterStr);
-                                    node.addContent(xpddlParameter);
-                                }
+                                                                if (action != null){
+                                                                    //check if this is a constant
+                                                                   Element constant = null;
+                                                                    try {
+                                                                        XPath path = new JDOMXPath("constants/constant[@name='" + parameterStr + "']");
+                                                                        constant = (Element) path.selectSingleNode(xpddlDomain);
+                                                                    } catch (JaxenException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                    if (constant != null) {//it is a constant
+                                                                        Element xpddlParameter = new Element("object");
+                                                                        xpddlParameter.setAttribute("id", parameterStr);
+                                                                        node.addContent(xpddlParameter);
+                                                                    }else{
+                                                                       Element xpddlParameter = new Element("parameter");
+                                                                       xpddlParameter.setAttribute("id", parameterStr);
+                                                                       node.addContent(xpddlParameter);
+                                                                    }
+                                                                }
+                                                                else{//if it is not in a action context
+                                                                    Element xpddlParameter = new Element("object");
+                                                                    xpddlParameter.setAttribute("id", parameterStr);
+                                                                    node.addContent(xpddlParameter);
+                                                                }
 							}
 						}
 					}
+                                        //Reserverd worlds from PDDL
 					else if(data.equals(TIME_METRIC_REPLACEMENT)){
 						node = new Element("function");
 						node.setAttribute("id", "total-time");
 					}
+                                        //Reserverd worlds from PDDL
+                                        else if(data.equals("duration")){
+                                            //TODO: check whether there is a association or attribute with this name
+						node = new Element("parameter");
+						node.setAttribute("id", data);
+                                        }                                        
 					else{
 						try{
 							Double.parseDouble(data);
@@ -1946,7 +2179,8 @@ public class ToXPDDL {
 								
 								if(constant == null){
 									// print error message
-									System.err.println("ERROR: \""+ data +"\" is not a known expression.");
+                                                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: \""+ data +"\" is not a known expression.\n");
+                                                                    System.err.println("ERROR: \""+ data +"\" is not a known expression.\n");
 								}
 
 							}
@@ -1960,143 +2194,152 @@ public class ToXPDDL {
 		else if(data.equals("=") || data.equals("<>")){			
 			Element left = buildCondition((Element)expressionTreeRoot.getChildren().get(0), action, operation, conditionType);
 			Element right = buildCondition((Element)expressionTreeRoot.getChildren().get(1), action, operation, conditionType);
-			
-			if(left.getName().equals("predicate") || right.getName().equals("predicate")){
-				// node is an incomplete predicate
-				node = (left.getName().equals("predicate")) ?left :right;
-				Element parameter = (!left.getName().equals("predicate")) ?left :right;
-				if(parameter.getName().equals("boolean")){
-					if(parameter.getAttributeValue("id").equals("false")){						
-						Element predicate = node;
-						node = new Element("not");
-						node.addContent(predicate);
-					}
-				}
-				// non primitive attribute or association
-				else if(parameter.getName().equals("parameter") 
-						&& parameter.getChildren().size() > 0){
-					Element paramPredicate = (Element)parameter.getChild("predicate").detach();
-					if(node.getAttribute("id").getValue().equals(paramPredicate.getAttribute("id").getValue()) &&
-							node.getChild("parameter").getAttribute("id").getValue().equals(
-									paramPredicate.getChild("parameter").getAttribute("id").getValue())){
-						// the atribution is consistent:
-						//a.y = a.y->including(x) => (a y x)
-						node.addContent(parameter);
-						
-						// excluding
-						if(parameter.getAttribute("opn").getValue().equals("excluding")){
-							Element predicate = node;
-							node = new Element("not");
-							node.addContent(predicate);
-						}
-						
-						// remove the mark
-						parameter.removeAttribute(parameter.getAttribute("opn"));
+			if (left!=null && right!=null){
+                            if(left.getName().equals("predicate") || right.getName().equals("predicate")){
+                                    // node is an incomplete predicate
+                                    node = (left.getName().equals("predicate")) ?left :right;
+                                    Element parameter = (!left.getName().equals("predicate")) ?left :right;
+                                    if(parameter.getName().equals("boolean")){
+                                            if(parameter.getAttributeValue("id").equals("false")){						
+                                                    Element predicate = node;
+                                                    node = new Element("not");
+                                                    node.addContent(predicate);
+                                            }
+                                    }
+                                    // non primitive attribute or association
+                                    else if(parameter.getName().equals("parameter") 
+                                                    && parameter.getChildren().size() > 0){
+                                            Element paramPredicate = (Element)parameter.getChild("predicate").detach();
+                                            if(node.getAttributeValue("id").equals(paramPredicate.getAttribute("id").getValue()) &&
+                                                            node.getChild("parameter").getAttribute("id").getValue().equals(
+                                                                            paramPredicate.getChild("parameter").getAttribute("id").getValue())){
+                                                    // the atribution is consistent:
+                                                    //a.y = a.y->including(x) => (a y x)
+                                                    
+                                                    node.addContent(parameter);
 
-						
-					}
-					else{
-						System.err.println("Not handled attribution");
-					}
-						 
-				}
-				else{
-					node.addContent(parameter);	
-				}			
-			}
-                        //Function
-			else{
-				if(conditionType.equals(PRECONDITION)){
-					node = new Element("equals");
+                                                    // excluding
+                                                    if(parameter.getAttributeValue("opn").equals("excluding")){
+                                                            Element predicate = node;
+                                                            node = new Element("not");
+                                                            node.addContent(predicate);
+                                                    }
 
-                                        //PDDL 3.1
-                                        if (right.getName().equals("parameter")){
-                                             if (right.getAttributeValue("id").equals("null")){
-                                                 right.setName("value");
-                                                 right.removeAttribute("id");
-                                                 right.setAttribute("object", "undefined");
-                                             }
-                                        }
-                                        node.addContent(left);
-					node.addContent(right);
-				}
-				else if(conditionType.equals(POSTCONDITION)){
-					
-					//check the case of increase, decrease, scale-up or scale-down
-					/*       =
-					 *     /   \
-					 *    A    op
-					 *        /  \
-					 *    	 A   ...		
-					 * 
-					 */
-					
-					//check if right is an arithmetic operator
-					if(right.getName().equals("add") ||
-							right.getName().equals("subtract") ||
-							right.getName().equals("multiply") ||
-							right.getName().equals("divide")){
-						String expression = "function[@id='"+ left.getAttributeValue("id") +"'";
-						for (Iterator<?> iter = left.getChildren().iterator(); iter.hasNext();) {
-							Element parameterOrObject = (Element) iter.next(); //it can be a paramet
-							expression += " and "+parameterOrObject.getName()+"/@id='"+ parameterOrObject.getAttributeValue("id") +"'";
-						}						
-						expression += "]";
+                                                    // remove the mark
+                                                    //parameter.removeAttribute(parameter.getAttribute("opn"));
 
-                        //System.out.println(expression);
-						
-						Element variable = null;
-						try {
-							XPath path = new JDOMXPath(expression);
-							variable = (Element) path.selectSingleNode(right);
-						} catch (JaxenException e) {
-							e.printStackTrace();
-						}
-						if(variable == null){
-							// not the case of increase, etc.
-							node = new Element("assign");
-							node.addContent(left);
-							node.addContent(right);
-						}
-						else{
-							// case of increase, etc.
-							if(right.getName().equals("add"))
-								node = new Element("increase");
-							else if(right.getName().equals("subtract"))
-								node = new Element("decrease");
-							else if(right.getName().equals("multiply"))
-								node = new Element("scale-up");
-							else if(right.getName().equals("divide"))
-								node = new Element("scale-down");
+                                                    //XMLUtilities.printXML(node);
+                                                    
+                                            }
+                                            else{
+                                                ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: attribute not handled");
+                                                System.err.println("Not handled attribution");
+                                            }
 
-							node.addContent(left);
-							right.removeContent(variable);
-							Element rightChild = (Element)((Element)right.getChildren().get(0)).clone();
-							node.addContent(rightChild);
-						}
-					}
-					else{
-						//case of A = B
-						node = new Element("assign");
-
-                        //PDDL 3.1
-                        if (right.getName().equals("parameter")){
-                            if (right.getAttributeValue("id").equals("null")){
-                                right.setName("value");
-                                right.removeAttribute("id");
-                                right.setAttribute("object", "undefined");
+                                    }
+                                    else{
+                                            node.addContent(parameter);	
+                                    }			
                             }
-                        }
-                        node.addContent(left);
-						node.addContent(right);
-					}
-				}
-			}
-			if(data.equals("<>")){
+                            //Function
+                            else{
+                                    if(conditionType.equals(PRECONDITION)){
+                                            node = new Element("equals");
+
+                                            //PDDL 3.1
+                                            if (right.getName().equals("parameter")){
+                                                if (right.getAttributeValue("id").equals("null")){
+                                                    right.setName("value");
+                                                    right.removeAttribute("id");
+                                                    right.setAttribute("object", "undefined");
+                                                }
+                                            }
+                                            node.addContent(left);
+                                            node.addContent(right);
+                                    }
+                                    else if(conditionType.equals(POSTCONDITION)){
+
+                                            //check the case of increase, decrease, scale-up or scale-down
+                                            /*       =
+                                            *     /   \
+                                            *    A    op
+                                            *        /  \
+                                            *    	 A   ...		
+                                            * 
+                                            */
+
+                                            //check if right is an arithmetic operator
+                                            if(right.getName().equals("add") ||
+                                                            right.getName().equals("subtract") ||
+                                                            right.getName().equals("multiply") ||
+                                                            right.getName().equals("divide")){
+                                                    String expression = "function[@id='"+ left.getAttributeValue("id") +"'";
+                                                    for (Iterator<?> iter = left.getChildren().iterator(); iter.hasNext();) {
+                                                            Element parameterOrObject = (Element) iter.next(); //it can be a paramet
+                                                            expression += " and "+parameterOrObject.getName()+"/@id='"+ parameterOrObject.getAttributeValue("id") +"'";
+                                                    }						
+                                                    expression += "]";
+
+                            //System.out.println(expression);
+
+                                                    Element variable = null;
+                                                    try {
+                                                            XPath path = new JDOMXPath(expression);
+                                                            variable = (Element) path.selectSingleNode(right);
+                                                    } catch (JaxenException e) {
+                                                            e.printStackTrace();
+                                                    }
+                                                    if(variable == null){
+                                                            // not the case of increase, etc.
+                                                            node = new Element("assign");
+                                                            node.addContent(left);
+                                                            node.addContent(right);
+                                                    }
+                                                    else{
+                                                            // case of increase, etc.
+                                                            if(right.getName().equals("add"))
+                                                                    node = new Element("increase");
+                                                            else if(right.getName().equals("subtract"))
+                                                                    node = new Element("decrease");
+                                                            else if(right.getName().equals("multiply"))
+                                                                    node = new Element("scale-up");
+                                                            else if(right.getName().equals("divide"))
+                                                                    node = new Element("scale-down");
+
+                                                            node.addContent(left);
+                                                            right.removeContent(variable);
+                                                            Element rightChild = (Element)((Element)right.getChildren().get(0)).clone();
+                                                            node.addContent(rightChild);
+                                                    }
+                                            }
+                                            else{
+                                                    //case of A = B
+                                                    node = new Element("assign");
+
+                            //PDDL 3.1
+                            if (right.getName().equals("parameter")){
+                                if (right.getAttributeValue("id").equals("null")){
+                                    right.setName("value");
+                                    right.removeAttribute("id");
+                                    right.setAttribute("object", "undefined");
+                                }
+                            }
+                            node.addContent(left);
+                                                    node.addContent(right);
+                                            }
+                                    }
+                            }
+                            
+                            if(data.equals("<>")){
 				Element not = new Element("not");
 				not.addContent(node);
 				node = not;
-			}
+                            }
+                            
+                            
+                            
+                        }
+			
 		}
 		else if (data.equals(".")){
 			// the last node is a function or a predicate
@@ -2202,7 +2445,8 @@ public class ToXPDDL {
 					}					
 				}
 				else{
-					System.err.println("Error: function or predicate \"" + lastNodeData + "\" not found");					
+                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: function or predicate \"" + lastNodeData + "\" not found in the domain.\n");
+                                    System.err.println("Error: function or predicate \"" + lastNodeData + "\" not found.\n");					
 				}
 			}
 			
@@ -2471,7 +2715,8 @@ public class ToXPDDL {
 				node = new Element("suchthat");
 			}*/
 			else{
-				System.err.println(data);
+                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: undentify element "+data+".\n");
+                            System.err.println(data);
 			}
 			for (Iterator<?> iter = expressionTreeRoot.getChildren().iterator(); iter.hasNext();) {
 				Element child = (Element) iter.next();
@@ -2481,7 +2726,8 @@ public class ToXPDDL {
 					node.addContent(xpddlChild);					
 				}
 				else{
-					System.err.println("Error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data"));
+                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data")+"\n");
+                                    System.err.println("Error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data"));
 				}
 			}
 			
@@ -3267,7 +3513,12 @@ public class ToXPDDL {
 				e.printStackTrace();
 			}
 
-                        metrics.addAll(domainmetrics);
+                        if (!metrics.isEmpty()){
+                            metrics.addAll(domainmetrics);
+                        }else{
+                            metrics = domainmetrics;
+                        }
+                        //metrics.addAll(domainmetrics);
 
                        
                         if (metrics != null && metrics.size() > 0){
@@ -3452,8 +3703,10 @@ public class ToXPDDL {
 		Element project = domain.getParentElement().getParentElement().getParentElement();
 		
 		if(containerXPDDLNode != null){
-			// 4.1 Predicates and Functions			
-			//4.1.2 object associations
+			
+                        // 4.1 PREDICATES and FUNCTIONS			
+			
+                        //4.1.2 object ASSOCIATIONS
 			List<?> objectAssociations = objectDiagram.getChild("associations").getChildren("objectAssociation");
 			for (Iterator<?> iterator = objectAssociations.iterator(); iterator.hasNext();) {
 				Element objectAssociation = (Element) iterator.next();
@@ -3814,7 +4067,7 @@ public class ToXPDDL {
 				}
 			}
 			
-			// 4.1.3 object attributes
+			// 4.1.3 object ATTRIBUTES
 			List<?> refObjects = objectDiagram.getChild("objects").getChildren("object");
 			for (Iterator<?> iterator = refObjects.iterator(); iterator.hasNext();) {
 				// get all object references in the diagram
@@ -3884,8 +4137,11 @@ public class ToXPDDL {
 											if(parameterizedValue.getChildText("value").equals("true")){
 												predOrFuncList.add(predOrFuncClone);
 											}
-											else if(!objectDiagram.getChildText("sequenceReference").equals("init") &&
+                                                                                        //checking false value and only it if it in the init state
+                                                                                        else if(!objectDiagram.getChildText("sequenceReference").equals("init") &&
 													parameterizedValue.getChildText("value").equals("false")){
+                                                                                        //checking false value (CHECK
+											//else if(parameterizedValue.getChildText("value").equals("false")){                                                                                                                                                                                
 													// deny the predicate
 												Element not = new Element("not");
 												not.addContent(predOrFuncClone);
@@ -3959,8 +4215,11 @@ public class ToXPDDL {
 												 containerXPDDLNode.addContent(predOrFunc);
 											 }
 										}
-										else if(!objectDiagram.getChildText("sequenceReference").equals("init") &&
+                                                                                //checking false value and only it if it in the ini state
+                                                                                else if(!objectDiagram.getChildText("sequenceReference").equals("init") &&
 												objectAttribute.getChildText("value").equals("false")){
+                                                                                //checking false value
+										//else if(objectAttribute.getChildText("value").equals("false")){
 												// deny the predicate
 											Element not = new Element("not");
 											not.addContent(predOrFunc);
@@ -4182,7 +4441,7 @@ public class ToXPDDL {
     
     /**
      * This method fix the time index (pddl operators at start, at end and overall) in a given xppdl condition.
-     * This a very simplified bersion of the method; it must be worked out to consider all cases and all condition.
+     * This a very simplified version of the method; it must be worked out to consider all cases and all condition.
      * Right now the method is only considering boolean attributes in the first level (under <and>)
      * @param timingDiagram the timing diagram of the action.
      * @param condition the condition (precondition or postcondition)
@@ -4278,61 +4537,72 @@ public class ToXPDDL {
                                                 valueAtCondition = "false";
                                             }
                                             Element value = timeInterval.getChild("value");
+                                            
+                                            Element type = timeInterval.getChild("type");
+                                            
+                                            String currenttype = condition.getName();
+                                            if (currenttype.equals("condition")){
+                                                currenttype = "precondition";
+                                            }
 
                                             //Check if we are comparing true value with true value (and vice versa)
                                             if (value.getText().trim().equals(valueAtCondition)){
-                                                Element durationConstratint = timeInterval.getChild("durationConstratint");
-                                                Element lowerbound = durationConstratint.getChild("lowerbound");
-                                                Element upperbound = durationConstratint.getChild("upperbound");
+                                                
+                                                //check if the interval refers to a precondition or a effect
+                                                if (currenttype.equals(type.getText())) {
+                                                    Element durationConstratint = timeInterval.getChild("durationConstratint");
+                                                    Element lowerbound = durationConstratint.getChild("lowerbound");
+                                                    Element upperbound = durationConstratint.getChild("upperbound");
 
 
-                                                String lowerboundValue = lowerbound.getAttributeValue("value");
-                                                String lowerboundIncluded = lowerbound.getAttributeValue("included");
-                                                String upperboundValue = upperbound.getAttributeValue("value");
-                                                String upperboundIncluded = upperbound.getAttributeValue("included");
+                                                    String lowerboundValue = lowerbound.getAttributeValue("value");
+                                                    String lowerboundIncluded = lowerbound.getAttributeValue("included");
+                                                    String upperboundValue = upperbound.getAttributeValue("value");
+                                                    String upperboundIncluded = upperbound.getAttributeValue("included");
 
 
 
-                                                //at start case
-                                                if (lowerboundValue.equals("0") && lowerboundIncluded.equals("true")){
-                                                    //add at-start node to the container (new condition)
-                                                    Element atStart = new Element("at-start");
-                                                    atStart.addContent((Element)newCondition.clone());
-                                                    newContainer.addContent(atStart);
-                                                    changed = true;
-                                                }
-                                                //at end case
-                                                if (upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("true")){
-                                                    //add at-end node to the container (new condition)
-                                                    Element atEnd = new Element("at-end");
-                                                    atEnd.addContent((Element)newCondition.clone());
-                                                    newContainer.addContent(atEnd);
-                                                    changed = true;
-                                                }
-                                                //over all case. The overall case is only applyed for precondition (condition) and not for effect
-                                                if(condition.getName().equals("condition")){
-                                                    
-                                                    if((lowerboundValue.equals("0") && lowerboundIncluded.equals("false")
-                                                            && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("false")) //(0,dur)
-                                                            ||
-                                                            (lowerboundValue.equals("0") && lowerboundIncluded.equals("true")
-                                                            && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("true")) //[0,dur]
-                                                            ||
-                                                            (lowerboundValue.equals("0") && lowerboundIncluded.equals("true")
-                                                            && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("false")) //[0,dur)
-                                                            ||
-                                                            (lowerboundValue.equals("0") && lowerboundIncluded.equals("false")
-                                                            && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("true")) //(0,dur]
-                                                            ){
-                                                        //add over-all node to the container (new condition)
-                                                        Element overAll = new Element("over-all");
-                                                        overAll.addContent((Element)newCondition.clone());
-                                                        newContainer.addContent(overAll);
+                                                    //at start case
+                                                    if (lowerboundValue.equals("0") && lowerboundIncluded.equals("true")){
+                                                        //add at-start node to the container (new condition)
+                                                        Element atStart = new Element("at-start");
+                                                        atStart.addContent((Element)newCondition.clone());
+                                                        newContainer.addContent(atStart);
                                                         changed = true;
                                                     }
+                                                    //at end case
+                                                    if (upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("true")){
+                                                        //add at-end node to the container (new condition)
+                                                        Element atEnd = new Element("at-end");
+                                                        atEnd.addContent((Element)newCondition.clone());
+                                                        newContainer.addContent(atEnd);
+                                                        changed = true;
+                                                    }
+                                                    //over all case. The overall case is only applyed for precondition (condition) and not for effect
+                                                    if(condition.getName().equals("condition")){
+
+                                                        if((lowerboundValue.equals("0") && lowerboundIncluded.equals("false")
+                                                                && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("false")) //(0,dur)
+                                                                ||
+                                                                (lowerboundValue.equals("0") && lowerboundIncluded.equals("true")
+                                                                && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("true")) //[0,dur]
+                                                                ||
+                                                                (lowerboundValue.equals("0") && lowerboundIncluded.equals("true")
+                                                                && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("false")) //[0,dur)
+                                                                ||
+                                                                (lowerboundValue.equals("0") && lowerboundIncluded.equals("false")
+                                                                && upperboundValue.endsWith(durationStr) && upperboundIncluded.equals("true")) //(0,dur]
+                                                                ){
+                                                            //add over-all node to the container (new condition)
+                                                            Element overAll = new Element("over-all");
+                                                            overAll.addContent((Element)newCondition.clone());
+                                                            newContainer.addContent(overAll);
+                                                            changed = true;
+                                                        }
+                                                    }
+                                                    
                                                 }
-
-
+                                                
                                             }
 
                                         }

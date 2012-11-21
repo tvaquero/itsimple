@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo
 * 
 *
 * This file is part of itSIMPLE.
@@ -900,10 +900,13 @@ public class ExecPlanner implements Runnable{
                     String consoleOutputStr = "";
                     for (Iterator<?> iter = consoleOutput.iterator(); iter.hasNext();) {
                                     String line = (String) iter.next();
-                                    consoleOutputStr += line + "\n";
+                                    //remove trouble chars
+                                    line = XMLUtilities.RemoveTroublesomeCharacters(line);
+                                    consoleOutputStr += line + " \n";
                             }
                         //4.3.2 set the value/output
                     planner.addContent(new Element("consoleOutput"));
+                    
                     planner.getChild("consoleOutput").setText(consoleOutputStr);
 
                     //5. set statistics
@@ -1276,9 +1279,9 @@ public class ExecPlanner implements Runnable{
 
         }
 	}
+        
 
-
-    
+  
     
     /*public static void main(String[] args) {    	
     	

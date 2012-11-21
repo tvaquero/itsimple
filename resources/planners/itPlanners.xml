@@ -2,7 +2,7 @@
 <itPlanners>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>3.5.10</version>
+		<version>4.0.00</version>
 	</toolInformation>
         <settings>
             <timeout enabled="true">1800</timeout>
@@ -15,7 +15,7 @@
 			<date>2002</date>
 			<institution />
 			<author>J. Hoffmann</author>
-			<link>http://members.deri.at/~joergh/ff.html</link>
+			<link>http://www.loria.fr/~hoffmanj/</link>
 			<description />
 			<platform>
 				<windows />
@@ -794,7 +794,7 @@
 			<date>2002</date>
 			<institution />
 			<author>J. Hoffmann</author>
-			<link>http://members.deri.at/~joergh/ff.html</link>
+			<link>http://www.loria.fr/~hoffmanj/</link>
 			<description />
 			<platform>
 				<linux />
@@ -882,7 +882,7 @@
 			<date>2002</date>
 			<institution />
 			<author>J. Hoffmann</author>
-			<link>http://members.deri.at/~joergh/ff.html</link>
+			<link>http://www.loria.fr/~hoffmanj/</link>
 			<description />
 			<platform>
 				<linux />
@@ -1192,9 +1192,6 @@
                                 <rewards />
                                 <strips />
                                 <equality />
-                                <conditional-effects />
-                                <disjunctive-preconditions />
-                                <negative-preconditions />
 			</requirements>
 			<settings>
 				<filePath>myPlanners/blackbox</filePath>

@@ -1,0 +1,71 @@
+<html>
+<body>
+<h1>Move &amp; Reach</h1>
+
+<h2>Intent</h2>
+
+The purpose of the pattern is to model agent objects (mobiles) that can move on a map of locations to reach desirable locations.
+
+<h2>Scenarios</h2>
+
+Consider a rover that has to reach a certain location in the Mars surface. Such a rover has to navigate through the Mars terrain and different checkpoints to reach the designated goal location. A team of surveillance and cleaning robots has navigate through different rooms and corridor in a building to reach their working locations. A character in a game has to walk through a map of places to find objects and access hidden and locked locations. Consider a logistic or truck domain in which a truck has to move in a network of locations (a map) in order to pick up and delivery different packages to customers. This pattern encapsulate the behavior of the truck that move from one location to another. Consider a team of robots that have to move on a building floor (a map of rooms) in order to reach certain offices and rooms for cleaning. This pattern can be used to represent the behavior of vehicles (trucks, airplanes, robots) that must move in a network of locations to reach certain locations. 
+
+<h2>Applicability</h2>
+
+Use this pattern when agent objects (mobiles) have to move, transit and navigate on a discrete map of locations in order to reach their destination and/or pass through a given set of locations. Different topologies of locations, including their connections, where mobiles navigate can be applied in this pattern. In fact, different maps can be used and combined in the pattern to create complex navigation graphs (accessed for example by different types of mobiles such as ships navigating on ocean, airplanes navigating on air, and trucks traveling on land).
+
+<h2>Model Representation</h2>
+
+A class <i>Mobile</i> represents the type of agent objects that can move and travel around different Locations. The class <i>Location</i> represents the map sites, places where the mobile might visit and be at. The way Location objects are connected to each other depends on the desired model: it can represent for example a map (e.g., the map of a building floor or a house map) or a sequence of locations (e.g., sequence of floor in a building). Mobiles can move from one location to another depending on the location accessibility. In this model the accessibility between locations is represented by the relation <i>connected</i>. Action <i>move</i>, performed by mobiles, can only happen between location that are connected. The model can be modified so the assecibility oflocation is surpass and therefore mobiles can access any location from its starting location when performing action move.<br>
+The following figure shows the UML class diagram of the Move &amp; Reach pattern.
+
+<p><center><img src="file:resources/patterns/images/moveandreach.png" /></center></p>
+
+<p>In the figure above, the association <i>at</i> indicates that a mobile must be at one location at a time. The following state machine diagram represents the behavior of a <i>Mobile</i> object.</p>
+
+<p><center><img src="file:resources/patterns/images/mobilestatemachine.png" /></center></p>
+
+<p>The specification of the action <i>move</i> in OCL is given below.</p>
+
+<font face="Verdana">
+<p><b>context</b> Mobile::move(from:Location, to:Location) <br>
+<b>pre:</b> <br>
+self.at = from and and <br>
+from &lt;&gt; to and <br>
+from.connected->exists(loc:Location | loc = to) <br>
+<b>post:</b> <br>
+self.at = to <br>
+</p>
+</font>
+<br>
+
+<h2>Elements, Participants and Roles</h2>
+<ul>
+<li><b>Mobile</b> (Class). The class of objects that can move around the map.</li>
+<li><b>at</b> (association). The relation that specifies where the mobile is located.</li>
+<li><b>move</b> (operator, action schema). The operation that makes a mobile go from one location to another.
+<li><b>Location</b> (or MapSite) (Class). The node object of the map.</li>
+<li><b>connected</b> (association). The edges of a directed graph representing the accessibility between nodes, the locations.</li>
+</ul>
+
+<h2>Metrics</h2>
+
+Mobility problems can have different metrics such as travel distance and total fuel used by mobiles. This pattern provides a base for more complicated mobility problem where these metrics might exist. For the encapsulate model described here, the usual metric is the number of occurrence of the action move in the plan (which provide the sense of the distance traveled by carriers), or even the number of actions in the plan (a very traditional and simplistic way to measure the quality of plan in AI Planning). Depending on the planning strategy used to solve the problem (especially not optimal ones), the resulting plans for mobility problems might contain undesirable loop such as in the path of mobiles.
+
+<h2>Consequences</h2>
+
+The topology of the map that the mobile can traverse is open and must be adapted to each applications. Defining the multiplicity of the association connected constraints the way locations are associated to each other, constraining therefore the accessibility on the map. 
+
+<h2>Known Uses</h2>
+
+Examples of domains where this patterns can be found are the following:
+<ul>
+<li>Logistic domain (IPC-1)</li>
+<li>Gripper (IPC-1)</li>
+<li>Mystery (IPC-1)</li>
+<li>Grid (IPC-1)</li>
+<li>Gold miner (IPC 2008)</li>
+<li>Escape Monster</li>
+</ul>
+</body>
+</html>

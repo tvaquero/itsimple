@@ -1,0 +1,9 @@
+#!/bin/bash
+
+
+./GENERATE-VARS/translate/translate.py $1 $2
+
+mv test.groups ./GENERATE-VARS/VARIABLES.txt
+
+rm all.groups output.sas
+

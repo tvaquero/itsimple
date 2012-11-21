@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2011 University of Sao Paulo, University of Toronto
 * 
 
 * This file is part of itSIMPLE.
@@ -30,6 +30,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,6 +62,7 @@ public class MultiObjectDialog extends JDialog {
 	
 	JComboBox classesComboBox;
 	JTextField numberTextField;
+        JTextField listTextField;
 	//JButton createObjectsButton;
 	
 	public MultiObjectDialog(Element project, Object[] parameters, int x, int y){
@@ -69,7 +72,7 @@ public class MultiObjectDialog extends JDialog {
 		setTitle("Create Multiple Objects");
 		setModal(true);
 		setResizable(false);
-		setSize(270,120);
+		setSize(380,210);
 		setLocation(x,y);
 		add(getMainPane());
 	}
@@ -100,13 +103,23 @@ public class MultiObjectDialog extends JDialog {
 		filter.setLimit(3);
 		numberTextField.setDocument(filter);
 		numberTextField.setColumns(3);
+                
+                
+                JLabel listLabel = new JLabel("Or, list their names:");
+		// only integer and non negative numbers will be accepted
+		listTextField = new JTextField();
+		listTextField.setColumns(3);
+                listTextField.setToolTipText("List the names of the objects, separated by comma (e.g., loc1, loc2, loc3).");
+                
 		
 		JPanel definitionsPane = new JPanel(new SpringLayout());
 		definitionsPane.add(classLabel);
 		definitionsPane.add(classesComboBox);
 		definitionsPane.add(numberLabel);
 		definitionsPane.add(numberTextField);
-		SpringUtilities.makeCompactGrid(definitionsPane, 2, 2, 5, 5, 5, 5);		
+                definitionsPane.add(listLabel);
+		definitionsPane.add(listTextField);
+		SpringUtilities.makeCompactGrid(definitionsPane, 3, 2, 5, 5, 5, 5);		
 		
 		//createObjectsButton = new JButton("Create");		
 		JPanel buttonsPanel = new JPanel();
@@ -138,6 +151,16 @@ public class MultiObjectDialog extends JDialog {
 			}
 		
 		});
+                
+                listTextField.addKeyListener(new KeyAdapter() {		
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER){
+					okAction.actionPerformed(null);
+				}
+		
+			}
+		
+		});
 		
 		return mainPane;
 	}
@@ -152,20 +175,32 @@ public class MultiObjectDialog extends JDialog {
 		private static final long serialVersionUID = 4765366613330731246L;
 
 		public void actionPerformed(ActionEvent e){
-			String text = numberTextField.getText();			
+			String text = numberTextField.getText();
+                        String listtext = listTextField.getText().trim();
+                        
+                        if(classesComboBox.getSelectedItem().equals("Undefined")){
+                            parameters[0] = classesComboBox.getSelectedItem();
+                        }
+                        else{
+                            Element selectedClass = ((ItemElement)classesComboBox.getSelectedItem()).data;
+                            parameters[0] = selectedClass;
+                        }
 
-			if(!text.equals("") || text.equals("0")){
+			if(!text.equals("")){
+                            if (!text.equals("0")){                                
 				// if the text is null or equals to "0", do nothing
 				// otherwise, set the parameters
-				if(classesComboBox.getSelectedItem().equals("Undefined")){
-					parameters[0] = classesComboBox.getSelectedItem();
-				}
-				else{
-					Element selectedClass = ((ItemElement)classesComboBox.getSelectedItem()).data;
-					parameters[0] = selectedClass;
-				}
 				parameters[1] = text;
+                            }
 			}
+                        if(!listtext.equals("")){
+                            // if the text is null do nothing
+                            List<String> names = Arrays.asList(listtext.split(","));
+                            parameters[2] = names;
+                            //System.out.print(names);
+                            
+                            
+                        }
 			
 			// close the dialog
 			MultiObjectDialog.this.dispose();

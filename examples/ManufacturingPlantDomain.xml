@@ -1783,7 +1783,7 @@ m2.sort = isoutput</precondition>
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -1855,7 +1855,7 @@ m2.sort = isoutput</precondition>
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />

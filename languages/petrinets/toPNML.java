@@ -99,17 +99,19 @@ public class toPNML {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Element modularPNMLNet = (Element) modularPNML.getChild("net").clone();;
+		Element modularPNMLNet = (Element) modularPNML.getChild("net").clone();
 		if(pnmlNodes != null){
 			pnml = (Element)pnmlNodes.getChild("pnml").clone();
 			
 			//1.0 set net
 			Element net = (Element)pnmlNodes.getChild("net").clone();
 			net.setAttribute("id","n1");
-			net.setAttribute("type","Extended P/T Net");
+			net.setAttribute("type","http://www.pnml.org/version-2009/grammar/ptnet");
 			//TODO net.setAttribute("type","http://www.informatik.hu-berlin.de/top/pnml/ptNetb");
 			pnml.addContent(net);
-			
+			Element page = new Element("page");
+                        page.setAttribute("id", "n1");
+                        net.addContent(page);
 			//get net places
 			List<Element> placeList = modularPNML.getChild("net").getChildren("place");
 			
@@ -161,6 +163,19 @@ public class toPNML {
 					String newID = module.getAttributeValue("name") + arc.getAttributeValue("id");
 					arc.setAttribute("id", newID);
 					String sourceID = arc.getAttributeValue("source");
+
+                                        /*Element toolspecific = new Element("toolspecific");
+                                        toolspecific.setAttribute("tool", "itSIMPLE");
+                                        Element itSettingsNode = ItSIMPLE.getItSettings();
+                                        String version = "";
+                                	if(itSettingsNode.getChild("version") != null)
+                                            version = itSettingsNode.getChildText("version");
+
+                                        toolspecific.setAttribute("version", version);
+                                        Element type = arc.getChild("type");
+                                        type.detach();
+                                        toolspecific.addContent(type);
+                                        arc.addContent(toolspecific);*/
 					
 					if(!sourceID.substring(0,1).equals("M")){
 						Element referenceTransition = null;
@@ -301,6 +316,7 @@ public class toPNML {
 						}
 						arc.setAttribute("target", newTarget);
 					}
+
 					arcList.add((Element) arc.clone());
 				}
 
@@ -309,19 +325,19 @@ public class toPNML {
 			//3.1 add places
 			for (Iterator<Element> PlaceIter = placeList.iterator(); PlaceIter.hasNext();) {
 				Element place = PlaceIter.next();
-				net.addContent((Element) place.clone());
+				page.addContent((Element) place.clone());
 			}
 			
 			//3.2 add transitions
 			for (Iterator<Element> transitionIter = transitionList.iterator(); transitionIter.hasNext();) {
 				Element transition = transitionIter.next();
-				net.addContent((Element) transition.clone());
+				page.addContent((Element) transition.clone());
 			}
 			
 			//3.3 add arcs
 			for (Iterator<Element> arcIter = arcList.iterator(); arcIter.hasNext();) {
 				Element arc = arcIter.next();
-				net.addContent((Element) arc.clone());
+				page.addContent((Element) arc.clone());
 			}
 		}
 		//XMLUtilities.printXML(pnml);

@@ -1303,12 +1303,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="367" y="60" />
+									<position x="487" y="58" />
 								</label>
 							</labels>
 							<points>
-								<point x="842" y="292" />
-								<point x="910" y="292" />
+								<point x="855" y="300" />
+								<point x="923" y="300" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1327,12 +1327,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="1535" y="-197" />
+									<position x="0" y="-28" />
 								</label>
 							</labels>
 							<points>
-								<point x="1012" y="203" />
-								<point x="1012" y="231" />
+								<point x="1030" y="199" />
+								<point x="1030" y="227" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1351,12 +1351,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="4720" y="-39" />
+									<position x="364" y="-8" />
 								</label>
 							</labels>
 							<points>
-								<point x="848" y="160" />
-								<point x="916" y="160" />
+								<point x="878" y="118" />
+								<point x="946" y="118" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1375,12 +1375,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="9079" y="-86" />
+									<position x="360" y="13" />
 								</label>
 							</labels>
 							<points>
-								<point x="280" y="120" />
-								<point x="343" y="120" />
+								<point x="322" y="152" />
+								<point x="294" y="152" />
 							</points>
 							<color />
 							<lineStyle />
@@ -3138,7 +3138,7 @@ and i.calibrated = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="480" y="490" />
+											<position x="566" y="491" />
 											<size width="168" height="111" />
 											<color />
 										</graphics>
@@ -3160,7 +3160,7 @@ and i.calibrated = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="927" y="491" />
+											<position x="862" y="489" />
 											<size width="171" height="112" />
 											<color />
 										</graphics>

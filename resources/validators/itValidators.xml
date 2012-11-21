@@ -2,7 +2,7 @@
 <itValidators>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>3.5.10</version>
+		<version>4.0.00</version>
 	</toolInformation>
 	<settings>
 		<timeout enabled="false">1200</timeout>

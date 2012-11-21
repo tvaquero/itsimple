@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Settlers Domain v1</name>
-	<description>This one was for the numeric track of the IPC-3 and proved to be a very tough resource management domain. Several interesting issues in encoding arise as well as the subsequent problem of planning with the domain. In particular, resources can be combined to construct vehicles of various kinds. Since these vehicles are not available initially, this is an example of a problem in which new objects are created. PDDL does not conveniently support this concept at present, so it is necessary to name "potential" vehicles at the outset, which can be realised through construction. A very high degree of redundant symmetry exists between these "potential" vehicles, since it does not matter which vehicle names are actually used for the vehicles that are realised in a plan. Planners that begin by grounding all actions can be swamped by the large numbers of potential actions involving these potential vehicles, which could be realised as one of several different types of actual vehicles.
+	<description>This model was based on the Numeric version of the Settlers domain from IPC-3 (2002)
+
+This one was for the numeric track of the IPC-3 and proved to be a very tough resource management domain. Several interesting issues in encoding arise as well as the subsequent problem of planning with the domain. In particular, resources can be combined to construct vehicles of various kinds. Since these vehicles are not available initially, this is an example of a problem in which new objects are created. PDDL does not conveniently support this concept at present, so it is necessary to name "potential" vehicles at the outset, which can be realised through construction. A very high degree of redundant symmetry exists between these "potential" vehicles, since it does not matter which vehicle names are actually used for the vehicles that are realised in a plan. Planners that begin by grounding all actions can be swamped by the large numbers of potential actions involving these potential vehicles, which could be realised as one of several different types of actual vehicles.
 
 Plan quality is judged by a linear combination of labour use, pollution creation and resource consumption. There is scope for constructing very hard metrics that involve maximising housing construction subject to an increasing pollution penalty (say), to ensure that optimal plan quality is bounded.
 
@@ -1973,8 +1975,8 @@ pollution = pollution + 2</constraints>
 					<class id="21">
 						<graphics>
 							<icon />
-							<position x="343" y="157" />
-							<size width="276" height="628" />
+							<position x="343" y="115" />
+							<size width="276" height="670" />
 							<color />
 						</graphics>
 					</class>
@@ -2005,7 +2007,7 @@ pollution = pollution + 2</constraints>
 					<class id="25">
 						<graphics>
 							<icon />
-							<position x="53" y="350" />
+							<position x="47" y="261" />
 							<size width="159" height="130" />
 							<color />
 						</graphics>
@@ -2016,7 +2018,7 @@ pollution = pollution + 2</constraints>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="1433" y="60" />
+									<position x="511" y="90" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
@@ -2035,8 +2037,8 @@ pollution = pollution + 2</constraints>
 								</label>
 							</labels>
 							<points>
-								<point x="246" y="300" />
-								<point x="245" y="330" />
+								<point x="205" y="537" />
+								<point x="204" y="567" />
 							</points>
 							<color />
 							<lineStyle />
@@ -2046,13 +2048,13 @@ pollution = pollution + 2</constraints>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="1483" y="-58" />
+									<position x="794" y="-19" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="677" y="-55" />
+									<position x="508" y="-73" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -2065,8 +2067,8 @@ pollution = pollution + 2</constraints>
 								</label>
 							</labels>
 							<points>
-								<point x="280" y="286" />
-								<point x="280" y="255" />
+								<point x="203" y="499" />
+								<point x="203" y="468" />
 							</points>
 							<color />
 							<lineStyle />
@@ -2076,7 +2078,7 @@ pollution = pollution + 2</constraints>
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="-666" y="51" />
+									<position x="494" y="74" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
@@ -2095,8 +2097,8 @@ pollution = pollution + 2</constraints>
 								</label>
 							</labels>
 							<points>
-								<point x="251" y="395" />
-								<point x="251" y="422" />
+								<point x="208" y="632" />
+								<point x="208" y="659" />
 							</points>
 							<color />
 							<lineStyle />

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Driver Log Domain v1</name>
-	<description>Based on the IPC 3 domain
+	<description>This model was based on the hard numeric version of the DriverLog domain from IPC-3 (2002). Here we added minor changes.
 
-This domain involves driving trucks around delivering packages between locations. The complication is that the trucks require drivers who must walk between trucks in order to drive them. The paths for walking and the roads for driving form different maps on the locations.</description>
+This domain involves driving trucks around delivering packages between locations. The complication is that the trucks require drivers who must walk between trucks in order to drive them. The paths for walking and the roads for driving form different maps on the locations.
+
+Hard-Numeric: In this case the fuel consumption of a trucks is proportional to the square of its load. This makes the problem of efficiently using trucks much harder, since it might be better to make multiple trips with smaller loads than to make a single trip with a heavy load.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
 		<version>3.1.10</version>
@@ -1349,7 +1351,7 @@ This domain involves driving trucks around delivering packages between locations
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="840" y="22" />
+									<position x="728" y="13" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -1372,7 +1374,7 @@ This domain involves driving trucks around delivering packages between locations
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="-121" y="36" />
+									<position x="517" y="17" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
@@ -1381,18 +1383,18 @@ This domain involves driving trucks around delivering packages between locations
 									<position x="900" y="15" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="-696" y="9" />
+									<position x="63" y="30" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="1757" y="10" />
+									<position x="900" y="21" />
 								</label>
 								<label type="changeability" identifier="">
-									<position x="1303" y="47" />
+									<position x="652" y="38" />
 								</label>
 							</labels>
 							<points>
-								<point x="1044" y="189" />
-								<point x="1077" y="189" />
+								<point x="1051" y="219" />
+								<point x="1084" y="219" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1402,7 +1404,7 @@ This domain involves driving trucks around delivering packages between locations
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="484" y="-32" />
+									<position x="518" y="-14" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
@@ -1411,13 +1413,13 @@ This domain involves driving trucks around delivering packages between locations
 									<position x="900" y="15" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="-666" y="-7" />
+									<position x="101" y="-17" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="1606" y="-11" />
+									<position x="848" y="-31" />
 								</label>
 								<label type="changeability" identifier="">
-									<position x="242" y="-50" />
+									<position x="291" y="-36" />
 								</label>
 							</labels>
 							<points>
@@ -1633,7 +1635,7 @@ This domain involves driving trucks around delivering packages between locations
 						<reference class="22" operator="1" />
 						<name />
 						<description />
-						<precondition />
+						<precondition>truck.at = loc</precondition>
 						<postcondition />
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="1" id="1" />
@@ -1656,7 +1658,7 @@ This domain involves driving trucks around delivering packages between locations
 						<reference class="22" operator="2" />
 						<name />
 						<description />
-						<precondition />
+						<precondition>truck.at = loc</precondition>
 						<postcondition />
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="2" id="1" />
@@ -1775,7 +1777,7 @@ This domain involves driving trucks around delivering packages between locations
 		<activityDiagrams />
 		<planningDomains>
 			<domain id="1">
-				<name>Driver Log Domain 1</name>
+				<name>Driver Log Domain</name>
 				<description />
 				<elements>
 					<objects>
@@ -2093,7 +2095,7 @@ This domain involves driving trucks around delivering packages between locations
 								<graphics>
 									<icon />
 									<position x="554" y="15" />
-									<size width="199" height="110" />
+									<size width="199" height="122" />
 									<color />
 								</graphics>
 							</object>
@@ -2151,7 +2153,7 @@ This domain involves driving trucks around delivering packages between locations
 								<graphics>
 									<icon />
 									<position x="800" y="41" />
-									<size width="168" height="115" />
+									<size width="168" height="565" />
 									<color />
 								</graphics>
 							</object>
@@ -2248,8 +2250,8 @@ This domain involves driving trucks around delivering packages between locations
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="272" y="384" />
-											<size width="192" height="112" />
+											<position x="272" y="372" />
+											<size width="192" height="124" />
 											<color />
 										</graphics>
 									</object>
@@ -2304,7 +2306,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<icon />
 											<position x="801" y="32" />
-											<size width="199" height="110" />
+											<size width="199" height="123" />
 											<color />
 										</graphics>
 									</object>
@@ -2625,7 +2627,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<icon />
 											<position x="1031" y="27" />
-											<size width="204" height="412" />
+											<size width="204" height="490" />
 											<color />
 										</graphics>
 									</object>
@@ -2641,7 +2643,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2665,7 +2667,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2689,7 +2691,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2737,7 +2739,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2761,7 +2763,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2785,7 +2787,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2809,7 +2811,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2911,7 +2913,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -3040,13 +3042,13 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="629" y="-74" />
+													<position x="652" y="-17" />
 												</label>
 												<label type="rolename" identifier="1">
-													<position x="" y="" />
+													<position x="100" y="15" />
 												</label>
 												<label type="rolename" identifier="2">
-													<position x="" y="" />
+													<position x="900" y="15" />
 												</label>
 											</labels>
 											<points>
@@ -3503,7 +3505,7 @@ This domain involves driving trucks around delivering packages between locations
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="" y="" />
+													<position x="500" y="-15" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />

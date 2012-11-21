@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008 Universidade de Sao Paulo
+* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
 * 
 
 * This file is part of itSIMPLE.
@@ -27,6 +27,8 @@
 package sourceEditor;
 
 import com.Ostermiller.Syntax.HighlightedDocument;
+import javax.swing.JTextPane;
+import org.jdom.Element;
 
 public class ItHilightedDocument extends HighlightedDocument {
 
@@ -36,12 +38,31 @@ public class ItHilightedDocument extends HighlightedDocument {
 	private static final long serialVersionUID = -8699913777343514435L;
 
 	public static final Object OCL_STYLE = OCLLexer.class;
-	public static final Object PDDL_STYLE = PDDLLexer.class;	
-	
+	public static final Object PDDL_STYLE = PDDLLexer.class;
+        
+        public Element data = null;
+        public JTextPane textPane = null;
+
+
 	public ItHilightedDocument() {
 		super();
 	}
 
+        public Element getData() {
+            return data;
+        }
+
+        public void setData(Element data) {
+            this.data = data;
+        }        
+        
+        public JTextPane getTextPane() {
+            return textPane;
+        }
+        
+        public void setTextPane(JTextPane textpane) {
+            this.textPane = textpane;
+        }
 	
 	
 }
