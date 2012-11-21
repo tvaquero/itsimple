@@ -48,8 +48,14 @@ The current version of itSIMPLE (version 3.0) is compatible with the following p
    * SGPlan 6 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
    * MIPS-xxl 2006 (linux). http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
    * MIPS-xxl 2008 v1.1 (linux). http://sjabbar.com/mips-xxl-planner
+   * SATPlan 2006 v1.1 (linux). http://www.cs.rochester.edu/u/kautz/satplan/index.htm 
    * LPG-td 1.0 (windows and linux). http://lpg.ing.unibs.it
    * LPG 1.2 (linux). http://prometeo.ing.unibs.it/lpg/
    * hspsp 2008 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
    * Plan-A 1.0 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+   * Blackbox v4.3 (linux) and v4.2 (Windows). http://www.cs.rochester.edu/u/kautz/satplan/blackbox/
+   * MaxPlan 2006. http://www.cse.wustl.edu/~chen/maxplan/
+   * LPRPG Public Release 2. http://planning.cis.strath.ac.uk/LPRPG/
+   * Marvin Release 1 (2004). http://planning.cis.strath.ac.uk/Marvin/
+
 Some of these planners are available with the tool. The others can be downloaded from their webpage.
