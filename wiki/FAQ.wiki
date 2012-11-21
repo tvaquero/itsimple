@@ -72,7 +72,7 @@ Some of these planners are available with the tool. The others can be downloaded
   # Execute the class ItSIMPLE.java.
 
 
-*Netbeans*
+*Eclipse*
 
   # Check out itSIMPLE project (Repository folder: trunk/itSIMPLE) to a local folder in your computer, e.g. in a folder called ‘Sources’ (not in the workspace folder of Eclipse). Wait for checkout completion
   # Create a new project (New-> Java Project). Press Next and on the Source tab press Link Additional source to the project". Chose the itSIMPLE folder that was checked out under the 'Source' folder. 
