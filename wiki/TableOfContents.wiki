@@ -4,6 +4,16 @@
 
 [Introduction Introduction]
 
-[GettingStarted Getting Started]
+[Description Description]
 
-[BasicFuncionalities Basic Funcionalities]
+[Tutorials Tutorials]
+
+[Documentation Documentation]
+
+[Publications Publications]
+
+[News News]
+
+[Releases Releases]
+
+[FAQ FAQ]
