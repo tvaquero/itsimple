@@ -3,18 +3,18 @@
 <wiki:toc max_depth="2" />
 
 Menu:
-* [Introduction Introduction]
+  * [Introduction Introduction]
 
-* [Description Description]
+  * [Description Description]
 
-* [Tutorials Tutorials]
+  * [Tutorials Tutorials]
 
-* [Documentation Documentation]
+  * [Documentation Documentation]
 
-* [Publications Publications]
+  * [Publications Publications]
 
-* [News News]
+  * [News News]
 
-* [Releases Releases]
+  * [Releases Releases]
 
-* [FAQ FAQ]
+  * [FAQ FAQ]
