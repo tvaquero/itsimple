@@ -11,4 +11,4 @@ These initial stages encompass processes such as domain specification, modeling,
  * PDDL (_Planning Domain Definition Language_) 
 Each one of them with its best contribution to the whole design process.
 
-The main purpose of these languages is to lead designers from the informality of real world requirements to formal _domain models_. Starting with *requirements elicitation*, *specification* and *modeling*, *itSIMPLE* proposes a special use of _UML_- in a planning approach (named _UML.P_) which contribute to the knowledge acquisition process as well as to the domain model visualization and verification
+The main purpose of these languages is to lead designers from the informality of real world requirements to formal _domain models_. Starting with *requirements elicitation*, *specification* and *modeling*, *itSIMPLE* proposes a special use of _UML_- in a planning approach which contribute to the knowledge acquisition process as well as to the domain model visualization and verification
