@@ -11,8 +11,6 @@
 
 ===Linux===
 
-[TableOfContents Go back]
-
  * Check if you have the lastest version of _Java Runtime installed_ (e.g., *JRE 6*, http://java.sun.com). You can check your version by typing _"java -version" in a terminal_;
  * Download itSIMPLE http://code.google.com/p/itsimple/downloads/list;
  * Unzip the file;
