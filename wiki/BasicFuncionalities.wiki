@@ -1,5 +1,5 @@
 #summary Show the basic itSIMPLE funcionalities.
-#sidebar TableContents
+#sidebar TableOfContents
 
 = Basic Funcionalities=
 itSIMPE4.0 is easy to learn and master:
