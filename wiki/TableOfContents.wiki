@@ -10,7 +10,7 @@
 
   * [Documentation Documentation]
 
-     * [GettingStarted Getting Started]
+     *[GettingStarted Getting Started]
 
   * [Publications Publications]
 
