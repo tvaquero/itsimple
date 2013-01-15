@@ -1,5 +1,5 @@
 #summary Landing page for itSimple explanations
-#sidebar TableContents
+#sidebar TableOfContents
 
 = Introduction =
 
