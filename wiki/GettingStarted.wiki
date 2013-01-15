@@ -1,0 +1,61 @@
+#summary A quick guide to getting started with itSimple project.
+#sidebar TableOfContents
+
+=Getting started=
+*itSIMPLE 4.0* is a java-based software and run on _Windows_, _Linux_ and _Mac_.
+
+==_Installing itSIMPLE_== 
+<wiki:comment>
+==A==
+</wiki:comment>
+
+===Linux===
+ * Check if you have the lastest version of _Java Runtime installed_ (e.g., *JRE 6*, http://java.sun.com). You can check your version by typing _"java -version" in a terminal_;
+ * Download itSIMPLE http://code.google.com/p/itsimple/downloads/list;
+ * Unzip the file;
+ * Change permission (typing in command line: _chmod +x itSIMPLE_v.jar_);
+ * Run the software: Typing in command line: _java -jar itSIMPLE_v.jar_;
+
+==_Windows (XP/Vista/7.0)_==
+ * Check if you have the lastest version of _Java Runtime installed_ (e.g., *JRE 6*, http://java.sun.com). You can check your version by typing _"java -version" in a terminal_;
+ * Download itSIMPLE http://code.google.com/p/itsimple/downloads/list;
+ * Unzip the file;
+ * Run the software: Typing in command line: _java -jar itSIMPLE_v.jar_ or double-clicking on _itSIMPLE_v.jar_ file.
+
+==Set up  itSIMPLE in Eclipse or Netbeans for development==
+
+=== Eclipse ===
+ * Check out *itSIMPLE* project (Repository folder: https://itsimple.googlecode.com/svn/trunk/) to a local folder in your computer, e.g. recomended a folder called _‘itSIMPLEsrc’_ (not in the workspace folder of Eclipse). Wait for checkout completion.
+ * Create a new project (_New-> Java Project_ choice). Name the project _'itSIMPLE'_. Press _Next_ and on the _Source_ tab press _"Link Additional source to the project"_. Chose the _'itSIMPLEsrc'_ folder were the checkout was done.
+ * Add the *JAR/ZIP libraries* to the project (right click over the _project -> Properties -> Java Build Path_ and on the tab press _Add external Jars_). Selected all .jar libraries. They will be in the folder *.../itSIMPLEsrc/lib*.
+ * Copy and paste the following folders _‘resource’_, _‘myPlanners_, _‘myIcons’_, _‘myValidators’_, and _‘myAnalyzers’_ from the *itSIMPLEsrc folder* into the project folder created by *Eclipse* (e.g., _workspace/itSIMPLE_). This is necessary for running *itSIMPLE_v* inside the *Eclipse* environment.
+ * Run the class *ItSIMPLE_v.java*.
+
+=== Netbeans ===
+ * Check out *itSIMPLE* project (_team->checkout_ choice; _Repository folder_: https://itsimple.googlecode.com/svn/trunk/) to a local folder in your computer, e.g. in a folder called _‘itSIMPLEsrc’_ (not in the *Netbeans Projects* folder). Uncheck _“Scan for !Netbeans project after"_. Wait for checkout completion.
+ * Create a project with existing source (_New project-> Java -> Java Project with Existing Sources_). Name the project _'itSIMPLE'_. The project folder can be created in the *Netbeans Projects* folder. As for the source, point to the folder that where you checked out the code (the _‘itSIMPLEsrc’_).
+ * Add the *JAR/ZIP libraries8 to the project (right click over _Libraries -> Add Jar/Folder_). Selected all .jar libraries). They will be in the folder *.../itSIMPLEsrc/lib*.
+ * Copy and paste the following folders _‘resource’_, _‘myPlanners’_, _‘myIcons’_, _‘myValidators’_, and _‘myAnalyzers’_ from the *itSIMPLEsrc8 folder into the project folder created by *Netbeans* (e.g., _Netbeans Projects/itSIMPLE_). This is necessary for running itSIMPLE inside the Netbeans environment.
+ * Run the class ItSIMPLE_v.java.
+
+
+== Planners== 
+
+=== Planners currently compatible with itSIMPLE ===
+The current version of itSIMPLE (version 4.0) is compatible with the following planners:
+
+ * Metric-FF (windows and linux). [http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-   xxl.htmlhttp://members.deri.at/~joergh/ff.html]
+ * FF (v2.3) (linux). http://members.deri.at/~joergh/ff.html
+SGPlan 5.2.2 (linux). http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
+ * SGPlan 6 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+ * MIPS-xxl 2006 (linux). http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
+ * MIPS-xxl 2008 v1.1 (linux). http://sjabbar.com/mips-xxl-planner
+ * SATPlan 2006 v1.1 (linux). http://www.cs.rochester.edu/u/kautz/satplan/index.htm
+ * LPG-td 1.0 (windows and linux). http://lpg.ing.unibs.it
+ * LPG 1.2 (linux). http://prometeo.ing.unibs.it/lpg/
+ * hspsp 2008 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+ * Plan-A 1.0 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
+ * Blackbox v4.3 (linux) and v4.2 (Windows). http://www.cs.rochester.edu/u/kautz/satplan/blackbox/
+ * Maxplan? 2006. http://www.cse.wustl.edu/~chen/maxplan/
+ * LPRPG Public Release 2. http://planning.cis.strath.ac.uk/LPRPG/
+ * Marvin Release 1 (2004). http://planning.cis.strath.ac.uk/Marvin/
