@@ -1,8 +1,6 @@
 #summary Landing page for itSimple explanations
 #sidebar TableOfContents
 
-= Introduction =
-
 The *itSIMPLE* (_Integrated Tools Software Interface for Modeling Planning Environments_  was designed to give support to users during the construction of real and complex planning domain applications mainly in the initial stages of the design life cycle. 
 
 These initial stages encompass processes such as domain specification, modeling, model analysis and model testing, all of them crucial for the success of the application. *itSIMPLE* is an open source project implemented in Java that presents a enhanced integrated environment with well-known representation languages such as:
