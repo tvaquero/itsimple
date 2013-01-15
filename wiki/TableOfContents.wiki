@@ -9,6 +9,7 @@
   * [Tutorials Tutorials]
 
   * [Documentation Documentation]
+    * [GettingStarted Getting Started]
 
   * [Publications Publications]
 
