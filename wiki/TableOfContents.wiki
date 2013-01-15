@@ -3,19 +3,11 @@
 <wiki:toc max_depth="2" />
 
   * [Introduction Introduction]
-
   * [Description Description]
-
   * [Tutorials Tutorials]
-
   * [Documentation Documentation]
-
-     *[GettingStarted Getting Started]
-
+     * [GettingStarted Getting Started]
   * [Publications Publications]
-
   * [News News]
-
   * [Releases Releases]
-
   * [FAQ FAQ]
