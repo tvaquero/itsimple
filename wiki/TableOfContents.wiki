@@ -10,6 +10,7 @@
         * [GettingStarted#Linux Linux]
         * [GettingStarted#Windows_(XP/Vista/7.0) Windows(XP/Later)]
      * [GettingStarted#Planners Planners compatible with itSIMPLE]
+     * [BasicFuncionalities Basic Funcionalities]
   * [Publications Publications]
   * [News News]
   * [Releases Releases]
