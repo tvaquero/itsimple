@@ -12,7 +12,7 @@ _itSIMPLE_ allows designers to deal with features from PDDL2.1 and PDDL3 such as
 
 You can click on _PDDL Translation_ tab in the toolbar translating your project: Planning Domain and Planning Problem (*1:*).
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/pddl/pddl_screen.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/PDDLTranslation/pddl_screen.png
 
 In the _Domain/Problem Selection_ (*2:*) panel  you can select a _Domain_ and for it_Domain_ select a problem for translate. Automatically will appear in _Domain/Problem_ panel (*8:* and *9:*) a _PDDL_ statements for this instances.
 
