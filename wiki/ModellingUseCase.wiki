@@ -21,7 +21,7 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/CasoUso/toolb
 
 An _Actor_ is a user of the _system_; user can mean a human user, a machine, or even another system or subsystem in the model. Anything that interacts with the system from the outside or system boundary is termed an _Actor_. Actors are typically associated with _Use Cases_.
 
-For create an _Actor_ with _itSIMPLE_ tool, you must click on the _Actor_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Modeling/CasoUso/actor.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create an _Actor_ with _itSIMPLE_ tool, you must click on the _Actor_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/CasoUso/actor.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 According to the problem context, you can personalize actors, selecting different icons in the _Properties Object_ panel: 
 
