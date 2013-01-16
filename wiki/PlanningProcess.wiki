@@ -39,3 +39,5 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Planning/planning_movi
 Left Window (*13:*)demonstrates the  _Preconditions_ of the Operator according to the Plan and Right Window (*14:*) demonstrates the Effects of the Operator according to the Plan. Look at the link green and the attribute _clear_ and _empty_ (with false value) of the _Hand_ and _Block_ class respectively (*16:*). In the left window this link doesn't exist and these attributes have Zero as true as value. This demonstrates which are effects of a given Operator in the problem.
 
 Either you can navigate by clicking on the _Forward_ option to analyze the changes or come back in the Plan Navigation clicking on the _Backward_ option (*17:*).
+
+[PDDL itSIMPLE PDDL Translation]
