@@ -18,24 +18,24 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/toolbars.png
 
 === *Creating* a new UML project===
 
-To create a new project, clic the _New UML project_ button https://my-project-probando.googlecode.com/svn/newUML1.png on the Standard toolbar, or choose _New project_ from the _File_ menu or use _Ctrl + N_ shortcuts. If you use _New project_ choice you can beside create a _New PDDL project_ ((_Ctrl + P_ shortcuts). 
+To create a new project, clic the _New UML project_ button https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/newUML1.png on the Standard toolbar, or choose _New project_ from the _File_ menu or use _Ctrl + N_ shortcuts. If you use _New project_ choice you can beside create a _New PDDL project_ ((_Ctrl + P_ shortcuts). 
 
 ===_Opening a Project_===
 
-To open a documen click the _Open project_ button on the Standard toolbar: https://my-project-probando.googlecode.com/svn/openDoc.png , or choose _Open project from the _File_ menu or simply use _Ctrl + O_ shortcuts.
+To open a documen click the _Open project_ button on the Standard toolbar: https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/openDoc.png , or choose _Open project from the _File_ menu or simply use _Ctrl + O_ shortcuts.
 
 You can open recent project clicking the _Open recent project_ choice from _File_ menu. 
 
 ===_Saving a Project_===
 
-To save a document click the _Save project_ button on the Standard toolbar https://my-project-probando.googlecode.com/svn/save1.png, or choose _Save project_ from the _File_ menu.  When you save the project for the first time, *itSIMPE4.0* displays the _Save As dialog box so that you can choice the saving path.
-*itSIMPE4.0* offer you _Save All_ choice: https://my-project-probando.googlecode.com/svn/save2.png, and you can save a project whith other extensions like _.xml_ clicking _ Save as_ choice from from the _File_ menu.
+To save a document click the _Save project_ button on the Standard toolbar https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/save1.png, or choose _Save project_ from the _File_ menu.  When you save the project for the first time, *itSIMPE4.0* displays the _Save As dialog box so that you can choice the saving path.
+*itSIMPE4.0* offer you _Save All_ choice: https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/save2.png, and you can save a project whith other extensions like _.xml_ clicking _ Save as_ choice from from the _File_ menu.
 
 == _Projects Manager_ ==
 
 _Project Manager_ displays the file structure of a project or projects group. A project group is a collection of projects.
 
-https://my-project-probando.googlecode.com/svn/Object_Manager.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/Object_Manager.png
 
 Essenciacialy the _Projects Manager_ panel enables you to navigate through the _itSIMPLE_ project space. It displays all projects, diagrams and elements.
 
@@ -57,7 +57,7 @@ new project, creating diagrams for each project, delete some diagrams and so on.
 The Object Properties displays the properties for the currently selected component. All elements have properties, whose values can be modified in the development environment. 
 The Object Properties has some tabs for each elements where the properties are specified. For instance, for use case, the _Object Properties_ displays:
 
-https://my-project-probando.googlecode.com/svn/Object_properties.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/Object_properties.png
  
 
 == _Diagram View_==
@@ -68,4 +68,4 @@ Use the Diagram View to build model relationships and elements. Within the diagr
 == _Information Panel_ ==
 You can get an overview of some elements in the information panel, for example, all data concerning the use cases:
 
-https://my-project-probando.googlecode.com/svn/PanelInfo.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/PanelInfo.png
