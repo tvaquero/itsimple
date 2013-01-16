@@ -6,11 +6,11 @@
 The _Class diagram_ of _itSIMPLE4.0_ captures the logical structure of the system; the _Classes_ and things that make up the model. It is a static model,  escribing what exists and what _attributes_ and _behavior_ it has, rather than how something is done. _Generalizations_  and _Associations_ are all valuable in reflecting inheritance, composition or usage, and connections, respectively.
 
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/dclasse1.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/dclasse1.png
 
 ==_Toolbox Elements_==
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/toolbarDC.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/toolbarDC.png
 
 === Class ===
 
@@ -20,19 +20,19 @@ Class models usually describe the logical structure of the system and are the bu
 
  * According _OMG UML Specification_: the main purpose of a _class_ is to specify a classification of objects and to specify the features that characterize the structure and behavior of those objects. _Objects_ of a _class_ must contain values for each attribute that is a member of that _class_, in accordance with the characteristics of the _attribute_, for example its type and multiplicity. 
 
-For create a _Class_ with _itSIMPLE_ tool, you must click on the _Class_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/Class.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create a _Class_ with _itSIMPLE_ tool, you must click on the _Class_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/Class.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 In the [BasicFuncionalities#Object_Properties Object Properties panel]  you can define some other properties of this class:
 
  * Base tab: You can specify a _Name_ and _Description_ and choose some [Icons1 icon] for this _Class_
- * Attributes tab: For define some attributes  (name, type and a initial value). Will appear other three bottom tabs (_New attribute_ : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/new.png, _Delete Selected Attribute_ : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/delete.png and _Edit Selected Attribute_ :https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/edit.png ) : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/attributeClasse.png
- * Operator tab: When you create a new operator, you can define its properties:https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/operator_properties.png
+ * Attributes tab: For define some attributes  (name, type and a initial value). Will appear other three bottom tabs (_New attribute_ : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/new.png, _Delete Selected Attribute_ : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/delete.png and _Edit Selected Attribute_ :https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/edit.png ) : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/attributeClasse.png
+ * Operator tab: When you create a new operator, you can define its properties:https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/operator_properties.png
  * Additional: For specify the stereotype of class (agent or utility)
  * Constraints: For specify some constraints.
  
 === Enumeration ===
 
-An _Enumeration_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/Class.png) is a data type, whose instances can be any of a number of user-defined enumeration literals. It is possible to extend the set of applicable enumeration literals in other packages or profiles. 
+An _Enumeration_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/Class.png) is a data type, whose instances can be any of a number of user-defined enumeration literals. It is possible to extend the set of applicable enumeration literals in other packages or profiles. 
 
  * According _OMG UML Specification_: an enumeration is a data type whose values are enumerated in the model as enumeration literals.
 
@@ -54,7 +54,7 @@ In the [BasicFuncionalities#Object_Properties Object Properties panel]  you can 
 
 === Generalization ===
 
-A _Generalization_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/generalization.png) is used to indicate inheritance between classes. Drawn from the specific classifier to a general classifier, the
+A _Generalization_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ClassDiagram/generalization.png) is used to indicate inheritance between classes. Drawn from the specific classifier to a general classifier, the
 generalize implication is that the source inherits the target's characteristics.
 
  * According _OMG UML Specification_: a _generalization_ is a taxonomic relationship between a more general classifier and a more specific classifier. Each instance of the specific classifier is also an indirect instance of the general classifier. Thus, the specific classifier inherits the features of the more general classifier.
