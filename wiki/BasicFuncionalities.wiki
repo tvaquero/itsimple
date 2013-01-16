@@ -4,7 +4,7 @@
 = Basic Funcionalities=
 itSIMPE4.0 is easy to learn and master:
 
-https://my-project-probando.googlecode.com/svn/itSimpleScreen.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/itSimpleScreen.png
 
 ==Toolbar==
 
