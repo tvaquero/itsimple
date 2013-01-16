@@ -7,7 +7,7 @@
 A _Use Case diagram_ of _itSIMPLE4.0_ project, captures _Use Cases_ and relationships among _Actors_ and the _system_. It describes the functional requirements of the system, the manner in which outside things (_Actors_) interact at the system boundary, and the response of the system.
 Exemplo:
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/cuexample.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/CasoUsocuexample.png
 
 Select _Use Case diagram elements_ and _connectors_ of the _Use Case Diagram Tab_ (2:). You most before select _Use Case Diagram- choice in left panel _Manage projects_ for the this project (1:): 
 
