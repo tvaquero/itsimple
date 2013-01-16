@@ -31,5 +31,5 @@ In order to hold all information available in several representation languages (
 
 Actually, in order to create a _Petri Net_ representation, a model is first represented in _PNML_ form and then showed to the user as a Petri Net graph for simulation and analysis. _itSIMPLE_ can save all _Petri Nets_ diagram to _PNML_ format. (*7:*).
 
-[PlanningProcess Planning Process]
+ * [PlanningProcess Planning Process]
  
