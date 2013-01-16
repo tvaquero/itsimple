@@ -70,4 +70,4 @@ You can get an overview of some elements in the information panel, for example, 
 
 https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/PanelInfo.png
 
-* [Modelling Modelling process]
+ * [Modelling Modelling process]
