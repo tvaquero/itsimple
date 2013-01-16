@@ -51,7 +51,7 @@ You can see a resume of the use case specification better in the _Information Pa
  
 ==== Association ====
 
-An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/CasoUso/association.png) refers to how individual use cases can be linked together based upon certain functionality. 
+An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png) refers to how individual use cases can be linked together based upon certain functionality. 
 
 For define an association with _itSIMPLE_ tool, you must first click on the actor where you want define the association and after click on the use case to complete the association.
 
