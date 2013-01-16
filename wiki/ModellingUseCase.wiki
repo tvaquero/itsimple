@@ -63,3 +63,4 @@ For define an dependency with _itSIMPLE_ tool, you must first click on the actor
 
  * [ModellingClassDiagram Class diagram]
  * [ModellingStateDiagram State Machine Diagram]
+ * [ModellingObject UML Object (snapshot) Diagram]
