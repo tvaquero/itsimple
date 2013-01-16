@@ -18,7 +18,7 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/object
 
 ===_Toolbox Elements and connectors_===
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ObjecttoolbarObject.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/toolbarObject.png
 
 An object (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/object.png) is  a particular instance of a Class.
 
