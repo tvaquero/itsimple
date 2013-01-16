@@ -11,7 +11,7 @@ Basically a classical _Petri net_ is a directed bipartite graph with two node ty
 
 For analyzing our State Machines using _Petri nets_ you must clicking on the Analysis Tab in the _itSIMPLE_ main screen (*1:*):
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Analyze/analyze_screen.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Analysis/analyze_screen.png
 
 Automatically will appear in _Projects manager_  panel all projects that are being processed in _itSIMPLE_ at the time (*2:*) and you can select one project for analyze.
 
@@ -21,9 +21,9 @@ In _Petri Net_ panel (*5:*) you can see the Analysis results based on the action
 
 Bar tool:
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Analyze/analyze_bartool.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Analysis/analyze_bartool.png
 
-Click run option (https://itsimple.googlecode.com/svn/wiki/resources/images/Analyze/step.png). The enabled transitions have green color and you can see in one step how are executed. Insofar as the transitions are executed, the result is visualize in the _Result_ panel (*6:*).
+Click run option (https://itsimple.googlecode.com/svn/wiki/resources/images/Analysis/step.png). The enabled transitions have green color and you can see in one step how are executed. Insofar as the transitions are executed, the result is visualize in the _Result_ panel (*6:*).
 
 Beside, you can visualize in only one Petri net diagram corresponding for each State _Machine Diagram_: Select all _State Machine Diagrams_ in _State Chart Diagram_ panel (*3:*) and click over _Build_ Option (*4:*).
 
