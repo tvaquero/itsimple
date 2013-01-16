@@ -13,7 +13,7 @@ The environment was designed to incorporate a toolset (representation languages 
 
 Some of the *UML diagrams* can be directly applied for planning domains such as _use case diagram_, _class diagram_, and _state chart diagram_ for each project (see in left panel Manage project *Newproject1* diagrams).
 
-https://my-project-probando.googlecode.com/svn/modeling1.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/modeling1.png
 
  * [ModellingUseCase Use case diagram]
  * [ModellingClassDiagram Class diagram]
@@ -26,25 +26,25 @@ https://my-project-probando.googlecode.com/svn/modeling1.png
 A _Use Case diagram_ of _itSIMPLE4.0_ project, captures _Use Cases_ and relationships among _Actors_ and the _system_. It describes the functional requirements of the system, the manner in which outside things (_Actors_) interact at the system boundary, and the response of the system.
 Exemplo:
 
-https://my-project-probando.googlecode.com/svn/cuexample.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/cuexample.png
 
 Select _Use Case diagram elements_ and _connectors_ of the _Use Case Diagram Tab_ (2:). You most before select _Use Case Diagram- choice in left panel _Manage projects_ for the this project (1:): 
 
-https://my-project-probando.googlecode.com/svn/cuexample3.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/cuexample3.png
 
 ===_Toolbox Elements and Connectors_===
 
-https://my-project-probando.googlecode.com/svn/toolbarCU.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/toolbarCU.png
 
 ==== Actor ==== 
 
 An _Actor_ is a user of the _system_; user can mean a human user, a machine, or even another system or subsystem in the model. Anything that interacts with the system from the outside or system boundary is termed an _Actor_. Actors are typically associated with _Use Cases_.
 
-For create an _Actor_ with _itSIMPLE_ tool, you must click on the _Actor_ icon (https://my-project-probando.googlecode.com/svn/actor.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create an _Actor_ with _itSIMPLE_ tool, you must click on the _Actor_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/actor.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 According to the problem context, you can personalize actors, selecting different icons in the _Properties Object_ panel: 
 
-https://my-project-probando.googlecode.com/svn/ator1.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ator1.png
 
 It is always useful to choose some [Icons icon] to the actor, because this gives a better interpretation to your _Use Case Diagram_.
 
@@ -56,15 +56,15 @@ In the [BasicFuncionalities#Object_Properties Object Properties panel] you can d
 
 A _Use Case_ is a _UML_ modeling element that describes how a user of the proposed system interacts with the system to perform a discrete unit of work. It describes and signifies a single interaction over time that has meaning for the end user (person, machine or other system), and is required to leave the system in a complete state: the interaction either completed or rolled back to the initial state.
 
-For create an _Use Case_ with _itSIMPLE_ tool, you must click on the _Use Case_ icon (https://my-project-probando.googlecode.com/svn/useCase1.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create an _Use Case_ with _itSIMPLE_ tool, you must click on the _Use Case_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/useCase1.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 In the [BasicFuncionalities#Object_Properties Object Properties panel]  you can define some other properties:
   * Base tab: You can specify a _Name_ and _Description_ of this _Use Case_.
-  * Contraints: After you have defined the base in the properties, you can specify the _Constraints_ of this Use Case. In the bottom section of this panel will appear four news tabs: https://my-project-probando.googlecode.com/svn/constraintCU.png
-    #The first tab (https://my-project-probando.googlecode.com/svn/ucpre.png) is Pre-Conditions where you can define the pre-conditions of this use case. This constraint answers the question: What do I have to specify as pre-conditions for this use case to work?
-    #The second tab (https://my-project-probando.googlecode.com/svn/help.png) is Post-Conditions where you can define the post-conditions of this use case. This contraints answers the question: What do I have to specify as post-conditions, which will be the result of this use case.
-    #The third tab (https://my-project-probando.googlecode.com/svn/ucinv.png) is for Invariants, where you can define some invariants of this use case. Invariant is a predicate that will always keep its truth value throughout a specific sequence of operations.
-    #And the last one tab (https://my-project-probando.googlecode.com/svn/uctemp.png) is for temporal constraints 
+  * Contraints: After you have defined the base in the properties, you can specify the _Constraints_ of this Use Case. In the bottom section of this panel will appear four news tabs:https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/constraintCU.png
+    #The first tab (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ucpre.png) is Pre-Conditions where you can define the pre-conditions of this use case. This constraint answers the question: What do I have to specify as pre-conditions for this use case to work?
+    #The second tab (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/help.png) is Post-Conditions where you can define the post-conditions of this use case. This contraints answers the question: What do I have to specify as post-conditions, which will be the result of this use case.
+    #The third tab (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/ucinv.png) is for Invariants, where you can define some invariants of this use case. Invariant is a predicate that will always keep its truth value throughout a specific sequence of operations.
+    #And the last one tab (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/uctemp.png) is for temporal constraints 
   * Further Details tab: For specify additional information.
   * Flow of events tab: Flow of events is a part of the plan, which will be generated by a planner.
 
@@ -72,13 +72,13 @@ You can see a resume of the use case specification better in the _Information Pa
  
 ==== Association ====
 
-An _Association_ (https://my-project-probando.googlecode.com/svn/association.png) refers to how individual use cases can be linked together based upon certain functionality. 
+An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png) refers to how individual use cases can be linked together based upon certain functionality. 
 
 For define an association with _itSIMPLE_ tool, you must first click on the actor where you want define the association and after click on the use case to complete the association.
 
 ==== Dependency ====
 
-In _UML_ modeling, a _dependency (https://my-project-probando.googlecode.com/svn/dependency1.png) relationship_ is a relationship in which changes to one model element (the supplier) impact another model element (the client).
+In _UML_ modeling, a _dependency (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/dependency1.png) relationship_ is a relationship in which changes to one model element (the supplier) impact another model element (the client).
 
 For define an dependency with _itSIMPLE_ tool, you must first click on the actor where you want define it, and after click on the use case to complete the association.
 
@@ -86,11 +86,11 @@ For define an dependency with _itSIMPLE_ tool, you must first click on the actor
 
 The _Class diagram_ of _itSIMPLE4.0_ captures the logical structure of the system; the _Classes_ and things that make up the model. It is a static model,  escribing what exists and what _attributes_ and _behavior_ it has, rather than how something is done. _Generalizations_  and _Associations_ are all valuable in reflecting inheritance, composition or usage, and connections, respectively.
 
-https://my-project-probando.googlecode.com/svn/dclasse1.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/dclasse1.png
 
 ===_Toolbox Elements_===
 
-https://my-project-probando.googlecode.com/svn/toolbarDC.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/toolbarDC.png
 
 ==== Class ==== 
 
@@ -100,25 +100,25 @@ Class models usually describe the logical structure of the system and are the bu
 
  * According _OMG UML Specification_: the main purpose of a _class_ is to specify a classification of objects and to specify the features that characterize the structure and behavior of those objects. _Objects_ of a _class_ must contain values for each attribute that is a member of that _class_, in accordance with the characteristics of the _attribute_, for example its type and multiplicity. 
 
-For create a _Class_ with _itSIMPLE_ tool, you must click on the _Class_ icon (https://my-project-probando.googlecode.com/svn/Class.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create a _Class_ with _itSIMPLE_ tool, you must click on the _Class_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Class.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 In the [BasicFuncionalities#Object_Properties Object Properties panel]  you can define some other properties of this class:
 
  * Base tab: You can specify a _Name_ and _Description_ and choose some [Icons icon] for this _Class_
- * Attributes tab: For define some attributes  (name, type and a initial value). Will appear other three bottom tabs (_New attribute_ : https://my-project-probando.googlecode.com/svn/new.png, _Delete Selected Attribute_ : https://my-project-probando.googlecode.com/svn/delete.png and _Edit Selected Attribute_ :https://my-project-probando.googlecode.com/svn/edit.png ) : https://my-project-probando.googlecode.com/svn/attributeClasse.png
- * Operator tab: When you create a new operator, you can define its properties:https://my-project-probando.googlecode.com/svn/operator_properties.png
+ * Attributes tab: For define some attributes  (name, type and a initial value). Will appear other three bottom tabs (_New attribute_ : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/svn/new.png, _Delete Selected Attribute_ : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/delete.png and _Edit Selected Attribute_ :https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/edit.png ) : https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/attributeClasse.png
+ * Operator tab: When you create a new operator, you can define its properties:https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/operator_properties.png
  * Additional: For specify the stereotype of class (agent or utility)
  * Constraints: For specify some constraints.
  
 ==== Enumeration ==== 
 
-An _Enumeration_ (https://my-project-probando.googlecode.com/svn/Class.png) is a data type, whose instances can be any of a number of user-defined enumeration literals. It is possible to extend the set of applicable enumeration literals in other packages or profiles. 
+An _Enumeration_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Class.png) is a data type, whose instances can be any of a number of user-defined enumeration literals. It is possible to extend the set of applicable enumeration literals in other packages or profiles. 
 
  * According _OMG UML Specification_: an enumeration is a data type whose values are enumerated in the model as enumeration literals.
 
 ==== Class Association ==== 
 
-An _Association_ (https://my-project-probando.googlecode.com/svn/association.png) implies two model elements have a _relationship_, usually implemented as an instance variable in one _Class_. The connector can include _named roles_ at each end, _multiplicity_, _direction_ and _constraints_. _Association_ is the general main relationship type between elements. 
+An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png) implies two model elements have a _relationship_, usually implemented as an instance variable in one _Class_. The connector can include _named roles_ at each end, _multiplicity_, _direction_ and _constraints_. _Association_ is the general main relationship type between elements. 
 To connect more than two elements in an association, you can use the _N-Ary_ Association element. 
 
  * According _OMG UML Specification_: an _association_ specifies a semantic relationship that can occur between typed instances. It has at least two ends represented by properties, each of which is connected to the type of the end. More than one end of the association may have the same type. An end property of an association that is owned by an end class or that is a navigable owned end of the association indicates that the association is navigable from the opposite ends; otherwise, the association is not navigable from the opposite ends.
@@ -135,7 +135,7 @@ In the [BasicFuncionalities#Object_Properties Object Properties panel]  you can 
 
 ==== Generalization ====
 
-A _Generalization_ (https://my-project-probando.googlecode.com/svn/generalization.png) is used to indicate inheritance between classes. Drawn from the specific classifier to a general classifier, the
+A _Generalization_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/generalization.png) is used to indicate inheritance between classes. Drawn from the specific classifier to a general classifier, the
 generalize implication is that the source inherits the target's characteristics.
 
  * According _OMG UML Specification_: a _generalization_ is a taxonomic relationship between a more general classifier and a more specific classifier. Each instance of the specific classifier is also an indirect instance of the general classifier. Thus, the specific classifier inherits the features of the more general classifier.
@@ -148,13 +148,13 @@ A State Machine diagram illustrates how an element (often a Class) can move betw
 
 According to _OMG UML Superstructure Specification_ State Machine representations in UML are based on the _Harel State Chart Notation_, and therefore are sometimes referred to as _State Charts_.
 
-https://my-project-probando.googlecode.com/svn/state_diagram.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/state_diagram.png
 
 ===_Toolbox Elements and connectors_===
 
 To define an _State machine diagram_ with itSIMPLE tool, you must first specify in _Properties Object_ panel a _name_ and select a _class_ which is associated to the diagram. Select a choice _Open Diagram_ doing right click on _State Machine_ icon at _Projects Manager_ panel and will appear _Digram View_ area for building you state diagram with a tool bar for modeling:
 
-https://my-project-probando.googlecode.com/svn/toolbarSD.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/toolbarSD.png
 
 In the _Properties Object_ you can describe a description for you state machine. In this same panel there is othet tab (_Internal conditions_). 
 
@@ -165,30 +165,30 @@ _Internal conditions_ are also situations similarly to preconditions and post co
 
 ==== State ====
 
-A _State_ (https://my-project-probando.googlecode.com/svn/state.png) represents a situation where some invariant condition holds; this condition can be static (waiting for an event) or dynamic (performing a set of activities).
+A _State_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/state.png) represents a situation where some invariant condition holds; this condition can be static (waiting for an event) or dynamic (performing a set of activities).
 
 State modeling is usually related to _Classes_ , and describes the enableable states a Class or element can be in and the transitions that enable the element to move there.
 
  * According _OMG UML Specification_: A state models a situation during which some (usually implicit) invariant condition holds. The invariant may represent a static situation such as an object waiting for some external event to occur. However, it can also model dynamic conditions such as the process of performing some activity (i.e., the model element under consideration enters the state when the activity commences and leaves it as soon as the activity is completed).
 
-For create a _state_ with _itSIMPLE_ tool, you must click on the _state_ icon (https://my-project-probando.googlecode.com/svn/state.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create a _state_ with _itSIMPLE_ tool, you must click on the _state_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/state.png) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 ==== Initial state ====
 
-The Initial state( https://my-project-probando.googlecode.com/svn/initialState.png ) is used by _State Machine diagrams_. In _State Machines_, the Initial element is a pseudo-state used to denote the default state of a Composite State ; there can be one Initial vertex in each Region of the Composite State.
+The Initial state( https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/initialState.png ) is used by _State Machine diagrams_. In _State Machines_, the Initial element is a pseudo-state used to denote the default state of a Composite State ; there can be one Initial vertex in each Region of the Composite State.
 
  * According _OMG UML Specification_: An initial pseudostate represents a default vertex that is the source for a single transition to the default state of a composite state. There can be at most one initial vertex in a region. The outgoing transition from the initial vertex may have a behavior, but not a trigger or guard.  An initial node is a control node at which flow starts when the activity is invoked.
 
-For create a _Initial state_ with _itSIMPLE_ tool, you must click on the _initial state_ icon ( https://my-project-probando.googlecode.com/svn/initialState.png ) at the toolbar and choose on the _Diagram View Area_ where you want put it.
+For create a _Initial state_ with _itSIMPLE_ tool, you must click on the _initial state_ icon (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/initialState.png ) at the toolbar and choose on the _Diagram View Area_ where you want put it.
 
 ==== Action association ====
 
-An _Association_ (https://my-project-probando.googlecode.com/svn/association.png) implies two model elements have a _relationship_, in this case a _State_ and an _Initial state_
+An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png) implies two model elements have a _relationship_, in this case a _State_ and an _Initial state_
 
 For define an association, you must first click on _Initial state_ icon and afterwards click on the _State_ to complete the association.
 
 ==== Final state ====
 
-The Initial state( https://my-project-probando.googlecode.com/svn/finalState.png )is used to define a Final state in an _State Machine Diagram_. 
+The Initial state( https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/finalState.png )is used to define a Final state in an _State Machine Diagram_. 
 
 </wiki:comment>
