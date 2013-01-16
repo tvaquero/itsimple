@@ -40,4 +40,4 @@ Left Window (*13:*)demonstrates the  _Preconditions_ of the Operator according t
 
 Either you can navigate by clicking on the _Forward_ option to analyze the changes or come back in the Plan Navigation clicking on the _Backward_ option (*17:*).
 
-[PDDL itSIMPLE PDDL Translation]
+ * [PDDL itSIMPLE PDDL Translation]
