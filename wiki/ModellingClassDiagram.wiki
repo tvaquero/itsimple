@@ -38,7 +38,7 @@ An _Enumeration_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Mode
 
 === Class Association ===
 
-An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaClasse/association.png) implies two model elements have a _relationship_, usually implemented as an instance variable in one _Class_. The connector can include _named roles_ at each end, _multiplicity_, _direction_ and _constraints_. _Association_ is the general main relationship type between elements. 
+An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png) implies two model elements have a _relationship_, usually implemented as an instance variable in one _Class_. The connector can include _named roles_ at each end, _multiplicity_, _direction_ and _constraints_. _Association_ is the general main relationship type between elements. 
 To connect more than two elements in an association, you can use the _N-Ary_ Association element. 
 
  * According _OMG UML Specification_: an _association_ specifies a semantic relationship that can occur between typed instances. It has at least two ends represented by properties, each of which is connected to the type of the end. More than one end of the association may have the same type. An end property of an association that is owned by an end class or that is a navigable owned end of the association indicates that the association is navigable from the opposite ends; otherwise, the association is not navigable from the opposite ends.
