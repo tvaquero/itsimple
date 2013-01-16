@@ -1,5 +1,5 @@
 #summary A quick guide to getting started with Class Diagram modeling in itSimple tool.
-#sidebar TableContents
+#sidebar TableOfContents
 
 =_Class diagram_=
 
