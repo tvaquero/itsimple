@@ -54,3 +54,4 @@ The Final state( https://itsimple.googlecode.com/svn/wiki/resources/images/Model
 
  * [ModellingUseCase Use case diagram]
  * [ModellingClassDiagram Class diagram]
+ * [ModellingObject UML Object (snapshot) Diagram]
