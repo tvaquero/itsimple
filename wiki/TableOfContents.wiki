@@ -30,6 +30,10 @@
             * [ModellingObject#The_Object_Respository The Object Respository]
               * [ModellingObject#Toolbox_Elements_and_connectors Toolbox Elements and connectors]
 
+     * [Analysis Analysis]
+     * [PlanningProcess Planning Process]
+     * [PDDL itSIMPLE PDDL Translation]
+
   * [Publications Publications]
   * [News News]
   * [Releases Releases]
