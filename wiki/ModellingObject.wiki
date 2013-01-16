@@ -31,7 +31,7 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/proper
 When you need to create several objects of the same type, you can use _Multi Object_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/multiobjects.png) and will be appear a new panel for it:
 
 https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/multiobjects_def.png
-Now you can choose the right class, a quantity of objects and a list of number for each objects. Beside you can define _object association_ between objects (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/association.png).
+Now you can choose the right class, a quantity of objects and a list of number for each objects. Beside you can define _object association_ between objects (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png).
 
 So you can open the initial(goal) State written as Snapshot- init(goal). In the Additional properties panel displays all objects for adding in the initial or goal states.
 
