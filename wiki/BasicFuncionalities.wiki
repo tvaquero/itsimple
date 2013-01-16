@@ -14,7 +14,7 @@ https://my-project-probando.googlecode.com/svn/itSimpleScreen.png
 
 
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Basic
+https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/toolbars.png
 
 === *Creating* a new UML project===
 
