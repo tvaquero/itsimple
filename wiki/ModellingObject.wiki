@@ -39,6 +39,4 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/Object/panel_
 
 Now you can define a very essencial part of _Planning Problem_ through the initial and goal state with all objects involved in the real problem.
 
- * [ModellingClassDiagram Class diagram]
- * [ModellingUseCase Use case diagram]
- * [ModellingStateDiagram State Machine Diagram]
+ * [Analysis Analysis]
