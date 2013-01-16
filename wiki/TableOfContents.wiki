@@ -32,7 +32,6 @@
      * [Analysis Analysis]
      * [PlanningProcess Planning Process]
      * [PDDL itSIMPLE PDDL Translation]
-
   * [Publications Publications]
   * [News News]
   * [Releases Releases]
