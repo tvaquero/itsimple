@@ -63,3 +63,4 @@ For define an generalization with _itSIMPLE_ tool, you must first click on the c
 
  * [ModellingUseCase Use case diagram]
  * [ModellingStateDiagram State Machine Diagram]
+ * [ModellingObject UML Object (snapshot) Diagram]
