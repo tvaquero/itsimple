@@ -18,3 +18,4 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/modeling1.png
  * [ModellingUseCase Use case diagram]
  * [ModellingClassDiagram Class diagram]
  * [ModellingStateDiagram State Machine Diagram]
+ * [ModellingObject UML Object (snapshot) Diagram]
