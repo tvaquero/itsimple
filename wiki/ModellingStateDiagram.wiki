@@ -39,7 +39,7 @@ For create a _Initial state_ with _itSIMPLE_ tool, you must click on the _initia
 
 === Action association ===
 
-An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/DiagramaEstado/association.png) implies two model elements have a _relationship_, in this case a _State_ and an _Initial state_
+An _Association_ (https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/association.png) implies two model elements have a _relationship_, in this case a _State_ and an _Initial state_
 
 For define an association, you must first click on _Initial state_ icon and afterwards click on the _State_ to complete the association.
 
