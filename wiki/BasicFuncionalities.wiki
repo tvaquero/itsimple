@@ -69,3 +69,5 @@ Use the Diagram View to build model relationships and elements. Within the diagr
 You can get an overview of some elements in the information panel, for example, all data concerning the use cases:
 
 https://itsimple.googlecode.com/svn/wiki/resources/images/Basic/PanelInfo.png
+
+* [Modelling Modelling process]
