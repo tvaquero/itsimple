@@ -1,13 +1,13 @@
 #summary Publications about the itSIMPLE tool and its application.
 
-== 2012 ==
+= 2012 =
 
   * Vaquero, T.S.; Costa, C.; Tonidandel, F.; Igreja, H.; Silva, J. R.; Beck, J. C. _Planning and Scheduling Ship Operations on Petroleum Ports and Platforms_. In: Proceedings of the ICAPS 2012 Workshop on Scheduling and Planning Applications (SPARK), p 8-16. Atibaia, São Paulo, Brazil. 2012. (Online proceedings)   ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2012/1.pdf View document])
 
   * Vaquero, T.S.; Tonaco, R.; Costa, C.; Toninandel, F.; Silva, J. R.; Beck, J. C. _itSIMPLE4.0: Enhancing the Modeling Experience of Planning Problems_. In: Proceedings of the ICAPS 2012 System Demonstration, p 11-14. Atibaia, São Paulo, Brazil. 2012. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2012/2.pdf View document])
 
 
-== 2011 ==
+= 2011 =
 
   * Vaquero, T. S.; Silva, J. R.; Beck, J.C. _A Brief Review of Tools and Methods for Knowledge Engineering for Planning & Scheduling_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/1.pdf View document])
 
@@ -17,7 +17,7 @@
 
   * Vaquero, T. S.; Silva, J. R.; Tonidandel, F.; Beck, J.C. _itSIMPLE: Towards an Integrated Design System for Real Planning Applications_. To appear in: The Knowledge Engineering Review Journal, special issue on International Competition on Knowledge Engineering for Planning & Scheduling (ICKEPS). Cambridge University Press.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/4.pdf View document])
 
-==2010==
+= 2010 =
 
   * Vaquero, T. S. ; Silva, J. R.; Beck, J.C. _Improving Planning Performance Through Post-Design Analysis_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010), Toronto. Canada. 2010. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2010/1.pdf View document])
 
@@ -25,7 +25,7 @@
 
 
 
-==2009==
+=2009=
 
   * Vaquero, T. S.; Silva, J. R; Ferreira, M.; Tonidandel, F.; Beck, J. C. _From Requirements and Analysis to PDDL in itSIMPLE3.0_. In: Proceedings of the 3rd International Competition on Knowledge Engineering for Planning and Scheduling. ICAPS-09. Thessaloniki, Greece. 2009. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2009/1.pdf View document])
 
@@ -35,12 +35,16 @@
 ==2008==
 
   * Vaquero, T. S.; Tonidandel, F.; Silva, J. R. _Suggestions for the Knowledge Engineering Competition_. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008.
+([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/1.pdf View document])
 
-  * Gomes, M. L.; Vaquero, T. S.; Silva, J. R.; Tonidandel, F. _Extracting State Constraints from UML Planning Models_. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008.
+  * Gomes, M. L.; Vaquero, T. S.; Silva, J. R.; Tonidandel, F. _Extracting State Constraints from UML Planning Models_. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/2.pdf View document])
 
-  * Udo, M.; Vaquero, T. S.; Silva, J. R.; Tonidandel, F. _Lean Software Development Domain_. In: ICAPS-08 Workshop on Scheduling and Planning Applications (SPARK). Sydney, Australia. 2008.
 
-  * Sette, F. ; Vaquero, T. S; Park S. W.; Silva, J. R. _Are Automated Planners up to Solve Real Problems?_. In: The 17th IFAC World Congress (IFAC 2008), 2008, Seoul, Korea.
+  * Udo, M.; Vaquero, T. S.; Silva, J. R.; Tonidandel, F. _Lean Software Development Domain_. In: ICAPS-08 Workshop on Scheduling and Planning Applications (SPARK). Sydney, Australia. 2008.  ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/3.pdf View document])
+
+
+  * Sette, F. ; Vaquero, T. S; Park S. W.; Silva, J. R. _Are Automated Planners up to Solve Real Problems?_. In: The 17th IFAC World Congress (IFAC 2008), 2008, Seoul, Korea. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/4.pdf View document])
+
 
 
 ==2007==
