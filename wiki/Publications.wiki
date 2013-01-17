@@ -19,9 +19,10 @@
 
 ==2010==
 
-  * Vaquero, T. S. ; Silva, J. R.; Beck, J.C. _Improving Planning Performance Through Post-Design Analysis_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010), Toronto. Canada. 2010.
+  * Vaquero, T. S. ; Silva, J. R.; Beck, J.C. _Improving Planning Performance Through Post-Design Analysis_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010), Toronto. Canada. 2010. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2010/1.pdf View document])
 
-  * Vaquero, T. S.; Silva, J. R.; Beck, J.C. _Analyzing Plans and Planners in itSIMPLE3.1_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010). Toronto. Canada. 2010.
+  * Vaquero, T. S.; Silva, J. R.; Beck, J.C. _Analyzing Plans and Planners in itSIMPLE3.1_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling workshop. The 20th International Conference on Automated Planning & Scheduling (ICAPS 2010). Toronto. Canada. 2010. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2010/2.pdf View document])
+
 
 
 ==2009==
