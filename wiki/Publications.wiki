@@ -4,12 +4,12 @@
 
   * Vaquero, T.S.; Costa, C.; Tonidandel, F.; Igreja, H.; Silva, J. R.; Beck, J. C. _Planning and Scheduling Ship Operations on Petroleum Ports and Platforms_. In: Proceedings of the ICAPS 2012 Workshop on Scheduling and Planning Applications (SPARK), p 8-16. Atibaia, São Paulo, Brazil. 2012. (Online proceedings)   ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2012/1.pdf View document])
 
-  * Vaquero, T.S.; Tonaco, R.; Costa, C.; Toninandel, F.; Silva, J. R.; Beck, J. C. _itSIMPLE4.0: Enhancing the Modeling Experience of Planning Problems_. In: Proceedings of the ICAPS 2012 System Demonstration, p 11-14. Atibaia, São Paulo, Brazil. 2012.
+  * Vaquero, T.S.; Tonaco, R.; Costa, C.; Toninandel, F.; Silva, J. R.; Beck, J. C. _itSIMPLE4.0: Enhancing the Modeling Experience of Planning Problems_. In: Proceedings of the ICAPS 2012 System Demonstration, p 11-14. Atibaia, São Paulo, Brazil. 2012. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2012/2.pdf View document])
 
 
 == 2011 ==
 
-  * Vaquero, T. S.; Silva, J. R.; Beck, J.C. _A Brief Review of Tools and Methods for Knowledge Engineering for Planning & Scheduling_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.
+  * Vaquero, T. S.; Silva, J. R.; Beck, J.C. _A Brief Review of Tools and Methods for Knowledge Engineering for Planning & Scheduling_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/1.pdf View document])
 
   * Vaquero, T. S.; Silva, J. R.; Beck, J.C. _Acquisition and Re.use of Plan Evaluation Rationales on Post Design_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.
 
