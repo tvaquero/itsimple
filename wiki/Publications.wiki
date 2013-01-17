@@ -48,15 +48,15 @@
 
 ==2007==
 
-  * Vaquero, T. S. ; Romero, V. M. C. ; Tonidandel, F. ; Silva, J. R. _itSIMPLE 2.0: An Integrated Tool for Designing Planning Domains_. In: The International Conference on Automated Planning & Scheduling. In: ICAPS 2007 ,Providence, Rhode Island. The International Conference on Automated Planning & Scheduling. Menlo Park, California, USA, 2007.
+  * Vaquero, T. S. ; Romero, V. M. C. ; Tonidandel, F. ; Silva, J. R. _itSIMPLE 2.0: An Integrated Tool for Designing Planning Domains_. In: The International Conference on Automated Planning & Scheduling. In: ICAPS 2007 ,Providence, Rhode Island. The International Conference on Automated Planning & Scheduling. Menlo Park, California, USA, 2007.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/1.pdf View document])
 
-  * Vaquero, T. S. ; Romero, V. M. C. ; Sette, F. ; Tonidandel, F. ; Silva, J. R. _itSIMPLE2.0 : An Integrated Tool for Designing Planning Domains. In: ICAPS 2007 - International Conference on Automated Planning and Scheduling_. In: Providence, Rhode Island. ICKEPS 2007 Competition on Knowledge Engineering for Planning and Scheduling. Menlo Park, California, USA, 2007.
+  * Vaquero, T. S. ; Romero, V. M. C. ; Sette, F. ; Tonidandel, F. ; Silva, J. R. _itSIMPLE2.0 : An Integrated Tool for Designing Planning Domains. In: ICAPS 2007 - International Conference on Automated Planning and Scheduling_. In: Providence, Rhode Island. ICKEPS 2007 Competition on Knowledge Engineering for Planning and Scheduling. Menlo Park, California, USA, 2007.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/2.pdf View document])
 
-  * Vaquero, T. S. ; Tonidandel, F. ; Barros, L.N. ; Silva, J. R. _Modeling a Real Application as a Planning Problem by using UML.P_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007. Full Paper.
+  * Vaquero, T. S. ; Tonidandel, F. ; Barros, L.N. ; Silva, J. R. _Modeling a Real Application as a Planning Problem by using UML.P_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007. Full Paper.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/3.pdf View document])
 
-  * Romero, V. M. C. ; Vaquero, T. S. ; Tonidandel, F. ; Silva, J. R. _Analysis and Management of Plans provided by Automated Planning Systems_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007.
+  * Romero, V. M. C. ; Vaquero, T. S. ; Tonidandel, F. ; Silva, J. R. _Analysis and Management of Plans provided by Automated Planning Systems_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007.[https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/4.pdf View document])
 
-  * Gomes, M. L. ; Udo, M. ; Vaquero, T. S. ; Silva, J. R. ; Tonidandel, F. _Obtaining States Invariants From Class Diagram in UML.P_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007.
+  * Gomes, M. L. ; Udo, M. ; Vaquero, T. S. ; Silva, J. R. ; Tonidandel, F. _Obtaining States Invariants From Class Diagram in UML.P_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/5.pdf View document])
 
   * Vaquero, T. S. ; Sette, F. ; Santos, E. A. ; Silva, J. R. . _Integrated Tools Environment for Modeling and Analysis of Automated Planning Systems_. In: COBEM07 - the 19th Congress of Mechanical Engineering, 2007, Brasilia, Brazil. 19th Congress of Mechanical Engineering - COBEM, 2007.
 
