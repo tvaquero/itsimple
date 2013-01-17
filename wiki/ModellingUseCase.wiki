@@ -15,7 +15,7 @@ https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/UseCase/cuexa
 
 ==_Toolbox Elements and Connectors_==
 
-https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/CasoUso/toolbarCU.png
+https://itsimple.googlecode.com/svn/wiki/resources/images/Modeling/UseCase/toolbarCU.png
 
 === Actor ===
 
