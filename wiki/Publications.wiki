@@ -34,8 +34,7 @@
 
 ==2008==
 
-  * Vaquero, T. S.; Tonidandel, F.; Silva, J. R. _Suggestions for the Knowledge Engineering Competition_. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008.
-([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/1.pdf View document])
+  * Vaquero, T. S.; Tonidandel, F.; Silva, J. R. _Suggestions for the Knowledge Engineering Competition_. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/1.pdf View document])
 
   * Gomes, M. L.; Vaquero, T. S.; Silva, J. R.; Tonidandel, F. _Extracting State Constraints from UML Planning Models_. In: ICAPS-08 Workshop on Knowledge Engineering for Planning and Scheduling (KEPS). Sydney, Australia. 2008. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2008/2.pdf View document])
 
