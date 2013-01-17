@@ -8,7 +8,7 @@ Demo video:
 <wiki:video url="https://www.youtube.com/watch?v=FGBhvBnzyvo&feature=player_embedded"/>
 
 
-*Old Versions*
+*Previous Versions*
 
   * Creating a UML Use Case diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleDomain_UseCases.htm click here] 
   * Creating a UML Class diagram in itSIMPLE 2.0 [http://fei.edu.br/~flaviot/itSIMPLE/itSimpleDomain_Classes.htm click here] 
