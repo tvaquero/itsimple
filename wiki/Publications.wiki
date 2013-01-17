@@ -68,6 +68,6 @@
 
 ==2005==
 
-  * Vaquero, T.S., Tonidandel, F., and Silva, J.R. _The itSIMPLE tool for Modeling Planning Domains_. In Proceeding of the First International Competition on Knowledge Engineering for AI Planning and Scheduling (ICKEPS). Monterey, California, USA. 2005.
+  * Vaquero, T.S., Tonidandel, F., and Silva, J.R. _The itSIMPLE tool for Modeling Planning Domains_. In Proceeding of the First International Competition on Knowledge Engineering for AI Planning and Scheduling (ICKEPS). Monterey, California, USA. 2005. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2005/1.pdf View document])
 
-  * Santos, E.; Vaquero, T.S.; SILVA, J.R. _Specification and Analysis for Automated Flexible Manufacturing_. In Proceeding of 18th International Congress of Mechanical Engineering (COBEM), Ouro Preto, MG, Brazil. 2005.
+  * Santos, E.; Vaquero, T.S.; SILVA, J.R. _Specification and Analysis for Automated Flexible Manufacturing_. In Proceeding of 18th International Congress of Mechanical Engineering (COBEM), Ouro Preto, MG, Brazil. 2005. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2005/2.pdf View document])
