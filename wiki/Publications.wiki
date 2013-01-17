@@ -27,9 +27,10 @@
 
 ==2009==
 
-  * Vaquero, T. S.; Silva, J. R; Ferreira, M.; Tonidandel, F.; Beck, J. C. _From Requirements and Analysis to PDDL in itSIMPLE3.0_. In: Proceedings of the 3rd International Competition on Knowledge Engineering for Planning and Scheduling. ICAPS-09. Thessaloniki, Greece. 2009.
+  * Vaquero, T. S.; Silva, J. R; Ferreira, M.; Tonidandel, F.; Beck, J. C. _From Requirements and Analysis to PDDL in itSIMPLE3.0_. In: Proceedings of the 3rd International Competition on Knowledge Engineering for Planning and Scheduling. ICAPS-09. Thessaloniki, Greece. 2009. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2009/1.pdf View document])
 
-  * Vaquero, T. S.; Sette, F.; Silva, J. R.; Beck, J. C. _Planning and Scheduling of Crude Oil Distribution in a Petroleum Plant_. In: ICAPS-09 Workshop on Scheduling and Planning Applications (SPARK). Thessaloniki, Greece. 2009.
+
+  * Vaquero, T. S.; Sette, F.; Silva, J. R.; Beck, J. C. _Planning and Scheduling of Crude Oil Distribution in a Petroleum Plant_. In: ICAPS-09 Workshop on Scheduling and Planning Applications (SPARK). Thessaloniki, Greece. 2009. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2009/2.pdf View document])
 
 ==2008==
 
