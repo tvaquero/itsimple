@@ -1,7 +1,7 @@
 #summary Tutorials and Videos.
 
 
-*itSIMPLE 4.0*
+*itSIMPLE 4.0 (beta)*
 
 Demo video:
 
