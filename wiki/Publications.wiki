@@ -55,7 +55,7 @@
 
   * Gomes, M.L.; Udo, M.; Vaquero, T.S.; Silva, J.R.; Tonidandel, F. _Obtaining States Invariants From Class Diagram in UML.P_. In: VIII SBAI - Simpósio Brasileiro de Automação Inteligente, 2007, Florianópolis, Brazil, 2007.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/5.pdf View document])
 
-  * Vaquero, T.S.; Sette, F.; Santos, E.A.; Silva, J.R. _Integrated Tools Environment for Modeling and Analysis of Automated Planning Systems_. In: COBEM07 - the 19th Congress of Mechanical Engineering, 2007, Brasilia, Brazil. 19th Congress of Mechanical Engineering - COBEM, 2007.
+  * Vaquero, T.S.; Sette, F.; Santos, E.A.; Silva, J.R. _Integrated Tools Environment for Modeling and Analysis of Automated Planning Systems_. In: COBEM07 - the 19th Congress of Mechanical Engineering, 2007, Brasilia, Brazil. 19th Congress of Mechanical Engineering - COBEM, 2007. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2007/6.pdf View document])
 
 
 ==2006==
