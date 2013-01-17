@@ -62,9 +62,9 @@
 
 ==2006==
 
-  * Vaquero, T.S.; Tonidandel, F.; Barros, L.N.; Silva, J.R. _On the use of UML.P for modeling a real planning problem_. In Proceeding of 16th International Conference on Automated Planning and Scheduling (ICAPS). Cumbria, UK. 2006.
+  * Vaquero, T.S.; Tonidandel, F.; Barros, L.N.; Silva, J.R. _On the use of UML.P for modeling a real planning problem_. In Proceeding of 16th International Conference on Automated Planning and Scheduling (ICAPS). Cumbria, UK. 2006. ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2006/1.pdf View document])
 
-  * Tonidandel, F.; Vaquero, T.S.; Silva, J.R. _Reading PDDL, Writing an Object-Oriented Model_. In Leture Notes in Computer Science. International Joint Conference on AI IBERAMIA/SBIA. Springer-Verlag. 2006.
+  * Tonidandel, F.; Vaquero, T.S.; Silva, J.R. _Reading PDDL, Writing an Object-Oriented Model_. In Leture Notes in Computer Science. International Joint Conference on AI IBERAMIA/SBIA. Springer-Verlag. 2006.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2006/2.pdf View document])
 
 ==2005==
 
