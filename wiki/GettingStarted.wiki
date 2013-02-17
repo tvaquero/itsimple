@@ -36,7 +36,7 @@
  * Check out *itSIMPLE* project (_team->checkout_ choice; _Repository folder_: https://itsimple.googlecode.com/svn/trunk/) to a local folder in your computer, e.g. in a folder called _‘itSIMPLEsrc’_ (not in the *Netbeans Projects* folder). Uncheck _“Scan for !Netbeans project after"_. Wait for checkout completion.
  * Create a project with existing source (_New project-> Java -> Java Project with Existing Sources_). Name the project _'itSIMPLE'_. The project folder can be created in the *Netbeans Projects* folder. As for the source, point to the folder that where you checked out the code (the _‘itSIMPLEsrc’_).
  * Add the *JAR/ZIP libraries* to the project (right click over _Libraries -> Add Jar/Folder_). Selected all .jar libraries). They will be in the folder _.../itSIMPLEsrc/lib_.
- * Copy and paste the following folders _‘resource’_, _‘myPlanners’_, _‘myIcons’_, _‘myValidators’_, and _‘myAnalyzers’_ from the _itSIMPLEsrc_ folder into the project folder created by *Netbeans* (e.g., _Netbeans Projects/itSIMPLE_). This is necessary for running itSIMPLE inside the Netbeans environment.
+ * Copy and paste the following folders _‘resource’_, _‘myPlanners’_, _‘myIcons’_, _‘myValidators’_, and _‘myAnalyzers’_ from the _itSIMPLEsrc_ folder into the project folder created by *Netbeans* (e.g., _NetbeansProjects/itSIMPLE_). This is necessary for running itSIMPLE inside the Netbeans environment.
  * Run the class ItSIMPLE.java.
 
 
