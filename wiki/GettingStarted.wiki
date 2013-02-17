@@ -47,7 +47,7 @@ The current version of itSIMPLE (version 4.0) is compatible with the following p
 
  * Metric-FF (windows and linux). [http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-   xxl.htmlhttp://members.deri.at/~joergh/ff.html]
  * FF (v2.3) (linux). http://members.deri.at/~joergh/ff.html
-* SGPlan 5.2.2 (linux). http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
+ * SGPlan 5.2.2 (linux). http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
  * SGPlan 6 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
  * MIPS-xxl 2006 (linux). http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
  * MIPS-xxl 2008 v1.1 (linux). http://sjabbar.com/mips-xxl-planner
