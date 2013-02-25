@@ -42,7 +42,6 @@
 
 </wiki:comment>
 
---> 
 == Planners== 
 
 === Planners currently compatible with itSIMPLE ===
