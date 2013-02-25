@@ -23,7 +23,7 @@
  * Unzip the file;
  * Run the software: Typing in command line: _java -jar itSIMPLE.jar_ or double-clicking on _itSIMPLE.jar_ file.
 
-</wiki:comment>
+<wiki:comment>
 ==Set up  itSIMPLE in Eclipse or Netbeans for development==
 
 === Eclipse ===
