@@ -23,7 +23,7 @@
  * Unzip the file;
  * Run the software: Typing in command line: _java -jar itSIMPLE.jar_ or double-clicking on _itSIMPLE.jar_ file.
 
-<--
+</wiki:comment>
 ==Set up  itSIMPLE in Eclipse or Netbeans for development==
 
 === Eclipse ===
@@ -39,6 +39,8 @@
  * Add the *JAR/ZIP libraries* to the project (right click over _Libraries -> Add Jar/Folder_). Selected all .jar libraries). They will be in the folder _.../itSIMPLEsrc/lib_.
  * Copy and paste the following folders _‘resource’_, _‘myPlanners’_, _‘myIcons’_, _‘myValidators’_, and _‘myAnalyzers’_ from the _itSIMPLEsrc_ folder into the project folder created by *Netbeans* (e.g., _!NetbeansProjects/itSIMPLE_). This is necessary for running itSIMPLE inside the Netbeans environment.
  * Run the class *ItSIMPLE.java*.
+
+</wiki:comment>
 
 --> 
 == Planners== 
