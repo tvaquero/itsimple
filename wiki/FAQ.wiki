@@ -54,7 +54,7 @@ The current version of itSIMPLE (version 3.0) is compatible with the following p
    * hspsp 2008 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
    * Plan-A 1.0 (linux). http://ipc.informatik.uni-freiburg.de/Planners/
    * Blackbox v4.3 (linux) and v4.2 (Windows). http://www.cs.rochester.edu/u/kautz/satplan/blackbox/
-   * MaxPlan 2006. http://www.cse.wustl.edu/~chen/maxplan/
+   * Maxplan 2006. http://www.cse.wustl.edu/~chen/maxplan/
    * LPRPG Public Release 2. http://planning.cis.strath.ac.uk/LPRPG/
    * Marvin Release 1 (2004). http://planning.cis.strath.ac.uk/Marvin/
 
