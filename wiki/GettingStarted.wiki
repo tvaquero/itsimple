@@ -62,3 +62,5 @@ The current version of itSIMPLE (version 4.0) is compatible with the following p
  * Maxplan? 2006. http://www.cse.wustl.edu/~chen/maxplan/
  * LPRPG Public Release 2. http://planning.cis.strath.ac.uk/LPRPG/
  * Marvin Release 1 (2004). http://planning.cis.strath.ac.uk/Marvin/
+
+== For Developers == 
