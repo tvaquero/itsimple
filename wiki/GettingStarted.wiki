@@ -24,7 +24,7 @@
  * Run the software: Typing in command line: _java -jar itSIMPLE.jar_ or double-clicking on _itSIMPLE.jar_ file.
 
 
-== For Developers ==
+==_For Developers_==
  
 ===Set up  itSIMPLE in Eclipse or Netbeans for development===
 
