@@ -38,7 +38,7 @@
 === Eclipse ===
  # Check out *itSIMPLE* project (Repository folder: https://itsimple.googlecode.com/svn/trunk/) to a local folder in your computer, e.g. recommended a folder called _‘itSIMPLEsrc’_ (not in the workspace folder of Eclipse). Wait for checkout completion.
  # Create a new project (_New-> Java Project_ choice). Name the project _'itSIMPLE'_. Press _Next_ and on the _Source_ tab press _"Link Additional source to the project"_. Chose the _'itSIMPLEsrc'_ folder were the checkout was done.
- # Add the *JAR/ZIP libraries* to the project (right click over the _project -> Properties -> Java Build Path_ and on the tab press _Add external Jars_). Selected all .jar libraries. They will be in the folder _.../itSIMPLEsrc/lib_.
+ # Add the *JAR/ZIP libraries* to the project (right click over the _project -> Properties -> Java Build Path_ and on the Libraries tab press _Add external Jars_). Selected all .jar libraries. They will be in the folder _.../itSIMPLEsrc/lib_.
  # Copy and paste the following folders _‘resource’_, _‘myPlanners_, _‘myIcons’_, _‘myValidators’_, and _‘myAnalyzers’_ from the _itSIMPLEsrc_ folder into the project folder created by *Eclipse* (e.g., _workspace/itSIMPLE_). This is necessary for running *itSIMPLE* inside the *Eclipse* environment.
  # Run the class *ItSIMPLE.java*.
 
