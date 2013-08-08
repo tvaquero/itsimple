@@ -11,7 +11,7 @@
 
   * Vaquero, T.S.; Silva, J.R.; Beck, J.C. _A Brief Review of Tools and Methods for Knowledge Engineering for Planning & Scheduling_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/1.pdf View document])
 
-  * Vaquero, T.S.; Silva, J.R.; Beck, J.C. _Acquisition and Re.use of Plan Evaluation Rationales on Post Design_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011 ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/2.pdf View document])
+  * Vaquero, T.S.; Silva, J.R.; Beck, J.C. _Acquisition and Reuse of Plan Evaluation Rationales on Post Design_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011 ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/2.pdf View document])
 
   * Vaquero, T.S.; Silva, J.R.; Beck, J.C. _A Conceptual Framework for Post.Design Analysis in AI Planning Applications_. In: Proceedings of the Knowledge Engineering for Planning and Scheduling (KEPS) workshop. The 21th International Conference on Automated Planning & Scheduling (ICAPS 2011). Freiburg. Germany. 2011.([https://itsimple.googlecode.com/svn/wiki/resources/papers/2011/3.pdf View document])
 
