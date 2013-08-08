@@ -1,5 +1,12 @@
 #summary Publications about the itSIMPLE tool and its application.
 
+==2013==
+
+  * Vaquero, T.S.; Silva, J.R; Beck, J.C. Post-Design Analysis for Building and Refining AI Planning Systems. Engineering Applications of Artificial Intelligence 26 (2013) 1967–1979.
+
+  * Vaquero, T.S.; Silva, J.R.; Tonidandel, F.; Beck, J.C. 2013. itSIMPLE: Towards an Integrated Design System for Real Planning Applications. The Knowledge Engineering Review Journal, Vol. 28:2, 215–230. Special issue on International Competition on Knowledge Engineering for Planning & Scheduling (ICKEPS). Cambridge University Press. 2013. DOI: 10.1017/S0269888912000434
+
+
 ==2012==
 
   * Vaquero, T.S.; Costa, C.; Tonidandel, F.; Igreja, H.; Silva, J.R.; Beck, J.C. _Planning and Scheduling Ship Operations on Petroleum Ports and Platforms_. In: Proceedings of the ICAPS 2012 Workshop on Scheduling and Planning Applications (SPARK), p 8-16. Atibaia, São Paulo, Brazil. 2012. (Online proceedings)   ([https://itsimple.googlecode.com/svn/wiki/resources/papers/2012/1.pdf View document])
