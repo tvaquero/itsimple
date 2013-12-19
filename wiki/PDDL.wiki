@@ -21,4 +21,4 @@ Before you select _Translate_ option (*4:*), you can specify a _PDDL_ Version in
 The _PDDL_ can be save with the _Save PDDL_ option (*5:*).
 
 
-The OCL to PDDL translation process is based on the mapping between the two languages described in: [[OCL2PDDL]|[https://code.google.com/p/itsimple/source/browse/wiki/resources/OCL2PDDLMapping-Draft2.pdf]]
+The OCL to PDDL translation process is based on the mapping between the two languages described in: [https://code.google.com/p/itsimple/source/browse/wiki/resources/OCL2PDDLMapping-Draft2.pdf]OCL2PDDL
