@@ -14,9 +14,9 @@
  * Check if you have the lastest version of Java Runtime installed (e.g., *JRE 6*, http://java.sun.com). You can check your version by typing _"java -version" in a terminal_;
  * Download itSIMPLE http://code.google.com/p/itsimple/downloads/list
  * Unzip the file;
- * Change permission of all planner files in the myPlanners folder so they can be executed (typing in command line: _chmod +x name-of-the-panner_);
  * Change permission (typing in command line: _chmod +x itSIMPLE.jar_);
  * Run the software: Typing in command line: _java -jar itSIMPLE.jar_;
+ * To run the planners from itSIMPLE, change permission of all planner files in the /myPlanners folder so they can be executed (typing in command line: _chmod +x name-of-the-panner_);
 
 ==_Windows (XP/Vista/7.0)_==
  * Check if you have the lastest version of _Java Runtime installed_ (e.g., *JRE 6*, http://java.sun.com). You can check your version by typing _"java -version"_ in a terminal;
