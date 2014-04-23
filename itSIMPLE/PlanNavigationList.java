@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -29,7 +29,6 @@ package itSIMPLE;
 import itGraph.ItGraph;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.Iterator;
 import java.util.List;
 
@@ -114,7 +113,6 @@ public class PlanNavigationList extends JPanel implements ChangeListener{
 							beforeGraph.setVisible(false);
 							beforeGraph.buildDiagram();
 							beforeGraph.setVisible(true);
-                            beforeGraph.setBackground(Color.WHITE);
 							before.revalidate();
 						
 							//ItGraph afterGraph = new ItGraph(project, afterDiagram, "UML");
@@ -124,7 +122,6 @@ public class PlanNavigationList extends JPanel implements ChangeListener{
 							afterGraph.setVisible(false);
 							afterGraph.buildDiagram();
 							afterGraph.setVisible(true);
-                            afterGraph.setBackground(Color.WHITE);
 							after.revalidate();							
 							
 						}
@@ -433,15 +430,15 @@ public class PlanNavigationList extends JPanel implements ChangeListener{
 	
 	@SuppressWarnings("unchecked")
 	private void setNewPlanStarTimes(Element oldPlanLastAction, Element newPlan){		
-		float nextActionStartTime = Float.parseFloat(oldPlanLastAction.getChildText("startTime")) +
-										Float.parseFloat(oldPlanLastAction.getChildText("duration"));
+		int nextActionStartTime = Integer.parseInt(oldPlanLastAction.getChildText("startTime")) + 
+										Integer.parseInt(oldPlanLastAction.getChildText("duration"));
 		
 		for (Iterator iterator = newPlan.getChild("plan").getChildren("action").iterator(); iterator.hasNext();) {
 			Element action = (Element) iterator.next();
 			action.getChild("startTime").setText(String.valueOf(nextActionStartTime));
 			
-			nextActionStartTime = Float.parseFloat(action.getChildText("startTime")) +
-										Float.parseFloat(action.getChildText("duration"));
+			nextActionStartTime = Integer.parseInt(action.getChildText("startTime")) + 
+										Integer.parseInt(action.getChildText("duration"));
 		}
 	}
 }

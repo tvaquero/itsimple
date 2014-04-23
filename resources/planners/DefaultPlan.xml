@@ -3,16 +3,18 @@
 <xmlPlan>
 	<toolInformation>
 		<name>itSIMPLE</name>
-		<version>4.0.00</version>
+		<version>2.1.10</version>
 		<message/>
 	</toolInformation>
 	<name/>
 	<description/>
-        <project/>
 	<domain/>
 	<problem/>
-        <datetime/>
-	<planner id=""/>
+	<planner id="">
+		<name/>
+		<version/>
+		<consoleOutput/>
+	</planner>
 	<statistics>
 		<toolTime/>
 		<time/>
@@ -22,13 +24,6 @@
 		<metricValue/>
 		<planningTechnique/>
 		<additional/>
-                <forcedQuit/>
 	</statistics>
-        <validity isValid=""/>
-        <validator id="" />
-        <evaluation value="">
-            <rationales/>
-        </evaluation>
 	<plan/>
-        <comments/>
 </xmlPlan>

@@ -1,9 +1,9 @@
-itSIMPLE: Integrated Tools Software Interface for Modeling PLanning Environments
+﻿itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
  
-Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
+Copyright (C) 2007,2008,2009 Universidade de Sao Paulo
  
 
-This file is part of itSIMPLE.
+This file is part of itSIMPLE 2.1.10.
 
 itSIMPLE is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,43 +21,36 @@ along with itSIMPLE.  If not, see <http://www.gnu.org/licenses/>.
 
 Authors:	Tiago S. Vaquero, 
 			Jose Reinaldo Silva,
-		 	Flavio Tonidandel,
 		 	Victor Romero,
 		 	Fernando Sette,
-                        Matheus Haddad,
-			Rosi Tanaco,
-			Gustavo Costa,
-			Jose Armando San Pedro Miralles.
+		 	Flavio Tonidandel.
 
 
 Contact the authors:  
-			http://code.google.com/p/itsimple/
+			http://dlab.poli.usp.br/itSIMPLE
+			itsimple@dlab.poli.usp.br
                         tiago.vaquero@gmail.com
 
-
-Installing and running itSIMPLE
--------------------------------
-To install itSIMPLE you just have to unzip the file and run the .jar file
-(e.g., java -jar itSIMPLE.jar). Sun Java 6 Runtime (or up) is required.
-
+			Design Lab - Escola Polit�cnica - Universidade de Sao Paulo
+			Av. Prof. Mello Moraes, 2231, sala MS-32
+			Sao Paulo, SP, 05508-030
+			Brazil
+			
 
 			
 Connecting planners to itSIMPLE.
 -------------------------------
 
 itSIMPLE can communicate with most available planners. The source comes already
-with some planners such as metric-ff (both windows and linux). For the others
-planners it is necessary to download them from the authors website and make a
-copy of the executable file (and all required files) an put it in folder
-myPlanners/. The name of the executable files must correspond to what is
-specified in a file use by itSIMPLE. The file itPlanners.xml
-(resources/planners/itPlanners.xml) holds information about each planners that
-itSIMPLE can communicate with. The following list show the name of 
-files treated by itSIMPLE:
-
-- metric-ff.exe  http://www.loria.fr/~hoffmanj/
-- metric-ff      http://www.loria.fr/~hoffmanj/
-- ffv-2.3        http://www.loria.fr/~hoffmanj/
+with metric-ff (both windows and linux). For the others planners it is necessary to
+download them from the authors website and make a copy of the executable file 
+(and all required files) an put it in folder myPlanners/. The name of the executable 
+files must correspond to what is specified in a file use by itSIMPLE. The file 
+itPlanners.xml (resources/planners/itPlanners.xml) holds information about each 
+planners that itSIMPLE can communicate with. The following list show the name of 
+files treated by itSIMPLE2.1:
+- metric-ff.exe  http://members.deri.at/~joergh/ff.html
+- metric-ff      http://members.deri.at/~joergh/ff.html
 - sgplan522      http://manip.crhc.uiuc.edu/programs/SGPlan/index.html
 - mips-xxl       (2006 version) http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html
 - satplan        (2006 version) http://www.cs.rochester.edu/u/kautz/satplan/index.htm
@@ -66,19 +59,12 @@ files treated by itSIMPLE:
 - mips-xxl2008   (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
 - sgplan6        (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
 - lpg            (version 1.2) http://zeus.ing.unibs.it/lpg/
-- hspsp          (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
-- Plan-A         (2008 version from IPC-6) http://ipc.informatik.uni-freiburg.de/Planners/
-- blackbox       (version 4.3 11 Jan 2006) http://www.cs.rochester.edu/u/kautz/satplan/blackbox
-- blackbox.exe   (version 4.3 11 Jan 2006) http://www.cs.rochester.edu/u/kautz/satplan/blackbox
-- maxplan        (2006 version from IPC-5) http://www.cse.wustl.edu/~chen/maxplan/
-- lprpg          (Public Release 2 2010-04-11) http://planning.cis.strath.ac.uk/LPRPG/
+- hspsp          (2008 version from IPC-6)http://ipc.informatik.uni-freiburg.de/Planners/
 
-It is necessary to compile the source for some of them, depending on the OS
-(Windows, Linux, Mac).
+Some of them it is necessary to compile the source.
 
-For more information check out our website http://code.google.com/p/itsimple/.
+For more information check our website dlab.poli.usp.br.
 
-Have fun. 
+Have fun.
 
-Tiago
 

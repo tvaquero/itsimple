@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Logistic Domain v1</name>
-	<description>This is the classical Logistic Domain</description>
+	<description>This is the Logistic Domain using itSIMPLE v2.0</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.22</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -2644,10 +2644,16 @@
 							</objectDiagram>
 						</objectDiagrams>
 						<constraints />
-						<metrics />
+						<metrics>
+							<metric id="1">
+								<name>metric1</name>
+								<enabled>true</enabled>
+								<type>minimize</type>
+								<function>Airplane2.currentPlaneLoad</function>
+							</metric>
+						</metrics>
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Logistic Domain 2</name>
@@ -3826,10 +3832,8 @@
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

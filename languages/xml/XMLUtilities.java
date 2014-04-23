@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -146,30 +146,10 @@ public class XMLUtilities {
 			System.out.println();
 		}
 	}
-
-    /**
-     * This method returns an Element as a string
-     * @param element
-     * @return
-     */
-	public static String toString(Element element){
-        String content = "";
-		Format format = Format.getPrettyFormat();
-		format.setIndent("\t");
-		XMLOutputter op = new XMLOutputter(format);
-		if(element == null){
-			System.err.println("Null element");
-		}
-		else{
-			content = op.outputString(element);
-		}
-        return content;
-	}
-
 	
 	
 	/**
-	 * Returns all class ascendents data until the first class in the hierarchy
+	 * Returns all class ascendents data untill the first class in the hierarchy
 	 * 
 	 * @param childClass the class data from which we want the ascendents
 	 * @return a List with all the class ascendents
@@ -199,7 +179,7 @@ public class XMLUtilities {
 	}
 	
 	/**
-	 * Returns all class descendents data until the first class in the hierarchy
+	 * Returns all class descendents data untill the first class in the hierarchy
 	 * 
 	 * @param parentClass the class data from which we want the descendents
 	 * @return a List with all the class descendents
@@ -305,32 +285,5 @@ public class XMLUtilities {
 		
 	}
 	
-        
-        /// Removes control characters and other non-UTF-8 characters
-        /// </summary>
-        /// <param name="inString">The string to process</param>
-        /// <returns>A string with no control characters or entities above 0x00FD</returns>
-        public static String RemoveTroublesomeCharacters(String inString)
-        {
-            if (inString == null) return null;
-
-            StringBuilder newString = new StringBuilder();
-            char ch;
-
-            for (int i = 0; i < inString.length(); i++)
-            {
-
-                ch = inString.charAt(i);
-                // remove any characters outside the valid UTF-8 range as well as all control characters
-                // except tabs and new lines
-                if ((ch < 0x00FD && ch > 0x001F) || ch == '\t' || ch == '\n' || ch == '\r')
-                {
-                    newString.append(ch);
-                }
-            }
-            return newString.toString();
-
-        }          
-        
 	
 }

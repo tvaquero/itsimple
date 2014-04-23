@@ -63,11 +63,6 @@ public class CheckBoxNode extends ItTreeNode{
 		CheckBoxUserObject userObject = (CheckBoxUserObject)getUserObject();
 		return userObject.isSelected();
 	}
-        
-        public void setSelected(boolean newValue){
-		CheckBoxUserObject userObject = (CheckBoxUserObject)getUserObject();
-		userObject.setSelected(newValue);
-	}
 	
 	  
 	  public static Object[] getCheckedNodes(CheckBoxNode node){

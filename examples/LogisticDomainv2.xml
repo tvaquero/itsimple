@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Logistic Domain v2</name>
-	<description>This is the improved version of the classical Logistic Domain</description>
+	<description>This is the Logistic Domain using itSIMPLE v2.0</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.22</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1212,13 +1212,13 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="466" y="15" />
+									<position x="484" y="-58" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="963" y="-45" />
+									<position x="1069" y="-16" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -1478,7 +1478,7 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="500" y="-15" />
+									<position x="" y="" />
 								</label>
 							</labels>
 							<points />
@@ -2692,7 +2692,6 @@ The goal is to deliver the packages</description>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Logistic Domain 2</name>
@@ -3871,10 +3870,8 @@ The goal is to deliver the packages</description>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
-*
+
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -29,19 +29,11 @@ package languages.pddl;
 import java.util.Iterator;
 import java.util.List;
 
-import languages.xml.XMLUtilities;
 import org.jdom.Element;
 
 public class XPDDLToPDDL {
 
-
-    /**
-     * Parse XPDDL elements into PDDL elements
-     * @param xpddlNode
-     * @param identation
-     * @return
-     */
-    public static String parseXPDDLToPDDL(Element xpddlNode, String identation){
+	public static String parseXPDDLToPDDL(Element xpddlNode, String identation){
 		String pddl = "";
 			
 		//1. Root node
@@ -179,20 +171,15 @@ public class XPDDLToPDDL {
 			
 			
 			// 8.1.3 Precondition node	
-			String precondition = identation + " :precondition \n";
-                        String preconditionContent = "";
-                        if(xpddlNode.getChild("precondition").getChildren().size() > 0){
-
-                                Element preconditionChild = (Element)xpddlNode.getChild("precondition").getChildren().get(0);
-                                preconditionContent = parseXPDDLToPDDL(preconditionChild, identation + "   ");
-                                //precondition += parseXPDDLToPDDL(preconditionChild, identation + "   ");
-                        }
-                        //Ckeck if the precondition is empty
-                        if (!preconditionContent.trim().equals("")){                            
-                            pddl += precondition + preconditionContent + "\n" ;
-                        }
-                        //pddl += precondition + "\n" ;
-
+			
+				String precondition = identation + " :precondition \n";
+				if(xpddlNode.getChild("precondition").getChildren().size() > 0){
+					Element preconditionChild = (Element)xpddlNode.getChild("precondition").getChildren().get(0);
+					precondition += parseXPDDLToPDDL(preconditionChild, identation + "   ");
+				}
+							
+				pddl += precondition + "\n" ;
+			
 			//8.1.4 Effect node
 			String effect = identation + " :effect\n";
 			if(xpddlNode.getChild("effect").getChildren().size() > 0){
@@ -230,19 +217,13 @@ public class XPDDLToPDDL {
 			
 			// 8.2.4 Condition node	
 			String condition = identation + " :condition \n";
-                        String conditionContent = "";
 			if(xpddlNode.getChild("condition").getChildren().size() > 0){
 				Element conditionChild = (Element)xpddlNode.getChild("condition").getChildren().get(0);
-                                conditionContent = parseXPDDLToPDDL(conditionChild, identation + "   ");
-				//condition += parseXPDDLToPDDL(conditionChild, identation + "   ");
+				condition += parseXPDDLToPDDL(conditionChild, identation + "   ");
 			}
-                        //Check if the precondition is empty
-			if (!conditionContent.trim().equals("")){
-                            pddl += condition + conditionContent + "\n" ;
-                        }
-			//pddl += condition + "\n" ;
-
-
+						
+			pddl += condition + "\n" ;
+		
 			//8.1.4 Effect node
 			String effect = identation + " :effect\n";
 			if(xpddlNode.getChild("effect").getChildren().size() > 0){
@@ -300,8 +281,7 @@ public class XPDDLToPDDL {
 		}
 		
 		//10.3 Predicate node and function node
-                //else if(xpddlNode.getName().equals("predicate") || xpddlNode.getName().equals("function")){
-		else if(xpddlNode.getName().equals("predicate")){
+		else if(xpddlNode.getName().equals("predicate") || xpddlNode.getName().equals("function")){
 			if(xpddlNode.getAttribute("id") == null){
 				// complete predicate
 				//open predicate/function
@@ -312,7 +292,6 @@ public class XPDDLToPDDL {
 					Element parameter = (Element) iterator.next();					
 					strPredicate += " " + parseXPDDLToPDDL(parameter, "");
 				}
-
 				// close predicate/function
 				strPredicate += ")";
 				
@@ -327,41 +306,6 @@ public class XPDDLToPDDL {
 					pddl += " " + parseXPDDLToPDDL(refParameter, "");
 				}
 				pddl += ")";				
-			}
-		}
-
-                //10.3.1 function node
-		else if(xpddlNode.getName().equals("function")){
-			if(xpddlNode.getAttribute("id") == null){
-				// complete function
-				//open function
-				String strFunction = "(" + xpddlNode.getAttributeValue("name");
-				for (Iterator<?> iterator = xpddlNode.getChildren().iterator(); iterator
-						.hasNext();) {
-					// add each parameter
-					Element parameter = (Element) iterator.next();
-					strFunction += " " + parseXPDDLToPDDL(parameter, "");
-				}
-				// close function
-				strFunction += ")";
-
-                                //check the function (PDDL 3.1)
-                                String ftype = xpddlNode.getAttributeValue("type");
-                                if (ftype != null){
-                                    strFunction += " - "+ ftype;
-                                }
-
-				// add the function to the output string
-				pddl += identation + strFunction;
-			}
-			else{
-				// reference predicate/function
-				pddl = identation + "(" + xpddlNode.getAttributeValue("id");
-				for (Iterator<?> iter = xpddlNode.getChildren().iterator(); iter.hasNext();) {
-					Element refParameter = (Element) iter.next();
-					pddl += " " + parseXPDDLToPDDL(refParameter, "");
-				}
-				pddl += ")";
 			}
 		}
 		
@@ -403,17 +347,7 @@ public class XPDDLToPDDL {
 		
 		// 10.5 Value node
 		else if(xpddlNode.getName().equals("value")){
-                        //pddl = xpddlNode.getAttributeValue("number");
-
-                        //Considering PDDL3.1 <value object=""> where object are also considered in function
-                        String numberValue = xpddlNode.getAttributeValue("number");
-                        String objectValue = xpddlNode.getAttributeValue("object");
-                        
-                        if (numberValue != null){
-                            pddl = numberValue;
-                        }else{
-                            pddl = objectValue;
-                        }
+			pddl = xpddlNode.getAttributeValue("number");
 		}
 		
 		// 10.6 equals node
@@ -613,59 +547,16 @@ public class XPDDLToPDDL {
 		
 		//10.26 at-start
 		else if(xpddlNode.getName().equals("at-start")){
-            Element chdNode = (Element)xpddlNode.getChildren().get(0);
-            if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
-    			pddl = identation + "(at start \n";
-    			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-    			pddl += identation + ")";
-            }
-            else{
-                pddl = identation + "(at start";
-                pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ");
-                pddl += ")";
-            }
-
+			pddl = identation + "(at start \n";
+			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
+			pddl += identation + ")\n";
 		}
 		
 		// 10.27 at-end
 		else if(xpddlNode.getName().equals("at-end")){
-            Element chdNode = (Element)xpddlNode.getChildren().get(0);
-            if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
-    			pddl = identation + "(at end \n";
-    			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-    			pddl += identation + ")";
-            }
-            else{
-                pddl = identation + "(at end";
-                pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ");
-                pddl += ")";
-            }
-
-		}
-		// 10.27.1 over-all
-		else if(xpddlNode.getName().equals("over-all")){
-            Element chdNode = (Element)xpddlNode.getChildren().get(0);
-            if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
-    			pddl = identation + "(over all \n";
-    			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-    			pddl += identation + ")\n";
-            }
-            else{
-                pddl = identation + "(over all";
-                pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ") ;
-                pddl += ")";
-            }
-		}
-
-                // 10.28 timed initial literal
-		else if(xpddlNode.getName().equals("at")){
-                        Element literal = xpddlNode.getChild("literal");
-                        Element timespecifier = xpddlNode.getChild("timespecifier");
-
-			pddl = identation + "(at " + timespecifier.getAttributeValue("number");
-
-			pddl += parseXPDDLToPDDL((Element)literal.getChildren().get(0), " ");
-			pddl += identation + ")";
+			pddl = identation + "(at end \n";
+			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
+			pddl += identation + ")\n";
 		}
 		
 		
@@ -744,77 +635,7 @@ public class XPDDLToPDDL {
 	}
 	
 	
-
-    /**
-     * Parse a xml plan (itSIMPLE format) to a PDDL plan format
-     * @param xmlPlan
-     * @return
-     */
-    public static String parseXMLPlanToPDDL(Element xmlPlan){
-        String pddlplan = "";
-
-
-        //Planner name
-        Element planner = xmlPlan.getChild("planner");
-        pddlplan = "; Planner "+ planner.getChildText("name") + " " + planner.getChildText("version") + " \n";
-
-        //statistics
-        Element statistics = xmlPlan.getChild("statistics");
-        pddlplan += "; itSIMPLETime "+ statistics.getChildText("toolTime") + "\n";
-        pddlplan += "; Time "+ statistics.getChildText("time") + "\n";
-        pddlplan += "; Parsing time "+ statistics.getChildText("parsingTime") + "\n";
-        pddlplan += "; NrActions "+ statistics.getChildText("parsingTime") + "\n";
-        pddlplan += "; MakeSpan "+ statistics.getChildText("parsingTime") + "\n";
-        pddlplan += "; MetricValue "+ statistics.getChildText("metricValue") + "\n";
-        pddlplan += "; PlanningTechnique: "+ statistics.getChildText("planningTechnique").trim().replaceAll("\n", " ") + "\n";
-        pddlplan += "\n";
-
-        //plan
-        List<?> actions = xmlPlan.getChild("plan").getChildren("action");
-        if (actions.size() > 0) {
-                for (Iterator<?> iter = actions.iterator(); iter.hasNext();) {
-                        Element action = (Element) iter.next();
-                        // build up the action string
-                        // start time
-                        String actionStr = action.getChildText("startTime") + ": ";
-
-                        // action name
-                        actionStr += "(" + action.getAttributeValue("id") + " ";
-
-                        // action parameters
-                        List<?> parameters = action.getChild("parameters")
-                                        .getChildren("parameter");
-                        for (Iterator<?> iterator = parameters.iterator(); iterator
-                                        .hasNext();) {
-                                Element parameter = (Element) iterator.next();
-                                actionStr += parameter.getAttributeValue("id");
-                                if (iterator.hasNext()) {
-                                        actionStr += " ";
-                                }
-                        }
-                        actionStr += ")";
-
-                        // action duration
-                        String duration = action.getChildText("duration");
-                        if (!duration.equals("")) {
-                                actionStr += " [" + duration + "]";
-                        }
-                        
-                        if(iter.hasNext()){
-                                pddlplan += actionStr +"\n";
-                        }
-                        else{
-                                pddlplan += actionStr;
-                        }
-                        //pddlplan += actionStr +"\n";
-                }
-        }
-
-
-        return pddlplan;
-    }
-
-
+	
 	/*public static void main(String[] args) {
 		Element project = null;
 		try {

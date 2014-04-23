@@ -4,7 +4,7 @@
 	<description>This project represents the classical Blocks World domain.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.30</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1994,7 +1994,6 @@ and x.attable = table</condition>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Blocks Domain 2</name>
@@ -3082,7 +3081,6 @@ and x.attable = table</condition>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="3">
 				<name>Blocks Domain 3</name>
@@ -5562,10 +5560,8 @@ and x.attable = table</condition>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

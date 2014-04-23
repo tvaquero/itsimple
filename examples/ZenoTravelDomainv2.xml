@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Zeno Travel Domain v2</name>
-	<description>This model was based on the numeric version of the Zeno travel domain from IPC-3 (2002). Here in extented the model.
-
-The final transportation domain involves transporting people around in planes, using different modes of movement: fast and slow. The key to this domain is that, where the expressive power of the numeric tracks is used, the fast movement consumes fuel faster than slow movement, making the search for a good quality plan (one using less fuel) much harder.
-
-Numeric: In this version aircraft consume fuel at different rates according to the mode of travel. One mode is restricted to planes that are carrying fewer than a threshold number of people, dependent on the plane concerned. Each plane has a separately generated fuel consumption rate in each travel mode.</description>
+	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.22</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -2443,7 +2439,6 @@ Numeric: In this version aircraft consume fuel at different rates according to t
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Planning Domain 2</name>
@@ -4531,10 +4526,8 @@ Numeric: In this version aircraft consume fuel at different rates according to t
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

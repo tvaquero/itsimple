@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -32,9 +32,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -246,26 +243,7 @@ public class PlanActionDialog extends JDialog implements ItemListener{
 						} catch (Exception e1) {
 	
 							e1.printStackTrace();
-						}
-                                                //set up the problem and domain
-                                                Element domain = problem.getParentElement().getParentElement();
-                                                Element project = domain.getParentElement().getParentElement().getParentElement();
-                                                System.out.println(project);
-
-                                                xmlPlan.getChild("project").setText(project.getChildText("name"));
-                                                xmlPlan.getChild("domain").setText(domain.getChildText("name"));
-                                                xmlPlan.getChild("problem").setText(problem.getChildText("name"));
-
-                                                xmlPlan.getChild("toolInformation").getChild("message").setText("plan manually designed by user.");
-
-                                                //set datetime
-                                                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                                Date date = new Date();
-                                                String dateTime = dateFormat.format(date);
-                                                //xmlPlan.getChild("datetime").setText(dateTime);
-                                                xmlPlan.getChild("datetime").setText(dateTime);
-
-
+						}		
 					}
 					
 					if (xmlPlan != null){					
@@ -321,17 +299,7 @@ public class PlanActionDialog extends JDialog implements ItemListener{
 						parameter.setText(((String)parametersTable.getValueAt(row++, 1)).toUpperCase());
 					}				
 				}
-
-                                //Check if was validated before and set to not validated in this case
-                                Element validity = xmlPlan.getChild("validity");
-                                if (validity!=null){
-                                    if (!validity.getAttributeValue("isValid").equals("")){
-                                        validity.setAttribute("isValid", "");
-                                        validity.setText("");
-                                        ItSIMPLE.getInstance().showHTMLReport(xmlPlan);
-                                    }
-
-                                }
+				
 				
 				// close the dialog and refresh the plan action list
 				PlanActionDialog.this.dispose();

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Grid Domain</name>
-	<description>This domain was extracted from IPC-1 (1998) and was created by Jana Koehler, based on an earlier domain by Drew McDermott.
-There is a square grid of locations. A robot can move one grid square at a time horizontally and vertically. If a square is locked, the robot can move to it only by unlocking it, which requires having a key of the same shape as the lock. 
-The goal is to get keys from various locations to various new locations.</description>
+	<description>There is a square grid of locations. A robot can move one grid square at a time horizontally and vertically. If a square is locked, the robot can move to it only by unlocking it, which requires having a key of the same shape as the lock. 
+The goal is to get keys from various locations to various new locations. This domain was created by Jana Koehler, based on an earlier domain by Drew McDermott.
+
+Extracted from IPC-1 (1998)</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -374,7 +375,7 @@ The goal is to get keys from various locations to various new locations.</descri
 							<value />
 						</rolename>
 						<multiplicity>
-							<value>0..*</value>
+							<value />
 						</multiplicity>
 					</associationEnd>
 					<associationEnd navigation="true" element="class" element-id="23" id="2">
@@ -383,7 +384,7 @@ The goal is to get keys from various locations to various new locations.</descri
 							<value>conn</value>
 						</rolename>
 						<multiplicity>
-							<value>0..*</value>
+							<value />
 						</multiplicity>
 					</associationEnd>
 				</associationEnds>
@@ -893,19 +894,19 @@ The goal is to get keys from various locations to various new locations.</descri
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="504" y="16" />
+									<position x="541" y="93" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="893" y="23" />
+									<position x="1500" y="16" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="-354" y="13" />
+									<position x="100" y="-15" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="708" y="16" />
+									<position x="900" y="-15" />
 								</label>
 								<label type="changeability" identifier="">
 									<position x="500" y="15" />
@@ -956,7 +957,7 @@ The goal is to get keys from various locations to various new locations.</descri
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="954" y="-42" />
+									<position x="1108" y="-30" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -5870,10 +5871,8 @@ The goal is to get keys from various locations to various new locations.</descri
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

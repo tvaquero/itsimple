@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.21</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1181,19 +1181,19 @@
 									<position x="500" y="-15" />
 								</label>
 								<label type="rolename" identifier="1">
-									<position x="100" y="15" />
+									<position x="" y="" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="900" y="15" />
+									<position x="" y="" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="100" y="-15" />
+									<position x="" y="" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
+									<position x="" y="" />
 								</label>
 								<label type="changeability" identifier="">
-									<position x="500" y="15" />
+									<position x="" y="" />
 								</label>
 							</labels>
 							<points />
@@ -1303,12 +1303,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="487" y="58" />
+									<position x="367" y="60" />
 								</label>
 							</labels>
 							<points>
-								<point x="855" y="300" />
-								<point x="923" y="300" />
+								<point x="842" y="292" />
+								<point x="910" y="292" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1327,12 +1327,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="0" y="-28" />
+									<position x="1535" y="-197" />
 								</label>
 							</labels>
 							<points>
-								<point x="1030" y="199" />
-								<point x="1030" y="227" />
+								<point x="1012" y="203" />
+								<point x="1012" y="231" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1351,12 +1351,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="364" y="-8" />
+									<position x="4720" y="-39" />
 								</label>
 							</labels>
 							<points>
-								<point x="878" y="118" />
-								<point x="946" y="118" />
+								<point x="848" y="160" />
+								<point x="916" y="160" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1375,12 +1375,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="360" y="13" />
+									<position x="9079" y="-86" />
 								</label>
 							</labels>
 							<points>
-								<point x="322" y="152" />
-								<point x="294" y="152" />
+								<point x="280" y="120" />
+								<point x="343" y="120" />
 							</points>
 							<color />
 							<lineStyle />
@@ -3138,7 +3138,7 @@ and i.calibrated = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="566" y="491" />
+											<position x="480" y="490" />
 											<size width="168" height="111" />
 											<color />
 										</graphics>
@@ -3160,7 +3160,7 @@ and i.calibrated = true</condition>
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="862" y="489" />
+											<position x="927" y="491" />
 											<size width="171" height="112" />
 											<color />
 										</graphics>
@@ -4660,13 +4660,10 @@ and i.calibrated = true</condition>
 							</objectDiagram>
 						</objectDiagrams>
 						<constraints />
-						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

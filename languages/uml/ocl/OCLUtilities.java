@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2010 Universidade de Sao Paulo
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
-*
+
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import java.util.StringTokenizer;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 import org.jaxen.jdom.JDOMXPath;
@@ -75,8 +74,7 @@ public class OCLUtilities {
 			actionNode = (Element)commonData.getChild("internalUse").getChild("action").clone();
 
 			Element preconditionNode = actionNode.getChild("preconditions");
-			Element postconditionNode = actionNode.getChild("postconditions");
-                        Element annotatedconditionNode = actionNode.getChild("annotatedoclexpressions");
+			Element postconditionNode = actionNode.getChild("postconditions");			
 			
 			//1. Get Operator parameters
 			String strParameters = "";
@@ -86,7 +84,7 @@ public class OCLUtilities {
 				
 				Element tyClass = null;
 				try {
-					XPath path = new JDOMXPath("project/elements/classes/*[@id='"+parameter.getChildText("type")+"']");
+					XPath path = new JDOMXPath("project/elements/classes/class[@id='"+parameter.getChildText("type")+"']");
 					tyClass = (Element)path.selectSingleNode(operator.getDocument());
 				} catch (JaxenException e2) {			
 					e2.printStackTrace();
@@ -108,9 +106,8 @@ public class OCLUtilities {
 			actionNode.getChild("name").setText(operator.getChildText("name")+ "(" + strParameters + ")");
 			actionNode.getChild("parameters").setText(strParameters);
 			
-			//String actionContext = operatorClass.getChildText("name")+ "::" + operator.getChildText("name")+ "(" + strParameters + ")";
-
-
+			//String actionContext = operatorClass.getChildText("name")+ "::" + operator.getChildText("name")+ "(" + strParameters + ")";		
+			
 			//3. Get the pre and post condition in the stateMachine diagrams							
 			
 			//3.1. Find all state machine diagrams with this operator		
@@ -130,26 +127,22 @@ public class OCLUtilities {
 				//new condition section in the action template
 				Element diagramPreConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
 				Element diagramPostConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
-                                Element diagramAnnotatedConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
 				
 				preconditionNode.addContent(diagramPreConditions);
 				postconditionNode.addContent(diagramPostConditions);
-                                annotatedconditionNode.addContent(diagramAnnotatedConditions);
-                                
 				
 				//get the class of the diagram
 				if (!stateMachine.getChildText("class").trim().equals("")){
 					Element tyClass = null;
 					try {
-						XPath path = new JDOMXPath("project/elements/classes/*[@id='"+stateMachine.getChildText("class")+"']");
+						XPath path = new JDOMXPath("project/elements/classes/class[@id='"+stateMachine.getChildText("class")+"']");
 						tyClass = (Element)path.selectSingleNode(operator.getDocument());
 					} catch (JaxenException e2) {			
 						e2.printStackTrace();
 					}
 					if (tyClass != null){
 						diagramPreConditions.setAttribute("class",tyClass.getChildText("name"));
-						diagramPostConditions.setAttribute("class",tyClass.getChildText("name"));
-                                                diagramAnnotatedConditions.setAttribute("class",tyClass.getChildText("name"));
+						diagramPostConditions.setAttribute("class",tyClass.getChildText("name"));						
 					}				
 				}
 				
@@ -165,7 +158,7 @@ public class OCLUtilities {
 					e2.printStackTrace();
 				}
 				//3.2.2 Deal with each transition of the selected action in the following cases:
-				//  case 1: one transition only - simple
+				//	case 1: one transition only - simple
 				//  case 2: many transitions - work with general structure (operator OR in preconditions and IF THEN ENDIF in postconditions)
 	
 				Element conditionGroup = new Element("conditionGroup");
@@ -251,7 +244,6 @@ public class OCLUtilities {
 					String preconditionStr = "";
 					if(!eachStatePreCondition.getText().trim().equals(""))
 						preconditionStr = eachStatePreCondition.getText().trim();
-                                        
 					if(!eachActionPreCondition.getText().trim().equals("")){
 						if (!preconditionStr.trim().equals("")){
 							preconditionStr = preconditionStr + " and " +eachActionPreCondition.getText().trim(); 
@@ -279,18 +271,6 @@ public class OCLUtilities {
 					
 					if (!groupPre.getText().trim().equals("")) preconditionGroup.addContent(groupPre);
 					if (!groupPost.getText().trim().equals("")) postconditionGroup.addContent(groupPost);
-                                        
-                                        
-                                        //Get annotated pre- and post-conditions
-                                        Element annotatedConditions = eachAction.getChild("annotatedoclexpressions");
-                                        if (annotatedConditions!=null){
-                                            for (Iterator it = annotatedConditions.getChildren().iterator(); it.hasNext();) {
-                                                Element eachannot = (Element)it.next();
-                                                diagramAnnotatedConditions.addContent((Element)eachannot.clone());
-                                            }  
-                                        }
-                                       
-                                        
 					
 			
 				}// End of transition iteration			
@@ -357,96 +337,7 @@ public class OCLUtilities {
 				}				
 				
 				
-			}// End of diagram iteration
-
-            //4. get pre and post condition from the ocl constraints (pre: and post:) defined in the operator
-            //Check if there is something at the constraints
-            if (!operator.getChildText("constraints").trim().equals("")){
-                String opExpression = operator.getChildText("constraints").trim();
-                StringTokenizer tokenizer = new StringTokenizer(opExpression);
-                String preconditionString = "";
-                String postconditionString = "";
-                boolean isPrecondition = false;
-                boolean isPostcondition = false;
-                while (tokenizer.hasMoreTokens()) {
-                    String token = tokenizer.nextToken();
-                    boolean consider = true;
-                    
-                    if (token.equals("pre:")){//this is either the end or the beggining
-                        isPrecondition = true;
-                        isPostcondition = false;
-                        consider = false;
-                    }
-                    else if (token.equals("post:")){
-                        isPostcondition = true;
-                        isPrecondition = false;
-                        consider = false;
-                    }
-                    if (consider){
-                        if (isPrecondition){
-                            preconditionString += token + " ";
-                        }
-                        else if (isPostcondition){
-                            postconditionString += token + " ";
-                        }
-                    }
-                }
-                if (!preconditionString.trim().equals("")){
-                    //System.out.println("Precondition: " + preconditionString);
-
-                    //find the constraint of the class
-                    Element currentClassConstraints = null;
-                    Element preConditions = null;
-                    try {
-						XPath path = new JDOMXPath("conditions[@class='"+operatorClass.getChildText("name")+"']");
-						currentClassConstraints = (Element)path.selectSingleNode(preconditionNode);
-					} catch (JaxenException e2) {
-						e2.printStackTrace();
-					}
-                    if (currentClassConstraints!=null){
-                        preConditions = currentClassConstraints;
-                    }
-                    else{
-                        preConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
-                        preConditions.setAttribute("class",operatorClass.getChildText("name"));
-                    }
-                
-                    //insert in the preconditions
-                    Element condition = new Element("condition");
-                    condition.setText(preconditionString);
-                    preConditions.addContent(condition);
-                    preconditionNode.addContent(preConditions);
-
-                }
-                if (!postconditionString.trim().equals("")){
-                    //System.out.println("Postcondition: " + postconditionString);
-                    //find the constraint of the class
-                    Element currentClassConstraints = null;
-                    Element postConditions = null;
-                    try {
-						XPath path = new JDOMXPath("conditions[@class='"+operatorClass.getChildText("name")+"']");
-						currentClassConstraints = (Element)path.selectSingleNode(postconditionNode);
-					} catch (JaxenException e2) {
-						e2.printStackTrace();
-					}
-                    if (currentClassConstraints!=null){
-                        postConditions = currentClassConstraints;
-                    }
-                    else{
-                        postConditions = (Element)commonData.getChild("internalUse").getChild("conditions").clone();
-                        postConditions.setAttribute("class",operatorClass.getChildText("name"));
-                    }
-
-                    Element condition = new Element("condition");
-                    condition.setText(postconditionString);
-                    postConditions.addContent(condition);
-                    postconditionNode.addContent(postConditions);
-                }
-	
-            }
-
-
-
+			}// End of diagram iteration		
 			
 		}
 		

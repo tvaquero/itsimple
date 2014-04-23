@@ -1,9 +1,9 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
-*
+
 * This file is part of itSIMPLE.
 *
 * itSIMPLE is free software: you can redistribute it and/or modify
@@ -32,19 +32,11 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +50,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -152,19 +143,18 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
                             //Before closing ckeck the inserted name
                             
                             // check the presence of "-"
-                            if (nameTextField != null){
-                                String name = nameTextField.getText();
+				String name = nameTextField.getText();
 				if(name.indexOf("-") > -1){
 					JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
 							"<html><center>The character \"-\" " +
 							"can not be used.</center></html>",
 							"Not Allowed Character",
 							JOptionPane.WARNING_MESSAGE);
-
+					
 					nameTextField.setText(data.getChildText("name"));
 				}
                                 else{
-					if (senderObject instanceof JTable){
+					if (senderObject instanceof JTable){				
 						JTable table = (JTable)senderObject;
 						DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
 						tableModel.setValueAt(nameTextField.getText(), table.getSelectedRow(), 0);
@@ -175,21 +165,18 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 						model.set(list.getSelectedIndex(), nameTextField.getText());
 						data.getChild("name").setText(nameTextField.getText());
 						propertiesPane.repaintSelectedElement();
-
+						
 						ItTreeNode operatorNode = ItSIMPLE.getInstance().getItTree().findNodeFromData(data.getDocument().getRootElement(), data);
 						operatorNode.setUserObject(nameTextField.getText());
                                                 DefaultTreeModel treeModel = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
                                                 treeModel.nodeChanged(operatorNode);
-
+		            	
 						// repaint open diagrams
-						ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+						ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
 						tabbed.repaintOpenDiagrams("stateMachineDiagram");
 					}
-                                        dispose();                                
-                            }
-                            }else{//in case there is no name involve (e.g. attribute list)
-                                dispose();
-                            }
+                                        dispose();
+				}
 				
 			}
 		});
@@ -242,12 +229,6 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 			JLabel nameLabel = new JLabel("Name ");			
 			nameTextField = new JTextField(15);
 			nameTextField.addKeyListener(this);
-                        nameTextField.addFocusListener(new FocusAdapter() {
-                                    @Override
-                                    public void focusLost(FocusEvent e) {                                
-                                      setTextComponentChange(e);
-                                    }
-                                  });
 			//nameTextField.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 			
 			// attribute type and dialog title
@@ -260,7 +241,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				attributeType.addItem("",null);
 				List<?> result = null;
 				try {
-					XPath path = new JDOMXPath("project/elements/classes/*");
+					XPath path = new JDOMXPath("project/elements/classes/class");
 					result = path.selectNodes(data.getDocument());
 				} catch (JaxenException e2) {			
 					e2.printStackTrace();
@@ -273,7 +254,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				
 				Element typeClass = null;
 				try {
-					XPath path = new JDOMXPath("project/elements/classes/*[@id='"+data.getChildText("type")+"']");
+					XPath path = new JDOMXPath("project/elements/classes/class[@id='"+data.getChildText("type")+"']");
 					typeClass = (Element)path.selectSingleNode(data.getDocument());
 				} catch (JaxenException e2) {			
 					e2.printStackTrace();
@@ -287,12 +268,6 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				JLabel initialValueLabel = new JLabel("Initial ");
 				initialValueField = new JTextField(15);
 				initialValueField.addKeyListener(this);
-                                initialValueField.addFocusListener(new FocusAdapter() {
-                                    @Override
-                                    public void focusLost(FocusEvent e) {                                
-                                      setTextComponentChange(e);
-                                    }
-                                  });
 				//initialValueField.setCursor(Cursor.getDefaultCursor());
 				
 				initialValuePanel.add(initialValueLabel, BorderLayout.WEST);
@@ -371,7 +346,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 			
 			Element typeClass = null;
 			try {
-				XPath path = new JDOMXPath("project/elements/classes/*[@id='"+data.getChildText("type")+"']");
+				XPath path = new JDOMXPath("project/elements/classes/class[@id='"+data.getChildText("type")+"']");
 				typeClass = (Element)path.selectSingleNode(data.getDocument());
 			} catch (JaxenException e2) {			
 				e2.printStackTrace();
@@ -418,7 +393,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 		
 		Element typeClass = null;
 		try {
-			XPath path = new JDOMXPath("project/elements/classes/*[@id='"+parameter.getChildText("type")+"']");
+			XPath path = new JDOMXPath("project/elements/classes/class[@id='"+parameter.getChildText("type")+"']");
 			typeClass = (Element)path.selectSingleNode(parameter.getDocument());
 		} catch (JaxenException e2) {			
 			e2.printStackTrace();
@@ -445,13 +420,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 
 			durationField = new JTextField();
 			durationField = new JTextField(15);
-			durationField.addKeyListener(this);
-                        durationField.addFocusListener(new FocusAdapter() {
-                                    @Override
-                                    public void focusLost(FocusEvent e) {                                
-                                      setTextComponentChange(e);
-                                    }
-                                  });
+			durationField.addKeyListener(this);	
 			
 			timedComboBox = new ItComboBox();			
 			ComboBoxRenderer renderer = new ComboBoxRenderer();
@@ -514,7 +483,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				
 				Element typeClass = null;
 				try {
-					XPath path = new JDOMXPath("project/elements/classes/*[@id='" + parameter.getChildText("type")+"']");
+					XPath path = new JDOMXPath("project/elements/classes/class[@id='" + parameter.getChildText("type")+"']");
 					typeClass = (Element)path.selectSingleNode(parameter.getDocument());					
 				} catch (JaxenException e2) {			
 					e2.printStackTrace();
@@ -549,8 +518,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 							column.setCellEditor(new DefaultCellEditor(new JTextField()));
 					}
 					else {
-			
-                                                // if it's not a Boolean, Int, Float nor String then its class is in this project
+						// if it's not a Boolean, Int, Float or String then its class is in this project
 						ItComboBox value = new ItComboBox();	
 						value.addItem("");
 						Element domain;
@@ -562,61 +530,44 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 							domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
 						}
 						
-						List<?> result = null;
-
-                                                //typeClass can be either a class or a enumeration
-                                                //if it is a class
-						if (typeClass.getName().equals("class")){
-                                                    //Get all descendent classes of typeClass
-                                                    List<?> descendents = XMLUtilities.getClassDescendents(typeClass);
-
-                                                    //create the queries for xpath
-                                                    String descendentsQuery = "";
-
-                                                    for (Iterator<?> iter = descendents.iterator(); iter.hasNext();) {
-                                                        Element descendent = (Element) iter.next();
-                                                        String each = "";
-                                                        each = "class='" + descendent.getAttributeValue("id") + "'";
-                                                        if (iter.hasNext()){
-                                                            each = each + " or ";
-                                                        }
-                                                        descendentsQuery = descendentsQuery + each;
-                                                    }
-                                                    if (descendentsQuery.equals(""))
-                                                        descendentsQuery = "class='" + typeClass.getAttributeValue("id") + "'";			
-                                                    else
-                                                        descendentsQuery = descendentsQuery + " or class='" + typeClass.getAttributeValue("id") + "'";
-
-
-                                                    try {					
-                                                        XPath path = new JDOMXPath("elements/objects/object["
-                                                                +descendentsQuery+"]");
-                                                        result = path.selectNodes(domain);
-
-                                                    } catch (JaxenException e2) {			
-                                                        e2.printStackTrace();
-                                                    }
-
-                                                }
-                                                //if it is a enumeration
-                                                else if(typeClass.getName().equals("enumeration")){
-                                                    try {					
-                                                        XPath path = new JDOMXPath("project/elements/classes/enumeration[@id='"+typeClass.getAttributeValue("id")+"']/literals/literal");
-                                                        result = path.selectNodes(domain.getDocument());
-
-                                                    } catch (JaxenException e2) {			
-                                                        e2.printStackTrace();
-                                                    }
-
-                                                }
-
-                                                //add values to the list (either objects or literals
+						
+						//Get all descendent classes of typeClass
+						List<?> descendents = XMLUtilities.getClassDescendents(typeClass);
+											
+						//create the queries for xpath
+						String descendentsQuery = "";
+						
+						for (Iterator<?> iter = descendents.iterator(); iter.hasNext();) {
+							Element descendent = (Element) iter.next();
+							String each = "";
+							each = "class='" + descendent.getAttributeValue("id") + "'";
+							if (iter.hasNext()){
+								each = each + " or ";
+							}
+							descendentsQuery = descendentsQuery + each;
+						}
+						if (descendentsQuery.equals(""))
+							descendentsQuery = "class='" + typeClass.getAttributeValue("id") + "'";			
+						else
+							descendentsQuery = descendentsQuery + " or class='" + typeClass.getAttributeValue("id") + "'";
+						
+						List<?> result = null;			
+						try {					
+							XPath path = new JDOMXPath("elements/objects/object["
+									+descendentsQuery+"]");
+							result = path.selectNodes(domain);
+							
+						} catch (JaxenException e2) {			
+							e2.printStackTrace();
+						}
 						if (result != null){
 							Iterator<?> objects = result.iterator();
 							while(objects.hasNext()){
 								Element object = (Element)objects.next();
 								value.addItem(object.getChildText("name"));
 							}
+							
+						
 						}
 						
 						column.setCellEditor(new DefaultCellEditor(value));
@@ -629,7 +580,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 			//2. set value editor column 
 			Element typeClass = null;
 			try {
-				XPath path = new JDOMXPath("project/elements/classes/*[@id='" + additional.getChildText("type")+"']");
+				XPath path = new JDOMXPath("project/elements/classes/class[@id='" + additional.getChildText("type")+"']");
 				typeClass = (Element)path.selectSingleNode(additional.getDocument());					
 			} catch (JaxenException e2) {			
 				e2.printStackTrace();
@@ -664,26 +615,20 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 						column.setCellEditor(new DefaultCellEditor(new JTextField()));
 				}
 				else {
-                                        // if it's not a Boolean, Int, Float or String then its class is in this project
+					// if it's not a Boolean, Int, Float or String then its class is in this project
 					ItComboBox value = new ItComboBox();	
 					value.addItem("");
-					//			attributes		object		objects			objectDiagram		objectDiagrams		problem							
-					Element domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                                        //in case this is a snapshot we need to reach the domain going up
-                                        if (domain.getName().equals("problem")){
-                                            domain = domain.getParentElement().getParentElement();
-                                        }
-
+					// 						attributes			object				objects			objectDiagram		objectDiagrams		problem							
+					Element problem = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
 					List<?> result = null;			
 					try {					
 						XPath path = new JDOMXPath("elements/objects/object[class='"
 								+typeClass.getAttributeValue("id")+"']");
-						result = path.selectNodes(domain);
+						result = path.selectNodes(problem);
 						
 					} catch (JaxenException e2) {			
 						e2.printStackTrace();
 					}
-
 					if (result != null){
 						Iterator<?> objects = result.iterator();
 						while(objects.hasNext()){
@@ -743,10 +688,6 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 			JToolBar toolBar = new JToolBar();
 			toolBar.add(newParameterizedValue);
 			toolBar.add(deleteParameterizedValue);
-                        toolBar.addSeparator();
-                        toolBar.add(doAllcombination2parameters).setToolTipText("Create all combinations of parameters.");
-                        toolBar.add(getValuesFromFile).setToolTipText("Get values (only) from txt file. Each value in a line.");
-                        //toolBar.add(getRowValuesFromFile);
 			
 			parametersValuesPanel.add(scrollText, BorderLayout.CENTER);
 			parametersValuesPanel.add(toolBar, BorderLayout.SOUTH);
@@ -845,61 +786,6 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 		
 		return constraintsPanel;
 	}
-        
-        public void setTextComponentChange(ComponentEvent e){
-            if (e.getSource() == nameTextField){
-				
-                // check the presence of "-"
-                String name = nameTextField.getText();
-                if(name.indexOf("-") > -1){
-                        JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
-                                        "<html><center>The character \"-\" " +
-                                        "can not be used.</center></html>",
-                                        "Not Allowed Character",
-                                        JOptionPane.WARNING_MESSAGE);
-
-                        nameTextField.setText(data.getChildText("name"));
-                }
-                else{
-                        if (senderObject instanceof JTable){				
-                                JTable table = (JTable)senderObject;
-                                DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
-                                tableModel.setValueAt(nameTextField.getText(), table.getSelectedRow(), 0);
-                        }
-
-                        else if(senderObject instanceof JList){
-                                JList list = (JList)senderObject;
-                                DefaultListModel model = (DefaultListModel)list.getModel();
-                                model.set(list.getSelectedIndex(), nameTextField.getText());
-                                data.getChild("name").setText(nameTextField.getText());
-                                propertiesPane.repaintSelectedElement();
-
-                                ItTreeNode operatorNode = ItSIMPLE.getInstance().getItTree().findNodeFromData(data.getDocument().getRootElement(), data);
-                                operatorNode.setUserObject(nameTextField.getText());
-                DefaultTreeModel treeModel = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
-                treeModel.nodeChanged(operatorNode);
-
-                                // repaint open diagrams
-                                ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
-                                tabbed.repaintOpenDiagrams("stateMachineDiagram");
-                        }
-                }
-        }
-        else if (e.getSource() == initialValueField){
-                if (senderObject instanceof JTable){				
-                        JTable table = (JTable)senderObject;
-                        DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
-                        tableModel.setValueAt(initialValueField.getText(), table.getSelectedRow(), 2);
-                }
-        }
-        else if (e.getSource() == durationField){				
-                data.getChild("timeConstraints").getChild("duration").setText(durationField.getText());
-        }
-        else if (e.getSource() == attributeMultiplicity){
-                data.getChild("multiplicity").setText(attributeMultiplicity.getSelectedItem().toString());
-        }
-        }
-        
 	
 	public void keyTyped(KeyEvent e) {
 		
@@ -907,7 +793,57 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER){
-			setTextComponentChange(e);
+			if (e.getSource() == nameTextField){
+				
+				// check the presence of "-"
+				String name = nameTextField.getText();
+				if(name.indexOf("-") > -1){
+					JOptionPane.showMessageDialog(ItSIMPLE.getItSIMPLEFrame(),
+							"<html><center>The character \"-\" " +
+							"can not be used.</center></html>",
+							"Not Allowed Character",
+							JOptionPane.WARNING_MESSAGE);
+					
+					nameTextField.setText(data.getChildText("name"));
+				}
+				else{
+					if (senderObject instanceof JTable){				
+						JTable table = (JTable)senderObject;
+						DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
+						tableModel.setValueAt(nameTextField.getText(), table.getSelectedRow(), 0);
+					}
+					
+					else if(senderObject instanceof JList){
+						JList list = (JList)senderObject;
+						DefaultListModel model = (DefaultListModel)list.getModel();
+						model.set(list.getSelectedIndex(), nameTextField.getText());
+						data.getChild("name").setText(nameTextField.getText());
+						propertiesPane.repaintSelectedElement();
+						
+						ItTreeNode operatorNode = ItSIMPLE.getInstance().getItTree().findNodeFromData(data.getDocument().getRootElement(), data);
+						operatorNode.setUserObject(nameTextField.getText());
+		            	DefaultTreeModel treeModel = (DefaultTreeModel) ItSIMPLE.getInstance().getItTree().getModel();
+		            	treeModel.nodeChanged(operatorNode);
+		            	
+						// repaint open diagrams
+						ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+						tabbed.repaintOpenDiagrams("stateMachineDiagram");
+					}
+				}
+			}
+			else if (e.getSource() == initialValueField){
+				if (senderObject instanceof JTable){				
+					JTable table = (JTable)senderObject;
+					DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
+					tableModel.setValueAt(initialValueField.getText(), table.getSelectedRow(), 2);
+				}
+			}
+			else if (e.getSource() == durationField){				
+				data.getChild("timeConstraints").getChild("duration").setText(durationField.getText());
+			}
+			else if (e.getSource() == attributeMultiplicity){
+				data.getChild("multiplicity").setText(attributeMultiplicity.getSelectedItem().toString());
+			}			
 		}		
 	}
 	
@@ -937,7 +873,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				if (data.getName().equals("attribute")){
 					List<?> result = null;
 					try {
-						XPath path = new JDOMXPath("project/diagrams/planningDomains/domain/planningProblems/problem/objectDiagrams/objectDiagram/objects/object/attributes/attribute[@class='"+ data.getParentElement().getParentElement().getAttributeValue("id")+ "' and @id='" + data.getAttributeValue("id")+ "']/value/parameterizedValue/parameters");
+						XPath path = new JDOMXPath("project/diagrams/planningProblems/problem/objectDiagrams/objectDiagram/objects/object/attributes/attribute[@class='"+ data.getParentElement().getParentElement().getAttributeValue("id")+ "' and @id='" + data.getAttributeValue("id")+ "']/value/parameterizedValue/parameters");
 						result = path.selectNodes(data.getDocument());
 					} catch (JaxenException e2) {			
 						e2.printStackTrace();
@@ -959,42 +895,6 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				// repaint open diagrams
 				ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
 				tabbed.repaintOpenDiagrams("stateMachineDiagram");
-
-                                if (data.getName().equals("operator")){
-                                    //check if there is any actionCounter metric of this action to update
-                                    //domain metrics
-                                    List<Element> result = new ArrayList();
-                                    List<Element> domainMetrics = null;
-                                    List<Element> problemMetrics = null;
-                                    try {
-                                            XPath path = new JDOMXPath("project/diagrams/planningDomains/domain/metrics/qualityMetric/actionCounter/chosenOperator[@class='"+ data.getParentElement().getParentElement().getAttributeValue("id")+ "' and @id='" + data.getAttributeValue("id")+ "']");
-                                            domainMetrics = path.selectNodes(data.getDocument());
-                                    } catch (JaxenException e2) {
-                                            e2.printStackTrace();
-                                    }
-                                    //problem metrics
-                                    try {
-                                            XPath path = new JDOMXPath("project/diagrams/planningDomains/domain/planningProblems/problem/metrics/qualityMetric/actionCounter/chosenOperator[@class='"+ data.getParentElement().getParentElement().getAttributeValue("id")+ "' and @id='" + data.getAttributeValue("id")+ "']");
-                                            problemMetrics = path.selectNodes(data.getDocument());
-                                    } catch (JaxenException e2) {
-                                            e2.printStackTrace();
-                                    }
-
-                                    if (domainMetrics != null){result.addAll(domainMetrics);}
-                                    if (problemMetrics != null){result.addAll(problemMetrics);}
-
-                                    //Add a referencial parameter for each actionCounter found
-                                    if (result!= null && result.size() > 0){
-                                        for (int i = 0; i < result.size(); i++){
-                                            Element chosenOperator = (Element)result.get(i);
-                                            Element parameterRef = new Element("parameter");
-                                            parameterRef.setAttribute("id", parameter.getAttributeValue("id"));
-                                            parameterRef.setAttribute("object", "");
-                                            chosenOperator.getChild("parameters").addContent(parameterRef);
-                                        }
-                                    }
-                                }
-
 				
 			}		
 		}
@@ -1051,64 +951,17 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 						}
 						
 					}
-
-                                        else if (data.getName().equals("operator")){
-                                            //check if there is any actionCounter metric of this action to update
-                                            //domain metrics
-                                            List<Element> result = new ArrayList();
-                                            List<Element> domainMetrics = null;
-                                            List<Element> problemMetrics = null;
-                                            try {
-                                                    XPath path = new JDOMXPath("project/diagrams/planningDomains/domain/metrics/qualityMetric/actionCounter/chosenOperator[@class='"+ data.getParentElement().getParentElement().getAttributeValue("id")+ "' and @id='" + data.getAttributeValue("id")+ "']/parameters/parameter[@id='"+selectedParameter.getAttributeValue("id")+"']");
-                                                    domainMetrics = path.selectNodes(data.getDocument());
-                                            } catch (JaxenException e2) {
-                                                    e2.printStackTrace();
-                                            }
-                                            //problem metrics
-                                            try {
-                                                    XPath path = new JDOMXPath("project/diagrams/planningDomains/domain/planningProblems/problem/metrics/qualityMetric/actionCounter/chosenOperator[@class='"+ data.getParentElement().getParentElement().getAttributeValue("id")+ "' and @id='" + data.getAttributeValue("id")+ "']/parameters/parameter[@id='"+selectedParameter.getAttributeValue("id")+"']");
-                                                    problemMetrics = path.selectNodes(data.getDocument());
-                                            } catch (JaxenException e2) {
-                                                    e2.printStackTrace();
-                                            }
-
-                                            if (domainMetrics != null){result.addAll(domainMetrics);}
-                                            if (problemMetrics != null){result.addAll(problemMetrics);}
-
-                                            //Add a referencial parameter for each actionCounter found
-                                            if (result!= null && result.size() > 0){
-                                                for (int i = 0; i < result.size(); i++){
-                                                    try {
-                                                        Element parameterOperator = (Element)result.get(i);
-                                                        Element chosenOperatorPars = parameterOperator.getParentElement();
-                                                        chosenOperatorPars.removeContent(parameterOperator);
-                                                    } catch (Exception ae) {
-                                                        System.out.println("delete actionCounter parameter exception");
-                                                    }
-                                                    
-                                                }
-                                            }
-                                        }
-
-
-                                        // repaint open diagrams
-					ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-					tabbed.repaintOpenDiagrams("stateMachineDiagram");
-
+					
+					
 					data.getChild("parameters").removeContent(selectedParameter);
 					tableModel.removeRow(row);
 					currentParameters.remove(row);
 					
 					propertiesPane.repaintSelectedElement();
 					
-
-
-
-
-
-
-
-
+					// repaint open diagrams
+					ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+					tabbed.repaintOpenDiagrams("stateMachineDiagram");
 				}
 			}
 		}
@@ -1250,682 +1103,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				
 			}		
 		}
-	};
-        
-        
-        
-        private Action doAllcombination2parameters = new AbstractAction("Automatic creation of parameters combination",new ImageIcon("resources/images/multiobjects.png")){
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3140378760767310300L;
-
-		public void actionPerformed(ActionEvent e) {		
-			if (data != null){
-//				 checks whether there is a cell being edited and cancells the edition
-				int column = parametersValuesTable.getSelectedColumn();
-				if (column > -1){
-					parametersValuesTable.getColumnModel().getColumn(column).getCellEditor().cancelCellEditing();
-                                }
-                                
-                                if (currentColumn.size() == 1){
-                                    Element parameter1 = currentColumn.get(0);
-                                    
-                                    //List<Element> result1 = getAllObjectFromParameter(parameter1);                                                                      
-                                    List<Element> result1 = getAllProblemObjectsFromParameter(parameter1);                                    
-                                                                                                           
-                                    
-                                    //add values to the list (either objects or literals
-                                    if (result1 != null){
-                                            Iterator<Element> objects1 = result1.iterator();
-                                                                                        
-                                            while(objects1.hasNext()){
-                                                    Element object1 = (Element)objects1.next();
-                                                    
-                                                        
-                                                        //create new parameterizedValue node
-                                                        Element parameterizedValue = (Element)commonData.getChild("definedNodes").getChild("elements")
-                                                                .getChild("references").getChild("parameterizedValue").clone();
-                                                        String id = String.valueOf(XMLUtilities.getId(data.getChild("value")));
-                                                        parameterizedValue.getAttribute("id").setValue(id);
-                                                        
-                                                         //set parameter
-                                                        Iterator<Element> iter = currentColumn.iterator();
-                                                        while(iter.hasNext()){
-                                                                Element eachParameter = iter.next();
-                                                                Element newParameter = (Element)commonData.getChild("definedNodes").getChild("elements")
-                                                                .getChild("references").getChild("parameter").clone();
-                                                                newParameter.setAttribute("id", eachParameter.getAttributeValue("id"));
-                                                                parameterizedValue.getChild("parameters").addContent(newParameter);
-                                                                
-                                                        }
-                                                        //set value
-                                                        if (!additional.getChildText("initialValue").trim().equals("")){
-                                                                parameterizedValue.getChild("value").setText(additional.getChildText("initialValue"));
-                                                        }
-                                                        
-                                                        //set parameters pair
-                                                        Element par1 = (Element)parameterizedValue.getChild("parameters").getChildren().get(0);
-                                                        par1.getChild("value").setText(object1.getChildText("name"));
-                                                        
-                                                        //XMLUtilities.printXML(parameterizedValue);
-                                                                                                                
-                                                        data.getChild("value").addContent(parameterizedValue);
-                                                        
-                                                        // if that is done in the repository, send the new parameterized value to all other references of this object in that domain
-                                                        if(data.getParentElement().getParentElement().getParentElement().getParentElement().getName().equals("repositoryDiagram")){					
-                                                                //                    attributes	 object		    objects	       repositoryDiagram  repositoryDiagrams domain
-                                                                Element domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                                                                Element object = data.getParentElement().getParentElement();
-                                                                List<?> result = null;
-                                                                try {
-                                                                        XPath path = new JDOMXPath("planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='"+ object.getAttributeValue("id")
-                                                                                        +"']/attributes/attribute[@id='"+ data.getAttributeValue("id") +"']");
-                                                                        result = path.selectNodes(domain);
-                                                                } catch (JaxenException e2) {			
-                                                                        e2.printStackTrace();
-                                                                }
-                                                                for (Iterator<?> iterator = result.iterator(); iterator.hasNext();) {
-                                                                        Element attribute = (Element) iterator.next();
-                                                                        Element refParamValue = (Element)parameterizedValue.clone();
-
-                                                                        //add the value in the last position
-                                                                        attribute.getChild("value").addContent(refParamValue);
-                                                                        if(attribute.getChild("value").getChildren().size() >= Integer.parseInt(id)){
-                                                                                // if there is already a value with this id, reset all the other values							
-                                                                                List<?> idResetList = null;
-                                                                                try {
-                                                                                        XPath path = new JDOMXPath("parameterizedValue[@id>="+ id +"]");
-                                                                                        idResetList = path.selectNodes(attribute.getChild("value"));
-                                                                                } catch (JaxenException e2) {			
-                                                                                        e2.printStackTrace();
-                                                                                }
-                                                                                for (Iterator<?> iterat = idResetList.iterator(); iterat.hasNext();) {
-                                                                                        // increase the other ids
-                                                                                        Element paramValue = (Element) iterat.next();
-                                                                                        if(paramValue != refParamValue){
-                                                                                                // increase the id
-                                                                                                int newId = Integer.parseInt(paramValue.getAttributeValue("id")) + 1;									
-                                                                                                paramValue.setAttribute("id", String.valueOf(newId));
-                                                                                                //remove the node and readd it in the last position
-                                                                                                Element parent = paramValue.getParentElement();
-                                                                                                parent.removeContent(paramValue);
-                                                                                                parent.addContent(paramValue);
-                                                                                        }
-                                                                                }
-                                                                        }						
-                                                                }
-                                                        }
-                                                        
-                                                        currentParameters.add(parameterizedValue);	
-                                                        showParameterizedValue(parameterizedValue);			
-                                                                                                                                                                                                                                
-
-                                            }
-                                            propertiesPane.repaintSelectedElement();
-                                    }
-                                }
-                                //two parameters
-                                else if (currentColumn.size() == 2){
-                                    
-                                    Element parameter1 = currentColumn.get(0);
-                                    Element parameter2 = currentColumn.get(1);
-                                    
-                                
-                                    //List<Element> result1 = getAllObjectFromParameter(parameter1);                                    
-                                    //List<Element> result2 = getAllObjectFromParameter(parameter2);
-                                    
-                                    List<Element> result1 = getAllProblemObjectsFromParameter(parameter1);                                    
-                                    List<Element> result2 = getAllProblemObjectsFromParameter(parameter2);
-                                                                                                           
-                                    
-                                    //add values to the list (either objects or literals
-                                    if (result1 != null && result2 != null){
-                                            Iterator<Element> objects1 = result1.iterator();
-                                                                                        
-                                            while(objects1.hasNext()){
-                                                    Element object1 = (Element)objects1.next();
-                                                    
-                                                    Iterator<Element> objects2 = result2.iterator();
-                                                    while(objects2.hasNext()){
-                                                        Element object2 = (Element)objects2.next();
-                                                        
-                                                        //create new parameterizedValue node
-                                                        Element parameterizedValue = (Element)commonData.getChild("definedNodes").getChild("elements")
-                                                                .getChild("references").getChild("parameterizedValue").clone();
-                                                        String id = String.valueOf(XMLUtilities.getId(data.getChild("value")));
-                                                        parameterizedValue.getAttribute("id").setValue(id);
-                                                        
-                                                         //set parameter
-                                                        Iterator<Element> iter = currentColumn.iterator();
-                                                        while(iter.hasNext()){
-                                                                Element eachParameter = iter.next();
-                                                                Element newParameter = (Element)commonData.getChild("definedNodes").getChild("elements")
-                                                                .getChild("references").getChild("parameter").clone();
-                                                                newParameter.setAttribute("id", eachParameter.getAttributeValue("id"));
-                                                                parameterizedValue.getChild("parameters").addContent(newParameter);
-                                                                
-                                                        }
-                                                        //set value
-                                                        if (!additional.getChildText("initialValue").trim().equals("")){
-                                                                parameterizedValue.getChild("value").setText(additional.getChildText("initialValue"));
-                                                        }
-                                                        
-                                                        //set parameters pair
-                                                        Element par1 = (Element)parameterizedValue.getChild("parameters").getChildren().get(0);
-                                                        Element par2 = (Element)parameterizedValue.getChild("parameters").getChildren().get(1);
-                                                        par1.getChild("value").setText(object1.getChildText("name"));
-                                                        par2.getChild("value").setText(object2.getChildText("name"));
-                                                        
-                                                        //XMLUtilities.printXML(parameterizedValue);
-                                                                                                                
-                                                        data.getChild("value").addContent(parameterizedValue);
-
-                                                        
-                                                        // if that is done in the repository, send the new parameterized value to all other references of this object in that domain
-                                                        if(data.getParentElement().getParentElement().getParentElement().getParentElement().getName().equals("repositoryDiagram")){					
-                                                                //                    attributes	 object		    objects	       repositoryDiagram  repositoryDiagrams domain
-                                                                Element domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                                                                Element object = data.getParentElement().getParentElement();
-                                                                List<?> result = null;
-                                                                try {
-                                                                        XPath path = new JDOMXPath("planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='"+ object.getAttributeValue("id")
-                                                                                        +"']/attributes/attribute[@id='"+ data.getAttributeValue("id") +"']");
-                                                                        result = path.selectNodes(domain);
-                                                                } catch (JaxenException e2) {			
-                                                                        e2.printStackTrace();
-                                                                }
-                                                                for (Iterator<?> iterator = result.iterator(); iterator.hasNext();) {
-                                                                        Element attribute = (Element) iterator.next();
-                                                                        Element refParamValue = (Element)parameterizedValue.clone();
-
-                                                                        //add the value in the last position
-                                                                        attribute.getChild("value").addContent(refParamValue);
-                                                                        if(attribute.getChild("value").getChildren().size() >= Integer.parseInt(id)){
-                                                                                // if there is already a value with this id, reset all the other values							
-                                                                                List<?> idResetList = null;
-                                                                                try {
-                                                                                        XPath path = new JDOMXPath("parameterizedValue[@id>="+ id +"]");
-                                                                                        idResetList = path.selectNodes(attribute.getChild("value"));
-                                                                                } catch (JaxenException e2) {			
-                                                                                        e2.printStackTrace();
-                                                                                }
-                                                                                for (Iterator<?> iterat = idResetList.iterator(); iterat.hasNext();) {
-                                                                                        // increase the other ids
-                                                                                        Element paramValue = (Element) iterat.next();
-                                                                                        if(paramValue != refParamValue){
-                                                                                                // increase the id
-                                                                                                int newId = Integer.parseInt(paramValue.getAttributeValue("id")) + 1;									
-                                                                                                paramValue.setAttribute("id", String.valueOf(newId));
-                                                                                                //remove the node and readd it in the last position
-                                                                                                Element parent = paramValue.getParentElement();
-                                                                                                parent.removeContent(paramValue);
-                                                                                                parent.addContent(paramValue);
-                                                                                        }
-                                                                                }
-                                                                        }						
-                                                                }
-                                                        }
-                                                        
-                                                        currentParameters.add(parameterizedValue);	
-                                                        showParameterizedValue(parameterizedValue);			
-                                                        
-                                                                                                                
-                                                        
-                                                    }
-                                            }
-                                            propertiesPane.repaintSelectedElement();
-                                    }
-                                    
-                                                                                                                                               
-                                    
-                                }
-	
-			}		
-		}
-	};
-        
-
-        
-        private Action getValuesFromFile = new AbstractAction("get values (only) from txt file",new ImageIcon("resources/images/import.png")){
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3140378760767310300L;
-
-		public void actionPerformed(ActionEvent e) {		
-			if (data != null){
-                            //checks whether there is a cell being edited and cancells the edition
-                            int column = parametersValuesTable.getSelectedColumn();
-                            if (column > -1){
-                                    parametersValuesTable.getColumnModel().getColumn(column).getCellEditor().cancelCellEditing();
-                            }
-                            
-                            String lastOpenFolder = "";
-                            Element lastOpenFolderElement = ItSIMPLE.getItSettings().getChild("generalSettings").getChild("lastOpenFolder");
-                            if (lastOpenFolderElement != null){
-                                    lastOpenFolder = lastOpenFolderElement.getText();
-                            }                            
-                            
-                            JFileChooser fc = new JFileChooser(lastOpenFolder);
-                            fc.setDialogTitle("Open Project");
-                            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                            //fc.setFileFilter(new XMLFileFilter());
-                            int returnVal = fc.showOpenDialog(EditDialog.this);
-                            if (returnVal == JFileChooser.APPROVE_OPTION){
-                                    File file = fc.getSelectedFile();
-                                    //System.out.println(file.getAbsolutePath());
-                                    List<String> valueList = new ArrayList<String>();
-                                    try{
-                                        // Open the file that is the first 
-                                        // command line parameter
-                                        FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
-                                        // Get the object of DataInputStream
-                                        DataInputStream in = new DataInputStream(fstream);
-                                        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                                        String strLine;
-                                        //Read File Line By Line
-                                        while ((strLine = br.readLine()) != null) 	{
-                                                // Print the content on the console
-                                                //System.out.println (strLine);
-                                                valueList.add(strLine.trim());
-                                        }
-                                        //Close the input stream
-                                        in.close();
-                                    }catch (Exception ex){//Catch exception if any
-                                            System.err.println("Error: " + ex.getMessage());
-                                    }
-                                    if (valueList.size() > 0){
-                                        int index = 0;
-                                        Element parameterizedValues = data.getChild("value");
-                                        for (Iterator<Element> it = parameterizedValues.getChildren().iterator(); it.hasNext();) {
-                                            Element each = it.next();
-                                            //each.getChild("value").setText(valueList.get(index));                                            
-                                            parametersValuesTableModel.setValueAt(valueList.get(index), index, currentColumn.size());
-                                            index++;
-                                        }
-                                       
-                                    }
-                                    
-                                    
-                                    if (lastOpenFolderElement != null){
-					//Holds the last open folder
-					if (!lastOpenFolderElement.getText().equals(file.getParent())){
-						lastOpenFolderElement.setText(file.getParent());
-						XMLUtilities.writeToFile("resources/settings/itSettings.xml", ItSIMPLE.getItSettings().getDocument());
-					}
-                                    } 
-                            }
-
-                            
-                            
-	
-	
-			}		
-		}
-	};
-        
-        
-
-                
-        private Action getRowValuesFromFile = new AbstractAction("get values from txt file",new ImageIcon("resources/images/import.png")){
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3140378760767310300L;
-
-		public void actionPerformed(ActionEvent e) {		
-			if (data != null){
-                            //checks whether there is a cell being edited and cancells the edition
-                            int column = parametersValuesTable.getSelectedColumn();
-                            if (column > -1){
-                                    parametersValuesTable.getColumnModel().getColumn(column).getCellEditor().cancelCellEditing();
-                            }
-                            
-                            String lastOpenFolder = "";
-                            Element lastOpenFolderElement = ItSIMPLE.getItSettings().getChild("generalSettings").getChild("lastOpenFolder");
-                            if (lastOpenFolderElement != null){
-                                    lastOpenFolder = lastOpenFolderElement.getText();
-                            }
-                            
-                            Element theObject = data.getParentElement().getParentElement();
-                            Element problem = theObject.getParentElement().getParentElement().getParentElement().getParentElement();
-                            Element domain = problem.getParentElement().getParentElement();
-                            System.out.println(theObject.getName());
-                            System.out.println(problem.getName());
-                            System.out.println(domain.getName());
-                            
-                            Element objnode = null;
-                            try {
-                                    XPath path = new JDOMXPath("elements/objects/object[@id="+ theObject.getAttributeValue("id") +"]");
-                                    objnode = (Element)path.selectSingleNode(domain);
-                            } catch (JaxenException e2) {			
-                                    e2.printStackTrace();
-                            }
-                            
-                            if (objnode != null){
-                                
-                                JFileChooser fc = new JFileChooser(lastOpenFolder);
-                                fc.setDialogTitle("Open Project");
-                                fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                                //fc.setFileFilter(new XMLFileFilter());
-                                int returnVal = fc.showOpenDialog(EditDialog.this);
-                                if (returnVal == JFileChooser.APPROVE_OPTION){
-                                        File file = fc.getSelectedFile();
-                                        //System.out.println(file.getAbsolutePath());
-                                        List<String> valueList = new ArrayList<String>();
-                                        try{
-                                            // Open the file that is the first 
-                                            // command line parameter
-                                            FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
-                                            // Get the object of DataInputStream
-                                            DataInputStream in = new DataInputStream(fstream);
-                                            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                                            String strLine;
-                                            //Read File Line By Line
-                                            while ((strLine = br.readLine()) != null) 	{
-                                                    // Print the content on the console
-                                                    //System.out.println (strLine);
-                                                    valueList.add(strLine.trim());
-                                            }
-                                            //Close the input stream
-                                            in.close();
-                                        }catch (Exception ex){//Catch exception if any
-                                                System.err.println("Error: " + ex.getMessage());
-                                        }
-                                        String first = "";
-                                        String last = "";
-                                        if (valueList.size() > 0){
-                                            
-                                            int lineindex = Integer.parseInt(objnode.getChildText("name").replace("j", "").trim());
-                                            
-                                            String values = valueList.get(lineindex-1);
-                                            String[] temp = values.split(" ");
-                                            int index = 0;
-                                            
-                                            
-                                            
-                                            Element parameterizedValues = data.getChild("value");
-                                            for (Iterator<Element> it = parameterizedValues.getChildren().iterator(); it.hasNext();) {
-                                                Element each = it.next();
-                                                //each.getChild("value").setText(valueList.get(index));                                  
-                                                parametersValuesTableModel.setValueAt("m"+temp[index], index, currentColumn.size()-1);
-                                                parametersValuesTableModel.setValueAt("m"+temp[index+1], index, currentColumn.size());
-                                                index++;
-                                            } 
-                                            
-                                            first = "m" + temp[0];
-                                            last = "m" + temp[temp.length-1];
-                                            
-                                            Element pnext = null;
-                                            
-                                            try {
-                                                    XPath path = new JDOMXPath("attribute[@id=4]");
-                                                    pnext = (Element)path.selectSingleNode(data.getParentElement());
-                                            } catch (JaxenException e2) {			
-                                                    e2.printStackTrace();
-                                            }
-                                            if (pnext != null){
-                                                pnext.getChild("value").setText(first);
-                                            }
-                                            
-                                            
-                                            Element plast = null;
-                                            try {
-                                                    XPath path = new JDOMXPath("attribute[@id=5]");
-                                                    plast = (Element)path.selectSingleNode(data.getParentElement());
-                                            } catch (JaxenException e2) {			
-                                                    e2.printStackTrace();
-                                            }
-                                            if (plast != null){
-                                                plast.getChild("value").setText(last);
-                                            }
-                                            
-                                            
-                                            
-
-
-                                        }
-                                        
-                                        
-                                        
-
-
-                                        if (lastOpenFolderElement != null){
-                                            //Holds the last open folder
-                                            if (!lastOpenFolderElement.getText().equals(file.getParent())){
-                                                    lastOpenFolderElement.setText(file.getParent());
-                                                    XMLUtilities.writeToFile("resources/settings/itSettings.xml", ItSIMPLE.getItSettings().getDocument());
-                                            }
-                                        } 
-                                }
-                                
-                                
-                                
-                                
-                            }
-                            
-                            
-                            
-
-                            
-                            
-	
-	
-			}		
-		}
-	};
-        
-      
-        
-        
-        /**
-         * This method finds all objects that can be used in the given parameter
-         * @param parameter
-         * @return 
-         */
-        public List<Element> getAllObjectFromParameter(Element parameter){
-            List<Element> result = null;
-            
-            //List of object from parameter 1
-            Element typeClass = null;
-            try {
-                    XPath path = new JDOMXPath("project/elements/classes/*[@id='" + parameter.getChildText("type")+"']");
-                    typeClass = (Element)path.selectSingleNode(parameter.getDocument());					
-            } catch (JaxenException e2) {			
-                    e2.printStackTrace();
-            }
-
-
-            if (typeClass != null){
-                
-                Element domain;
-                if(data.getParentElement().getParentElement().getParentElement().getParentElement().getName().equals("repositoryDiagram")){
-                    //				attributes			object			objects			repositoryDiagram	repositoryDiagrams		domain
-                    domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                }else{
-                    //				attributes			object				objects			objectDiagram		objectDiagrams		problem			planningProblems	domain
-                    domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                } 
-                
-                String parameterType = typeClass.getChildText("name");
-
-                if (!parameterType.equals("Boolean") && !parameterType.equals("Int") &&
-                    !parameterType.equals("Float") && !parameterType.equals("String")){
-
-
-                    //typeClass can be either a class or a enumeration                                                            
-                    //if it is a class
-                    if (typeClass.getName().equals("class")){
-                       
-                        //Get all descendent classes of typeClass
-                        List<?> descendents = XMLUtilities.getClassDescendents(typeClass);
-
-                        //create the queries for xpath
-                        String descendentsQuery = "";
-
-                        for (Iterator<?> iter = descendents.iterator(); iter.hasNext();) {
-                            Element descendent = (Element) iter.next();
-                            String each = "";
-                            each = "class='" + descendent.getAttributeValue("id") + "'";
-                            if (iter.hasNext()){
-                                each = each + " or ";
-                            }
-                            descendentsQuery = descendentsQuery + each;
-                        }
-                        if (descendentsQuery.equals(""))
-                            descendentsQuery = "class='" + typeClass.getAttributeValue("id") + "'";			
-                        else
-                            descendentsQuery = descendentsQuery + " or class='" + typeClass.getAttributeValue("id") + "'";
-
-                        try {					
-                            XPath path = new JDOMXPath("elements/objects/object["+descendentsQuery+"]");
-                            result = path.selectNodes(domain);
-
-                        } catch (JaxenException e2) {			
-                            e2.printStackTrace();
-                        }
-                        
-                        
-
-                    }
-                    //if it is a enumeration
-                    else if(typeClass.getName().equals("enumeration")){
-                        try {					
-                            XPath path = new JDOMXPath("project/elements/classes/enumeration[@id='"+typeClass.getAttributeValue("id")+"']/literals/literal");
-                            result = path.selectNodes(domain.getDocument());
-
-                        } catch (JaxenException e2) {			
-                            e2.printStackTrace();
-                        }
-                    }
-                }
-            }
-            
-            
-            return result;
-        }
-        
-
-        
-        /**
-         * This method finds all objects that can be used in the given parameter
-         * @param parameter
-         * @return 
-         */
-        public List<Element> getAllProblemObjectsFromParameter(Element parameter){
-            List<Element> result = null;
-            
-            //List of object from parameter 1
-            Element typeClass = null;
-            try {
-                    XPath path = new JDOMXPath("project/elements/classes/*[@id='" + parameter.getChildText("type")+"']");
-                    typeClass = (Element)path.selectSingleNode(parameter.getDocument());					
-            } catch (JaxenException e2) {			
-                    e2.printStackTrace();
-            }
-
-
-            if (typeClass != null){
-                
-                Element domain;
-                Element problem;
-                if(data.getParentElement().getParentElement().getParentElement().getParentElement().getName().equals("repositoryDiagram")){
-                    //		  attributes         object		objects  	repositoryDiagram	repositoryDiagrams		domain
-                    domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                    problem = null;
-                }else{
-                    //		  attributes         object		objects		   objectDiagram      objectDiagrams	 problem            planningProblems	domain
-                    domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                    problem = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                } 
-                
-                String parameterType = typeClass.getChildText("name");
-
-                if (!parameterType.equals("Boolean") && !parameterType.equals("Int") &&
-                    !parameterType.equals("Float") && !parameterType.equals("String")){
-
-
-                    //typeClass can be either a class or a enumeration                                                            
-                    //if it is a class
-                    if (typeClass.getName().equals("class")){
-                        
-                        List<Element> selectedRepositoryObjects = null;
-                        
-                        //Get all descendent classes of typeClass
-                        List<?> descendents = XMLUtilities.getClassDescendents(typeClass);
-
-                        //create the queries for xpath
-                        String descendentsQuery = "";
-
-                        for (Iterator<?> iter = descendents.iterator(); iter.hasNext();) {
-                            Element descendent = (Element) iter.next();
-                            String each = "";
-                            each = "class='" + descendent.getAttributeValue("id") + "'";
-                            if (iter.hasNext()){
-                                each = each + " or ";
-                            }
-                            descendentsQuery = descendentsQuery + each;
-                        }
-                        if (descendentsQuery.equals(""))
-                            descendentsQuery = "class='" + typeClass.getAttributeValue("id") + "'";			
-                        else
-                            descendentsQuery = descendentsQuery + " or class='" + typeClass.getAttributeValue("id") + "'";
-
-                        try {					
-                            XPath path = new JDOMXPath("elements/objects/object["+descendentsQuery+"]");
-                            selectedRepositoryObjects = path.selectNodes(domain);
-                            //result = path.selectNodes(domain);
-
-                        } catch (JaxenException e2) {			
-                            e2.printStackTrace();
-                        }
-                        
-                        if (problem != null){
-                            
-                            for (Iterator<Element> it = selectedRepositoryObjects.iterator(); it.hasNext();) {
-                                Element object = it.next();
-                                Element refObj = null;
-                                try {					
-                                    XPath path = new JDOMXPath("objectDiagrams/objectDiagram/objects/object[@id="+object.getAttributeValue("id") +"]");
-                                    refObj = (Element)path.selectSingleNode(problem);
-                                    //result = path.selectNodes(domain);
-                                } catch (JaxenException e2) {			
-                                    e2.printStackTrace();
-                                }
-                                if (refObj != null){
-                                    if (result == null){
-                                        result = new ArrayList<Element>();
-                                    }
-                                   result.add(object);
-                                }
-                            }                                                                              
-                        }else{
-                           result = selectedRepositoryObjects;
-                        }                                                
-
-                    }
-                    //if it is a enumeration
-                    else if(typeClass.getName().equals("enumeration")){
-                        try {					
-                            XPath path = new JDOMXPath("project/elements/classes/enumeration[@id='"+typeClass.getAttributeValue("id")+"']/literals/literal");
-                            result = path.selectNodes(domain.getDocument());
-
-                        } catch (JaxenException e2) {			
-                            e2.printStackTrace();
-                        }
-                    }
-                }
-            }
-            
-            
-            return result;
-        }
-        
-        
+	};	
 
 	public void keyReleased(KeyEvent e) {
 		if(e.getSource() == descriptionTextPane){
@@ -1973,188 +1151,185 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 	public void tableChanged(TableModelEvent e) {
 		
 		int row = e.getFirstRow();
-                int col = e.getColumn();
-                if(row > -1 && col > -1){
-                    if (e.getSource() == parametersTableModel){
-                        
-                        Element selectedParameter = currentParameters.get(row);
-                        String strdata = (String)parametersTableModel.getValueAt(row, col);
-                        switch(col){
-                            case 0:{// name
-                                selectedParameter.getChild("name").setText(strdata);
-                            }
-                            break;
-                            case 1:{// type
-                                Element Class = (Element)parameterType.getDataItem(parameterType.getSelectedIndex());
-                                //System.out.println(Class);
-                                if(Class != null){
-                                        if(!Class.getAttributeValue("id").equals(selectedParameter.getChildText("type"))){
-                                                selectedParameter.getChild("type").setText(Class.getAttributeValue("id"));
-                                                //XMLUtilities.printXML(selectedParameter);
-                                        }
-                                }
-                                else{
-                                        selectedParameter.getChild("type").setText("");
-                                }
-                            }
-                            break;
-                        }
+        int col = e.getColumn();        
+        if(row > -1 && col > -1){
+        	if (e.getSource() == parametersTableModel){
+                Element selectedParameter = currentParameters.get(row);
+                String strdata = (String)parametersTableModel.getValueAt(row, col);
+                switch(col){
+    	            case 0:{// name
+    	            	selectedParameter.getChild("name").setText(strdata);
+    	            }
+    	            break;
+    	            case 1:{// type            	
+    	            	Element Class = (Element)parameterType.getDataItem(parameterType.getSelectedIndex());
+    	            	if(Class != null){
+    	            		if(!Class.getAttributeValue("id").equals(selectedParameter.getChildText("type"))){
+    	            			selectedParameter.getChild("type").setText(Class.getAttributeValue("id"));
+    	            		}            		
+    	            	}
+    	            	else{
+    	            		selectedParameter.getChild("type").setText("");
+    	            	}
+    	            }
+    	            break;
+                }
+                
+				// repaint open diagrams
+				ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();						
+				tabbed.repaintOpenDiagrams("stateMachineDiagram");
+        	}
+        	else if(e.getSource() == parametersValuesTableModel){
+        		Element objectParameterizedValue = currentParameters.get(row);        		
+        		String strdata = (String)parametersValuesTableModel.getValueAt(row, col);
+        		
+        		if (col == parametersValuesTableModel.getColumnCount()-1){
+        			//the last column holds the attribute value 
+        			
+        			//if the value is the same, do nothing
+            		if(!objectParameterizedValue.getChildText("value").equals(strdata)){
+            			Element parentObject = data.getParentElement().getParentElement();        			
+            			if(parentObject.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
+            				//repository diagram
+            				objectParameterizedValue.getChild("value").setText(strdata);
+            				//set this value in all other object diagrams
+    		            	List<?> result = null;
+    						try {
+    							XPath path = new JDOMXPath("planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='"+
+    									parentObject.getAttributeValue("id") +"']");									
+    							result = path.selectNodes(parentObject.getParentElement().getParentElement().getParentElement().getParentElement());//domain
+    						} catch (JaxenException e2) {			
+    							e2.printStackTrace();
+    						}
+    						for (Iterator<?> iter = result.iterator(); iter.hasNext();){							
+    							Element object = (Element) iter.next();
+    							Element paramValue = null;
+    							try {
+    								XPath path = new JDOMXPath("attributes/attribute[@id='"+ objectParameterizedValue.getParentElement().getParentElement().getAttributeValue("id")
+    										+"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id") +"']");									
+    								paramValue = (Element)path.selectSingleNode(object);
+    							} catch (JaxenException e2) {			
+    								e2.printStackTrace();
+    							}
+    							if(paramValue != null){
+    								paramValue.getChild("value").setText(strdata);    								
+    							}
+    						}
+            				
+            			}
+            			else{
+            				// other objetc diagrams
+            				//look for the same attribute in the repository			            	
+			            	Element domain = parentObject.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
+			            	Element paramValue = null;
+							try {
+								XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='"+ parentObject.getAttributeValue("id")
+										+"']/attributes/attribute[@id='"+ data.getAttributeValue("id")
+										+"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id") +"']");									
+								paramValue = (Element)path.selectSingleNode(domain);
+							} catch (JaxenException e2) {			
+								e2.printStackTrace();
+							}
+							if(paramValue != null){
+								if(paramValue.getChildText("value").trim().equals("") ||
+										strdata.equals("")){
+									//the value can be changed if there is no value in the repository or the value is null
+									objectParameterizedValue.getChild("value").setText(strdata);
+	    		            	}
+	    		            	else{
+	    		            		//if the value was set in the repository, it can't be changed
+	    		            		JOptionPane.showMessageDialog(this,
+	    									"<html><center>This value can't be changed since<br>it was defined in the Repository Diagram</center></html>",
+	    									"Not Allowed Change",
+	    									JOptionPane.WARNING_MESSAGE);			            		
+	    		            		parametersValuesTableModel.setValueAt(objectParameterizedValue.getChildText("value"), row, col);
+	    		            		// get the column to cancel the edition
+	    		            		parametersValuesTable.getColumnModel().getColumn(col).getCellEditor().cancelCellEditing();
+	    		            	}
+							}
+							else{
+//								 this parameterized value was not created in the repository diagram
+								objectParameterizedValue.getChild("value").setText(strdata);
+							}
+            			}
+            		}       			
+        			
+        		}
+        		else{
+        			// the other columns holds the attribute parameters
+        			Element classParameter = currentColumn.get(col);
+    				Element parentObject = data.getParentElement().getParentElement(); 
+        			Element attrParameter = XMLUtilities.getElement(objectParameterizedValue.getChild("parameters"), classParameter.getAttributeValue("id"));
+            		//if the value is the same, do nothing
+    				if (attrParameter != null && !attrParameter.getChildText("value").equals(strdata)){
+    					if(parentObject.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
+    						attrParameter.getChild("value").setText(strdata);
+            				//set this value in all other object diagrams
+    		            	List<?> result = null;
+    						try {
+    							XPath path = new JDOMXPath("planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='"+
+    									parentObject.getAttributeValue("id") +"']");									
+    							result = path.selectNodes(parentObject.getParentElement().getParentElement().getParentElement().getParentElement());//domain
+    						} catch (JaxenException e2) {			
+    							e2.printStackTrace();
+    						}
+    						for (Iterator<?> iter = result.iterator(); iter.hasNext();) {
+    							Element object = (Element) iter.next();
+    							Element parameter = null;
+    							try {
+    								XPath path = new JDOMXPath("attributes/attribute[@id='"+ objectParameterizedValue.getParentElement().getParentElement().getAttributeValue("id")
+    										+"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id")
+    										+"']/parameters/parameter[@id='"+ classParameter.getAttributeValue("id") +"']");									
+    								parameter = (Element)path.selectSingleNode(object);
+    							} catch (JaxenException e2) {			
+    								e2.printStackTrace();
+    							}
+    							if(parameter != null){
+    								parameter.getChild("value").setText(strdata);
+    							}
+    						}
+            			}
+            			else{
+            				//look for the same attribute in the repository
+                			Element domain = parentObject.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
+    		            	Element repAttrParameter = null;
+    						try {
+    							XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='"+ parentObject.getAttributeValue("id")
+    									+"']/attributes/attribute[@id='"+ data.getAttributeValue("id")
+    									+"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id")
+    									+"']/parameters/parameter[@id='"+ classParameter.getAttributeValue("id") +"']");									
+    							repAttrParameter = (Element)path.selectSingleNode(domain);
+    						} catch (JaxenException e2) {			
+    							e2.printStackTrace();
+    						}
+    						if(repAttrParameter != null){
+    							if(repAttrParameter.getChildText("value").trim().equals("") ||
+    									strdata.equals("")){
+    								//the value can be change if there is no value in the repository or it's null
+    								attrParameter.getChild("value").setText(strdata);
+        		            	}
+        		            	else{
+        		            		//if the value was set in the repository, it can't be changed
+        		            		JOptionPane.showMessageDialog(this,
+        									"<html><center>This value can't be changed since<br>it was defined in the Repository Diagram</center></html>",
+        									"Not Allowed Change",
+        									JOptionPane.WARNING_MESSAGE);			            		
+        		            		parametersValuesTableModel.setValueAt(attrParameter.getChildText("value"), row, col);
+        		            		// get the column to cancel the edition
+        		            		parametersValuesTable.getColumnModel().getColumn(col).getCellEditor().cancelCellEditing();
+        		            	}
+    						}
+    						else{
+    							// this parameterized value was not created in the repository diagram
+    							attrParameter.getChild("value").setText(strdata);
+    						}
+            			}
+    				}
+        		}        		
+        	}
 
-                        // repaint open diagrams
-                        ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-                        tabbed.repaintOpenDiagrams("stateMachineDiagram");
-                    }
-                    else if(e.getSource() == parametersValuesTableModel){
-                            Element objectParameterizedValue = currentParameters.get(row);
-                            String strdata = (String)parametersValuesTableModel.getValueAt(row, col);
-
-                            if (col == parametersValuesTableModel.getColumnCount()-1){
-                                    //the last column holds the attribute value
-
-                                    //if the value is the same, do nothing
-                            if(!objectParameterizedValue.getChildText("value").equals(strdata)){
-                                    Element parentObject = data.getParentElement().getParentElement();
-                                    if(parentObject.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
-                                            //repository diagram
-                                            objectParameterizedValue.getChild("value").setText(strdata);
-                                            //set this value in all other object diagrams
-                                             List<?> result = null;
-                                            try {
-                                                    XPath path = new JDOMXPath("planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='"+
-                                                                    parentObject.getAttributeValue("id") +"']");
-                                                    result = path.selectNodes(parentObject.getParentElement().getParentElement().getParentElement().getParentElement());//domain
-                                            } catch (JaxenException e2) {
-                                                    e2.printStackTrace();
-                                            }
-                                            for (Iterator<?> iter = result.iterator(); iter.hasNext();){
-                                                    Element object = (Element) iter.next();
-                                                    Element paramValue = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath("attributes/attribute[@id='"+ objectParameterizedValue.getParentElement().getParentElement().getAttributeValue("id")
-                                                                            +"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id") +"']");
-                                                            paramValue = (Element)path.selectSingleNode(object);
-                                                    } catch (JaxenException e2) {
-                                                            e2.printStackTrace();
-                                                    }
-                                                    if(paramValue != null){
-                                                            paramValue.getChild("value").setText(strdata);
-                                                    }
-                                            }
-
-                                    }
-                                    else{
-                                            // other objetc diagrams
-                                            //look for the same attribute in the repository
-                                            Element domain = parentObject.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                                            Element paramValue = null;
-                                                            try {
-                                                                    XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='"+ parentObject.getAttributeValue("id")
-                                                                                    +"']/attributes/attribute[@id='"+ data.getAttributeValue("id")
-                                                                                    +"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id") +"']");
-                                                                    paramValue = (Element)path.selectSingleNode(domain);
-                                                            } catch (JaxenException e2) {
-                                                                    e2.printStackTrace();
-                                                            }
-                                                            if(paramValue != null){
-                                                                    if(paramValue.getChildText("value").trim().equals("") ||
-                                                                                    strdata.equals("")){
-                                                                            //the value can be changed if there is no value in the repository or the value is null
-                                                                            objectParameterizedValue.getChild("value").setText(strdata);
-                                            }
-                                            else{
-                                                    //if the value was set in the repository, it can't be changed
-                                                    JOptionPane.showMessageDialog(this,
-                                                                                    "<html><center>This value can't be changed since<br>it was defined in the Repository Diagram</center></html>",
-                                                                                    "Not Allowed Change",
-                                                                                    JOptionPane.WARNING_MESSAGE);
-                                                    parametersValuesTableModel.setValueAt(objectParameterizedValue.getChildText("value"), row, col);
-                                                    // get the column to cancel the edition
-                                                    parametersValuesTable.getColumnModel().getColumn(col).getCellEditor().cancelCellEditing();
-                                            }
-                                                            }
-                                                            else{
-                                                                    //this parameterized value was not created in the repository diagram
-                                                                    objectParameterizedValue.getChild("value").setText(strdata);
-                                                            }
-                                    }
-                            }
-
-                            }
-                            else{
-                                    // the other columns holds the attribute parameters
-                                    Element classParameter = currentColumn.get(col);
-                                    Element parentObject = data.getParentElement().getParentElement();
-                                    Element attrParameter = XMLUtilities.getElement(objectParameterizedValue.getChild("parameters"), classParameter.getAttributeValue("id"));
-                                    //if the value is the same, do nothing
-                                    if (attrParameter != null && !attrParameter.getChildText("value").equals(strdata)){
-                                            if(parentObject.getParentElement().getParentElement().getName().equals("repositoryDiagram")){
-                                                    attrParameter.getChild("value").setText(strdata);
-                                                    //set this value in all other object diagrams
-                                                    List<?> result = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath("planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='"+
-                                                                            parentObject.getAttributeValue("id") +"']");
-                                                            result = path.selectNodes(parentObject.getParentElement().getParentElement().getParentElement().getParentElement());//domain
-                                                    } catch (JaxenException e2) {
-                                                            e2.printStackTrace();
-                                                    }
-                                                    for (Iterator<?> iter = result.iterator(); iter.hasNext();) {
-                                                            Element object = (Element) iter.next();
-                                                            Element parameter = null;
-                                                            try {
-                                                                    XPath path = new JDOMXPath("attributes/attribute[@id='"+ objectParameterizedValue.getParentElement().getParentElement().getAttributeValue("id")
-                                                                                    +"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id")
-                                                                                    +"']/parameters/parameter[@id='"+ classParameter.getAttributeValue("id") +"']");
-                                                                    parameter = (Element)path.selectSingleNode(object);
-                                                            } catch (JaxenException e2) {
-                                                                    e2.printStackTrace();
-                                                            }
-                                                            if(parameter != null){
-                                                                    parameter.getChild("value").setText(strdata);
-                                                            }
-                                                    }
-                                            }
-                                            else{
-                                                    //look for the same attribute in the repository
-                                                    Element domain = parentObject.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                                                    Element repAttrParameter = null;
-                                                    try {
-                                                        XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='"+ parentObject.getAttributeValue("id")
-                                                                            +"']/attributes/attribute[@id='"+ data.getAttributeValue("id")
-                                                                            +"']/value/parameterizedValue[@id='"+ objectParameterizedValue.getAttributeValue("id")
-                                                                            +"']/parameters/parameter[@id='"+ classParameter.getAttributeValue("id") +"']");
-                                                        repAttrParameter = (Element)path.selectSingleNode(domain);
-                                                    } catch (JaxenException e2) {
-                                                        e2.printStackTrace();
-                                                    }
-                                                    if(repAttrParameter != null){
-                                                            if(repAttrParameter.getChildText("value").trim().equals("") ||
-                                                                            strdata.equals("")){
-                                                                    //the value can be change if there is no value in the repository or it's null
-                                                                    attrParameter.getChild("value").setText(strdata);
-                                                            }
-                                                            else{
-                                                                    //if the value was set in the repository, it can't be changed
-                                                                    JOptionPane.showMessageDialog(this,
-                                                                                                    "<html><center>This value can't be changed since<br>it was defined in the Repository Diagram</center></html>",
-                                                                                                    "Not Allowed Change",
-                                                                                                    JOptionPane.WARNING_MESSAGE);
-                                                                    parametersValuesTableModel.setValueAt(attrParameter.getChildText("value"), row, col);
-                                                                    // get the column to cancel the edition
-                                                                    parametersValuesTable.getColumnModel().getColumn(col).getCellEditor().cancelCellEditing();
-                                                            }
-                                                    }
-                                                    else{
-                                                            // this parameterized value was not created in the repository diagram
-                                                            attrParameter.getChild("value").setText(strdata);
-                                                    }
-                                                }
-                                    }
-                            }
-                    }
-
-                    propertiesPane.repaintSelectedElement();
-            }
+			propertiesPane.repaintSelectedElement();
+        } 
 	}
 
 }

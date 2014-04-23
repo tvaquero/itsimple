@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.22</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1552,7 +1552,7 @@
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="911" y="32" />
+									<position x="1050" y="25" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -1575,16 +1575,16 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="569" y="18" />
+									<position x="500" y="-47" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="964" y="30" />
+									<position x="1048" y="-9" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="30" y="15" />
+									<position x="48" y="-10" />
 								</label>
 								<label type="multiplicity" identifier="2">
 									<position x="956" y="-11" />
@@ -1605,13 +1605,13 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="614" y="-19" />
+									<position x="436" y="86" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="964" y="29" />
+									<position x="1025" y="17" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="26" y="12" />
@@ -4581,45 +4581,17 @@ h.lifting = null</condition>
 						</objectDiagrams>
 						<constraints />
 						<metrics>
-							<qualityMetric id="1">
+							<metric id="1">
 								<name>Fuel level Minimization</name>
-								<description />
 								<enabled>true</enabled>
-								<type>expression</type>
-								<intention>minimize</intention>
-								<weight>1</weight>
-								<variable>
-									<chosenVariable type="">
-										<object class="" id="">
-											<attribute type="" class="" id="" />
-										</object>
-									</chosenVariable>
-								</variable>
-								<expression>
-									<rule>fuelCost</rule>
-								</expression>
-								<actionCounter>
-									<chosenOperator class="" id="">
-										<parameters />
-									</chosenOperator>
-								</actionCounter>
-								<preferenceFunction>
-									<function id="1">
-										<domain>
-											<lowerbound value="-inf" included="true" />
-											<upperbound value="+inf" included="true" />
-										</domain>
-										<rule>1</rule>
-									</function>
-								</preferenceFunction>
-							</qualityMetric>
+								<type>minimize</type>
+								<function>fuelCost</function>
+							</metric>
 						</metrics>
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

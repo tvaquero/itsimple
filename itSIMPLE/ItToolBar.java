@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -22,22 +22,15 @@
 * 
 * Authors:	Tiago S. Vaquero, 
 *			Victor Romero.
- *              Rosimarci Tonaco
 **/
 
 package itSIMPLE;
 
-import itGraph.BasicCell;
 import languages.xml.XMLUtilities;
 import util.filefilter.PDDLFileFilter;
 import util.filefilter.PNMLFileFilter;
 import itGraph.ItGraph;
-import itGraph.UMLElements.*;
-import java.awt.event.ActionEvent;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -49,7 +42,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-//import javax.swing.text.Element;
 
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
@@ -62,31 +54,8 @@ import languages.petrinets.PetriNetAnalysis;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.AbstractButton;
-import javax.swing.JComponent;
-//import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-//import javax.swing.text.StyledDocument;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.BadLocationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
-import sourceEditor.ItHilightedDocument;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoManager;
-
-
 
 public class ItToolBar extends JToolBar {
 
@@ -140,24 +109,9 @@ public class ItToolBar extends JToolBar {
 	private JButton summaryButton = null;
 	private JButton closeEditButton = null;
 	
-	//PDDL Buttons	
+	//PDDL Buttons
+	
 	private JButton saveToPDDLFileButton = null;
-        //domain
-        private JButton pddlTypeTemplateButton = null;
-        private JButton pddlPredicateTemplateButton = null;
-        private JButton pddlFunctionTemplateButton = null;
-        private JButton pddlDerivedPredicateTemplateButton = null;
-        private JButton pddlConstraintTemplateButton = null;
-        //problem
-        private JButton pddlObjectTemplateButton = null;
-        private JButton pddlMetricTemplateButton = null;
-        private JButton pddlProblemConstraintTemplateButton = null;
-        //gerenal
-        private JButton pddlCommentButton = null;
-        private JButton pddlCommentLineButton = null;
-        private JButton pddlUndoButton = null;
-        private JButton pddlRedoButton = null;
-        
 	double currentDelay = 1000.0;
 	private static double MAX_DELAY = 2000.0;
 	
@@ -174,166 +128,11 @@ public class ItToolBar extends JToolBar {
 	private JButton stepPetriNetButton = null;
 	private JButton pausePetriNetButton = null;
 	private JButton stopPetriNetButton = null;
-
-        //PDDL Editor buttons
-        private static String action = "(:action action_name_here\n"+
-                    "  :parameters (  )\n"+
-                    "  :precondition (  )\n"+
-                    "  :effect (  )\n"+
-                    ")";
-
-        private static String durativeAction = "(:durative-action durative_action_name_here\n"+
-                    " :parameters (  )\n"+
-                    " :condition (  )\n"+
-                    " :effect (  )\n"+
-                    ")";
-
-        private static String function = "(:functions \n"+
-                                              " (func1)\n"+
-                                              " (func2)\n"+
-                                              " (func3)\n" +
-                                              ")";
-
-        private static String predicates = "(:predicates \n"+
-                                              " (pred1)\n"+
-                                              " (pred2)\n"+
-                                              " (pred3)\n" +
-                                              ")";
-
-        private static String derivedPredicates = "(:derived (pred1)\n"+
-                                                     " (derived_pred)\n" +
-                                                     ")";                
-        private static String type = "(:types \n"+
-                                         "obj1 obj2 obj3 - Type)\n";
-
-        private static String constraints = "(:constraints  \n"+
-                                            ")\n";
-
-        private static String comment = ";; Type your comment here.\n";
-
-        private static String strips = ":strips\n";
-
-        private static String typing = ":typing\n";
-
-        private static String negativePreconditions = ":negative-preconditions\n";
-
-        private static String disjunctivePreconditions = ":disjunctive-preconditions\n";
-
-        private static String equality = ":equality\n";
-
-        private static String existentialPreconditions = ":existential-preconditions\n";
-
-        private static String universalPreconditions = ":universal-preconditions\n";
-
-        private static String quantifiedPreconditions = ":quantified-preconditions\n";
-
-        private static String conditionalEffects = ":conditional-effects\n";
-
-        private static String fluent = ":fluent\n";
-
-        private static String adl = ":adl\n";
-
-        private static String durativeActionsInRequirements = ":durative-actions\n";
-
-        private static String derivedPredicatesInRequirements = ":derived-predicates\n";
-
-        private static String timedInitialLiterals = ":timed-initial-literals\n";
-
-        private static String preferences = ":preferences\n";
-
-        private static String constraintsInRequirements = ":constraints\n";
-
-        private static String object = "(:objects obj1 obj2 obj3 - Type)\n";
-
-        private static String metric = "(:metric  )\n";
-
-        private static String commentLine = ";;";
-
-        protected UndoManager undo = new UndoManager();
-        
-        private javax.swing.JButton redoButton;
-        private javax.swing.JButton undoButton;
-        
-    private void insertText(String text)
-    {
-        ItHilightedDocument doc = (ItHilightedDocument) textPane.getStyledDocument();
-        int offset = textPane.getCaretPosition();
-        try
-        {
-            doc.insertString(offset, text, null);
-        }
-        catch (BadLocationException ex)
-        {
-            Logger.getLogger(ItToolBar.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void insertText(int offset, String text)
-    {
-        ItHilightedDocument doc = (ItHilightedDocument) textPane.getStyledDocument();
-        //int offset = textPane.getCaretPosition();
-        try
-        {
-            doc.insertString(offset, text, null);
-        }
-        catch (BadLocationException ex)
-        {
-            Logger.getLogger(ItToolBar.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public static int getLineAtCaret(JTextComponent component)
-    {
-            int caretPosition = component.getCaretPosition();
-            return component.getDocument().getDefaultRootElement()
-                    .getElementIndex( caretPosition ) + 1;
-    }
-
-    public static void gotoStartOfLine(JTextComponent component, int line)
-    {
-            //Element root = component.getDocument().getDefaultRootElement();
-            line = Math.max(line, 1);
-            line = Math.min(line, component.getDocument().getDefaultRootElement().getElementCount());
-            component.setCaretPosition( component.getDocument().getDefaultRootElement().getElement( line - 1 ).getStartOffset() );
-    }
-  
-//    private class MyUndoableEditListener implements UndoableEditListener
-//    {
-//        public void undoableEditHappened(UndoableEditEvent e)
-//        {
-//            //Remember the edit and update the menus
-//            undo.addEdit(e.getEdit());
-//            updateUndoState();
-//            updateRedoState();
-//        }
-//    }
-
-    public void setUndoManager(UndoManager undo)
-    {
-        this.undo = undo;
-    }
-
-    private void updateUndoState()
-    {
-        if (undo.canUndo())
-            pddlUndoButton.setEnabled(true);
-        else
-            pddlUndoButton.setEnabled(false);
-    }
-
-    private void updateRedoState()
-    {
-        if (undo.canRedo())
-            pddlRedoButton.setEnabled(true);
-        else
-            pddlRedoButton.setEnabled(false);
-    }
 	
 	public ItToolBar(String diagramType, String language) {
 		super();
 		//initialize();
 		setRollover(true);
-               
 		if (language.equals("UML")){
 			add(getSelectButton());		
 			if (diagramType.equals("classDiagram")){
@@ -356,17 +155,14 @@ public class ItToolBar extends JToolBar {
 				add(getFinalStateButton());
 				add(getActionAssociationButton());
 			}
+			else if(diagramType.equals("objectDiagram")){				
+				add(getObjectAssociationButton());
+			}
 			else if(diagramType.equals("repositoryDiagram")){
 				add(getObjectButton());
 				add(getMultipleObjectsButton());
 				add(getObjectAssociationButton());
-                                add(getSnapshotWizards());
 			}		
-                        else if(diagramType.equals("objectDiagram")){				
-				add(getObjectAssociationButton());
-                                add(getSnapshotWizards());
-                                
-			}
 			
 			addSeparator();
 			add(getZoomInButton());
@@ -380,39 +176,7 @@ public class ItToolBar extends JToolBar {
 			
 		}
 		else if (language.equals("PDDL")){
-                    System.out.print("Ola: " + diagramType);                        
-                        if(diagramType.equals("pddldomain")){
-                            add(getpddlUndoButton());
-                            add(getpddlRedoButton());
-                            addSeparator();
-                            
-                            add(getpddlTypeTemplateButton());
-                            add(getpddlPredicateTemplateButton());
-                            add(getpddlFunctionTemplateButton());
-                            add(getPDDLActionsTemplateList());
-                            add(getpddlDerivedPredicateTemplateButton());                            
-                            add(getpddlConstraintTemplateButton());                            
-                            add(getListRequirementButtons());
-                            
-                            addSeparator();
-                            add(getpddlCommentButton());
-                            add(getpddlCommentLineButton());                            
-                            
-                        }else if(diagramType.equals("pddlproblem")){
-                            //xxx
-                            add(getpddlUndoButton());
-                            add(getpddlRedoButton());
-                            addSeparator();
-                            add(getpddlObjectTemplateButton());
-                            add(getpddlMetricTemplateButton());
-                            add(getpddlProblemConstraintTemplateButton());
-                            addSeparator();
-                            add(getpddlCommentButton());
-                            add(getpddlCommentLineButton());
-                        }else{
-                            add(getSaveToPDDLFileButton());
-                        }
-			
+			add(getSaveToPDDLFileButton());
 		}
 		else if (language.equals("PetriNet")){
 		// TODO	change language to PNML instead of PetriNet
@@ -433,7 +197,7 @@ public class ItToolBar extends JToolBar {
 			
 		}
 	}
-
+	
 
 	/**
 	 * This method initializes this
@@ -729,129 +493,6 @@ public class ItToolBar extends JToolBar {
 		}
 		return objectAssociationButton;
 	}
-        
-        
-    //Snapthot Wizards
-        private  AbstractButton getSnapshotWizards() {
-            final JToggleButton moreButton = new JToggleButton("Wizards");
-            moreButton.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        createAndShowWizardMenu((JComponent) e.getSource(), moreButton);
-                    }
-                }
-            });
-            moreButton.setFocusable(false);
-            moreButton.setHorizontalTextPosition(SwingConstants.LEADING);
-            return moreButton;
-        }
-        
-        
-        private void createAndShowWizardMenu(final JComponent component, final AbstractButton moreButton) {
-            JPopupMenu menu = new JPopupMenu();
-
-             JMenuItem neighborsItem = new JMenuItem("Associate neighbors");
-            //stripsitem.setActionCommand();
-            neighborsItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: Associate Neighbors
-                    System.out.println("Associate Selected Neighbors");
-                    
-                    Object[] cells = graph.getSelectionCells();		
-			if(cells.length > 0){
-                            /*
-				List<Object> deletingCells = new ArrayList<Object>();
-				// 1. Delete all associations
-				BasicAssociation selectedAssociation = null;
-				
-				// this will mark if there is an object cell to be deleted
-				// so after it's deleted, the repository list is updated
-				boolean object = false;
-				
-				for(int i = 0; i < cells.length; i++){
-					Object cell = cells[i];			
-					if (cell instanceof ActorCell ||
-							cell instanceof UseCaseCell ||							
-							cell instanceof StateCell ||
-							cell instanceof InitialStateCell ||
-							cell instanceof FinalStateCell ||
-							cell instanceof ObjectCell ||
-							cell instanceof ClassCell ||
-							cell instanceof EnumerationCell){
-						// Add cells to a list
-						deletingCells.add(cell);
-						
-						if(!object && cell instanceof ObjectCell){
-							object = true;
-						}
-					}
-					
-					
-					else if(cell instanceof UseCaseAssociation ||
-					cell instanceof Dependency ||							
-					cell instanceof ClassAssociation ||
-					cell instanceof ObjectAssociation ||
-					cell instanceof ActionAssociation ||
-					cell instanceof Generalization){						
-						selectedAssociation = (BasicAssociation)cell;						
-						deleteElement(selectedAssociation.getData(), selectedAssociation.getReference(), null, false);
-						selectedAssociation.setData(null);
-					}					
-				}
-				// 2. Delete all cells
-				for (Iterator<Object> iter = deletingCells.iterator(); iter.hasNext();) {
-					BasicCell selectedCell = (BasicCell) iter.next();
-					deleteElement(selectedCell.getData(), selectedCell.getReference(),
-							selectedCell.getAdditionalData(), false);
-					selectedCell.setData(null);
-				}
-
-				ItGraph.this.getGraphLayoutCache().remove(cells, true, true);
-				propertiesPane.setNoSelection();
-				if(object){
-					// update the repository list
-					AdditionalPropertiesTabbedPane.getInstance().setRepositoryPanel();
-				}
-                                * 
-                                */
-
-				
-			}
-                    
-                    
-                    
-                    
-                    
-                }
-            });                    
-            JMenuItem gridItem = new JMenuItem("Create Grid of Objects");
-            //stripsitem.setActionCommand();
-            gridItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: Create grid of objects
-                    System.out.println("Create grid of objects");                    	
-                    final ObjectGridWizard dialog = new ObjectGridWizard(ItSIMPLE.getInstance(),true);
-                    dialog.setVisible(true);
-                    
-                }
-            });
-            
-            menu.add(neighborsItem);
-            menu.add(gridItem);
-
-            menu.addPopupMenuListener(new PopupMenuListener() {
-                public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                }
-                public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                    moreButton.setSelected(false);
-                }
-                public void popupMenuCanceled(PopupMenuEvent e) {
-                    moreButton.setSelected(false);
-                }
-            });
-            menu.show(component, 0, component.getHeight());
-        }        
-        
 	
 	/**
 	 * This method initializes dependencyButton	
@@ -933,8 +574,8 @@ public class ItToolBar extends JToolBar {
 	 */
 	private JButton getCloseEditButton() {
 		if (closeEditButton == null) {
-			closeEditButton = new JButton("Close HERE!");
-			closeEditButton.setToolTipText("Close editing and back to simulation.");
+			closeEditButton = new JButton("Close");
+			closeEditButton.setToolTipText("Close editing");
 			closeEditButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// get the edited diagram
@@ -1107,7 +748,6 @@ public class ItToolBar extends JToolBar {
 		}
 		return stepPetriNetButton;
 	}
-        
 	private JButton getRunPetriNetButton() {
 		if (runPetriNetButton == null) {
 			runPetriNetButton = new JButton(new ImageIcon("resources/images/play.png"));
@@ -1208,504 +848,8 @@ public class ItToolBar extends JToolBar {
 		}
 		return simulationDelay;
 	}
-        
-        
-        //PDDL Buttons
-        private JButton getpddlTypeTemplateButton() {
-            if (pddlTypeTemplateButton == null) {
-                pddlTypeTemplateButton = new JButton(new ImageIcon("resources/images/class.png"));
-                pddlTypeTemplateButton.setText("Types");
-                pddlTypeTemplateButton.setToolTipText("New object type");
-                pddlTypeTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW TYPE ACTION;
-                        insertText(type); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlTypeTemplateButton;
-	}
-        
-        private JButton getpddlPredicateTemplateButton() {
-            if (pddlPredicateTemplateButton == null) {
-                pddlPredicateTemplateButton = new JButton(new ImageIcon("resources/images/attribute.png"));
-                pddlPredicateTemplateButton.setText("Predicates");
-                pddlPredicateTemplateButton.setToolTipText("New predicate");
-                pddlPredicateTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW PREDICATE ACTION;
-                        insertText(predicates); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlPredicateTemplateButton;
-	}
-        
-        private JButton getpddlFunctionTemplateButton() {
-            if (pddlFunctionTemplateButton == null) {
-                pddlFunctionTemplateButton = new JButton(new ImageIcon("resources/images/operator2.png"));
-                pddlFunctionTemplateButton.setText("Functions");
-                pddlFunctionTemplateButton.setToolTipText("New predicate");
-                pddlFunctionTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW PREDICATE ACTION;
-                        insertText(function); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlFunctionTemplateButton;
-	}
-        
-//pddl actions
-        private AbstractButton getPDDLActionsTemplateList() {
-            final JToggleButton moreButton = new JToggleButton("Actions");
-            //moreButton.setIcon(new ImageIcon("resources/images/makemovie.png"));
-            moreButton.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        createAndShowActionsTemplateMenu((JComponent) e.getSource(), moreButton);
-                    }
-                }
-            });
-            moreButton.setFocusable(false);
-            moreButton.setHorizontalTextPosition(SwingConstants.LEADING);
-            return moreButton;
-        }
-        
-        
-        private void createAndShowActionsTemplateMenu(final JComponent component, final AbstractButton moreButton) {
-            JPopupMenu menu = new JPopupMenu();
-
-             JMenuItem actionItem = new JMenuItem("Action");
-            //stripsitem.setActionCommand();
-            actionItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: Associate Neighbors
-                    System.out.println("Action");
-                    //ItSIMPLE.getInstance().getDomainPDDLTextPane()
-                    insertText(action); //Código feito em 13/05 - Rosi.
-                }
-            });                    
-            JMenuItem durativeActionItem = new JMenuItem("Durative-Action");
-            //stripsitem.setActionCommand();
-            durativeActionItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: Create grid of objects
-                    System.out.println("Durative-Action");
-                    insertText(durativeAction); //Código feito em 15/05 - Rosi.
-                }
-            });
-            
-            menu.add(actionItem);
-            menu.add(durativeActionItem);
-
-            menu.addPopupMenuListener(new PopupMenuListener() {
-                public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                }
-                public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                    moreButton.setSelected(false);
-                }
-                public void popupMenuCanceled(PopupMenuEvent e) {
-                    moreButton.setSelected(false);
-                }
-            });
-            menu.show(component, 0, component.getHeight());
-        }        
-                
-        private JButton getpddlConstraintTemplateButton() {
-            if (pddlConstraintTemplateButton == null) {
-                pddlConstraintTemplateButton = new JButton(new ImageIcon("resources/images/ucinv.png"));
-                pddlConstraintTemplateButton.setText("Constraints");
-                pddlConstraintTemplateButton.setToolTipText("New constraint");
-                pddlConstraintTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW CONSTRAINT ACTION;
-                        insertText(constraints); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlConstraintTemplateButton;
-	}                
-                
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        private AbstractButton getListRequirementButtons() {
-            final JToggleButton moreButton = new JToggleButton("Requirements");
-            moreButton.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        createAndShowRequirementsMenu((JComponent) e.getSource(), moreButton);
-                    }
-                }
-            });
-            moreButton.setFocusable(false);
-            moreButton.setHorizontalTextPosition(SwingConstants.LEADING);
-            return moreButton;
-        }
-
-        private void createAndShowRequirementsMenu(final JComponent component, final AbstractButton moreButton) {
-            JPopupMenu menu = new JPopupMenu();
-
-             JMenuItem stripsitem = new JMenuItem(":strips");
-            //stripsitem.setActionCommand();
-            stripsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD STRIPS REQUIREMENTS
-                    System.out.println("Add :strips");
-                    insertText(strips);
-                }
-            });        
-
-            JMenuItem fluentitem = new JMenuItem(":fluent");
-            //stripsitem.setActionCommand();
-            fluentitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD FLUENT REQUIREMENTS
-                    System.out.println("Add :fluent");
-                    insertText(fluent);
-                }
-            });
-
-            JMenuItem typingitem = new JMenuItem(":typing");
-            //stripsitem.setActionCommand();
-            typingitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD TYPING REQUIREMENTS
-                    System.out.println("Add :typing");
-                    insertText(typing);
-                }
-            });
-
-            JMenuItem negativepreconditionsitem = new JMenuItem(":negative-preconditions");
-            //stripsitem.setActionCommand();
-            negativepreconditionsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD NEGATIVE-PRECONDITIONS REQUIREMENTS
-                    System.out.println("Add :negative-preconditions");
-                    insertText(negativePreconditions);
-                }
-            });
-
-            JMenuItem disjunctivepreconditionsitem = new JMenuItem(":disjunctive-preconditions");
-            //stripsitem.setActionCommand();
-            disjunctivepreconditionsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD DISJUNCTIVE-PRECONDITIONS REQUIREMENTS
-                    System.out.println("Add :disjunctive-preconditions");
-                    insertText(disjunctivePreconditions);
-                }
-            });
-
-            JMenuItem equalityitem = new JMenuItem(":equality");
-            //stripsitem.setActionCommand();
-            equalityitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD EQUALITY REQUIREMENTS
-                    System.out.println("Add :equality");
-                    insertText(equality);
-                }
-            });
-
-            JMenuItem existentialpreconditionsitem = new JMenuItem(":existential-preconditions");
-            //stripsitem.setActionCommand();
-            existentialpreconditionsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD EXISTENTIAL-PRECONDITIONS REQUIREMENTS
-                    System.out.println("Add :existential-preconditions");
-                    insertText(existentialPreconditions);
-                }
-            });
-
-            JMenuItem universalpreconditionsitem = new JMenuItem(":universal-preconditions");
-            //stripsitem.setActionCommand();
-            universalpreconditionsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD UNIVERSAL-PRECONDITIONS REQUIREMENTS
-                    System.out.println("Add :universal-preconditions");
-                    insertText(universalPreconditions);
-                }
-            });
-
-            JMenuItem quantifiedpreconditionsitem = new JMenuItem(":quantified-preconditions");
-            //stripsitem.setActionCommand();
-            quantifiedpreconditionsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD QUANTIFIED-PRECONDITIONS REQUIREMENTS
-                    System.out.println("Add :quantified-preconditions");
-                    insertText(quantifiedPreconditions);
-                }
-            });
-
-            JMenuItem conditionaleffectsitem = new JMenuItem(":conditional-effects");
-            //stripsitem.setActionCommand();
-            conditionaleffectsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD CONDITIONAL-EFFECTS REQUIREMENTS
-                    System.out.println("Add :conditional-effects");
-                    insertText(conditionalEffects);
-                }
-            });
-
-            JMenuItem adlitem = new JMenuItem(":adl");
-            //stripsitem.setActionCommand();
-            adlitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD ADL REQUIREMENTS
-                    System.out.println("Add :adl");
-                    insertText(adl);
-                }
-            });
-
-            JMenuItem durativeactionitem = new JMenuItem(":durative-action");
-            //stripsitem.setActionCommand();
-            durativeactionitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD DURATIVE-ACTION REQUIREMENTS
-                    System.out.println("Add :durative-action");
-                    insertText(durativeActionsInRequirements);
-                }
-            });
-
-            JMenuItem derivedpredicatesitem = new JMenuItem(":derived-predicates");
-            //stripsitem.setActionCommand();
-            derivedpredicatesitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD DERIVED-PREDICATES REQUIREMENTS
-                    System.out.println("Add :derived-predicates");
-                    insertText(derivedPredicatesInRequirements);
-                }
-            });
-
-            JMenuItem timedinitialliteralsitem = new JMenuItem(":timed-initial-literals");
-            //stripsitem.setActionCommand();
-            timedinitialliteralsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD TIMED-INITIAL-LITERALS REQUIREMENTS
-                    System.out.println("Add :timed-initial-literals");
-                    insertText(timedInitialLiterals);
-                }
-            });
-
-            JMenuItem preferencesitem = new JMenuItem(":preferences");
-            //stripsitem.setActionCommand();
-            preferencesitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD TIMED-INITIAL-LITERALS REQUIREMENTS
-                    System.out.println("Add :preferences");
-                    insertText(preferences);
-                }
-            });
-
-            JMenuItem constraintsitem = new JMenuItem(":constraints");
-            //stripsitem.setActionCommand();
-            constraintsitem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    //TODO: ADD TIMED-INITIAL-LITERALS REQUIREMENTS
-                    System.out.println("Add :constraints");
-                    insertText(constraintsInRequirements);
-                }
-            });
-            
-            menu.add(stripsitem);
-            menu.add(fluentitem);
-            menu.add(typingitem);
-            menu.add(negativepreconditionsitem);
-            menu.add(disjunctivepreconditionsitem);
-            menu.add(equalityitem);
-            menu.add(existentialpreconditionsitem);
-            menu.add(universalpreconditionsitem);
-            menu.add(quantifiedpreconditionsitem);
-            menu.add(conditionaleffectsitem);
-            menu.add(adlitem);
-            menu.add(durativeactionitem);
-            menu.add(derivedpredicatesitem);
-            menu.add(timedinitialliteralsitem);
-            menu.add(preferencesitem);
-            menu.add(constraintsitem);
-
-            menu.addPopupMenuListener(new PopupMenuListener() {
-                public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                }
-                public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                    moreButton.setSelected(false);
-                }
-                public void popupMenuCanceled(PopupMenuEvent e) {
-                    moreButton.setSelected(false);
-                }
-            });
-            menu.show(component, 0, component.getHeight());
-        }
-        
-        
-        
-        
-        
-        private JButton getpddlDerivedPredicateTemplateButton() {
-            if (pddlDerivedPredicateTemplateButton == null) {
-                pddlDerivedPredicateTemplateButton = new JButton(new ImageIcon("resources/images/operator.png"));
-                pddlDerivedPredicateTemplateButton.setText("Derived Predicate");
-                pddlDerivedPredicateTemplateButton.setToolTipText("New derived predicate");
-                pddlDerivedPredicateTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW DERIVED PREDICATES ACTION;
-                        insertText(derivedPredicates); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlDerivedPredicateTemplateButton;
-	}
-        
-        
-        private JButton getpddlObjectTemplateButton() {
-            if (pddlObjectTemplateButton == null) {
-                pddlObjectTemplateButton = new JButton(new ImageIcon("resources/images/object.png"));
-                pddlObjectTemplateButton.setText("Objects");
-                pddlObjectTemplateButton.setToolTipText("New object");
-                pddlObjectTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW OBJECT ACTION;
-                        insertText(object); //Código feito em 21/05 - Rosi.
-                    }
-                });
-            }
-            return pddlObjectTemplateButton;
-	}
-        
-        private JButton getpddlMetricTemplateButton() {
-            if (pddlMetricTemplateButton == null) {
-                pddlMetricTemplateButton = new JButton(new ImageIcon("resources/images/compare.png"));
-                pddlMetricTemplateButton.setText("Metric");
-                pddlMetricTemplateButton.setToolTipText("New metric");
-                pddlMetricTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW Metric ACTION;
-                        insertText(metric); //Código feito em 21/05 - Rosi.
-                    }
-                });
-            }
-            return pddlMetricTemplateButton;
-	}
-        
-	private JButton getpddlProblemConstraintTemplateButton() {
-            if (pddlProblemConstraintTemplateButton == null) {
-                pddlProblemConstraintTemplateButton = new JButton(new ImageIcon("resources/images/ucinv.png"));                
-                pddlProblemConstraintTemplateButton.setText("Constraints");
-                pddlProblemConstraintTemplateButton.setToolTipText("New constraint");
-                pddlProblemConstraintTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: NEW PROBLEM CONSTRAINT ACTION;
-                        insertText(constraints); //Código feito em 21/05 - Rosi.
-                    }
-                });
-            }
-            return pddlProblemConstraintTemplateButton;
-	}
-        
-        
-        private JButton getpddlCommentButton() {
-            if (pddlCommentButton == null) {
-                //pddlCommentButton = new JButton(new ImageIcon("resources/images/stop.png"));
-                pddlCommentButton = new JButton();
-                pddlCommentButton.setText("Add Comment");
-                pddlCommentButton.setToolTipText("Add a comment line");
-                pddlCommentButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //TODO: COMMENT LINE ACTION;
-                        insertText(comment); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlCommentButton;
-	}
-
-        private JButton getpddlCommentLineButton() {
-            if (pddlCommentLineButton == null) {
-                //pddlCommentButton = new JButton(new ImageIcon("resources/images/stop.png"));
-                pddlCommentLineButton = new JButton();
-                pddlCommentLineButton.setText("Comment Line");
-                pddlCommentLineButton.setToolTipText("Comment current line(s)");
-                pddlCommentLineButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {                        
-                        int line_number = getLineAtCaret(textPane);
-                        gotoStartOfLine(textPane, line_number);
-                        int offset = textPane.getCaretPosition();
-                        insertText(offset, commentLine); //Código feito em 15/05 - Rosi.
-                    }
-                });
-            }
-            return pddlCommentLineButton;
-	}
-
-	private JButton getpddlUndoButton() {
-            if (pddlUndoButton == null) {
-                pddlUndoButton = new JButton(new ImageIcon("resources/images/undo.png"));
-                //pddlUndoButton.setText("Undo");
-                pddlUndoButton.setToolTipText("Undo");                
-                pddlUndoButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //System.out.println("fazendo Undo!");
-                        try
-                        {
-                            if (undo.canUndo())
-                            {
-                                undo.undo();
-                                undo.undo();
-                            }
-                        }
-                        catch (CannotUndoException eUndo)
-                        {
-                            // do something
-                        }
-                        //updateUndoState();
-                        //updateRedoState();
-                    }
-                });
-            }
-            return pddlUndoButton;
-	}
-
-
-	private JButton getpddlRedoButton() {
-            if (pddlRedoButton == null) {
-                pddlRedoButton = new JButton(new ImageIcon("resources/images/redo.png"));
-                //pddlRedoButton.setText("Redo");
-                pddlRedoButton.setToolTipText("Redo");
-                pddlRedoButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        //System.out.println("fazendo Redo!");
-                        try
-                        {
-                            if (undo.canRedo())
-                            {
-                                undo.redo();
-                                undo.redo();
-                            }
-                        }
-                        catch (CannotRedoException eUndo)
-                        {
-                            // do something
-                        }
-                        //updateUndoState();
-                        //updateRedoState();
-                    }
-                });
-            }
-            return pddlRedoButton;
-	}
-
-
+	
+	
 	public void setSelectedButton(int button){
 		selectedButton = button;
 		if(button == SELECT){

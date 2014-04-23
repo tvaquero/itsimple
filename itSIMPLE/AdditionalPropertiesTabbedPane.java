@@ -45,7 +45,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
-import languages.xml.XMLUtilities;
 
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
@@ -97,7 +96,7 @@ public class AdditionalPropertiesTabbedPane extends JTabbedPane implements Mouse
 		objectsList.addMouseListener(this);
 		
 		JToolBar toolBar = new JToolBar();
-		toolBar.add(importObjects).setToolTipText("Import selected object into the diagram.");
+		toolBar.add(importObjects);
 		
 		repositoryPanel.add(new JScrollPane(objectsList), BorderLayout.CENTER);
 		repositoryPanel.add(toolBar, BorderLayout.NORTH);
@@ -198,71 +197,6 @@ public class AdditionalPropertiesTabbedPane extends JTabbedPane implements Mouse
 					if(objectClass != null){
 						// add the object reference to the diagram
 						Element reference = (Element)repositoryObject.clone();
-                                                
-                                                //1. Get all class parents and their attributes
-                                                ArrayList<Element> parentList = new ArrayList<Element>();
-                                                ArrayList<Element> attributeList = new ArrayList<Element>();
-                                                Element referenceAttributes = reference.getChild("attributes");
-                                                boolean hasParent = true;
-                                                Element parent = objectClass;
-                                                while (hasParent && parent != null){
-                                                        //check if it's not a primitive class
-                                                        if (!parent.getChildText("type").equals("Primitive")){
-                                                                parentList.add(parent);
-
-                                                                //1.1 List attributes
-                                                                Iterator<?> attributes = parent.getChild("attributes").getChildren("attribute").iterator();
-                                                                while(attributes.hasNext()){
-                                                                        Element attribute = (Element)attributes.next();
-                                                                        attributeList.add(attribute);										
-                                                                }	
-                                                                //1.2 Checks if there is a parent class
-                                                                if (!parent.getChild("generalization").getAttributeValue("id").equals("")){
-                                                                        parent = XMLUtilities.getElement(parent.getParentElement(), parent.getChild("generalization").getAttributeValue("id"));
-                                                                        hasParent = true;
-                                                                }
-                                                                else{
-                                                                        hasParent = false;
-                                                                        parent = null;
-                                                                }
-                                                        }
-                                                        else{
-                                                                hasParent = false;									
-                                                        }	
-                                                } 
-                                                
-                                                
-                                                for (Iterator<?> iter = attributeList.iterator(); iter.hasNext();) {
-                                                    Element currentAtt = (Element) iter.next();
-
-                                                    if (diagram.getName().equals("objectDiagram")){
-                                                        //put the initial value
-                                                        if (!currentAtt.getChildText("initialValue").equals("")){
-                                                            //find attribute to set the initial value
-                                                            
-                                                            Element refAttribute = null;
-                                                            try {
-                                                                    XPath path = new JDOMXPath("attribute[@class="+currentAtt.getParentElement().getParentElement().getAttributeValue("id")+" and @id="+currentAtt.getAttributeValue("id")+"]");
-                                                                    refAttribute = (Element)path.selectSingleNode(referenceAttributes);
-                                                            } catch (JaxenException e2) {			
-                                                                    e2.printStackTrace();
-                                                            }
-                                                            //put the initial value
-               
-                                                            if (refAttribute!=null){
-                                                                if (refAttribute.getChildText("value").trim().equals("")){
-                                                                    refAttribute.getChild("value").setText(currentAtt.getChildText("initialValue"));
-                                                                }
-                                                                
-                                                            }
-
-                                                        }
-                                                    }
-
-                                                }
-
-
-
 						diagram.getChild("objects").addContent(reference);
 						
 						// create the object in the graph

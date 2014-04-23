@@ -12,7 +12,7 @@ This domain has a simple optimal strategy: 1) get the laser cannon, 2) shoot thr
 Extracted from IPC-6 (2008) - Learning Track</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.1.10</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -410,7 +410,7 @@ the robot has to be over the gold location to pick it up</description>
 							<value />
 						</rolename>
 						<multiplicity>
-							<value>0..*</value>
+							<value />
 						</multiplicity>
 					</associationEnd>
 					<associationEnd navigation="true" element="class" element-id="23" id="2">
@@ -419,7 +419,7 @@ the robot has to be over the gold location to pick it up</description>
 							<value>connected</value>
 						</rolename>
 						<multiplicity>
-							<value>0..*</value>
+							<value />
 						</multiplicity>
 					</associationEnd>
 				</associationEnds>
@@ -986,10 +986,10 @@ the robot has to be over the gold location to pick it up</description>
 									<position x="1937" y="18" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="-250" y="14" />
+									<position x="100" y="-15" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="708" y="13" />
+									<position x="900" y="-15" />
 								</label>
 								<label type="changeability" identifier="">
 									<position x="500" y="15" />
@@ -9128,7 +9128,6 @@ the robot has to be over the gold location to pick it up</description>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Grid 6x6</name>
@@ -15902,10 +15901,8 @@ the robot has to be over the gold location to pick it up</description>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

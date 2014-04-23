@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package itSIMPLE; 
+package itSIMPLE;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;

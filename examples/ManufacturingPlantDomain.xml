@@ -4,7 +4,7 @@
 	<description />
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.22</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -1783,7 +1783,7 @@ m2.sort = isoutput</precondition>
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -1855,7 +1855,7 @@ m2.sort = isoutput</precondition>
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -10800,10 +10800,8 @@ m2.sort = isoutput</precondition>
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

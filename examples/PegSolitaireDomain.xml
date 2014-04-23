@@ -24,7 +24,7 @@ Description extract from :
 http://en.wikipedia.org/wiki/Peg_solitaire</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
-		<version>3.1.10</version>
+		<version>2.0.22</version>
 	</generalInformation>
 	<elements>
 		<classes>
@@ -5717,7 +5717,6 @@ o  o  o  o  o  o  o
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 			<domain id="2">
 				<name>Planning Domain European Board</name>
@@ -11164,10 +11163,8 @@ o  o  o  o  o  o  o
 						<metrics />
 					</problem>
 				</planningProblems>
-				<metrics />
 			</domain>
 		</planningDomains>
-		<timingDiagrams />
 	</diagrams>
 </project>
 

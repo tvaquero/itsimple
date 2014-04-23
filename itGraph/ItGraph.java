@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
+* Copyright (C) 2007,2008 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -384,10 +384,9 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				//1.0 set net
 				//XMLUtilities.printXML(diagram);
 				Element net = diagram.getChild("net");
-                                Element page = net.getChild("page");
 				
 				// 1.1 add places
-				List<?> netPlaceList = page.getChildren("place");
+				List<?> netPlaceList = net.getChildren("place");
 				
 				for (Iterator<?> placeIter = netPlaceList.iterator(); placeIter.hasNext();) {
 					Element place = (Element) placeIter.next();
@@ -407,7 +406,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				}
 				
 				//2.4 add transitions
-				List<?> netTransitionList = page.getChildren("transition");
+				List<?> netTransitionList = net.getChildren("transition");
 				for (Iterator<?> transitionIter = netTransitionList.iterator(); transitionIter.hasNext();) {
 					Element transition = (Element) transitionIter.next();
 					TransitionCell transitionCell = null;
@@ -430,7 +429,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				}
 				
 				//2.5 add arcs
-				List<?> netArcList = page.getChildren("arc");
+				List<?> netArcList = net.getChildren("arc");
 				for (Iterator<?> arcIter = netArcList.iterator(); arcIter.hasNext();) {
 					Element arc = (Element) arcIter.next();
 					String sourceID = arc.getAttributeValue("source");
@@ -695,8 +694,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 							cell instanceof InitialStateCell ||
 							cell instanceof FinalStateCell ||
 							cell instanceof ObjectCell ||
-							cell instanceof ClassCell ||
-							cell instanceof EnumerationCell){
+							cell instanceof ClassCell){
 						// Add cells to a list
 						deletingCells.add(cell);
 						
@@ -757,8 +755,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 					Object cell = cells[i];
 					
 					if (cell instanceof ObjectCell ||
-							cell instanceof ClassCell  ||
-							cell instanceof EnumerationCell ||
+							cell instanceof ClassCell ||
 							cell instanceof ActorCell ||
 							cell instanceof UseCaseCell ||							
 							cell instanceof StateCell ||
@@ -788,16 +785,10 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				for (Iterator<Object> iter = deletingCells.iterator(); iter.hasNext();) {
 					BasicCell cell = (BasicCell) iter.next();					
 					if (cell instanceof ObjectCell ||
-							cell instanceof ClassCell ||
-                                                        cell instanceof EnumerationCell){
+							cell instanceof ClassCell){
 						deleteElement(cell.getData(), null, null, true);
 						cell.setData(null);
 					}
-					//if (cell instanceof ObjectCell ||
-					//		cell instanceof EnumerationCell){
-					//	deleteElement(cell.getData(), null, null, true);
-					//	cell.setData(null);
-					//}
 					else if (cell instanceof ActorCell ||
 							cell instanceof UseCaseCell ||							
 							cell instanceof StateCell ||
@@ -816,7 +807,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 		}
 	};
 	
-	// save image action in the popup menu
+	// delete action in the popup menu
 	private Action saveImage = new AbstractAction("Save diagram image", new ImageIcon("resources/images/image.png")){
 		/**
 		 * 
@@ -962,18 +953,6 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				deleteFromModel.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, true));	
 				popupMenu.add(deleteFromModel);
 			}
-			else if(cell instanceof EnumerationCell){
-
-				// delete item
-				JMenuItem delete = new JMenuItem(deleteAction);
-				delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, Event.CTRL_MASK, true));
-				popupMenu.add(delete);
-
-				// delete from model item
-				 JMenuItem deleteFromModel = new JMenuItem(deleteFromModelAction);
-				deleteFromModel.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, true));
-				popupMenu.add(deleteFromModel);
-			}
 			
 			else if(cell instanceof ObjectCell){		
 								
@@ -1070,7 +1049,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 			Element parent = data.getParentElement();
 			parent.removeContent(data);
 		}
-
+		
 		else if (name.equals("class")){
 			if (deleteFromModel){
 				//1. Delete all reference of generalization
@@ -1078,7 +1057,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				while(classes.hasNext()){
 					Element Class = (Element)classes.next();
 					if (!Class.getChildText("type").equals("Primitive")){						
-						if(Class.getChild("generalization").getAttributeValue("element").equals(name) &&
+						if(Class.getChild("generalization").getAttributeValue("element").equals(name) ||
 						Class.getChild("generalization").getAttributeValue("element").equals(data.getAttributeValue("id"))){
 						
 							Class.getChild("generalization").setAttribute("element","");
@@ -1265,84 +1244,58 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				}
 			}		
 		}
-                else if (name.equals("enumeration")){
-
-                                //1. Delete all reference on Class diagrams
-				Iterator<?> classDiagrams = project.getChild("diagrams").getChild("classDiagrams").getChildren().iterator();
-				while(classDiagrams.hasNext()){
-					Element classDiagram = (Element)classDiagrams.next();
-
-					//2.1 Checking class references
-					Element classReference = XMLUtilities.getElement(classDiagram.getChild("classes"),data.getAttributeValue("id"));
-					if (classReference != null) {
-						//deleting class reference
-						classDiagram.getChild("classes").removeContent(classReference);
-					}
-
-				}
-
-//				 delete elements nodes from tree
-				if(projectNode != null){
-					tree.deleteTreeNodeFromData(projectNode, data);
-				}
-
-				//5. deleting element
-				Element parent = data.getParentElement();
-				parent.removeContent(data);
-
-                }
 		else if (name.equals("object")){
-                    if (deleteFromModel){
-
-                            Element domain = null;
-
-                            if (diagram.getName().equals("objectDiagram")){
-                                                                    //objectDiagrams	problem		  	    planningProblems	domain
-                                    domain = diagram.getParentElement().getParentElement().getParentElement().getParentElement();
-
-                            }else if (diagram.getName().equals("repositoryDiagram")){
-                                                                    //repositoryDiagrams	domain
-                                    domain = diagram.getParentElement().getParentElement();
-                            }
-
-                            //1.1 Get all objects and associations from the domain
-                            List<?> result = null;
-                            try {
-                                    XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='" +data.getAttributeValue("id")+"'] | " +
-                                                    "planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='" +data.getAttributeValue("id")+"'] | " +
-                                                    "repositoryDiagrams/repositoryDiagram/associations/objectAssociation[associationEnds/objectAssociationEnd/@element-id='"+data.getAttributeValue("id")+"'] | "+
-                                                    "planningProblems/problem/objectDiagrams/objectDiagram/associations/objectAssociation[associationEnds/objectAssociationEnd/@element-id='"+data.getAttributeValue("id")+"']");
-                                    result = path.selectNodes(domain);
-                            } catch (JaxenException e2) {
-                                    e2.printStackTrace();
-                            }
-
-                            //1.2 delete all references
-                            for (int i = 0; i < result.size(); i++){
-                                    Element element = (Element)result.get(i);
-                                    Element parent = element.getParentElement();
-                                    if (parent != null){
-    //					 delete elements nodes from tree
-                                            if(projectNode != null && element.getName().equals("object")){
-                                                    tree.deleteTreeNodeFromReference(projectNode, element);
-                                            }
-
-                                            parent.removeContent(element);
-                                    }
-
-                            }
-
-    //			 delete elements nodes from tree
-                            if(projectNode != null){
-                                    tree.deleteTreeNodeFromData(projectNode, data);
-                            }
-
-                            // deleting element
-                            Element parent = data.getParentElement();
-                            parent.removeContent(data);
-
-                    }
-                    else{
+		if (deleteFromModel){
+			
+			Element domain = null;
+			
+			if (diagram.getName().equals("objectDiagram")){
+								//objectDiagrams	problem		  	    planningProblems	domain
+				domain = diagram.getParentElement().getParentElement().getParentElement().getParentElement();
+				
+			}else if (diagram.getName().equals("repositoryDiagram")){
+								//repositoryDiagrams	domain
+				domain = diagram.getParentElement().getParentElement();				
+			}
+					
+			//1.1 Get all objects and associations from the domain
+			List<?> result = null;
+			try {
+				XPath path = new JDOMXPath("repositoryDiagrams/repositoryDiagram/objects/object[@id='" +data.getAttributeValue("id")+"'] | " +
+						"planningProblems/problem/objectDiagrams/objectDiagram/objects/object[@id='" +data.getAttributeValue("id")+"'] | " +
+						"repositoryDiagrams/repositoryDiagram/associations/objectAssociation[associationEnds/objectAssociationEnd/@element-id='"+data.getAttributeValue("id")+"'] | "+
+						"planningProblems/problem/objectDiagrams/objectDiagram/associations/objectAssociation[associationEnds/objectAssociationEnd/@element-id='"+data.getAttributeValue("id")+"']");
+				result = path.selectNodes(domain);
+			} catch (JaxenException e2) {			
+				e2.printStackTrace();
+			}			
+			
+			//1.2 delete all references 
+			for (int i = 0; i < result.size(); i++){
+				Element element = (Element)result.get(i);
+				Element parent = element.getParentElement();
+				if (parent != null){
+//					 delete elements nodes from tree
+					if(projectNode != null && element.getName().equals("object")){
+						tree.deleteTreeNodeFromReference(projectNode, element);
+					}
+					
+					parent.removeContent(element);
+				}
+				
+			}
+			
+//			 delete elements nodes from tree
+			if(projectNode != null){
+				tree.deleteTreeNodeFromData(projectNode, data);
+			}
+			
+			// deleting element
+			Element parent = data.getParentElement();			
+			parent.removeContent(data);
+			
+		}
+		else{
 			// delete only the object references
 			
 			// deleting classAssociations to this class			
@@ -1654,9 +1607,9 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 									model.nodeChanged(node);
 									
 									// repaint open diagrams
-                                                                        ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-                                                                        tabbed.repaintOpenDiagrams("repositoryDiagram");
-                                                                        tabbed.repaintOpenDiagrams("objectDiagram");
+					            	ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+					            	tabbed.repaintOpenDiagrams("repositoryDiagram");
+					            	tabbed.repaintOpenDiagrams("objectDiagram");
 									
 								}
 								else{
