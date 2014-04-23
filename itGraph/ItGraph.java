@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
 
 * This file is part of itSIMPLE.
@@ -384,10 +384,9 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				//1.0 set net
 				//XMLUtilities.printXML(diagram);
 				Element net = diagram.getChild("net");
-                                Element page = net.getChild("page");
 				
 				// 1.1 add places
-				List<?> netPlaceList = page.getChildren("place");
+				List<?> netPlaceList = net.getChildren("place");
 				
 				for (Iterator<?> placeIter = netPlaceList.iterator(); placeIter.hasNext();) {
 					Element place = (Element) placeIter.next();
@@ -407,7 +406,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				}
 				
 				//2.4 add transitions
-				List<?> netTransitionList = page.getChildren("transition");
+				List<?> netTransitionList = net.getChildren("transition");
 				for (Iterator<?> transitionIter = netTransitionList.iterator(); transitionIter.hasNext();) {
 					Element transition = (Element) transitionIter.next();
 					TransitionCell transitionCell = null;
@@ -430,7 +429,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				}
 				
 				//2.5 add arcs
-				List<?> netArcList = page.getChildren("arc");
+				List<?> netArcList = net.getChildren("arc");
 				for (Iterator<?> arcIter = netArcList.iterator(); arcIter.hasNext();) {
 					Element arc = (Element) arcIter.next();
 					String sourceID = arc.getAttributeValue("source");
@@ -788,16 +787,15 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				for (Iterator<Object> iter = deletingCells.iterator(); iter.hasNext();) {
 					BasicCell cell = (BasicCell) iter.next();					
 					if (cell instanceof ObjectCell ||
-							cell instanceof ClassCell ||
-                                                        cell instanceof EnumerationCell){
+							cell instanceof ClassCell){
 						deleteElement(cell.getData(), null, null, true);
 						cell.setData(null);
 					}
-					//if (cell instanceof ObjectCell ||
-					//		cell instanceof EnumerationCell){
-					//	deleteElement(cell.getData(), null, null, true);
-					//	cell.setData(null);
-					//}
+					if (cell instanceof ObjectCell ||
+							cell instanceof EnumerationCell){
+						deleteElement(cell.getData(), null, null, true);
+						cell.setData(null);
+					}
 					else if (cell instanceof ActorCell ||
 							cell instanceof UseCaseCell ||							
 							cell instanceof StateCell ||
@@ -1078,7 +1076,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 				while(classes.hasNext()){
 					Element Class = (Element)classes.next();
 					if (!Class.getChildText("type").equals("Primitive")){						
-						if(Class.getChild("generalization").getAttributeValue("element").equals(name) &&
+						if(Class.getChild("generalization").getAttributeValue("element").equals(name) ||
 						Class.getChild("generalization").getAttributeValue("element").equals(data.getAttributeValue("id"))){
 						
 							Class.getChild("generalization").setAttribute("element","");
@@ -1654,9 +1652,9 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 									model.nodeChanged(node);
 									
 									// repaint open diagrams
-                                                                        ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
-                                                                        tabbed.repaintOpenDiagrams("repositoryDiagram");
-                                                                        tabbed.repaintOpenDiagrams("objectDiagram");
+					            	ItTabbedPane tabbed = ItSIMPLE.getInstance().getItGraphTabbedPane();
+					            	tabbed.repaintOpenDiagrams("repositoryDiagram");
+					            	tabbed.repaintOpenDiagrams("objectDiagram");
 									
 								}
 								else{

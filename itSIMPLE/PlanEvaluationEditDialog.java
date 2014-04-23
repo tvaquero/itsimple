@@ -63,7 +63,7 @@ public class PlanEvaluationEditDialog extends JDialog {
 		super(itSIMPLEFrame);
 
                 this.xmlPlan = xmlPlan;
-		setTitle("Edit Plan Evaluation");
+		setTitle("Edit Plan Evatuation");
 		
 		int w = 750;
 		int h = 550;
@@ -94,7 +94,6 @@ public class PlanEvaluationEditDialog extends JDialog {
                 mainTabbedPane = new JTabbedPane();
                 mainTabbedPane.setTabPlacement(JTabbedPane.NORTH);
                 mainTabbedPane.addTab("Metrics",new PlanEvaluationEditPanel(xmlPlan));
-                mainTabbedPane.addTab("Rationales", new PlanEvaluationRationalesEditPanel(xmlPlan));
                 mainPanel.add(mainTabbedPane, BorderLayout.CENTER);
 
                 add(mainPanel);

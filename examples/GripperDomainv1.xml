@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Gripper Domain v1</name>
-	<description>This models was based on the Gripper domain from IPC-1 (1998), a domain created by Jana Koehler.
-There is a robot with two grippers. It can carry a ball in each. The goal is to take N balls from one room to another; N rises with problem number. Some planners treat the two grippers asymmetrically, giving rise to an unnecessary combinatorial explosion.</description>
+	<description>There is a robot with two grippers. It can carry a ball in each. The goal is to take N balls from one room to another; N rises with problem number. Some planners treat the two grippers asymmetrically, giving rise to an unnecessary combinatorial explosion.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
 		<version>3.1.10</version>
@@ -142,7 +141,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 				</generalization>
 				<constraints />
 				<graphics>
-					<icon />
+					<icon>robot.png</icon>
 					<position x="" y="" />
 					<size width="" height="" />
 					<color />
@@ -212,7 +211,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 				</generalization>
 				<constraints />
 				<graphics>
-					<icon />
+					<icon>ball.png</icon>
 					<position x="" y="" />
 					<size width="" height="" />
 					<color />
@@ -331,39 +330,6 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<type>simple</type>
 						<rolename>
 							<value>atrobby</value>
-						</rolename>
-						<multiplicity>
-							<value>1</value>
-						</multiplicity>
-					</associationEnd>
-				</associationEnds>
-				<changeability>
-					<value />
-				</changeability>
-				<constraints />
-				<graphics>
-					<points />
-					<color />
-					<lineStyle />
-				</graphics>
-			</classAssociation>
-			<classAssociation id="4">
-				<name>attached</name>
-				<description />
-				<associationEnds>
-					<associationEnd navigation="false" element="class" element-id="22" id="1">
-						<type>none</type>
-						<rolename>
-							<value />
-						</rolename>
-						<multiplicity>
-							<value>1..*</value>
-						</multiplicity>
-					</associationEnd>
-					<associationEnd navigation="true" element="class" element-id="21" id="2">
-						<type>simple</type>
-						<rolename>
-							<value>attached</value>
 						</rolename>
 						<multiplicity>
 							<value>1</value>
@@ -622,7 +588,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 					<class id="22">
 						<graphics>
 							<icon />
-							<position x="466" y="51" />
+							<position x="490" y="36" />
 							<size width="184" height="128" />
 							<color />
 						</graphics>
@@ -638,8 +604,8 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 					<class id="24">
 						<graphics>
 							<icon />
-							<position x="146" y="352" />
-							<size width="135" height="94" />
+							<position x="161" y="377" />
+							<size width="100" height="70" />
 							<color />
 						</graphics>
 					</class>
@@ -667,7 +633,9 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 									<position x="500" y="15" />
 								</label>
 							</labels>
-							<points />
+							<points>
+								<point x="284" y="416" />
+							</points>
 							<color />
 							<lineStyle />
 						</graphics>
@@ -704,33 +672,6 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 							<labels>
 								<label type="main" identifier="">
 									<position x="470" y="-12" />
-								</label>
-								<label type="rolename" identifier="1">
-									<position x="100" y="15" />
-								</label>
-								<label type="rolename" identifier="2">
-									<position x="897" y="35" />
-								</label>
-								<label type="multiplicity" identifier="1">
-									<position x="100" y="-15" />
-								</label>
-								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
-								</label>
-								<label type="changeability" identifier="">
-									<position x="500" y="15" />
-								</label>
-							</labels>
-							<points />
-							<color />
-							<lineStyle />
-						</graphics>
-					</classAssociation>
-					<classAssociation id="4">
-						<graphics>
-							<labels>
-								<label type="main" identifier="">
-									<position x="500" y="-15" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
@@ -830,12 +771,12 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="631" y="-28" />
+									<position x="680" y="-86" />
 								</label>
 							</labels>
 							<points>
-								<point x="292" y="99" />
-								<point x="417" y="98" />
+								<point x="284" y="63" />
+								<point x="409" y="62" />
 							</points>
 							<color />
 							<lineStyle />
@@ -875,7 +816,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="606" y="26" />
+									<position x="424" y="87" />
 								</label>
 							</labels>
 							<points>
@@ -899,7 +840,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="822" y="193" />
+									<position x="945" y="63" />
 								</label>
 							</labels>
 							<points>
@@ -977,7 +918,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<reference class="21" operator="2" />
 						<name />
 						<description />
-						<precondition>gripper.attached = robot</precondition>
+						<precondition />
 						<postcondition />
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="2" id="1" />
@@ -986,7 +927,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="231" y="-167" />
+									<position x="509" y="-114" />
 								</label>
 							</labels>
 							<points>
@@ -1000,7 +941,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<reference class="21" operator="3" />
 						<name />
 						<description />
-						<precondition>gripper.attached = robot</precondition>
+						<precondition />
 						<postcondition />
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="3" id="1" />
@@ -1009,7 +950,7 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="264" y="109" />
+									<position x="490" y="-10" />
 								</label>
 							</labels>
 							<points>
@@ -1513,54 +1454,6 @@ There is a robot with two grippers. It can carry a ball in each. The goal is to 
 												</label>
 												<label type="rolename" identifier="2">
 													<position x="900" y="15" />
-												</label>
-											</labels>
-											<points />
-											<color />
-											<lineStyle />
-										</graphics>
-									</objectAssociation>
-									<objectAssociation id="5">
-										<classAssociation>4</classAssociation>
-										<description />
-										<associationEnds>
-											<objectAssociationEnd element="object" element-id="2" id="1" />
-											<objectAssociationEnd element="object" element-id="1" id="2" />
-										</associationEnds>
-										<graphics>
-											<labels>
-												<label type="main" identifier="">
-													<position x="" y="" />
-												</label>
-												<label type="rolename" identifier="1">
-													<position x="" y="" />
-												</label>
-												<label type="rolename" identifier="2">
-													<position x="" y="" />
-												</label>
-											</labels>
-											<points />
-											<color />
-											<lineStyle />
-										</graphics>
-									</objectAssociation>
-									<objectAssociation id="6">
-										<classAssociation>4</classAssociation>
-										<description />
-										<associationEnds>
-											<objectAssociationEnd element="object" element-id="3" id="1" />
-											<objectAssociationEnd element="object" element-id="1" id="2" />
-										</associationEnds>
-										<graphics>
-											<labels>
-												<label type="main" identifier="">
-													<position x="" y="" />
-												</label>
-												<label type="rolename" identifier="1">
-													<position x="" y="" />
-												</label>
-												<label type="rolename" identifier="2">
-													<position x="" y="" />
 												</label>
 											</labels>
 											<points />

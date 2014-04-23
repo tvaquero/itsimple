@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<name>Blocks Domain v1_0</name>
-	<description>This model represents the classical Blocks Wold domain, based on the domain from IPC-2 (2000).
-Stack a set of blocks. A high degree of interaction between goals. Easy for people, can be hard for automated planners.</description>
+	<description>This project represents the classical Blocks Wold domain.</description>
 	<generalInformation>
 		<tool>itSIMPLE</tool>
 		<version>3.1.10</version>
@@ -647,7 +646,7 @@ Stack a set of blocks. A high degree of interaction between goals. Easy for peop
 					<class id="5">
 						<graphics>
 							<icon />
-							<position x="377" y="313" />
+							<position x="384" y="268" />
 							<size width="300" height="187" />
 							<color />
 						</graphics>
@@ -655,7 +654,7 @@ Stack a set of blocks. A high degree of interaction between goals. Easy for peop
 					<class id="6">
 						<graphics>
 							<icon />
-							<position x="182" y="149" />
+							<position x="200" y="62" />
 							<size width="141" height="124" />
 							<color />
 						</graphics>
@@ -663,7 +662,7 @@ Stack a set of blocks. A high degree of interaction between goals. Easy for peop
 					<class id="7">
 						<graphics>
 							<icon />
-							<position x="42" y="339" />
+							<position x="42" y="297" />
 							<size width="99" height="105" />
 							<color />
 						</graphics>
@@ -674,13 +673,13 @@ Stack a set of blocks. A high degree of interaction between goals. Easy for peop
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="467" y="-17" />
+									<position x="510" y="-39" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="791" y="-19" />
+									<position x="1404" y="-11" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -693,8 +692,8 @@ Stack a set of blocks. A high degree of interaction between goals. Easy for peop
 								</label>
 							</labels>
 							<points>
-								<point x="242" y="103" />
-								<point x="289" y="103" />
+								<point x="246" y="32" />
+								<point x="293" y="32" />
 							</points>
 							<color />
 							<lineStyle />
@@ -731,22 +730,22 @@ Stack a set of blocks. A high degree of interaction between goals. Easy for peop
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="304" y="-34" />
+									<position x="500" y="-15" />
 								</label>
 								<label type="rolename" identifier="1">
-									<position x="100" y="15" />
+									<position x="" y="" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="900" y="15" />
+									<position x="" y="" />
 								</label>
 								<label type="multiplicity" identifier="1">
-									<position x="100" y="-15" />
+									<position x="" y="" />
 								</label>
 								<label type="multiplicity" identifier="2">
-									<position x="900" y="-15" />
+									<position x="" y="" />
 								</label>
 								<label type="changeability" identifier="">
-									<position x="500" y="15" />
+									<position x="" y="" />
 								</label>
 							</labels>
 							<points />

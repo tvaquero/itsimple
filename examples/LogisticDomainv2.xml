@@ -1212,13 +1212,13 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="466" y="15" />
+									<position x="484" y="-58" />
 								</label>
 								<label type="rolename" identifier="1">
 									<position x="100" y="15" />
 								</label>
 								<label type="rolename" identifier="2">
-									<position x="963" y="-45" />
+									<position x="1069" y="-16" />
 								</label>
 								<label type="multiplicity" identifier="1">
 									<position x="100" y="-15" />
@@ -1478,7 +1478,7 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="500" y="-15" />
+									<position x="" y="" />
 								</label>
 							</labels>
 							<points />

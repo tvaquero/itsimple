@@ -1,7 +1,7 @@
 /*** 
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 * 
-* Copyright (C) 2007-2012 University of Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 * 
 *
 * This file is part of itSIMPLE.
@@ -617,10 +617,10 @@ public class XPDDLToPDDL {
             if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
     			pddl = identation + "(at start \n";
     			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-    			pddl += identation + ")";
+    			pddl += identation + ")\n";
             }
             else{
-                pddl = identation + "(at start";
+                pddl = identation + "(at start ";
                 pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ");
                 pddl += ")";
             }
@@ -633,10 +633,10 @@ public class XPDDLToPDDL {
             if (chdNode.getName().equals("and") || chdNode.getName().equals("or")){
     			pddl = identation + "(at end \n";
     			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), identation + "  ") + "\n";
-    			pddl += identation + ")";
+    			pddl += identation + ")\n";
             }
             else{
-                pddl = identation + "(at end";
+                pddl = identation + "(at end ";
                 pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ");
                 pddl += ")";
             }
@@ -651,7 +651,7 @@ public class XPDDLToPDDL {
     			pddl += identation + ")\n";
             }
             else{
-                pddl = identation + "(over all";
+                pddl = identation + "(over all ";
                 pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), " ") ;
                 pddl += ")";
             }

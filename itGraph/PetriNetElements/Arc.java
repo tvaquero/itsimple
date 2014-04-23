@@ -58,9 +58,7 @@ public class Arc extends BasicArc {
 		super();
 		data = arc;
 		weight = arc.getChild("inscription").getChildText("text");
-                //Element toolspecific = arc.getChild("toolspecific");
-		//String type = toolspecific.getChild("type").getAttributeValue("value");
-                String type = arc.getChild("type").getAttributeValue("value");
+		String type = arc.getChild("type").getAttributeValue("value");
 		if(type.equals("normal"))
 			arcType = NORMAL_ARC;
 		else if(type.equals("read"))

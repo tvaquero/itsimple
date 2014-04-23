@@ -1,7 +1,7 @@
 /***
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 *
-* Copyright (C) 2007-2011 University of Sao Paulo
+* Copyright (C) 2007-2010 Universidade de Sao Paulo
 *
 *
 * This file is part of itSIMPLE.
@@ -57,7 +57,6 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.nfunk.jep.JEP;
-import util.database.DataBase;
 
 /**
  * This class is responsible for all plan analysis processes including plan evaluation, plan comparison.
@@ -2111,10 +2110,10 @@ public class PlanAnalyzer {
 
         html.append("<table bgcolor=\"#EEEEEE\" cellpadding=\"5\" cellspacing=\"1\" width=\"100%\">\n");
         html.append("<tr style=\"background-color:#000066; color:#FFFFFF; height:35px;\" >\n");
-        if (projects.size()>1){html.append("<th>Project</th>\n");}
-        html.append("<th>Domain</th>\n");
-        html.append("<th>Problem</th>\n");
-        html.append("<th>Planner</th>\n");
+        if (projects.size()>1){html.append("<th>Projects</th>\n");}
+        html.append("<th>Domains</th>\n");
+        html.append("<th>Problems</th>\n");
+        html.append("<th>Planners</th>\n");
         html.append("<th width=\"50px\">Time (s)</th>\n");
         html.append("<th width=\"50px\">Steps</th>\n");
         html.append("<th width=\"50px\">Validity</th>\n");
@@ -2392,10 +2391,10 @@ public class PlanAnalyzer {
         //2.1.2 Comparison Table
         StringBuilder comparisonTable = new StringBuilder();
         comparisonTable.append("                   var data = new google.visualization.DataTable();\n");
-        comparisonTable.append("                   data.addColumn('string', 'Project');\n");
-        comparisonTable.append("                   data.addColumn('string', 'Domain');\n");
-        comparisonTable.append("                   data.addColumn('string', 'Problem');\n");
-        comparisonTable.append("                   data.addColumn('string', 'Planner');\n");
+        comparisonTable.append("                   data.addColumn('string', 'Projects');\n");
+        comparisonTable.append("                   data.addColumn('string', 'Domains');\n");
+        comparisonTable.append("                   data.addColumn('string', 'Problems');\n");
+        comparisonTable.append("                   data.addColumn('string', 'Planners');\n");
         comparisonTable.append("                   data.addColumn('number', 'Time');\n");
         comparisonTable.append("                   data.addColumn('number', 'Steps');\n");
         comparisonTable.append("                   data.addColumn('string', 'Validity');\n");
@@ -2712,14 +2711,14 @@ public class PlanAnalyzer {
                                 
                                 double plancost = -1;
                                 
-                               
-                                if (plan.getChild("metrics") != null && plan.getChild("metrics").getChildren().size()>0){
+                                if (plan.getChild("metrics").getChildren().size()>0){
                                     
                                     Element theCurrentmetrics = plan.getChild("metrics");
                                     plancost = evaluateCostAward(theCurrentmetrics);
                                     betterCriteria.getChild("plancost").setAttribute("temp", Double.toString(plancost));
                                     
                                 }
+
 
 
                                 //Checking it the values are the best

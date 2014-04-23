@@ -176,6 +176,19 @@
 							<color />
 						</graphics>
 					</attribute>
+					<attribute id="6">
+						<name>batchCounter</name>
+						<type>2</type>
+						<description />
+						<multiplicity />
+						<initialValue />
+						<changeability />
+						<parameters />
+						<constraints />
+						<graphics>
+							<color />
+						</graphics>
+					</attribute>
 				</attributes>
 				<operators>
 					<operator id="1">
@@ -409,7 +422,7 @@
 								<defaultValue />
 							</parameter>
 							<parameter id="3">
-								<name>ayl</name>
+								<name>aly</name>
 								<type>7</type>
 								<defaultValue />
 							</parameter>
@@ -1531,12 +1544,12 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="501" y="-28" />
+									<position x="540" y="-99" />
 								</label>
 							</labels>
 							<points>
-								<point x="210" y="134" />
-								<point x="455" y="134" />
+								<point x="205" y="126" />
+								<point x="450" y="126" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1547,7 +1560,7 @@
 						<name />
 						<description />
 						<precondition>spg.belongsTo = ayl and spg.currentColor = col and veh.paintColor = col and veh.seqRank = spg.lastPaintedSeqRank + 1 and spg.batchCounter &lt; spg.paintBatchLimit and abl.worksOn = ayl and spg.lastPaintedSeqRank = abl.lastAssembledSeqRank</precondition>
-						<postcondition>spg.batchCounter = spg.batchCounter + 1 and spg.lastPaintedSeqRank = veh.seqRank</postcondition>
+						<postcondition>spg.batchCounter = spg.batchCounter + 1 and lastPaintedSeqRank = veh.seqRank</postcondition>
 						<associationEnds>
 							<actionEnd navigation="false" element="state" element-id="2" id="1" />
 							<actionEnd navigation="true" element="state" element-id="1" id="2" />
@@ -1555,7 +1568,7 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="464" y="-16" />
+									<position x="460" y="-86" />
 								</label>
 							</labels>
 							<points>
@@ -1579,7 +1592,7 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="796" y="-17" />
+									<position x="2978" y="45" />
 								</label>
 							</labels>
 							<points>
@@ -1604,13 +1617,13 @@
 						<graphics>
 							<labels>
 								<label type="main" identifier="">
-									<position x="552" y="151" />
+									<position x="599" y="123" />
 								</label>
 							</labels>
 							<points>
-								<point x="558" y="240" />
-								<point x="558" y="177" />
-								<point x="509" y="177" />
+								<point x="553" y="244" />
+								<point x="553" y="181" />
+								<point x="504" y="181" />
 							</points>
 							<color />
 							<lineStyle />
@@ -1728,7 +1741,7 @@
 							</graphics>
 						</object>
 						<object id="6">
-							<name>a1</name>
+							<name>assenblyLine1</name>
 							<class>7</class>
 							<description />
 							<graphics>
@@ -1999,6 +2012,12 @@
 											<color />
 										</graphics>
 									</attribute>
+									<attribute class="6" id="6">
+										<value />
+										<graphics>
+											<color />
+										</graphics>
+									</attribute>
 								</attributes>
 								<graphics>
 									<icon />
@@ -2164,7 +2183,7 @@
 									<object id="6">
 										<attributes>
 											<attribute class="7" id="1">
-												<value>0</value>
+												<value />
 												<graphics>
 													<color />
 												</graphics>
@@ -2172,8 +2191,8 @@
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="238" y="169" />
-											<size width="190" height="117" />
+											<position x="238" y="195" />
+											<size width="190" height="91" />
 											<color />
 										</graphics>
 									</object>
@@ -2195,7 +2214,7 @@
 												</graphics>
 											</attribute>
 											<attribute class="9" id="1">
-												<value>a1</value>
+												<value>assemblyLine1</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -2203,8 +2222,8 @@
 										</attributes>
 										<graphics>
 											<icon />
-											<position x="773" y="173" />
-											<size width="256" height="131" />
+											<position x="731" y="182" />
+											<size width="203" height="94" />
 											<color />
 										</graphics>
 									</object>
@@ -2217,7 +2236,7 @@
 												</graphics>
 											</attribute>
 											<attribute class="6" id="4">
-												<value>a1</value>
+												<value>assemblyLine1</value>
 												<graphics>
 													<color />
 												</graphics>
@@ -2240,11 +2259,17 @@
 													<color />
 												</graphics>
 											</attribute>
+											<attribute class="6" id="6">
+												<value />
+												<graphics>
+													<color />
+												</graphics>
+											</attribute>
 										</attributes>
 										<graphics>
 											<icon />
 											<position x="489" y="141" />
-											<size width="275" height="168" />
+											<size width="215" height="135" />
 											<color />
 										</graphics>
 									</object>
@@ -2278,7 +2303,7 @@
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2302,7 +2327,7 @@
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2326,7 +2351,7 @@
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2350,7 +2375,7 @@
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2374,7 +2399,7 @@
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2398,7 +2423,7 @@
 										<graphics>
 											<labels>
 												<label type="main" identifier="">
-													<position x="500" y="-15" />
+													<position x="" y="" />
 												</label>
 												<label type="rolename" identifier="1">
 													<position x="" y="" />
@@ -2419,110 +2444,7 @@
 								<name>Snapshot</name>
 								<sequenceReference>goal</sequenceReference>
 								<description />
-								<objects>
-									<object id="1">
-										<attributes>
-											<attribute class="5" id="4">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="3">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="2">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="1">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-										</attributes>
-										<graphics>
-											<icon />
-											<position x="59" y="378" />
-											<size width="190" height="155" />
-											<color />
-										</graphics>
-									</object>
-									<object id="2">
-										<attributes>
-											<attribute class="5" id="4">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="3">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="2">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="1">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-										</attributes>
-										<graphics>
-											<icon />
-											<position x="278" y="386" />
-											<size width="183" height="145" />
-											<color />
-										</graphics>
-									</object>
-									<object id="3">
-										<attributes>
-											<attribute class="5" id="4">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="3">
-												<value>true</value>
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="2">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-											<attribute class="5" id="1">
-												<value />
-												<graphics>
-													<color />
-												</graphics>
-											</attribute>
-										</attributes>
-										<graphics>
-											<icon />
-											<position x="484" y="371" />
-											<size width="193" height="153" />
-											<color />
-										</graphics>
-									</object>
-								</objects>
+								<objects />
 								<associations />
 								<constraints />
 							</objectDiagram>
