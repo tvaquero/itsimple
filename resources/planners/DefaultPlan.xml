@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xmlPlan>
+	<toolInformation>
+		<name>itSIMPLE</name>
+		<version>4.0.00</version>
+		<message/>
+	</toolInformation>
+	<name/>
+	<description/>
+        <project/>
+	<domain/>
+	<problem/>
+        <datetime/>
+	<planner id=""/>
+	<statistics>
+		<toolTime/>
+		<time/>
+		<parsingTime/>
+		<nrActions/>
+		<makeSpan/>
+		<metricValue/>
+		<planningTechnique/>
+		<additional/>
+                <forcedQuit/>
+	</statistics>
+        <validity isValid=""/>
+        <validator id="" />
+        <evaluation value="">
+            <rationales/>
+        </evaluation>
+	<plan/>
+        <comments/>
+</xmlPlan>

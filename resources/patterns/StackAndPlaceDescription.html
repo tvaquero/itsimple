@@ -1,0 +1,109 @@
+<html>
+<body>
+<h1>Stack &amp; Place</h1>
+
+<h2>Intent</h2>
+
+The purpose of the pattern is to model objects (e.g., boxes, packages) that must be reorganized (placed, stacked on and unstacked from each other) by stacker agents in discrete areas. Given an initial arrangement of the objects in different areas, the goal is to reorganize these object to reach a new desired arrangement.
+
+<h2>Scenarios</h2>
+
+Consider a ship in which containers must be replaced, reorganized on the main deck by a crane from the port to the deck. The containers are reorganized on the available areas, discrete regions of the surface of the deck for instance, in the appropriate order or they are relocated from the port areas to the deck. In a pallet, consider the situation where boxes must be reorganized by workers (stacker) to a desirable new position. In a classical blocks world, blocks must be reorganized on the table given an initial arrangement and a target positions of the blocks.
+
+<h2>Applicability</h2>
+
+Use this pattern when objects have be placed, piled up, and reorganized on the available areas of a areas (spots) by stackers (agent objects).
+
+<h2>Model Representation</h2>
+
+A class <i>Box</i> represents the type of objects that are stacked and unstacked from other objects by <i>Stackers</i> and put down and picked up from the available <i>Areas</i>. The class <i>Stacker</i> represents the type of agent objects that can organize and re-organized the boxes on the available areas. <i>Boxes</i> (e.g., packages, containers, blocks) can be stacked on top of other boxes, forming a pile of boxes. The class <i>Area</i> represents the available places where boxes, or piles can be positioned.
+
+The following figure shows the UML class diagram of the stack and place model.
+
+<p><center><img src="file:resources/patterns/images/stackandplace.png" /></center></p>
+
+<p>The following figures show the state machine diagrams of the stack and place model, representing the behavior of the <i>Box</i> and <i>Stacker</i> objects, respectively.</p>
+
+<p><center><img src="file:resources/patterns/images/boxstatemachine.png" /></center></p>
+
+<p><center><img src="file:resources/patterns/images/stackerstatemachine.png" /></center></p>
+
+<p>The OCL specification of the actions and invariants is presented below.</p>
+
+<font face="Verdana">
+<p>
+<b>context</b> Box <b>inv:</b><br>
+self.onbox->notEmpty() implies self.onarea->isEmpty() and <br>
+self.onarea->notEmpty() implies self.onbox->isEmpty() <br>
+<br>
+<b>context</b> Stacker::pickup(x: Box, a: Area) <br>
+<b>pre:</b> <br>
+self.idle = true and self.holding = null and <br>
+and x.onarea = a and x.clear = true <br>
+<b>post:</b><br>
+self.idle = false and self.holding = x and  <br>
+x.onarea = null and x.clear = false and  <br>
+a.available = true <br>
+<br>
+<b>context</b> Stacker::putdown(x: Box, a: Area) <br>
+<b>pre:</b> <br>
+self.idle = true and self.holding = null and <br>
+and x.onarea = a and x.clear = true <br>
+<b>post:</b> <br>
+self.idle = false and self.holding = x and <br>
+x.onarea = null and x.clear = false and <br>
+a.available = true <br>
+<br>
+<b>context</b> Stacker::stack(x: Box, y: Box) <br>
+<b>pre:</b> <br>
+self.idle = false and self.holding = x and <br>
+x.clear = false and and y.clear = true <br>
+<b>post:</b><br>
+self.idle = true and self.holding = null and <br>
+x.onbox = y and x.clear = true and y.clear = false <br>
+<br>
+<b>context</b> Stacker::unstack(x: Box, y: Box) <br>
+<b>pre:</b> <br>
+self.idle = true and self.holding = null and <br>
+x.onbox = y and x.clear = true <br>
+<b>post:</b><br>
+self.idle = false and self.holding = x and <br>
+x.clear = false and x.onbox = null and y.clear = true <br>
+</p>
+</font>
+<br>
+
+<h2>Elements, Participants and Roles</h2>
+<ul>
+<li><b>Stacker</b> (Class).  The class of objects that can (re)arrange box objects on the available areas.</li>
+<li><b>holding</b> (association).  The relation between a Stacker and a Box that represents the agent holding the box.</li>
+<li><b>pickup</b> (operator, action schema). The operation performed by a stacker to pick up a box directly from the area (box on a certain area). As a result, the stackers will be holding the box.</li>
+<li><b>putdown</b> (operator, action schema). The operation performed by a stacker to put down a box directly on the area. As a result, the stackers will not be holding the box anymore.</li>
+<li><b>stack</b> (operator, action schema). The operation performed by a stacker to stack a box on another box. As a result, the stackers will not be holding the box anymore.</li>
+<li><b>unstack</b> (operator, action schema). The operation performed by a stacker to unstack a box from another box. As a result, the stackers will be holding the box.</li>
+<li><b>Box</b> (Class). The object that is placed and rearranged on the areas.</li>
+<li><b>onarea</b> (association). the relation between Box and Area that represents that fact that a box is directly on the area, direct contact.</li>
+<li><b>onbox</b> (association). The relation between Box and another Box that represents that fact that a box is directly on another box.</li>
+<li><b>Area</b> (Class). The objects that represents the available areas in a surface where the box can be placed on.</li>
+</ul>
+
+<h2>Metrics</h2>
+
+The main metric for stack and place problems is the number of box manipulations. This pattern provides a base for more complicated reorganization problems such as the total weight of a pile, the number of piles or area used. For the encapsulate model described here, the usual metric is the number of box manipulation, or even the number of actions in the plan (a very traditional and simplistic way to measure the quality of plan in AI Planning). Depending on the planning strategy used to solve the problem (especially not optimal ones), the resulting plans for place and stack problems might contain undesirable stack-unstack or pickup-putdown or stack-unstack pickup-stack-unstack-putdown loops.
+
+<h2>Consequences</h2>
+
+This pattern does not consider the load constraint of the boxes in a pile nor the dimensions of the areas. If these requirements are necessary, this pattern must be extended accordingly. The pattern can be extended to represent grouping of areas in surfaces for instances (e.g., in containers). A collection pattern can be use to group the areas; however, if a stacker must travel to one surface to another to place boxes, then the necessary extension is required by, for example, using the move and reach pattern.
+
+<h2>Known Uses</h2>
+
+Examples of domains where this patterns can be found are the following:
+<ul>
+<li>Blocks world</li>
+<li>Hanoi</li>
+<li>Freecell</li>
+</ul>
+
+
+</body>
+</html>

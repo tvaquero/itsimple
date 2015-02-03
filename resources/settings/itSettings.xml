@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<itSIMPLE>
+	<version>4.0.00</version>
+	<generalSettings>
+		<language id="EN" />
+		<graphics>
+			<iconsPath>myIcons/</iconsPath>
+			<appearence>Default</appearence>
+		</graphics>
+		<lastOpenFolder></lastOpenFolder>
+	</generalSettings>
+	<recentProjects>
+	</recentProjects>
+	<logfolder path="resources/log/" />
+</itSIMPLE>
+
+
+

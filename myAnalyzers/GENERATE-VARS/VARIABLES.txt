@@ -1,0 +1,121 @@
+var0:
+  0: Atom laserat(node4i0)
+  1: Atom holdslaser(robot1)
+  2: Atom laserat(node3i3)
+  3: Atom laserat(node2i0)
+  4: Atom laserat(node3i0)
+  5: Atom laserat(node0i2)
+  6: Atom laserat(node1i2)
+  7: Atom laserat(node4i2)
+  8: Atom laserat(node3i2)
+  9: Atom laserat(node1i3)
+  10: Atom laserat(node2i4)
+  11: Atom laserat(node4i3)
+  12: Atom laserat(node2i1)
+  13: Atom laserat(node0i3)
+  14: Atom laserat(node2i2)
+  15: Atom laserat(node1i4)
+  16: Atom laserat(node0i0)
+  17: Atom laserat(node2i3)
+  18: Atom laserat(node4i4)
+  19: Atom laserat(node1i1)
+  20: Atom laserat(node4i1)
+  21: Atom laserat(node0i4)
+  22: Atom laserat(node0i1)
+  23: Atom laserat(node3i1)
+  24: Atom laserat(node1i0)
+  25: Atom laserat(node3i4)
+var1:
+  0: Atom robotat(robot1, node2i4)
+  1: Atom robotat(robot1, node1i4)
+  2: Atom robotat(robot1, node4i4)
+  3: Atom robotat(robot1, node1i1)
+  4: Atom robotat(robot1, node3i1)
+  5: Atom robotat(robot1, node1i3)
+  6: Atom robotat(robot1, node2i1)
+  7: Atom robotat(robot1, node2i3)
+  8: Atom robotat(robot1, node0i1)
+  9: Atom robotat(robot1, node3i4)
+  10: Atom robotat(robot1, node4i1)
+  11: Atom robotat(robot1, node3i2)
+  12: Atom robotat(robot1, node4i3)
+  13: Atom robotat(robot1, node0i4)
+  14: Atom robotat(robot1, node2i2)
+  15: Atom robotat(robot1, node0i3)
+  16: Atom robotat(robot1, node0i0)
+  17: Atom robotat(robot1, node2i0)
+  18: Atom robotat(robot1, node1i0)
+  19: Atom robotat(robot1, node4i0)
+  20: Atom robotat(robot1, node3i0)
+  21: Atom robotat(robot1, node0i2)
+  22: Atom robotat(robot1, node3i3)
+  23: Atom robotat(robot1, node1i2)
+  24: Atom robotat(robot1, node4i2)
+var2:
+  0: Atom holdsgold(robot1)
+  1: Atom holdsbomb(robot1)
+  2: Atom armempty(robot1)
+  3: <none of those>
+var3:
+  0: Atom softrockat(node0i3)
+  1: Atom clear(node0i3)
+var4:
+  0: Atom softrockat(node4i4)
+  1: Atom clear(node4i4)
+var5:
+  0: Atom clear(node2i4)
+  1: Atom hardrockat(node2i4)
+var6:
+  0: Atom hardrockat(node2i3)
+  1: Atom clear(node2i3)
+var7:
+  0: Atom clear(node2i2)
+  1: Atom softrockat(node2i2)
+var8:
+  0: Atom hardrockat(node3i3)
+  1: Atom clear(node3i3)
+var9:
+  0: Atom clear(node3i2)
+  1: Atom softrockat(node3i2)
+var10:
+  0: Atom clear(node0i4)
+  1: Atom softrockat(node0i4)
+var11:
+  0: Atom softrockat(node4i1)
+  1: Atom clear(node4i1)
+var12:
+  0: Atom clear(node1i3)
+  1: Atom softrockat(node1i3)
+var13:
+  0: Atom clear(node1i4)
+  1: Atom softrockat(node1i4)
+var14:
+  0: Atom softrockat(node0i2)
+  1: Atom clear(node0i2)
+var15:
+  0: Atom clear(node2i1)
+  1: Atom softrockat(node2i1)
+var16:
+  0: Atom clear(node1i1)
+  1: Atom hardrockat(node1i1)
+var17:
+  0: Atom softrockat(node3i1)
+  1: Atom clear(node3i1)
+var18:
+  0: Atom hardrockat(node4i3)
+  1: Atom clear(node4i3)
+var19:
+  0: Atom clear(node4i2)
+  1: Atom softrockat(node4i2)
+var20:
+  0: Atom clear(node0i1)
+  1: Atom hardrockat(node0i1)
+var21:
+  0: Atom hardrockat(node3i4)
+  1: Atom clear(node3i4)
+var22:
+  0: Atom clear(node1i2)
+  1: Atom softrockat(node1i2)
+var23:
+  0: Atom goldat(node1i4)
+  1: <none of those>

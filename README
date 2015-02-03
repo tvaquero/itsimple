@@ -1,6 +1,6 @@
 itSIMPLE: Integrated Tools Software Interface for Modeling PLanning Environments
  
-Copyright (C) 2007-2012 University of Sao Paulo, University of Toronto
+Copyright (C) 2007-2015 University of Sao Paulo, University of Toronto
  
 
 This file is part of itSIMPLE.
@@ -24,7 +24,7 @@ Authors:	Tiago S. Vaquero,
 		 	Flavio Tonidandel,
 		 	Victor Romero,
 		 	Fernando Sette,
-                        Matheus Haddad,
+            Matheus Haddad,
 			Rosi Tanaco,
 			Gustavo Costa,
 			Jose Armando San Pedro Miralles.
