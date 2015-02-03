@@ -1,0 +1,107 @@
+<html>
+<body>
+<h1>Volume Transfer</h1>
+
+<h2>Intent</h2>
+
+The purpose of the pattern is to model and represent the problem of transferring volumes from one container to another and refilling when necessary. It represents agents that can manage the volume of substances in containers, from refilling (or refueling) them from the sources and emptying their content to distributing and exchange volumes among the containers.  Containers might have different capacities and current content. In the planning problem represented by this pattern, the goal is to put, reach, the desired amount of substance (e.g. liquid, solid) in each available containers. A container’s content can be consumed from an external process but such consume is not represented in this pattern.
+
+<h2>Scenarios</h2>
+
+In a chemical plant, liquid and substances must be distributed in different containers to reach a certain volume in each of of them. Sources of substances can be for example large reservatory that feed the system. In a petroleum port, oil must be transferred from the tanker (vessel) to the tanks and also among tanks. In a logistic domain, trucks have containers of fuel while gas stations are the source of fuel. In this case, fuel is consumed when truck drive from one location to another. Trucks can perform refueling at the fuel station or even share fuel between trucks if necessary. A rover must collect and store a certain amount of data and transfer it to a satellite.
+
+<h2>Applicability</h2>
+
+Use this pattern when objects are aimed to store volume of substances or material. These container objects are able to refill from a source object, pour the substance with other containers and empty their content. 
+
+<h2>Model Representation</h2>
+
+A class <i>Container</i> represents the type of objects that can store a certain amount of substance (e.g., liquid, material, sand, rock, data) and such substance needs to be transfer to other containers, refilled from a source and empty when necessary. Each container has a capacity, a maximum amount of substance that it can store and the current available amount of such a substance. The class <i>Source</i> represents the type of objects that has a infinite amount of substance so containers can refill to its max capacity. Container are considered agent objects in this pattern such that they can perform three main actions: refill the content from a source; pour their content to another container; and totally empty their content.<br>
+The following figure shows the UML class diagram of the volume transfer model.
+
+<p><center><img src="file:resources/patterns/images/volumetransfer.png" /></center></p>
+
+<p>The following figure shows the state machine diagram of the volume transfer model, representing the behavior of the <i>Container</i>.</p>
+
+<p><center><img src="file:resources/patterns/images/containerstatemachine.png" /></center></p>
+
+<p>The OCL specification of the actions and invariants is presented below.</p>
+
+<font face="Verdana">
+<p>
+<b>context</b> Container <b>inv</b>:<br>
+self.current <= self.capacity<br>
+<br>
+<b>context</b> Container::refill(s: Source) <br>
+<b>pre:</b><br>
+self.current < self.capacity <br> 
+<b>post:</b><br>
+self.current = self.capacity<br>
+<br>
+<b>context</b> Container::empty() <br>
+<b>pre:</b><br>
+self.current > 0<br>
+<b>post:</b><br>
+self.current = 0<br>
+<br>
+<i>-- Transfer content from the container to another container (c2). If c2 has enough room for putting all the volume of the container then the container becomes empty while the content is fully transfer to c2. If c2 cannot support all volume from the container then c2 receives the volume up to its max while the container holds the remaining (the amount that count not be transferred to c2).</i><br>
+<b>context</b> Container::pour(c2: Container) <br>
+<b>pre:</b><br>
+self.current > 0 and c2.current < c2.capacity<br>
+<b>post:</b><br>
+if (c2.capacity >= (self.current + c2.current)) then <br>
+self.current = 0 and <br>
+c2.current = c2.current + self.current <br>
+endif <br>
+and <br>
+if (c2.capacity < (self.current + c2.current)) then <br>
+c2.current = c2.capacity <br>
+and self.current = self.current - (c2.capacity - c2.current) <br>
+endif<br>
+<br>
+<i>-- Transfer a specified amount of substance (int) from one container to another</i><br>
+<b>context</b> Container::transfer(c2: Container, amount: Int) <br>
+<b>pre:</b><br>
+self.current >= amount and c2.capacity >= c2.current + amount<br>
+<b>post:</b><br>
+self.current = self.current - amount and<br>
+c2.current = c2.current + amount<br>
+</p>
+</font>
+<br>
+
+<h2>Elements, Participants and Roles</h2>
+<ul>
+
+<li><b>Container</b> (Class).  The class of objects that can store, share and refill substances.</li>
+<li><b>capacity</b> (property). The property that holds the max capacity of a container to store a substance.</li>
+<li><b>current</b> (property). The property that holds the current amount of substance in the container.</li>
+<li><b>refill</b> (operator, action schema). The operation performed by a Container to refill its content from a source.</li>
+<li><b>empty</b> (operator, action schema). The operation performed by a Container to make its content empty.</li>
+<li><b>pour</b> (operator, action schema). The operation performed by a Container to pass its content to another container, lets say c2. If c2 has enough room for putting all the volume of the container then the container becomes empty while the content is fully transfer to c2. If c2 cannot support all volume from the container then c2 receives the volume up to its max while the container holds the remaining (the amount that count not be transferred to c2).</li>
+<li><b>transfer</b> (operator, action schema). The operation performed by a Container to transfer a certain (specified) amount of substance to another container (c2).</li>
+<li><b>Source</b> (Class). The object that represents an infinite source of substance, the object that the container can refill from.</li>
+</ul>
+
+<h2>Metrics</h2>
+
+The main metric for the volume transfer problems is the number volume manipulation, the size of the plan.
+
+<h2>Consequences</h2>
+
+This pattern does not consider the consumption of the substance. Depending on the problem the pattern can be extended to deal with substance consumption in which the substance can be used for example based on a consumption rate of a fixed amount of volume. The substance can be then refilled from the source or even shared between containers when required. Difference substance can be used as well. The pattern can be used to handle different types of substances so a container can hold the information about which type of substance it is currently storing. Mix of substances can also be considered (some constraints on the mixture can be used as well).
+
+<h2>Known Uses</h2>
+
+Examples of domains where this patterns can be found are the following:
+<ul>
+<li>The classical Jugs and Water problem</li>
+<li>Oil transportation on a Petroleum Port (vessels, tanks and pipelines)</li>
+<li>Chemical plant</li>
+<li>Data transfer</li>
+<li>Fuel tank of trucks in a Logistic problem</li>
+<li>Sample container in a rover on Mars</li>
+<li>Transport of wood, stone, gold and coal in the Settlers domain</li>
+</ul>
+</body>
+</html>

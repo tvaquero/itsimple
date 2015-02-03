@@ -1,0 +1,227 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+* {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+body {
+	margin: 30px 0;
+	padding: 0;
+	background: #EFEFEF;
+	font-size: 12px;
+	color: #6B6B6B;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+	text-transform: lowercase;
+	font-weight: normal;
+	color: #000000;
+}
+
+h2 {
+	margin-bottom: 1em;
+	margin-top: 1em;
+	border-bottom: 1px solid #F4F4F4;
+	font-size: 26px;
+}
+
+h3 {
+	margin-bottom: 1em;
+	margin-top: 2.5em;
+	padding-bottom: 5px;
+	font-size: 16px;
+	font-weight:bold;
+	border-bottom: 1px solid #F4F4F4;
+}
+
+p, ol, ul, blockquote {
+	line-height: 24px;
+}
+
+ul {
+	margin-left: 0;
+	padding-left: 0;
+	list-style: none;
+}
+
+a {
+	color: #4F4F7C;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img {
+	border: none;
+}
+
+#textfield1 {
+	width: 185px;
+	margin-bottom: 10px;
+	border: 1px solid #E0E0E0;
+	border-right-color: #F6F6F6;
+	border-bottom-color: #F6F6F6;
+}
+
+#submit1 {
+	border: 1px solid #EBEBEB;
+	border-bottom-color: #DDDDDD;
+	background: #FBFBFB url(images/img7.gif) repeat-x;
+	text-transform: lowercase;
+	font-size: 12px;
+	color: #7A7A7A;
+}
+
+/* Posted */
+
+.posted {
+	height: 33px;
+	margin: 0 0 30px 0;
+	padding: 10px 15px 0 15px;
+	background: url(images/img6.gif) repeat-x;
+	border-bottom: 1px solid #F2F2F2;
+}
+
+.posted p {
+	float: left;
+	margin: 0;
+}
+
+.posted .comments {
+	float: right;
+}
+
+.posted a {
+	color: #717171;
+}
+
+/* Header */
+
+#header {
+	width: 917px;
+	height: 115px;
+	margin: 0 auto;
+	background: url(images/img2.gif) repeat-x;
+}
+
+/* Logo */
+
+#logo {
+	float: left;
+	height: 115px;
+	padding: 0 0 0 0;
+	background: url(images/img1.gif) no-repeat;
+}
+
+#logo * {
+	text-decoration: none;
+}
+
+#logo h1 {
+	float: left;
+	padding: 50px 0 0 40px;
+	font-size: 36px;
+}
+
+#logo h1 a {
+	color: #000000;
+}
+
+#logo h1 span {
+	font-weight: bold;
+}
+
+#logo h2 {
+	float: left;
+	padding: 72px 0 0 8px;
+	font-size: 12px;
+	border: none;
+}
+
+#logo h2 a {
+	color: #B4B4B4;
+}
+
+/* Menu */
+
+#menu {
+	float: right;
+	height: 45px;
+	padding: 70px 25px 0 0;
+	background: url(images/img3.gif) no-repeat right top;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	padding: 0 15px 0 20px;
+	border-left: 1px solid #DBDBDB;
+	text-transform: lowercase;
+	text-decoration: none;
+	font-size: 13px;
+	color: #3B3B3B;
+}
+
+#menu .first a {
+	border: none;
+}
+
+/* Splash */
+
+#splash {
+	width: 877px;
+	height: 170px;
+	margin: 0 auto;
+	background: url(images/img5.gif) repeat-x left bottom;
+	border-right: 20px solid #FFFFFF;
+	border-left: 20px solid #FFFFFF;
+}
+
+/* Content */
+
+#content {
+	width: 847px;
+	margin: 0 auto;
+	padding: 30px 35px 0 35px;
+	background: #FFFFFF url(images/img8.gif) no-repeat left bottom;
+}
+
+#colOne {
+	float: left;
+	width: 620px;
+}
+
+#colTwo {
+	float: right;
+	width: 110px;
+	padding: 5px 0 0 0;
+}
+
+/* Footer */
+
+#footer {
+}
+
+#footer p {
+	text-align: center;
+	color: #777777;
+}
+
+#footer a {
+	color: #5D5D5D;
+}
