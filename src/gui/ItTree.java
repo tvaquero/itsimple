@@ -71,6 +71,143 @@ public class ItTree extends JTree{
 		while(diagramsIterator.hasNext()){		
 			Element diagrams = (Element) diagramsIterator.next();			
 			
+                        //chevere KaosDiagram
+                        if(diagrams.getName().equals("KaosDiagrams")){
+                            
+                            Element kaosDiagram = diagrams.getChild("name");
+                            Element goalDiagram = diagrams.getChild("GoalDiagram");
+                            Element operDiagram = diagrams.getChild("OperDiagram");
+                            Element objectDiagram = diagrams.getChild("ObjectDiagram");
+                            Element agentDiagram = diagrams.getChild("AgentDiagram");
+                            ItTreeNode treeKAOS = new ItTreeNode(kaosDiagram.getText(),kaosDiagram, null, null);
+                            
+                            ItTreeNode treeGoal = new ItTreeNode(goalDiagram.getChild("name").getText(),goalDiagram, null, null);
+                            //treeGoal.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+                            treeGoal.setIcon(new ImageIcon("resources/images/goal_icono.png"));
+                            
+                            
+                            //Insering all goals expectation for a goal diagram
+                            Iterator list_goals_expectation =  goalDiagram.getChild("goalsExpe").getChildren("goal").iterator();//(Element)goalDiagram.getChildren("goals");
+                             
+                            while (list_goals_expectation.hasNext()){
+					Element goal = (Element)list_goals_expectation.next();
+					ItTreeNode treeDiagram = new ItTreeNode(goal.getChildText("name"),
+							                                goal, null, null);
+					treeDiagram.setIcon(new ImageIcon("resources/images/expetativa.png"));
+					treeModel.insertNodeInto(treeDiagram, treeGoal, treeGoal.getChildCount());
+									
+				}
+                            //Insering all goals expectation for a goal diagram
+                            Iterator list_goals_requi =  goalDiagram.getChild("goalsReq").getChildren("goal").iterator();//(Element)goalDiagram.getChildren("goals");
+                             
+                            while (list_goals_requi.hasNext()){
+					Element goal = (Element)list_goals_requi.next();
+					ItTreeNode treeDiagram = new ItTreeNode(goal.getChildText("name"),
+							                                goal, null, null);
+					treeDiagram.setIcon(new ImageIcon("resources/images/requirement.png"));
+					treeModel.insertNodeInto(treeDiagram, treeGoal, treeGoal.getChildCount());
+									
+				}
+                            
+                            //Insering all agents for agoal diagram.
+                            Iterator list_agents =  goalDiagram.getChild("agents").getChildren("agent").iterator();//(Element)goalDiagram.getChildren("goals");
+                             
+                            while (list_agents.hasNext()){
+					Element agent = (Element)list_agents.next();
+					ItTreeNode treeDiagram = new ItTreeNode(agent.getChildText("name"),
+							                                agent, null, null);
+					treeDiagram.setIcon(new ImageIcon("resources/images/agent1.png"));
+					treeModel.insertNodeInto(treeDiagram, treeGoal, treeGoal.getChildCount());
+									
+				}
+                         
+                            
+                            
+                            
+                            ItTreeNode treeOp = new ItTreeNode(operDiagram.getChild("name").getText(),operDiagram, null, null);
+                            treeOp.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+                            
+                            ItTreeNode treeObj = new ItTreeNode(objectDiagram.getChild("name").getText(),objectDiagram, null, null);
+                            treeObj.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+                            
+                            ItTreeNode treeAg = new ItTreeNode(agentDiagram.getChild("name").getText(),agentDiagram, null, null);
+                            treeAg.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+                        
+                            treeModel.insertNodeInto(treeGoal, treeKAOS, treeKAOS.getChildCount());
+                            treeModel.insertNodeInto(treeOp, treeKAOS, treeKAOS.getChildCount());
+                            treeModel.insertNodeInto(treeObj, treeKAOS, treeKAOS.getChildCount());
+                            treeModel.insertNodeInto(treeAg, treeKAOS, treeKAOS.getChildCount());
+                            
+                       
+                            treeKAOS.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+			    treeModel.insertNodeInto(treeKAOS, treeProject, treeProject.getChildCount());
+                            
+                            
+                                
+                               /* Element kaosDiagram = diagrams.getChild("name");
+                                ItTreeNode name = new ItTreeNode(kaosDiagram.getText(), kaosDiagram, null, null);
+                                
+                                
+                                
+                                
+                                Element goalDiagram1 = diagrams.getChild("GoalDiagram");
+                                
+                                
+                                name.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+                                treeModel.insertNodeInto(name, treeProject, treeProject.getChildCount());
+                                
+				Iterator goalDiagrams = diagrams.getChildren("GoalDiagram").iterator();				
+				while (goalDiagrams.hasNext()){
+                                    
+					Element goalDiagram = (Element)goalDiagrams.next();
+					ItTreeNode treeDiagram = new ItTreeNode(goalDiagram.getChildText("name"),
+							                                goalDiagram, null, null);
+					treeDiagram.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+					treeModel.insertNodeInto(treeDiagram, treeProject, treeProject.getChildCount());
+					
+					Iterator agents = goalDiagram.getChild("agents").getChildren("agent").iterator();
+					while (agents.hasNext()){
+						Element actor = (Element) agents.next();
+						ItTreeNode treeActor = new ItTreeNode(actor.getChildText("name"), actor, null, null);
+						treeActor.setIcon(new ImageIcon("resources/images/agent1.png"));
+						treeDiagram.add(treeActor);				
+					}
+					
+					Iterator useCases = goalDiagram.getChild("goals").getChildren("goal").iterator();
+					while (useCases.hasNext()){
+						Element useCase = (Element) useCases.next();
+						ItTreeNode treeUseCase = new ItTreeNode(useCase.getChildText("name"), useCase, null, null);
+						treeUseCase.setIcon(new ImageIcon("resources/images/goal1.png"));
+						treeDiagram.add(treeUseCase);
+					}					
+				}*//*
+                                Iterator agentDiagram = diagrams.getChildren("AgentDiagram").iterator();				
+				while (goalDiagrams.hasNext()){
+					Element useCaseDiagram = (Element)goalDiagrams.next();
+					ItTreeNode treeDiagram = new ItTreeNode(useCaseDiagram.getChildText("name"),
+							                                useCaseDiagram, null, null);
+					treeDiagram.setIcon(new ImageIcon("resources/images/useCaseDiagram.png"));
+					treeModel.insertNodeInto(treeDiagram, treeProject, treeProject.getChildCount());
+					
+					Iterator agents = useCaseDiagram.getChild("agents").getChildren("agent").iterator();
+					while (agents.hasNext()){
+						Element actor = (Element) agents.next();
+						ItTreeNode treeActor = new ItTreeNode(actor.getChildText("name"), actor, null, null);
+						treeActor.setIcon(new ImageIcon("resources/images/agent1.png"));
+						treeDiagram.add(treeActor);				
+					}
+					
+					Iterator useCases = useCaseDiagram.getChild("goals").getChildren("goal").iterator();
+					while (useCases.hasNext()){
+						Element useCase = (Element) useCases.next();
+						ItTreeNode treeUseCase = new ItTreeNode(useCase.getChildText("name"), useCase, null, null);
+						treeUseCase.setIcon(new ImageIcon("resources/images/goal1.png"));
+						treeDiagram.add(treeUseCase);
+					}					
+				}*/
+			}
+                        //chevere
+                        
 			//Use Case Diagrams
 			if(diagrams.getName().equals("useCaseDiagrams")){
 				Iterator useCaseDiagrams = diagrams.getChildren("useCaseDiagram").iterator();				
