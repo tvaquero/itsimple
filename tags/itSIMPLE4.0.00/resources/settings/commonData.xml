@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<commonData>
+	<generalInformation>
+		<tool>itSIMPLE</tool>
+		<version>4.0.00</version>
+	</generalInformation>
+	<definedNodes>
+		<elements>
+			<references>
+				<class id="">
+					<graphics>
+						<icon/>
+						<position x="0" y="0"/>
+						<size width="100" height="70"/>
+						<color/>
+					</graphics>
+				</class>
+				<enumeration id="">
+					<graphics>
+						<icon/>
+						<position x="0" y="0"/>
+						<size width="120" height="70"/>
+						<color/>
+					</graphics>
+				</enumeration>
+				<classAssociation id="">
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="2">
+								<position x="" y=""/>
+							</label>
+							<label type="multiplicity" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="multiplicity" identifier="2">
+								<position x="" y=""/>
+							</label>
+							<label type="changeability" identifier="">
+								<position x="" y=""/>
+							</label>							
+						</labels>
+						<points/>
+						<color/>
+						<lineStyle/>
+					</graphics>
+				</classAssociation>
+				<object id="">
+					<attributes/>
+					<graphics>
+						<icon/>
+						<position x="0" y="0"/>
+						<size width="100" height="50"/>
+						<color/>
+					</graphics>
+				</object>
+				<attribute class="" id="">
+					<value/>
+					<graphics>
+						<color/>
+					</graphics>
+				</attribute>
+				<parameterizedValue id="">
+					<parameters/>
+					<value/>
+					<graphics>
+						<color/>
+					</graphics>
+				</parameterizedValue>
+				<parameter id="">
+					<value/>
+				</parameter>
+			</references>
+			<model>
+				<actor id="">
+					<name>Agent</name>
+					<description/>
+					<graphics>
+						<icon>agent.png</icon>
+						<position x="0" y="0"/>
+						<size width="70" height="80"/>
+						<color/>
+					</graphics>
+				</actor>
+				<useCase id="">
+					<name>Use Case</name>
+					<description/>
+					<definition>
+						<precondition/>
+						<postcondition/>
+						<invariants/>
+						<temporalConstraints/>
+						<flowOfEvents/>
+						<additionalIformation/>
+						<issues/>
+					</definition>
+					<graphics>
+						<icon/>
+						<position x="0" y="0"/>
+						<size width="150" height="80"/>
+						<color/>
+					</graphics>
+				</useCase>
+				<useCaseAssociation id="">
+					<name/>
+					<description/>
+					<associationEnds>
+						<associationEnd navigation="false" element="" element-id="" id="1">
+							<type/>
+							<rolename>
+								<value/>
+							</rolename>
+							<multiplicity>
+								<value/>
+							</multiplicity>
+						</associationEnd>
+						<associationEnd navigation="false" element="" element-id="" id="2">
+							<type/>
+							<rolename>
+								<value/>
+							</rolename>
+							<multiplicity>
+								<value/>
+							</multiplicity>
+						</associationEnd>
+					</associationEnds>
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="2">
+								<position x="" y=""/>
+							</label>
+							<label type="multiplicity" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="multiplicity" identifier="2">
+								<position x="" y=""/>
+							</label>
+						</labels>
+						<points/>
+						<color/>
+						<lineStyle/>
+					</graphics>
+				</useCaseAssociation>
+				<dependency id="">
+					<name/>
+					<description/>
+					<associationEnds>
+						<associationEnd navigation="false" element="" element-id="" id="1">
+							<type/>
+							<rolename>
+								<value/>
+							</rolename>
+							<multiplicity>
+								<value/>
+							</multiplicity>
+						</associationEnd>
+						<associationEnd navigation="true" element="" element-id="" id="2">
+							<type/>
+							<rolename>
+								<value/>
+							</rolename>
+							<multiplicity>
+								<value/>
+							</multiplicity>
+						</associationEnd>
+					</associationEnds>
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="2">
+								<position x="" y=""/>
+							</label>
+							<label type="multiplicity" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="multiplicity" identifier="2">
+								<position x="" y=""/>
+							</label>
+						</labels>
+						<points/>
+						<color/>
+						<lineStyle/>
+					</graphics>
+				</dependency>
+				<class id="">
+					<name>Class</name>
+					<description/>
+					<type/>
+					<stereotype/>
+					<attributes/>
+					<operators/>
+					<generalization element="class" id="">
+						<name/>
+						<graphics>
+							<labels>
+								<label type="main" identifier="">
+									<position x="" y=""/>
+								</label>
+							</labels>
+							<points/>
+							<color/>
+							<lineStyle/>
+						</graphics>
+					</generalization>
+					<constraints/>
+					<graphics>
+						<icon/>
+						<position x="" y=""/>
+						<size width="" height=""/>
+						<color/>
+					</graphics>
+				</class>
+				<classAssociation id="">
+					<name>association</name>
+					<description/>
+					<associationEnds>
+						<associationEnd navigation="false" element="" element-id="" id="1">
+							<type>none</type>
+							<rolename>
+								<value/>
+							</rolename>
+							<multiplicity>
+								<value/>
+							</multiplicity>
+						</associationEnd>
+						<associationEnd navigation="true" element="class" element-id="" id="2">
+							<type>simple</type>
+							<rolename>
+								<value/>
+							</rolename>
+							<multiplicity>
+								<value/>
+							</multiplicity>
+						</associationEnd>
+					</associationEnds>
+					<changeability>
+						<value/>						
+					</changeability>
+					<constraints/>
+					<graphics>						
+						<points/>
+						<color/>
+						<lineStyle/>
+					</graphics>
+				</classAssociation>
+				<state id="">
+					<name>State</name>
+					<description/>
+					<condition/>
+					<graphics>
+						<icon/>
+						<position x="0" y="0"/>
+						<size width="150" height="60"/>
+						<color/>
+					</graphics>
+				</state>
+				<initialState id="">
+					<name>Initial State</name>
+					<description/>
+					<graphics>
+						<icon>initialState.png</icon>
+						<position x="0" y="0"/>
+						<size width="50" height="50"/>
+						<color/>
+					</graphics>
+				</initialState>
+				<finalState id="">
+					<name>Final State</name>
+					<description/>
+					<graphics>
+						<icon>finalState.png</icon>
+						<position x="0" y="0"/>
+						<size width="50" height="50"/>
+						<color/>
+					</graphics>
+				</finalState>
+				<action id="">
+					<reference class="" operator=""/>
+					<name/>
+					<description/>
+					<precondition/>
+					<postcondition/>
+                                        <annotatedoclexpressions/>                                        
+					<associationEnds>
+						<actionEnd navigation="false" element="state" element-id="" id="1"/>
+						<actionEnd navigation="true" element="state" element-id="" id="2"/>
+					</associationEnds>
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y=""/>
+							</label>							
+						</labels>
+						<points/>
+						<color/>
+						<lineStyle/>
+					</graphics>
+				</action>
+				<object id="">
+					<name>Object</name>
+					<class/>
+					<description/>
+					<graphics>
+						<icon/>
+						<position x="" y=""/>
+						<size width="" height=""/>
+						<color/>
+					</graphics>
+				</object>
+				<objectAssociation id="">
+					<classAssociation/>
+					<description/>
+					<associationEnds>
+						<objectAssociationEnd element="" element-id="" id="1"/>
+						<objectAssociationEnd element="" element-id="" id="2"/>
+					</associationEnds>
+					<graphics>
+						<labels>
+							<label type="main" identifier="">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="1">
+								<position x="" y=""/>
+							</label>
+							<label type="rolename" identifier="2">
+								<position x="" y=""/>
+							</label>														
+						</labels>
+						<points/>
+						<color/>
+						<lineStyle/>
+					</graphics>
+				</objectAssociation>
+				<attribute id="">
+					<name>attribute</name>
+					<type>1</type>
+					<description/>
+					<multiplicity/>
+					<initialValue/>
+					<changeability/>
+					<parameters/>
+					<constraints/>
+					<graphics>
+						<color/>
+					</graphics>
+				</attribute>
+				<operator id="">
+					<name>operator</name>
+					<description/>
+					<timeConstraints timed="false">
+						<duration/>
+					</timeConstraints>
+					<parameters/>
+					<constraints/>
+					<graphics>
+						<color/>
+					</graphics>
+				</operator>
+				<parameter id="">
+					<name>p</name>
+					<type/>
+					<defaultValue/>
+				</parameter>
+				<enumeration id="">
+					<name>Enumeration</name>
+					<description/>
+					<type/>
+					<stereotype>enumeration</stereotype>
+					<literals />
+					<operators />
+					<constraints/>
+					<graphics>
+						<icon/>
+						<position x="" y=""/>
+						<size width="" height=""/>
+						<color/>
+					</graphics>
+				</enumeration>
+				<literal id="">
+					<name />
+					<graphics>
+						<color/>
+					</graphics>
+				</literal>
+				<point x="" y=""/>
+				<position x="" y=""/>
+				<metric id="">
+					<name />
+					<enabled />					
+					<type />
+					<function />
+				</metric>
+                                <qualityMetric id="">
+                                        <name />
+                                        <description />
+                                        <enabled />
+                                        <type />
+                                        <intention />
+                                        <weight>1</weight>
+                                        <variable>
+                                                <chosenVariable type="">
+                                                        <object class="" id="">
+                                                                <attribute type="" class="" id=""/>
+                                                        </object>
+                                                </chosenVariable>
+                                        </variable>
+                                        <expression>
+                                                <rule />
+                                        </expression>
+                                        <actionCounter>
+                                                <chosenOperator class="" id="">
+                                                    <parameters />
+                                                </chosenOperator >
+                                        </actionCounter>
+                                        <preferenceFunction>
+                                                <function id="1">
+                                                        <domain>
+                                                                <lowerbound value="-inf" included="true" />
+                                                                <upperbound value="+inf" included="true" />
+                                                        </domain>
+                                                        <rule>1</rule>
+                                                </function>
+                                        </preferenceFunction>
+                                </qualityMetric>
+                                <function id="">
+                                    <domain>
+                                        <lowerbound value="" included="true" />
+                                        <upperbound value="" included="true" />
+                                    </domain>
+                                    <rule />
+                                </function>
+                                <lifeline id="">
+                                    <object class="" element="" id=""/>
+                                    <attribute class="" id=""/>
+                                    <timeIntervals/>
+                                    <note/>
+                                </lifeline>
+                                <timeInterval id="">
+                                    <durationConstratint>
+                                        <lowerbound value="" included="true"/>
+                                        <upperbound value="" included="true"/>
+                                        <annotation/>
+                                    </durationConstratint>
+                                    <type>precondition</type>
+                                    <timeConstraint/>
+                                    <stimulus class="" action=""/>
+                                    <value/>
+                                </timeInterval>
+                                <annotatedoclcondition type="">		
+                                        <annotation/>
+                                        <condition/>
+                                </annotatedoclcondition>                                
+			</model>
+			<structure>
+				<domain id="">
+					<name>Planning Domain</name>
+					<description/>
+					<elements>
+						<objects/>
+					</elements>
+					<repositoryDiagrams>
+						<repositoryDiagram id="1">
+							<name>Object Repository</name>
+							<description/>
+							<objects/>
+							<associations/>
+							<constraints/>
+						</repositoryDiagram>
+					</repositoryDiagrams>
+					<planningProblems>
+						<problem id="1">
+							<name>Problem</name>
+							<description/>
+							<objectDiagrams>
+								<objectDiagram id="1">
+									<name>Snapshot</name>
+									<sequenceReference>init</sequenceReference>
+									<description/>
+									<objects/>
+									<associations/>
+									<constraints/>
+								</objectDiagram>
+								<objectDiagram id="2">
+									<name>Snapshot</name>
+									<sequenceReference>goal</sequenceReference>
+									<description/>
+									<objects/>
+									<associations/>
+									<constraints/>
+								</objectDiagram>
+							</objectDiagrams>
+							<constraints/>
+							<metrics />
+						</problem>
+					</planningProblems>
+                                        <constraints/>
+                                        <metrics/>
+				</domain>
+				<problem id="">
+					<name>Problem</name>
+					<description/>
+					<objectDiagrams>
+						<objectDiagram id="1">
+							<name>Snapshot</name>
+							<sequenceReference>init</sequenceReference>
+							<description/>
+							<objects/>
+							<associations/>
+							<constraints/>
+						</objectDiagram>
+						<objectDiagram id="2">
+							<name>Snapshot</name>
+							<sequenceReference>goal</sequenceReference>
+							<description/>
+							<objects/>
+							<associations/>
+							<constraints/>
+						</objectDiagram>
+					</objectDiagrams>
+					<constraints/>
+					<metrics/>
+				</problem>
+			</structure>
+		</elements>
+		<diagrams>
+			<useCaseDiagram id="">
+				<name>Use Case Diagram</name>
+				<description/>
+				<actors/>
+				<useCases/>
+				<associations/>
+				<constraints/>
+			</useCaseDiagram>
+			<classDiagram id="">
+				<name>Class Diagram</name>
+				<description/>
+				<classes/>
+				<associations/>
+				<constraints/>
+			</classDiagram>
+			<stateMachineDiagram id="">
+				<class/>
+				<name>State Machine Diagram</name>
+				<description/>
+				<states/>
+				<associations/>
+				<constraints/>
+			</stateMachineDiagram>
+			<activityDiagram id="">
+				<name>Activity Diagram</name>
+				<description/>
+                                <activities />
+                                <decisions />
+                                <forks />
+                                <objects />
+				<associations/>
+				<constraints/>
+			</activityDiagram>
+			<timingDiagram id="">
+				<name>Timing Diagram</name>
+                <description/>
+                <type/><!-- state lifetime or condition lifetime -->
+                <context/><!-- general or action specific -->
+                <action class="" id=""/>
+                <frame>
+                    <duration>10</duration>
+                    <timingRuler>
+                        <durationObservation/>
+                    </timingRuler>
+                    <lifelines>
+                    </lifelines>
+                </frame>
+                <constraints/>
+			</timingDiagram>
+			<objectDiagram id="">
+				<name>Snapshot</name>
+				<sequenceReference/>
+				<description/>
+				<objects/>
+				<associations/>
+				<constraints/>
+			</objectDiagram>
+			<repositoryDiagram id="">
+				<name>Object Repository</name>
+				<description/>
+				<objects/>
+				<associations/>
+				<constraints/>
+			</repositoryDiagram>
+		</diagrams>
+	</definedNodes>
+	<internalUse>
+		<openTab language="" projectID="" diagramID="">
+			<type/>
+			<domain/>
+			<problem/>
+			<additional/>
+		</openTab>
+		<openProject projectPath="" id=""/>
+		<action>
+			<name/>
+			<class/>
+			<parameters/>
+			<preconditions/>
+			<postconditions/>
+                        <annotatedoclexpressions/>
+		</action>
+		<conditions class=""/>
+	</internalUse>
+	<xpddlNodes>
+		<xpddlDomain>
+			<name/>
+			<requirements/>
+			<types/>
+			<constants/>
+			<predicates/>
+			<functions/>
+			<constraints/>
+			<actions/>
+		</xpddlDomain>
+		<xpddlProblem>
+			<name/>
+			<domain/>
+			<objects/>
+			<init/>
+			<goal/>
+			<constraints/>
+		</xpddlProblem>
+		<action name="">
+			<parameters/>
+			<precondition/>
+			<effect/>
+		</action>
+		<metric>
+			<optimization />
+			<expression />
+		</metric>
+	</xpddlNodes>
+	<petriNetNodes>
+		<pnmlNodes>
+			<pnml/>
+			<net id="" type="">
+				<name>
+					<text/>
+				</name>
+			</net>
+			<moduleNodes>
+				<module name="">
+					<interface/>
+				</module>
+				<importPlace id=""/>
+				<importTransition id=""/>
+				<exportPlace id="" ref=""/>
+				<exportTransition id="" ref=""/>
+			</moduleNodes>
+			<toolspecificNodes>
+				<type/>
+			</toolspecificNodes>
+			<place id="">
+				<name>
+					<text/>
+					<graphics>
+						<offset x="0" y="-20"/>
+					</graphics>
+				</name>
+				<initialMarking>
+					<text>0</text>
+				</initialMarking>
+				<graphics>
+					<position x="" y=""/>
+				</graphics>
+				<toolspecific tool="itSIMPLE" version="">
+					<class/>
+					<state/>
+					<type>place</type>
+				</toolspecific>
+			</place>
+			<transition id="">
+				<name>
+					<text/>
+					<graphics>
+						<offset x="0" y="-20"/>
+					</graphics>
+				</name>
+				<graphics>
+					<position x="" y=""/>
+				</graphics>
+				<toolspecific tool="itSIMPLE" version="">
+					<class/>
+					<operator/>
+					<preconditionGroup/>
+					<graphics>
+						<color>black</color>
+					</graphics>
+					<type>normal</type>
+				</toolspecific>
+			</transition>
+			<referencePlace id="" ref="">
+				<name>
+					<text/>
+					<graphics>
+						<offset x="0" y="-10"/>
+					</graphics>
+				</name>
+				<initialMarking>
+					<text>0</text>
+				</initialMarking>
+				<graphics>
+					<position x="" y=""/>
+				</graphics>
+				<toolspecific tool="itSIMPLE" version="">
+					<class/>
+					<state/>
+				</toolspecific>
+			</referencePlace>
+			<referenceTransition id="" ref="">
+				<name>
+					<text/>
+					<graphics>
+						<offset x="0" y="-10"/>
+					</graphics>
+				</name>
+				<graphics>
+					<position x="" y=""/>
+				</graphics>
+				<toolspecific tool="itSIMPLE" version="">
+					<class/>
+					<operator/>
+					<preconditionGroup/>
+					<graphics>
+						<color>black</color>
+					</graphics>
+					<type>normal</type>
+				</toolspecific>
+			</referenceTransition>
+			<arc id="" source="" target="">
+				<type value=""/>
+				<inscription>
+					<text>1</text>
+					<graphics>
+						<offset x="0" y="-10"/>
+					</graphics>
+				</inscription>
+				<graphics/>
+			</arc>
+			<position x="" y=""/>
+			<instanceNodes>
+				<instance id="" ref=""/>
+				<importPlace parameter="" ref=""/>
+				<importTransition parameter="" ref=""/>
+			</instanceNodes>
+		</pnmlNodes>
+	</petriNetNodes>
+	<planSimulationNodes>
+		<analysis>
+			<domain id=""/>
+			<problem id=""/>
+			<variables/>
+		</analysis>
+		<variable type="" id="">
+			<object id="" class=""/>
+			<values/>
+		</variable>
+		<action>
+			<name/>
+			<parameters/>
+		</action>
+	</planSimulationNodes>
+        <planAnalysis>
+            <statisticSupport id="">
+                <name/>
+                <time temp="" counter="0"/>
+                <planlength temp="" counter="0"/>
+                <plancost temp="" counter="0"/>
+                <evaluation temp="" counter="0"/>
+            </statisticSupport>
+            <plannerStatisticSupport id="">
+                <name/>
+                <ntimesbetter>
+                    <runtime temp="" counter="0"/>
+                    <planlength temp="" counter="0"/>
+                    <plancost temp="" counter="0"/>
+                    <evaluation temp="" counter="0"/>
+                </ntimesbetter>
+                <problemssolved counter="0"/>
+                <timeoutsreached counter="0"/>
+                <nosolutionfound counter="0"/>
+                <skipped counter="0"/>
+                <invalidsolution counter="0"/>
+                <largestplanlength value=""/>
+                <costqualityscore value="0"/>
+                <score value="0"/>
+            </plannerStatisticSupport>
+            <rationale id="" targetplanid="" relationalid="" enabled="true">
+                <name/>
+                <description/>
+                <rule/>
+                <impact quality="none"/>
+                <abstractionlevel range="problem-specific"/>
+                <validity isValid=""/>
+                <comments/>
+            </rationale>
+        </planAnalysis>
+</commonData>

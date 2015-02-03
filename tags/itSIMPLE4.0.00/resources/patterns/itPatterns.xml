@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<itPatterns>
+	<toolInformation>
+		<name>itSIMPLE</name>
+		<version>4.0.00</version>
+	</toolInformation>
+	<modelingpatterns>
+		<modelingpattern id="1">
+			<name>Move &amp; Reach</name>
+			<version>1.0</version>
+			<date>2012</date>
+			<author>Tiago Vaquero</author>
+			<file>MoveAndReach.xml</file>
+			<descriptionfile>MoveAndReachDescription.html</descriptionfile>
+			<description></description>
+		</modelingpattern>
+		<modelingpattern id="2">
+			<name>Object Transportation</name>
+			<version>1.0</version>
+			<date>2012</date>
+			<author>Tiago Vaquero</author>
+			<file>ObjectTransportation.xml</file>
+			<descriptionfile>ObjectTransportationDescription.html</descriptionfile>
+			<description></description>
+		</modelingpattern>
+		<modelingpattern id="3">
+			<name>Stack &amp; Place</name>
+			<version>1.0</version>
+			<date>2012</date>
+			<author>Tiago Vaquero</author>
+			<file>StackAndPlace.xml</file>
+			<descriptionfile>StackAndPlaceDescription.html</descriptionfile>
+			<description></description>
+		</modelingpattern>
+                <modelingpattern id="4">
+			<name>Assembling</name>
+			<version>1.0</version>
+			<date>2012</date>
+			<author>Tiago Vaquero</author>
+			<file>Assembling.xml</file>
+			<descriptionfile>AssemblingDescription.html</descriptionfile>
+			<description></description>
+		</modelingpattern>
+                <modelingpattern id="5">
+			<name>Volume Transfer</name>
+			<version>1.0</version>
+			<date>2012</date>
+			<author>Tiago Vaquero</author>
+			<file>VolumeTransfer.xml</file>
+			<descriptionfile>VolumeTransferDescription.html</descriptionfile>
+			<description></description>
+		</modelingpattern>
+                <modelingpattern id="6">
+			<name>Multi-Processing</name>
+			<version>1.0</version>
+			<date>2012</date>
+			<author>Tiago Vaquero</author>
+			<file>MultiProcessing.xml</file>
+			<descriptionfile>MultiProcessingDescription.html</descriptionfile>
+			<description></description>
+		</modelingpattern>                  
+	</modelingpatterns>
+</itPatterns>

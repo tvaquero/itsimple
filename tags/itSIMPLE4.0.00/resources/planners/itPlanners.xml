@@ -1,0 +1,1800 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<itPlanners>
+	<toolInformation>
+		<name>itSIMPLE</name>
+		<version>4.0.00</version>
+	</toolInformation>
+        <settings>
+            <timeout enabled="true">1800</timeout>
+            <planValidation enabled="true"/>
+        </settings>
+	<planners>
+		<planner id="1">
+			<name>Metric-FF</name>
+			<version>Windows</version>
+			<date>2002</date>
+			<institution />
+			<author>J. Hoffmann</author>
+			<link>http://www.loria.fr/~hoffmanj/</link>
+			<description />
+			<platform>
+				<windows />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <quantified-preconditions />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/metric-ff.exe</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>ffSolution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="false" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles>
+							<fileName>ffPSolution.soln</fileName>
+							<fileName>Depend.xml</fileName>
+						</additionalGeneratedFiles>
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-E" id="3">
+						<name>enforced hill-climbing</name>
+						<value />
+						<enable>false</enable>
+						<description>don't do enforced hill-climbing try before bestfirst</description>
+					</argument>
+					<argument parameter="-g" id="4">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_g in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-h" id="5">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_h in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-O" id="6">
+						<name>optimization</name>
+						<value />
+						<enable>true</enable>
+						<description>switch on optimization expression (default is plan length)</description>
+					</argument>
+				</arguments>
+                                <timeout enabled="false">600</timeout>
+                                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="2">
+			<name>SGPlan 5</name>
+			<version>5.2.2 Linux</version>
+			<date>March 2007</date>
+			<institution>University of Illinois</institution>
+			<author>C. W. Hsu, B. W. Wah, R. Y. Huang, Y. X. Chen</author>
+			<link>http://manip.crhc.uiuc.edu/programs/SGPlan/index.html</link>
+			<description />
+			<platform>
+				<linux />
+                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <object-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/sgplan522</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter="-out">
+							<description>specifies the file name for computed plans</description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-cputime" id="3">
+						<name>cputime</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>specifies the maximum CPU-time (in seconds)</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="3">
+			<name>MIPS-XXL</name>
+			<version>1.0 Linux</version>
+			<date>2006</date>
+			<institution>University of Dortmund</institution>
+			<author>Stefan Edelkamp, Shahid Jabbar, Mohammed Nazih</author>
+			<link>http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html</link>
+			<description />
+			<platform>
+				<linux />
+                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <object-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/mips-xxl</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>ffPSolution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="false" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles>
+							<fileName>ffSolution.soln</fileName>
+						</additionalGeneratedFiles>
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-E" id="3">
+						<name>enforced hill-climbing</name>
+						<value />
+						<enable>false</enable>
+						<description>don't do enforced hill-climbing try before bestfirst</description>
+					</argument>
+					<argument parameter="-X" id="4">
+						<name>external enforced hill-climbing</name>
+						<value />
+						<enable>false</enable>
+						<description>do external enforced hill-climbing</description>
+					</argument>
+					<argument parameter="-B" id="5">
+						<name>external breadth-first search</name>
+						<value />
+						<enable>false</enable>
+						<description>do external breadth-first search</description>
+					</argument>
+					<argument parameter="-k" id="6">
+						<name>beam size for pruning</name>
+						<value>5</value>
+						<enable>false</enable>
+						<description>beam size for pruning; valid for both Ex-EHC and Ex-BFS</description>
+					</argument>
+					<argument parameter="-M" id="7">
+						<name>external merge</name>
+						<value />
+						<enable>false</enable>
+						<description>do external merge</description>
+					</argument>
+					<argument parameter="-g" id="8">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_g in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-h" id="9">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_h in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-O" id="10">
+						<name>optimization</name>
+						<value />
+						<enable>true</enable>
+						<description>switch on optimization expression (default is plan length)</description>
+					</argument>
+					<argument parameter="-G" id="11">
+						<name>output normal task</name>
+						<value />
+						<enable>false</enable>
+						<description>output normal task</description>
+					</argument>
+					<argument parameter="-A" id="12">
+						<name>output ADL</name>
+						<value />
+						<enable>false</enable>
+						<description>output ADL task instead of STRIPS</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="4">
+			<name>SATPlan2006</name>
+			<version>1.1 Linux</version>
+			<date>2006</date>
+			<institution>University of Washington, Max-Planck-Institut för Informatik</institution>
+			<author>Prof. Henry Kautz, Dr. Jörg Hoffmann, Shane Neph</author>
+			<link>http://www.cs.rochester.edu/u/kautz/satplan/index.htm</link>
+			<description />
+			<platform>
+				<linux />
+                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/satplan</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter="-solution">
+							<description>solution filename</description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-domain" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>domain filename</description>
+					</domain>
+					<problem parameter="-problem" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>problem filename</description>
+					</problem>
+					<problem parameter="-solver" id="3">
+						<name>solver</name>
+						<value>satplan</value>
+						<enable>true</enable>
+						<description>sat solver name (e.g. satplan, berkmin561, jerusat1.3, minisat, satz-rand, siege)</description>
+					</problem>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="5">
+			<name>LPG-td</name>
+			<version>1.0 Linux</version>
+			<date>August 2004</date>
+			<institution>Dipartimento di Elettronica per l'Automazione Universita' di Brescia Via Branze 38, I-25123, Brescia, Italy</institution>
+			<author>Alfonso Gerevini, Alessandro Saetti and Ivan Serina</author>
+			<link>http://lpg.ing.unibs.it/</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/lpg-td-1.0</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution</fileName>
+						<fileNameAutomaticIncrement>.SOL</fileNameAutomaticIncrement>
+						<argument needArgument="true" parameter="-out">
+							<description>specifies the file name for computed plans. For example, "-out myplan" produces the file myplan.SOL</description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-quality" id="3">
+						<name>running mode</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-speed" id="4">
+						<name>running mode</name>
+						<value />
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-n" id="5">
+						<name>running mode</name>
+						<value>2</value>
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-cputime" id="6">
+						<name>cputime</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>Specifies the maximum CPU-time (in seconds) after which termination of the planning process is forced. The default value is 1800 (30 minutes).</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="6">
+			<name>LPG-td</name>
+			<version>1.0 Windows</version>
+			<date>August 2004</date>
+			<institution>Dipartimento di Elettronica per l'Automazione Universita' di Brescia Via Branze 38, I-25123, Brescia, Italy</institution>
+			<author>Alfonso Gerevini, Alessandro Saetti and Ivan Serina</author>
+			<link>http://lpg.ing.unibs.it/</link>
+			<description />
+			<platform>
+				<windows />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/lpg-td-1.0.exe</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution</fileName>
+						<fileNameAutomaticIncrement>_1.SOL</fileNameAutomaticIncrement>
+						<argument needArgument="true" parameter="-out">
+							<description>specifies the file name for computed plans. For example, "-out myplan" produces the file myplan.SOL</description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-quality" id="3">
+						<name>running mode</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-speed" id="4">
+						<name>running mode</name>
+						<value />
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-n" id="5">
+						<name>running mode</name>
+						<value>2</value>
+						<enable>false</enable>
+						<description>specifies a running mode, which is either "speed" (-speed), "quality"(-quality) or "incremental quality" (-n #solutions) (also called "bestquality")</description>
+					</argument>
+					<argument parameter="-cputime" id="6">
+						<name>cputime</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>Specifies the maximum CPU-time (in seconds) after which termination of the planning process is forced. The default value is 1800 (30 minutes).</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="7">
+			<name>MIPS-XXL</name>
+			<version>IPC-6 v1.2 Linux</version>
+			<date>2008</date>
+			<institution>University of Dortmund</institution>
+			<author>Stefan Edelkamp, Shahid Jabbar, Mohammed Nazih</author>
+			<link>http://andorfer.cs.uni-dortmund.de/~edelkamp/mips/mips-xxl.html</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/mips-xxl2008</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>mipsPSolution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="false" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles>
+							<fileName>mipsSolution.soln</fileName>
+                            <fileName>foundplan</fileName>
+						</additionalGeneratedFiles>
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-E" id="3">
+						<name>enforced hill-climbing</name>
+						<value />
+						<enable>false</enable>
+						<description>don't do enforced hill-climbing try before bestfirst</description>
+					</argument>
+					<argument parameter="-X" id="4">
+						<name>external enforced hill-climbing</name>
+						<value />
+						<enable>false</enable>
+						<description>do external enforced hill-climbing</description>
+					</argument>
+					<argument parameter="-B" id="5">
+						<name>external breadth-first search</name>
+						<value />
+						<enable>false</enable>
+						<description>do external breadth-first search</description>
+					</argument>
+					<argument parameter="-k" id="6">
+						<name>beam size for pruning</name>
+						<value>5</value>
+						<enable>false</enable>
+						<description>beam size for pruning; valid for both Ex-EHC and Ex-BFS</description>
+					</argument>
+					<argument parameter="-M" id="7">
+						<name>external merge</name>
+						<value />
+						<enable>false</enable>
+						<description>do external merge</description>
+					</argument>
+					<argument parameter="-D" id="8">
+						<name>do external Dijkstra</name>
+						<value />
+						<enable>false</enable>
+						<description>do external Dijkstra</description>
+					</argument>
+					<argument parameter="-Z" id="9">
+						<name>do external branch and bound</name>
+						<value />
+						<enable>false</enable>
+						<description>do external branch and bound</description>
+					</argument>
+					<argument parameter="-S" id="10">
+						<name>Stop at the first solution</name>
+						<value />
+						<enable>false</enable>
+						<description>Stop at the first solution</description>
+					</argument>
+					<argument parameter="-g" id="11">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_g in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-h" id="12">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_h in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-O" id="13">
+						<name>optimization</name>
+						<value />
+						<enable>true</enable>
+						<description>switch on optimization expression (default is plan length)</description>
+					</argument>
+					<argument parameter="-G" id="14">
+						<name>output normal task</name>
+						<value />
+						<enable>false</enable>
+						<description>output normal task</description>
+					</argument>
+					<argument parameter="-A" id="15">
+						<name>output ADL</name>
+						<value />
+						<enable>false</enable>
+						<description>output ADL task instead of STRIPS</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="8">
+			<name>SGPlan 6</name>
+			<version>IPC-6 (2008) Linux</version>
+			<date>2008</date>
+			<institution>University of Illinois</institution>
+			<author>C. W. Hsu, B. W. Wah, R. Y. Huang, Y. X. Chen</author>
+			<link>http://manip.crhc.uiuc.edu/programs/SGPlan/index.html</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <derived-predicates />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <preferences />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/sgplan6</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter="-out">
+							<description>specifies the file name for computed plans</description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-cputime" id="3">
+						<name>cputime</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>specifies the maximum CPU-time (in seconds)</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="9">
+			<name>Metric-FF</name>
+			<version>Linux</version>
+			<date>2002</date>
+			<institution />
+			<author>J. Hoffmann</author>
+			<link>http://www.loria.fr/~hoffmanj/</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <quantified-preconditions />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/metric-ff</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="0">step</planStartIdentifier>
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-E" id="3">
+						<name>enforced hill-climbing</name>
+						<value />
+						<enable>false</enable>
+						<description>don't do enforced hill-climbing try before bestfirst</description>
+					</argument>
+					<argument parameter="-g" id="4">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_g in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-h" id="5">
+						<name>weight</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>set weight w_h in w_g*g(s) + w_h*h(s) [preset: 0]</description>
+					</argument>
+					<argument parameter="-O" id="6">
+						<name>optimization</name>
+						<value />
+						<enable>false</enable>
+						<description>switch on optimization expression (default is plan length)</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+                <planner id="10">
+			<name>FF 2.3</name>
+			<version> FFv-2.3 Linux</version>
+			<date>2002</date>
+			<institution />
+			<author>J. Hoffmann</author>
+			<link>http://www.loria.fr/~hoffmanj/</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <quantified-preconditions />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/ffv-2.3</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="0">step</planStartIdentifier>
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-i" id="3">
+						<name>run-time information level</name>
+						<value>1</value>
+						<enable>false</enable>
+						<description>run-time information level</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="11">
+			<name>LPG</name>
+			<version>1.2 Linux</version>
+			<date>June 2003</date>
+			<institution>Dipartimento di Elettronica per l'Automazione Universita' di Brescia Via Branze 38, I-25123, Brescia, Italy</institution>
+			<author>Alfonso Gerevini, Alessandro Saetti and Ivan Serina</author>
+			<link>http://prometeo.ing.unibs.it/lpg/</link>
+			<description />
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <probabilistic-effects />
+                                <quantified-preconditions />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/lpg</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution</fileName>
+						<fileNameAutomaticIncrement>_1.SOL</fileNameAutomaticIncrement>
+						<argument needArgument="true" parameter="-out">
+							<description>specifies the file name for computed plans. For example, "-out myplan" produces the file myplan_#.SOL where # is the number of the solution e.g. myplan_1.SOL</description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="4">solution found:</planStartIdentifier>
+						<planEndIdentifier>Solution number</planEndIdentifier>
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-n" id="3">
+						<name>number of solutions</name>
+						<value>1</value>
+						<enable>true</enable>
+						<description>specifies the desired number of solutions.</description>
+					</argument>
+					<argument parameter="-noout" id="4">
+						<name>no output</name>
+						<value />
+						<enable>false</enable>
+						<description>does not save computed plans.</description>
+					</argument>
+					<argument parameter="-cputime" id="5">
+						<name>cputime</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>Specifies the maximum CPU-time (in seconds) after which termination of the planning process is forced. The default value is 1800 (30 minutes).</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="12">
+			<name>hspsp</name>
+			<version>IPC-6 (2008) Linux</version>
+			<date>2008</date>
+			<institution>NICTA and The Australian National University</institution>
+			<author>Patrik Haslum</author>
+			<link>http://ipc.informatik.uni-freiburg.de/Planners/</link>
+			<description>Note: the planner only fully supports monotonic numeric fluents, so that its plans in the transport domain are not guaranteed to be optimal.</description>
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <fluents />
+                                <equality />
+                                <conditional-effects />
+                                <constraints />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <negative-preconditions />
+                                <numeric-fluents />
+                                <object-fluents />
+                                <preferences />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/hsp_p</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter=">">
+							<description></description>
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="1">; MetricValue</planStartIdentifier>
+						<planEndIdentifier>;; stats:</planEndIdentifier>
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of the operators</description>
+					</domain>
+					<problem parameter="" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>specifies the file of (init/goal) facts</description>
+					</problem>
+					<argument parameter="-ipc" id="3">
+						<name>print solution style</name>
+						<value></value>
+						<enable>true</enable>
+						<description>specifies print solution style -ipc for the international planning competition</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+		<planner id="13">
+			<name>Plan-A 1.0</name>
+			<version>IPC-6 (2008) Linux</version>
+			<date>2008</date>
+			<institution></institution>
+			<author>Qiang Lv, Yixin Chen, Ruoyun Huang</author>
+			<link>http://ipc.informatik.uni-freiburg.de/Planners/</link>
+			<description>Note: This planner is not guaranteed to produce globally optimal solutions, but solutions which are optimal with respect to a certain planning horizon. It participated noncompetitively.</description>
+			<platform>
+				<linux />
+                                <mac />
+			</platform>
+			<requirements>
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <constraints />
+                                <continuous-effects />
+                                <disjunctive-preconditions />
+                                <duration-inequalities />
+                                <durative-actions />
+                                <existential-preconditions />
+                                <preferences />
+                                <quantified-preconditions />
+                                <timed-initial-literals />
+                                <universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/Plan-A</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter="-F">
+							<description></description>
+						</argument>
+						<additionalGeneratedFiles>
+							<fileName>bb_solving_result_cnf</fileName>
+						</additionalGeneratedFiles>
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>operator strips file name</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>fact strips file name</description>
+					</problem>
+					<argument parameter="-G" id="3">
+						<name>output type</name>
+						<value>1</value>
+						<enable>true</enable>
+						<description>(0) create CNF output or (1) build final solution</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+                <runAllComparison enabled="true"/>
+			</settings>
+	</planner>
+        <planner id="14">
+			<name>Blackbox</name>
+			<version>4.3 Linux</version>
+			<date>11 Jan 2006</date>
+			<institution />
+			<author>Henry Kautz</author>
+			<link>http://www.cs.rochester.edu/u/kautz/satplan/blackbox/</link>
+			<description />
+			<platform>
+				<linux />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/blackbox</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="1">Begin plan</planStartIdentifier>
+						<planEndIdentifier>End plan</planEndIdentifier>
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>to specify operator file</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>to specify fact file</description>
+					</problem>
+					<argument parameter="-g" id="3">
+						<name>output file</name>
+						<value>solution.sol</value>
+						<enable>false</enable>
+						<description>to specify output file</description>
+					</argument>
+					<argument parameter="-t" id="4">
+						<name>fixed number of time steps</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>to specify a fixed number of time steps</description>
+					</argument>
+					<argument parameter="-i" id="5">
+						<name>info level</name>
+						<value>0</value>
+						<enable>false</enable>
+						<description>to specify tracing info level 1 or 2 (default is 0)</description>
+					</argument>
+					<argument parameter="-step" id="6">
+						<name>plan graph length</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>increment plan graph by length n</description>
+					</argument>
+					<argument parameter="-noskip" id="7">
+						<name>don't graphplan solver</name>
+						<value />
+						<enable>false</enable>
+						<description>don't skip graphplan solver</description>
+					</argument>
+					<argument parameter="-noopt" id="8">
+						<name>stop first solution</name>
+						<value />
+						<enable>false</enable>
+						<description>stop as soon as a solution found</description>
+					</argument>
+					<argument parameter="-printlit" id="9">
+						<name>print literal form</name>
+						<value />
+						<enable>false</enable>
+						<description>print wff in literal form</description>
+					</argument>
+					<argument parameter="-printcnf" id="10">
+						<name>print propositional form</name>
+						<value />
+						<enable>false</enable>
+						<description>print wff in propositional (.cnf) form</description>
+					</argument>
+					<argument parameter="-printmap" id="11">
+						<name>literals to propositions</name>
+						<value />
+						<enable>false</enable>
+						<description>map mapping from literals to propositions</description>
+					</argument>
+					<argument parameter="-printmodel" id="12">
+						<name>print model</name>
+						<value />
+						<enable>false</enable>
+						<description>print model returned by solver</description>
+					</argument>
+					<argument parameter="-printexit" id="13">
+						<name>exit after printing wff</name>
+						<value />
+						<enable>false</enable>
+						<description>exit after printing wff</description>
+					</argument>
+					<argument parameter="-nopretty" id="14">
+						<name>print solution in literal form</name>
+						<value />
+						<enable>false</enable>
+						<description>print the solution plan in literal form, rather than lisp notation</description>
+					</argument>
+					<argument parameter="-M" id="15">
+						<name>alternative max nodes</name>
+						<value>2048</value>
+						<enable>false</enable>
+						<description>to specify alternative max nodes in a time step (default is 2048)</description>
+					</argument>
+					<argument parameter="-maxfail" id="16">
+						<name>failure mode</name>
+						<value>4</value>
+						<enable>false</enable>
+						<description>halt if solvers go into failure mode N times in a row (default 4)</description>
+					</argument>
+					<argument parameter="-maxtimeout" id="17">
+						<name>timeout N times</name>
+						<value>8</value>
+						<enable>false</enable>
+						<description>halt if solvers timeout N times in a row (default 8)</description>
+					</argument>
+					<argument parameter="-maxauto" id="18">
+						<name>halt after plans of length N are reached</name>
+						<value>50</value>
+						<enable>false</enable>
+						<description>halt after plans of length N are reached (default 50)</description>
+					</argument>
+					<argument parameter="-noexcl" id="19">
+						<name>minimal set of exclusiveness</name>
+						<value/>
+						<enable>false</enable>
+						<description>only generate minimal set of exclusiveness relationships</description>
+					</argument>
+					<argument parameter="-axioms" id="20">
+						<name>aximos</name>
+						<value>7</value>
+						<enable>false</enable>
+						<description>or default (7), mutex (15), compressed (31), expanded (63), action (129), dagsat (319)</description>
+					</argument>
+					<argument parameter="-maxglobalsec" id="21">
+						<name>maximum global time limit</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>maximum global time limit N seconds (default 1800)</description>
+					</argument>
+					<argument parameter="-solver" id="22">
+						<name>solver</name>
+						<value/>
+						<enable>false</enable>
+						<description>-solver SPEC { -then SPEC }*   sequence of solver specifications, must be the last argument.
+ Format of SPEC:
+	SPEC == { -maxit N } { -maxsec F } COMMAND {solver specific options}.
+	COMMAND == graphplan || satz || walksat || relsat || compact
+               -maxsec F == only run solver for F seconds
+               -maxit N == only run solver for N iterations (flips/backtracks/recursions)
+                   If maxsec or maxit are not specified, then use the most recently
+                   set value.  Default values are 0 (meaning no limit).
+               To get options for particular solvers (e.g. walksat) try
+                    blackbox -help -solver walksat</description>
+					</argument>
+				</arguments>
+                		<timeout enabled="false">600</timeout>
+                		<runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+                <planner id="15">
+			<name>Blackbox</name>
+			<version>4.2 Windows</version>
+			<date>11 Jan 2006</date>
+			<institution />
+			<author>Henry Kautz</author>
+			<link>http://www.cs.rochester.edu/u/kautz/satplan/blackbox/</link>
+			<description />
+			<platform>
+				<windows />
+			</platform>
+			<requirements>
+				<adl />
+                                <mdp />
+                                <typing />
+                                <rewards />
+                                <strips />
+                                <equality />
+                                <conditional-effects />
+                                <disjunctive-preconditions />
+                                <negative-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/blackbox.exe</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="1">Begin plan</planStartIdentifier>
+						<planEndIdentifier>End plan</planEndIdentifier>
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>to specify operator file</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>to specify fact file</description>
+					</problem>
+					<argument parameter="-g" id="3">
+						<name>output file</name>
+						<value>solution.sol</value>
+						<enable>false</enable>
+						<description>to specify output file</description>
+					</argument>
+					<argument parameter="-t" id="4">
+						<name>fixed number of time steps</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>to specify a fixed number of time steps</description>
+					</argument>
+					<argument parameter="-i" id="5">
+						<name>info level</name>
+						<value>0</value>
+						<enable>false</enable>
+						<description>to specify tracing info level 1 or 2 (default is 0)</description>
+					</argument>
+					<argument parameter="-step" id="6">
+						<name>plan graph length</name>
+						<value>10</value>
+						<enable>false</enable>
+						<description>increment plan graph by length n</description>
+					</argument>
+					<argument parameter="-noskip" id="7">
+						<name>don't graphplan solver</name>
+						<value />
+						<enable>false</enable>
+						<description>don't skip graphplan solver</description>
+					</argument>
+					<argument parameter="-noopt" id="8">
+						<name>stop first solution</name>
+						<value />
+						<enable>false</enable>
+						<description>stop as soon as a solution found</description>
+					</argument>
+					<argument parameter="-printlit" id="9">
+						<name>print literal form</name>
+						<value />
+						<enable>false</enable>
+						<description>print wff in literal form</description>
+					</argument>
+					<argument parameter="-printcnf" id="10">
+						<name>print propositional form</name>
+						<value />
+						<enable>false</enable>
+						<description>print wff in propositional (.cnf) form</description>
+					</argument>
+					<argument parameter="-printmap" id="11">
+						<name>literals to propositions</name>
+						<value />
+						<enable>false</enable>
+						<description>map mapping from literals to propositions</description>
+					</argument>
+					<argument parameter="-printmodel" id="12">
+						<name>print model</name>
+						<value />
+						<enable>false</enable>
+						<description>print model returned by solver</description>
+					</argument>
+					<argument parameter="-printexit" id="13">
+						<name>exit after printing wff</name>
+						<value />
+						<enable>false</enable>
+						<description>exit after printing wff</description>
+					</argument>
+					<argument parameter="-nopretty" id="14">
+						<name>print solution in literal form</name>
+						<value />
+						<enable>false</enable>
+						<description>print the solution plan in literal form, rather than lisp notation</description>
+					</argument>
+					<argument parameter="-M" id="15">
+						<name>alternative max nodes</name>
+						<value>2048</value>
+						<enable>false</enable>
+						<description>to specify alternative max nodes in a time step (default is 2048)</description>
+					</argument>
+					<argument parameter="-maxfail" id="16">
+						<name>failure mode</name>
+						<value>4</value>
+						<enable>false</enable>
+						<description>halt if solvers go into failure mode N times in a row (default 4)</description>
+					</argument>
+					<argument parameter="-maxtimeout" id="17">
+						<name>timeout N times</name>
+						<value>8</value>
+						<enable>false</enable>
+						<description>halt if solvers timeout N times in a row (default 8)</description>
+					</argument>
+					<argument parameter="-maxauto" id="18">
+						<name>halt after plans of length N are reached</name>
+						<value>50</value>
+						<enable>false</enable>
+						<description>halt after plans of length N are reached (default 50)</description>
+					</argument>
+					<argument parameter="-noexcl" id="19">
+						<name>minimal set of exclusiveness</name>
+						<value/>
+						<enable>false</enable>
+						<description>only generate minimal set of exclusiveness relationships</description>
+					</argument>
+					<argument parameter="-axioms" id="20">
+						<name>aximos</name>
+						<value>7</value>
+						<enable>false</enable>
+						<description>or default (7), mutex (15), compressed (31), expanded (63), action (129), dagsat (319)</description>
+					</argument>
+					<argument parameter="-maxglobalsec" id="21">
+						<name>maximum global time limit</name>
+						<value>1800</value>
+						<enable>false</enable>
+						<description>maximum global time limit N seconds (default 1800)</description>
+					</argument>
+					<argument parameter="-solver" id="22">
+						<name>solver</name>
+						<value/>
+						<enable>false</enable>
+						<description>-solver SPEC { -then SPEC }*   sequence of solver specifications, must be the last argument.
+ Format of SPEC:
+	SPEC == { -maxit N } { -maxsec F } COMMAND {solver specific options}.
+	COMMAND == graphplan || satz || walksat || relsat || compact
+               -maxsec F == only run solver for F seconds
+               -maxit N == only run solver for N iterations (flips/backtracks/recursions)
+                   If maxsec or maxit are not specified, then use the most recently
+                   set value.  Default values are 0 (meaning no limit).
+               To get options for particular solvers (e.g. walksat) try
+                    blackbox -help -solver walksat</description>
+					</argument>
+				</arguments>
+                		<timeout enabled="false">600</timeout>
+                		<runAllComparison enabled="true"/>
+			</settings>
+		</planner>
+        <planner id="16">
+			<name>MaxPlan</name>
+			<version>IPC-5 (2006) Linux</version>
+			<date>2006</date>
+			<institution />
+			<author>Xing Zhao, Yixin Chen, Weixiong Zhang, and Ruoyun Huang</author>
+			<link>http://www.cse.wustl.edu/~chen/maxplan/</link>
+			<description>MaxPlan is an automated optimal propositional based on a satisfiability (SAT) formulation of STRIPS planning. The key innovation of MaxPlan is its use of the long distance mutual exclusion (londex), a novel generalization of the classic mutual exclusion (mutex). Based on a multi-valued domain formulation, londex provides much stronger space pruning than mutex since it can capture constraints relating actions not only at the same time step but also across multiple time steps. Several other novel techniques, including backward level reduction, accumulative learning of clauses, and SAT constraint partitioning, are also developed to further improve the search efficiency for both satisfiability solving and unsatisfiability proving.Winner of the 1st Prize, Optimal Planning Track, Deterministic Part of the 5th International Planning Competition (IPC5), 2006.</description>
+			<platform>
+				<linux />
+				<mac />
+			</platform>
+			<requirements>
+				<mdp />
+				<typing />
+				<rewards />
+				<strips />
+				<equality />
+				<disjunctive-preconditions />
+				<existential-preconditions />
+				<quantified-preconditions />
+				<timed-initial-literals />
+				<universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/maxplan</filePath>
+				<output hasOutputFile="true">
+					<outputFile>
+						<fileName>solution.soln</fileName>
+						<fileNameAutomaticIncrement />
+						<argument needArgument="true" parameter="-F">
+							<description>Final Output Solution File Name (only when -G 1 is used)</description>
+						</argument>
+						<additionalGeneratedFiles>
+							<fileName>bb_solving_result_cnf</fileName>
+							<fileName>CG_Temp</fileName>
+						</additionalGeneratedFiles>
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="" />
+						<planEndIdentifier />
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="-o" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>operator strips file name</description>
+					</domain>
+					<problem parameter="-f" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>fact strips file name</description>
+					</problem>
+					<argument parameter="-G" id="3">
+						<name>output type</name>
+						<value>1</value>
+						<enable>true</enable>
+						<description>(0) create CNF output or (1) build final solution</description>
+					</argument>
+					<argument parameter="-C" id="4">
+						<name>CNF formula output </name>
+						<value>0</value>
+						<enable>true</enable>
+						<description>CNF formula output (preset: -1); at layer -l. 0 none, 1 action-based, 2 gp-style action-based, 3 gp-based, 4 thin gp-based</description>
+					</argument>
+				</arguments>
+                <timeout enabled="false">600</timeout>
+				<runAllComparison enabled="true" />
+			</settings>
+		</planner>
+		<planner id="17">
+			<name>LPRPG</name>
+			<version>Public Release 2</version>
+			<date>2010</date>
+			<institution>University of Strathclyde</institution>
+			<author>A. I. Coles, M. Fox, D. Long, and A. J. Smith</author>
+			<link>http://planning.cis.strath.ac.uk/LPRPG/</link>
+			<description>LPRPG is a heuristic forward search planner that uses similar techniques to FF and Metric-FF. The key difference lies in its handling of numbers. The numeric effects of actions are translated into constraints in a linear program during the construction of the reachability graph. This allows LPRPG to combine the relaxation reasoning for propositional parts of the planning problem with a linear program solution of the numeric parts. The result is a more effective guide when domains involve complex metric behaviour, particularly where resources flow around the domain or are exchanged for one another.</description>
+			<platform>
+				<linux />
+			</platform>
+			<requirements>
+				<adl />
+				<mdp />
+				<typing />
+				<rewards />
+				<strips />
+				<fluents />
+				<equality />
+				<conditional-effects />
+				<disjunctive-preconditions />
+				<duration-inequalities />
+				<durative-actions />
+				<existential-preconditions />
+				<negative-preconditions />
+				<numeric-fluents />
+				<quantified-preconditions />
+				<universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/lprpg</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="1">Solution Found</planStartIdentifier>
+						<planEndIdentifier></planEndIdentifier>
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>operator file name</description>
+					</domain>
+					<problem parameter="" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>fact file name</description>
+					</problem>
+					<argument parameter="-e" id="3">
+						<name>Use standard EHC</name>
+						<value/>
+						<enable>false</enable>
+						<description>Use standard EHC instead of steepest descent;</description>
+					</argument>
+					<argument parameter="-E" id="4">
+						<name>Skip HC</name>
+						<value/>
+						<enable>false</enable>
+						<description>Skip HC - go straight to best-first search;</description>
+					</argument>
+					<argument parameter="-h" id="5">
+						<name>Disable helpful-action pruning</name>
+						<value/>
+						<enable>false</enable>
+						<description>Disable helpful-action pruning.</description>
+					</argument>
+				</arguments>
+				<timeout enabled="false">600</timeout>
+				<runAllComparison enabled="true" />
+			</settings>
+		</planner>
+		<planner id="18">
+			<name>Marvin</name>
+			<version>Release 1 (IPC-4)</version>
+			<date>2004</date>
+			<institution>University of Strathclyde</institution>
+			<author>Andrew Coles or Amanda Smith</author>
+			<link>http://planning.cis.strath.ac.uk/Marvin/</link>
+			<description>Marvin is a domain-independent forward-chaining heuristic-search planner, written by Andrew Coles and Amanda Smith; it competed in the recent Fourth International Planning Competition. Marvin stands for Macro-Actions from Reduced Versions of the INstance: problems are solved by learning macro-actions through solving a smaller, automatically generated, instance and then using these in the process of solving the original, larger, problem instance. Marvin supports the following features of PDDL2.1: STRIPS; ADL; Derived Predicates. It does not yet support fluents or temporal planning. The basic search strategy used is an extension of FF's enforced hill-climbing; the extensions made include the use of memoised plateau-escaping sequences as reusable macro-actions, identification of transformational operators, cycle detection, and support for ADL and derived predicates without the need for compilation of the domain before search.</description>
+			<platform>
+				<linux />
+			</platform>
+			<requirements>
+				<adl />
+				<mdp />
+				<typing />
+				<rewards />
+				<strips />
+				<equality />
+				<conditional-effects />
+				<disjunctive-preconditions />
+				<existential-preconditions />
+				<negative-preconditions />
+				<quantified-preconditions />
+				<universal-preconditions />
+			</requirements>
+			<settings>
+				<filePath>myPlanners/marvin</filePath>
+				<output hasOutputFile="false">
+					<outputFile>
+						<fileName />
+						<fileNameAutomaticIncrement />
+						<argument needArgument="" parameter="">
+							<description />
+						</argument>
+						<additionalGeneratedFiles />
+					</outputFile>
+					<consoleOutput>
+						<planStartIdentifier startsAfterNlines="1">Solution Found</planStartIdentifier>
+						<planEndIdentifier></planEndIdentifier>
+					</consoleOutput>
+				</output>
+				<arguments>
+					<domain parameter="" id="1">
+						<name>domain</name>
+						<value />
+						<enable>true</enable>
+						<description>operator file name</description>
+					</domain>
+					<problem parameter="" id="2">
+						<name>problem</name>
+						<value />
+						<enable>true</enable>
+						<description>fact file name</description>
+					</problem>
+					<argument parameter="-b" id="3">
+						<name>Go straight for best-first search - skip EHC step</name>
+						<value/>
+						<enable>false</enable>
+						<description>Normally Marvin attempts to solve the problem using Enforced Hill-Climbing, resorting to Best-First Search if this fails. If you know that EHC will fail on your problem then pass this option to make it go straight into trying BestFS.</description>
+					</argument>
+					<argument parameter="-m" id="4">
+						<name>Do not memoise plateau-escaping action sequences</name>
+						<value/>
+						<enable>false</enable>
+						<description>Disable the memoisation of plateau-escaping action sequences.</description>
+					</argument>
+					<argument parameter="-p" id="5">
+						<name>Disable symmetric action choice pruning</name>
+						<value/>
+						<enable>false</enable>
+						<description>Do not prune the number of actions applicable in a given state by only considering actions applying to one exemplar in each symmetry group.</description>
+					</argument>
+					<argument parameter="-r" id="6">
+						<name>Do not solve reduced instance prior to specified problem</name>
+						<value/>
+						<enable>false</enable>
+						<description>Skip the step which produces a reduced instance of the original problem and attempts to solve that first. This step is automatically skipped if the reduced problem isn't any smaller.</description>
+					</argument>
+					<argument parameter="-s" id="7">
+						<name>Sequential (implicit if domain contains derived predicates)</name>
+						<value/>
+						<enable>false</enable>
+						<description>Do not attempt to plan actions concurrently.</description>
+					</argument>
+					<argument parameter="-t" id="8">
+						<name>Do not recognise transformational operators (implies -r not being passed)</name>
+						<value/>
+						<enable>false</enable>
+						<description>Do not attempt to recognise simple transformation operators.</description>
+					</argument>
+					<argument parameter="-v" id="9">
+						<name>Verbose</name>
+						<value/>
+						<enable>false</enable>
+						<description>Be verbose about the planning process.</description>
+					</argument>
+				</arguments>
+				<timeout enabled="false">600</timeout>
+				<runAllComparison enabled="true" />
+			</settings>
+		</planner>
+	</planners>
+</itPlanners>
