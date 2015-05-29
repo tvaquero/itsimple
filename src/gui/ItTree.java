@@ -47,7 +47,7 @@ import src.languages.xml.XMLUtilities;
 import src.util.filefilter.PDDLFileFilter;
 
 /**
- * A JTree extension which uses XML structures to to manage its data.
+ * A JTree extension which uses XML structures to manage its data.
  * This class uses the JDom library to set/get values of XML tags and to
  * navigate through the XML nodes.
  *  
@@ -489,8 +489,7 @@ public class ItTree extends JTree{
 
 
 
-
-        /**
+    /**
 	 * Builds the tree node representing the project,
 	 * which is structured in a XML type file
 	 * 

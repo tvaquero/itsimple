@@ -1040,7 +1040,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 			// deleting useCaseAssociations to this actor
 			
 			Iterator<?> associations = diagram.getChild("associations").getChildren().iterator();
-			// adds the elements to be deleted so the hasNext method doesn`t lose its reference
+			// adds the elements to be deleted so the hasNext method doesn't lose its reference
 			ArrayList<Element> listData = new ArrayList<Element>();
 			
 			while(associations.hasNext()){
@@ -1218,7 +1218,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 						
 					// deleting classAssociations to this class			
 					Iterator<?> associations = diagram.getChild("associations").getChildren().iterator();
-					// adds the elements to be deleted so the hasNext method doesn`t lose its reference
+					// adds the elements to be deleted so the hasNext method doesn't lose its reference
 					ArrayList<Element> listReference = new ArrayList<Element>();
 					ArrayList<Element> listData = new ArrayList<Element>();	
 					while(associations.hasNext()){
@@ -1348,7 +1348,7 @@ public class ItGraph extends JGraph implements GraphModelListener, GraphSelectio
 			// deleting classAssociations to this class			
 			Iterator<?> associations = diagram.getChild("associations").getChildren().iterator();
 			
-			// adds the elements to be deleted so the hasNext method doesn`t lose its reference
+			// adds the elements to be deleted so the hasNext method doesn't lose its reference
 			//ArrayList listReference = new ArrayList();
 			ArrayList<Element> listData = new ArrayList<Element>();	
 			while(associations.hasNext()){

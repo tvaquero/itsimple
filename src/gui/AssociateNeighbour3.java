@@ -75,7 +75,7 @@ public class AssociateNeighbour3 extends javax.swing.JDialog {
                     Object association = jComboBox1.getModel().getSelectedItem();
                     Object idAssociation = getIdClass(association.toString());
                     if(!validateAssociations(selected_objects, idAssociation)){
-                         JOptionPane.showMessageDialog(null, "Association "+ association.toString() +" not linked all this selected objects.\n Please, select another relationship.");;
+                         JOptionPane.showMessageDialog(null, "Association \""+ association.toString() +"\" not linked all this selected objects.\n Please, select another relationship.");;
                          enabledAllObjects(false);
                          jButton1.setEnabled(false);
                     }

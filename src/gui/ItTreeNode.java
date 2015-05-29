@@ -41,7 +41,7 @@ public class ItTreeNode extends DefaultMutableTreeNode {
 	private Element data = null;
 	private Element reference = null;
 	private Element additionalData = null;
-        private String infostring = "";
+    private String infostring = "";
 	private Icon icon = null;
 
 	public ItTreeNode() {

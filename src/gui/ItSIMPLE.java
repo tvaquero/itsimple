@@ -210,12 +210,13 @@ public class ItSIMPLE extends JFrame {
 	private JMenuItem motifMenuItem = null;
 	private JMenuItem defaultMenuItem = null;
 	private JMenuItem plannersSettingsMenuItem = null;
+	
         //Help
         private JMenu helpMenu = null;
         private JMenuItem aboutMenuItem = null;
         private JMenuItem checkUpdatesMenuItem = null;
         
-        //Perpective
+        //Perspective
         private ButtonGroup perspectiveGroup = new ButtonGroup();
 	private JToggleButton modelingPerspectiveButton = null;	
 	private JToggleButton analysisPerspectiveButton = null;	
