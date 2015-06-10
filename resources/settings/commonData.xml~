@@ -664,34 +664,6 @@
 			<expression />
 		</metric>
 	</xpddlNodes>
-	<xrmplNodes>
-		<RMPL>
-		</RMPL>
-		<Class name="">
-		</Class>
-		<Field>
-			<VarSpec type="" name=""/>
-		</Field>
-		<Method name="">
-			<ParameterList/>
-		</Method>
-		<Primitive/>
-		<Duration/>
-		<Controllable lbound="" ubound=""/>
-		<Behavior>
-			<PreCondition/>
-			<PostCondition/>
-		</Behavior>
-		<Body/>
-    		<Constructor name="">
-      			<ParameterList/>
-		</Constructor>
-		<Assignment lhs=""/>
-		<New class=""/>
-		<Identifier name=""/>
-		<Sequence/>
-		<Achieve/>
-	</xrmplNodes>
 	<petriNetNodes>
 		<pnmlNodes>
 			<pnml/>
