@@ -68,7 +68,8 @@ public class ExpressionTreeBuilder{
 		separators.addElement(",");
 		separators.addElement(":");
 		
-		separators.addElement("=");		
+		separators.addElement("=");
+		//separators.addElement("==");	
 		separators.addElement("<"); 
 		separators.addElement(">");
 		separators.addElement(">=");

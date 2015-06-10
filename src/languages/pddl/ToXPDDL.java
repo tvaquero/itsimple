@@ -65,10 +65,10 @@ public class ToXPDDL {
 
 	
 	public static Element XMLToXPDDLDomain(Element project, String pddlVersion, List<Element> instructions){
-		//ToXPDDL.project = project;
-		Element xpddlNodes = null;
+		
 		xpddlDomain = null;
 		
+		Element xpddlNodes = null;
 		try {
 			xpddlNodes = (Element)XMLUtilities.readFromFile("resources/settings/commonData.xml").getRootElement().getChild("xpddlNodes").clone();
 		} catch (JDOMException e) {
@@ -87,6 +87,7 @@ public class ToXPDDL {
 			//2. Types
 			//2.1 from classes
 			Element classesHierarchyTree = XMLUtilities.getClassesHierarchyTree(project);
+			//XMLUtilities.printXML(classesHierarchyTree);
 			fillOutTypes(xpddlDomain.getChild("types"), classesHierarchyTree);
 			
 			//2.2 from enumerations
@@ -325,7 +326,7 @@ public class ToXPDDL {
 		}
 		
 		/*
-                //4.2 Boolean and non-primitive attributes
+        //4.2 Boolean and non-primitive attributes
 		List<?> attributes = null;
 		try {
 			XPath path = new JDOMXPath("project/elements/classes/class/attributes/attribute[type!='2' and type!='3' and type!='4']");
@@ -450,7 +451,7 @@ public class ToXPDDL {
 			xpddlDomain.getChild("predicates").addContent(predicate);			
 		}*/
                 
-                //4.2 Boolean 
+        //4.2 Boolean 
 		List<?> attributes = null;
 		try {
 			XPath path = new JDOMXPath("project/elements/classes/class/attributes/attribute[type='1']");
@@ -529,10 +530,10 @@ public class ToXPDDL {
 		}
 
 
-                //4.2 non-primitive attributes (they are treat differently depending on the chosen pddl version)
+        //4.2 non-primitive attributes (they are treat differently depending on the chosen pddl version)
 		attributes = null;
 		try {
-                        XPath path = new JDOMXPath("project/elements/classes/class/attributes/attribute[type!='1' and type!='2' and type!='3' and type!='4']");
+            XPath path = new JDOMXPath("project/elements/classes/class/attributes/attribute[type!='1' and type!='2' and type!='3' and type!='4']");
 			attributes = path.selectNodes(project.getDocument());
 		} catch (JaxenException e) {
 			e.printStackTrace();
@@ -540,20 +541,20 @@ public class ToXPDDL {
 		for(Iterator<?> iter = attributes.iterator(); iter.hasNext();){
 			Element attribute = (Element)iter.next();
 			Element attributeClass = attribute.getParentElement().getParentElement();
-                        //Element predicate = new Element("predicate");
-                        //predicate.setAttribute("name", attribute.getChildText("name"));
+            //Element predicate = new Element("predicate");
+            //predicate.setAttribute("name", attribute.getChildText("name"));
 
-                        String xpddlTag = ""; //this variable holds where should we put the resulting xppdl attribute
-                        Element theXPDDLAttr = null;
-                        if (!pddlVersion.equals(PDDL_3_1)){
-                            theXPDDLAttr = new Element("predicate");
-                            theXPDDLAttr.setAttribute("name", attribute.getChildText("name"));
-                            xpddlTag = "predicates";
-                        }else{
-                            theXPDDLAttr = new Element("function");
-                            theXPDDLAttr.setAttribute("name", attribute.getChildText("name"));
-                            xpddlTag = "functions";
-                        }
+            String xpddlTag = ""; //this variable holds where should we put the resulting xppdl attribute
+            Element theXPDDLAttr = null;
+            if (!pddlVersion.equals(PDDL_3_1)){
+                theXPDDLAttr = new Element("predicate");
+                theXPDDLAttr.setAttribute("name", attribute.getChildText("name"));
+                xpddlTag = "predicates";
+            }else{
+                theXPDDLAttr = new Element("function");
+                theXPDDLAttr.setAttribute("name", attribute.getChildText("name"));
+                xpddlTag = "functions";
+            }
 
                         
 			// 4.2.1 arguments 1 to n-1 (those are done before because the names are given by the user)
@@ -622,62 +623,62 @@ public class ToXPDDL {
 			}
 
 			//4.2.3 argument n
-                        Element attributeType = null;
+            Element attributeType = null;
+            try {
+                    XPath path = new JDOMXPath("project/elements/classes/*[@id='" + attribute.getChildText("type") + "']");
+                    attributeType = (Element)path.selectSingleNode(project.getDocument());
+            } catch (JaxenException e) {
+                    e.printStackTrace();
+            }
+            if(attributeType != null){
+
+                    if (!pddlVersion.equals(PDDL_3_1)){
+                        Element predicateValueType = new Element("parameter");
+                        //this is done because the attribute type name may be lower than 3
+                        int length = (attributeType.getChildText("name").length() > 3) ?3 :attributeType.getChildText("name").length();
+                        String noIndexPredicateValueTypeName = attributeType.getChildText("name").substring(0,length).toLowerCase();
+                        List<?> result = null;
                         try {
-                                XPath path = new JDOMXPath("project/elements/classes/*[@id='" + attribute.getChildText("type") + "']");
-                                attributeType = (Element)path.selectSingleNode(project.getDocument());
+                                // checks if there is already a parameter with that name
+                                XPath path = new JDOMXPath("parameter[starts-with(@name,'" + noIndexPredicateValueTypeName + "')]");
+                                //result = path.selectNodes(predicate);
+                                result = path.selectNodes(theXPDDLAttr);
                         } catch (JaxenException e) {
                                 e.printStackTrace();
                         }
-                        if(attributeType != null){
-
-                                if (!pddlVersion.equals(PDDL_3_1)){
-                                    Element predicateValueType = new Element("parameter");
-                                    //this is done because the attribute type name may be lower than 3
-                                    int length = (attributeType.getChildText("name").length() > 3) ?3 :attributeType.getChildText("name").length();
-                                    String noIndexPredicateValueTypeName = attributeType.getChildText("name").substring(0,length).toLowerCase();
-                                    List<?> result = null;
-                                    try {
-                                            // checks if there is already a parameter with that name
-                                            XPath path = new JDOMXPath("parameter[starts-with(@name,'" + noIndexPredicateValueTypeName + "')]");
-                                            //result = path.selectNodes(predicate);
-                                            result = path.selectNodes(theXPDDLAttr);
-                                    } catch (JaxenException e) {
-                                            e.printStackTrace();
-                                    }
-                                    if(result.size() > 0){
-                                            boolean hasSameName = true;
-                                            String predicateValueTypeName = "";
-                                            for(int i = result.size(); hasSameName; i++){
-                                                    predicateValueTypeName = noIndexPredicateValueTypeName + i;
-                                                    Element sameNameParameter = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath("parameter[@name='" + predicateValueTypeName + "']");
-                                                            //sameNameParameter = (Element)path.selectSingleNode(predicate);
-                                                            sameNameParameter = (Element)path.selectSingleNode(theXPDDLAttr);
-                                                    } catch (JaxenException e) {
-                                                            e.printStackTrace();
-                                                    }
-                                                    if(sameNameParameter == null){
-                                                            hasSameName = false;
-                                                    }
-                                            }
-                                            predicateValueType.setAttribute("name", predicateValueTypeName);
-                                    }
-                                    else{
-                                            predicateValueType.setAttribute("name", noIndexPredicateValueTypeName);
-                                    }
-                                    predicateValueType.setAttribute("type", attributeType.getChildText("name"));
-                                    //predicate.addContent(predicateValueType);
-                                    theXPDDLAttr.addContent(predicateValueType);
+                        if(result.size() > 0){
+                                boolean hasSameName = true;
+                                String predicateValueTypeName = "";
+                                for(int i = result.size(); hasSameName; i++){
+                                        predicateValueTypeName = noIndexPredicateValueTypeName + i;
+                                        Element sameNameParameter = null;
+                                        try {
+                                                XPath path = new JDOMXPath("parameter[@name='" + predicateValueTypeName + "']");
+                                                //sameNameParameter = (Element)path.selectSingleNode(predicate);
+                                                sameNameParameter = (Element)path.selectSingleNode(theXPDDLAttr);
+                                        } catch (JaxenException e) {
+                                                e.printStackTrace();
+                                        }
+                                        if(sameNameParameter == null){
+                                                hasSameName = false;
+                                        }
                                 }
-                                //If it is PDDL3.1
-                                else{
-                                    theXPDDLAttr.setAttribute("type", attributeType.getChildText("name"));
-                                }
+                                predicateValueType.setAttribute("name", predicateValueTypeName);
                         }
+                        else{
+                                predicateValueType.setAttribute("name", noIndexPredicateValueTypeName);
+                        }
+                        predicateValueType.setAttribute("type", attributeType.getChildText("name"));
+                        //predicate.addContent(predicateValueType);
+                        theXPDDLAttr.addContent(predicateValueType);
+                    }
+                    //If it is PDDL3.1
+                    else{
+                        theXPDDLAttr.setAttribute("type", attributeType.getChildText("name"));
+                    }
+            }
 
-                        //Insert the resulting node at the right place
+            //Insert the resulting node at the right place
 			//xpddlDomain.getChild("predicates").addContent(predicate);
                         xpddlDomain.getChild(xpddlTag).addContent(theXPDDLAttr);
 		}
@@ -772,8 +773,8 @@ public class ToXPDDL {
 		
 		
 		//6. Constraints
-                Element constraints = xpddlDomain.getChild("constraints");
-                Element constraint = new Element("and");
+        Element constraints = xpddlDomain.getChild("constraints");
+        Element constraint = new Element("and");
 		if(pddlVersion.equals(PDDL_3_0)){
                         // 6.1 Find association with multiplicity "1"
 			List<?> result = null;
@@ -898,37 +899,36 @@ public class ToXPDDL {
 					}
 				}	
 			}
-                }
-                
-                //6.3 OCL Contraints on classes (inv:)
-                if (pddlVersion.equals(PDDL_3_0) || pddlVersion.equals(PDDL_3_1)){
+        }
+        
+        //6.3 OCL Constraints on classes (inv:)
+        if (pddlVersion.equals(PDDL_3_0) || pddlVersion.equals(PDDL_3_1)){
 
-                        List<?> classesWithConstraints = null;
-                        try {
-                            XPath path = new JDOMXPath("project/elements/classes/class[constraints!='']");
-                            classesWithConstraints = path.selectNodes(project.getDocument());
-                        } catch (JaxenException e2) {
-                            e2.printStackTrace();
-                        }
-
-                        for (Iterator<?> it = classesWithConstraints.iterator(); it.hasNext();) {
-                            Element theclass = (Element)it.next();
-                            //String classConstraintStr = theclass.getChildText("constraints");
-                            //System.out.println(classConstraintStr);
-                            Element xpddlconst = buildClassConstraint(theclass);
-                            constraint.addContent(xpddlconst);
-                        }
-                            
+                List<?> classesWithConstraints = null;
+                try {
+                    XPath path = new JDOMXPath("project/elements/classes/class[constraints!='']");
+                    classesWithConstraints = path.selectNodes(project.getDocument());
+                } catch (JaxenException e2) {
+                    e2.printStackTrace();
                 }
 
-                //6.4 Add constraints that where found
-                if(constraint.getChildren().size() > 0){
-                    constraints.addContent(constraint);
+                for (Iterator<?> it = classesWithConstraints.iterator(); it.hasNext();) {
+                    Element theclass = (Element)it.next();
+                    //String classConstraintStr = theclass.getChildText("constraints");
+                    //System.out.println(classConstraintStr);
+                    Element xpddlconst = buildClassConstraint(theclass);
+                    constraint.addContent(xpddlconst);
                 }
+                    
+        }
+
+        //6.4 Add constraints that where found
+        if(constraint.getChildren().size() > 0){
+            constraints.addContent(constraint);
+        }
 		
 		
 		//7. Actions
-                //Tiago
 		List<?> operators = null;
 		try {
 			XPath path = new JDOMXPath("project/elements/classes/class/operators/operator");
@@ -940,964 +940,985 @@ public class ToXPDDL {
 		for (Iterator<?> iter = operators.iterator(); iter.hasNext();) {
 			Element operator = (Element) iter.next();
                                                 
-                        //7.0 Check whether operator is inhibited
-                        /*boolean inhibited = false;
-                        if(instructions != null){
-                            for(Iterator iterate = instructions.iterator(); iterate.hasNext();){
-                                Element inhibitedOperator = (Element)iterate.next();
-                                if(inhibitedOperator.getChildText("name").equals(operator.getChildText("name"))){
-                                    inhibited = true;
+            //7.0 Check whether operator is inhibited
+            /*boolean inhibited = false;
+            if(instructions != null){
+                for(Iterator iterate = instructions.iterator(); iterate.hasNext();){
+                    Element inhibitedOperator = (Element)iterate.next();
+                    if(inhibitedOperator.getChildText("name").equals(operator.getChildText("name"))){
+                        inhibited = true;
+                    }
+                }
+            }*/	                        
+            
+            //if(!inhibited){
+
+
+				//Check the type or the operator (action or process or event)
+				//Element action = (Element)xpddlNodes.getChild("action").clone();
+				Element action;
+				Element typenode = operator.getChild("type");
+				if (typenode == null){ //if there is not type definition then consider it as an action
+					//System.out.println("Operator's type empty. Setting it to 'action'");
+					typenode = new Element("type");
+					typenode.setText("action");
+					operator.addContent(typenode);
+				}
+				if (typenode.getText().trim().equals("action")){
+					action = (Element)xpddlNodes.getChild("action").clone();
+				}
+				else if (typenode.getText().trim().equals("process")){
+					action = (Element)xpddlNodes.getChild("process").clone();
+				}
+				else if (typenode.getText().trim().equals("event")){
+					action = (Element)xpddlNodes.getChild("event").clone();
+				}							
+				else{
+					action = (Element)xpddlNodes.getChild("action").clone();
+				}
+				
+				//set the name 
+                action.setAttribute("name", operator.getChildText("name"));			
+                
+                
+                
+                //7.1 Parameters
+                 
+                //7.1.2 declared parameters
+                for (Iterator<?> iterator = operator.getChild("parameters").getChildren("parameter").iterator(); iterator.hasNext();) {
+                        Element parameter = (Element) iterator.next();
+                        Element parameterClass = null;
+                        try {
+                                XPath path = new JDOMXPath("project/elements/classes/*[@id='" + parameter.getChildText("type") + "']");
+                                parameterClass = (Element)path.selectSingleNode(project.getDocument());
+                        } catch (JaxenException e) {			
+                                e.printStackTrace();
+                        }
+
+                        if(parameterClass != null){
+                                Element actionParameter = new Element("parameter");
+                                actionParameter.setAttribute("name", parameter.getChildText("name"));
+                                actionParameter.setAttribute("type", parameterClass.getChildText("name"));
+
+                                action.getChild("parameters").addContent(actionParameter);
+                        }
+                }
+
+                //7.2 duration
+                boolean isDurative = Boolean.parseBoolean(operator.getChild("timeConstraints").getAttributeValue("timed"));
+
+                //check if there is any timing diagram for this operator
+                Element timingDiagram = null;
+                try {
+                    XPath path = new JDOMXPath("project/diagrams/timingDiagrams/timingDiagram[action/@class='" +
+                            operator.getParentElement().getParentElement().getAttributeValue("id") +
+                            "' and action/@id='"+operator.getAttributeValue("id")+"']");
+                    timingDiagram = (Element)path.selectSingleNode(project.getDocument());
+                } catch (JaxenException e) {
+                    e.printStackTrace();
+                }
+
+                if(isDurative){
+                    Element duration = new Element("duration");
+                    
+                    String durationStr = operator.getChild("timeConstraints").getChildText("duration");
+                    
+                    if (durationStr.trim().equals("")){
+                        //see if it can be found in the timing diagram
+                        if (timingDiagram!=null){
+                            durationStr = timingDiagram.getChild("frame").getChildText("duration").trim();
+                        }
+                    }
+
+                    if(durationStr.trim().equals("")){
+                    	Element value = new Element("value");
+                        value.setAttribute("number", "0");
+                        ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!) WARNING: duration of durative-action \""+ operator.getChildText("name")+ "\" not specified.\n");
+                        System.out.println("WARNING: duration of action \""+ operator.getChildText("name")+ "\" not specified.\n");
+                    }
+                    else{
+                    	
+                    	// check if the duration has bounds
+                    	if (durationStr.startsWith("[") && durationStr.endsWith("]") && durationStr.contains(",")){
+   	                	
+    	                	durationStr = durationStr.replace("[", "");
+    	                	durationStr = durationStr.replace("]", "");
+    	                	durationStr = durationStr.replace("self.", "");
+    	                	String[] bounds = durationStr.split(",");
+    	                	
+    	                	//TODO: implement lower and upper bounds
+    	                	Element durationExpression = parseActionDuration(operator, action, duration, bounds[0]);
+                        	duration.addContent(durationExpression);
+    	                	
+                    	}
+                    	else{
+                    		Element durationExpression = parseActionDuration(operator, action, duration, durationStr);
+                        	duration.addContent(durationExpression);
+                    	}
+                    	
+                    	
+                    	/*
+                        try {
+                            Float.parseFloat(durationStr);
+                            value.setAttribute("number", durationStr);
+                            duration.addContent(value);
+                        }
+                        catch(Exception e){
+                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) Warning: "+durationStr+ " is not a number at " +operator.getChildText("name")+".\n");
+                            System.out.println("This is not a number!\n");
+                            ExpressionTreeBuilder builder = new ExpressionTreeBuilder(durationStr);
+                            Element durationExpressionTree = builder.getExpressionTree();
+                            Element durationExpresion = buildCondition(durationExpressionTree, action, null, PRECONDITION);
+                            duration.addContent(durationExpresion);
+                        }
+                        */
+                    }
+                    action.addContent(duration);
+
+                    action.setName("durative-action");
+                }
+
+                //7.2 Preconditions and postconditions
+
+                // check whether the operator has constraints
+                // if that is the case, translate only the constraints
+                // otherwise, look for the action definition in state machine
+                String constraintsExpression = operator.getChildText("constraints").trim();
+                String precondition;
+                String postcondition;
+                
+                Element annotatedConditions = null;
+                
+
+                if(!constraintsExpression.equals("")){
+                    // precondition
+                    precondition = constraintsExpression.substring(
+                                    constraintsExpression.indexOf("pre:"), 
+                                    constraintsExpression.indexOf("post:")).trim();
+
+                    // take off "pre:"
+                    precondition = precondition.substring(4, precondition.length()).trim();
+
+                    // postcondition		
+                    postcondition = constraintsExpression.substring(
+                                    constraintsExpression.indexOf("post:"), 
+                                    constraintsExpression.length()).trim();
+
+                    // take off "post:"
+                    postcondition = postcondition.substring(5, postcondition.length()).trim();				
+
+                }
+                else{
+                        Element actionNode = OCLUtilities.buildConditions(operator);
+                        //XMLUtilities.printXML(actionNode);
+                        //System.out.println("---------------------------\n \n");
+
+                        //7.2.1 Preconditions
+                        List<?> preconditions = null;
+                        try {
+                                XPath path = new JDOMXPath("preconditions/conditions/condition");
+                                preconditions = path.selectNodes(actionNode);
+                        } catch (JaxenException e) {			
+                                e.printStackTrace();
+                        }
+                        precondition = "";
+                        if(preconditions.size() > 0){
+                                for (Iterator<?> iterator = preconditions.iterator(); iterator.hasNext();) {
+                                        Element condition = (Element) iterator.next();
+                                        precondition += condition.getText();
+                                        if(iterator.hasNext())
+                                                precondition += " and ";
+                                }
+                        }
+
+                        //7.3.2 Postconditions
+                        List<?> postconditions = null;
+                        try {
+                                XPath path = new JDOMXPath("postconditions/conditions/condition");
+                                postconditions = path.selectNodes(actionNode);
+                        } catch (JaxenException e) {			
+                                e.printStackTrace();
+                        }
+                        postcondition = "";
+                        if(postconditions.size() > 0){
+                                for (Iterator<?> iterator = postconditions.iterator(); iterator.hasNext();) {
+                                        Element condition = (Element) iterator.next();
+                                        postcondition += condition.getText();
+                                        if(iterator.hasNext())
+                                                postcondition += " and ";
+                                }
+                        }
+                        
+                        annotatedConditions = actionNode.getChild("annotatedoclexpressions");
+
+                }
+
+                // clean up preconditions
+                if (precondition.indexOf("&#xd;") > -1){				
+                    precondition.replaceAll("&#xd;", " "); // return carriage in xml
+                }
+                
+                if(!precondition.trim().equals("")){
+                    try{					
+                        ExpressionTreeBuilder builder = new ExpressionTreeBuilder(precondition);
+                        Element preconditionExpressionTree = builder.getExpressionTree();
+                        Element xpddlPrecondition = buildCondition(preconditionExpressionTree, action, null, PRECONDITION);
+                        action.getChild("precondition").addContent(xpddlPrecondition);
+                        //XMLUtilities.printXML(preconditionExpressionTree);
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                        ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: error on action: \"" + action.getAttributeValue("name") + "\", with the precondition: \"" + precondition + "\"." +
+                                        "\nInvalid or unsupported syntax.\n");
+                        System.err.println("Error on action: \"" + action.getAttributeValue("name") + "\", with the precondition: \"" + precondition + "\"." +
+                                        "\nInvalid or unsupported syntax.\n");
+                    }
+                }
+
+                // clean up post-condition
+                if (postcondition.indexOf("&#xd;") > -1){				
+                    postcondition.replaceAll("&#xd;", " "); // return carriage in xml
+                }
+
+                if(!postcondition.trim().equals("")){
+                    try{
+                        ExpressionTreeBuilder builder = new ExpressionTreeBuilder(postcondition);
+                        Element postconditionExpressionTree = builder.getExpressionTree();
+                        Element effect = buildCondition(postconditionExpressionTree, action, null, POSTCONDITION);
+                        action.getChild("effect").addContent(effect);
+                        //XMLUtilities.printXML(postconditionExpressionTree);
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                        ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: error on action: \"" + action.getAttributeValue("name") + "\", with the postcondition: \"" + postcondition + "\"." +
+                                        "\nInvalid or unsupported syntax.\n");
+                        System.err.println("Error on action: \"" + action.getAttributeValue("name") + "\", with the postcondition: \"" + postcondition + "\"." +
+                                        "\nInvalid or unsupported syntax.\n");
+                    }
+                }
+                
+                if(precondition.trim().equals("") && postcondition.trim().equals("")){
+                    ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!) WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
+                                        "\" not defined.\n");
+                    System.out.println("WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
+                                        "\" not defined.\n");
+                }
+
+                
+                // 7.3.3 Analyse preconditions and postconditions for additional statements in postcondition
+                // get all predicates in effect with more than one parameter
+                List<?> effectPredicates = null;
+                try {
+                        XPath path = new JDOMXPath("effect/descendant::predicate[count(*) > 1]");
+                        effectPredicates = path.selectNodes(action);
+                } catch (JaxenException e) {			
+                        e.printStackTrace();
+                }
+
+                for (Iterator<?> iterator = effectPredicates.iterator(); iterator.hasNext();) {
+                        Element predicate = (Element) iterator.next();
+                       
+                        
+                        // if the predicate is denied or is a condition to a when node, do nothing
+                        if(!predicate.getParentElement().getName().equals("not")){
+                            
+                            //If a parameter is being included (including) to the predicate list the we should not c
+                            // consider it for negating in the postcondition.
+                            boolean isIncluding = false;
+                            Element theLastParameter = ((Element)predicate.getChildren().get(predicate.getChildren().size()-1));                                        
+                            if (theLastParameter.getAttribute("opn") != null && theLastParameter.getAttributeValue("opn").equals("including")){
+                                isIncluding = true;
+                                //remove the mark (at opn) that says the the parameter is been included
+                                theLastParameter.removeAttribute("opn");
+                            }
+                            //XMLUtilities.printXML(predicate);
+                            //If it is is not a including case, then we can proceed.
+                            if (!isIncluding){
+
+                                // build the query to find the same predicate with xpath
+                                // only the last parameter must be different
+                                String query = "descendant::predicate[@id='"+ predicate.getAttributeValue("id") +"'";
+                                List<?> parameters = predicate.getChildren();
+                                int index = 1;
+                                for (Iterator<?> iterator2 = parameters.iterator(); iterator2.hasNext();) {
+                                        // don't use the last parameter
+                                        Element parameter = (Element) iterator2.next();
+                                        if(index != parameters.size()){								
+                                                query += " and *["+ index +"]/@id='"+ parameter.getAttributeValue("id") +"'";
+                                                index++;
+                                        }
+                                }
+                                query += "]";
+
+                                // check whether the predicate is inside a when node
+                                Element parent = predicate.getParentElement();
+                                while(!parent.getName().equals("when") && !parent.getName().equals("effect")){
+                                        parent = parent.getParentElement();
+                                }                                            
+                                //XMLUtilities.printXML(predicate);
+                                //XMLUtilities.printXML(parent);
+                                
+                                if(parent.getName().equals("effect")){
+                                        // the predicate isn't inside a when node
+
+                                        // find the same predicate in precondition, with only the last parameter different
+                                        // indicating that this value must be denied
+
+                                        // look for the predicates in precondition
+                                        List<?> precondPredicates = null;
+                                        try {
+                                                XPath path = new JDOMXPath(query);
+                                                precondPredicates = path.selectNodes(action.getChild("precondition"));
+                                        } catch (JaxenException e) {			
+                                                e.printStackTrace();
+                                        }
+
+                                        for (Iterator<?> iterator3 = precondPredicates.iterator(); iterator3.hasNext();) {
+                                                Element precondPredicate = (Element) iterator3.next();
+
+                                                // checks if the last parameter is the same; if so, do nothing
+                                                Element lastParameter = (Element)predicate.getChildren().get(parameters.size()-1);
+                                                Element lastPrecondParameter = (Element)precondPredicate.getChildren().get(parameters.size()-1);
+                                                
+                                                if(!lastParameter.getAttributeValue("id").equals(lastPrecondParameter.getAttributeValue("id"))){
+                                                    
+                                                        // get the conditions for a when node in post condition
+                                                        List<?> conditions = buildWhenCondition(precondPredicate);
+
+                                                        if(conditions.size() == 0){
+                                                                // there is no need to create a when node
+                                                                // in this case, deny the precondition predicate directly in the effect node
+                                                                Element not = new Element("not");
+                                                                not.addContent((Element)precondPredicate.clone());
+                                                                Element predicateParent = predicate.getParentElement();
+                                                                if(predicateParent.getName().equals("effect")){
+                                                                        // there is only one statement, so create an and node
+                                                                        Element andNode = new Element("and");
+                                                                        andNode.addContent(predicate.detach());
+                                                                        andNode.addContent(not);
+                                                                        predicateParent.addContent(andNode);
+                                                                }
+                                                                else if(predicateParent.getName().equals("and")){
+                                                                        // just add the not in the and node
+                                                                        predicateParent.addContent(not);
+                                                                }
+                                                                //XMLUtilities.printXML(predicateParent);
+
+                                                        }
+                                                        else{
+                                                                // TODO look for a when with the same conditions
+                                                                // only creates a when node if there is not already a when with the same conditions
+
+                                                                Element when = new Element("when");
+                                                                Element container;									
+
+                                                                if(conditions.size() == 1){
+                                                                        container = when;
+                                                                }
+                                                                else{// size > 1
+                                                                        container = new Element("and");
+                                                                        when.addContent(container);
+                                                                }									
+
+                                                                for (Iterator<?> iterator4 = conditions.iterator(); iterator4.hasNext();) {
+                                                                        Element condition = (Element) iterator4.next();
+                                                                        container.addContent(condition);										
+                                                                }									
+
+                                                                Element not = new Element("not");
+                                                                not.addContent((Element)precondPredicate.clone());
+                                                                Element doNode = new Element("do");
+                                                                doNode.addContent(not);
+                                                                when.addContent(doNode);
+
+                                                                // add the when node in the effect
+                                                                Element predicateParent = predicate.getParentElement();
+                                                                if(predicateParent.getName().equals("effect")){
+                                                                        // there is only one statement, so create an and node
+                                                                        Element andNode = new Element("and");
+                                                                        andNode.addContent(predicate.detach());
+                                                                        andNode.addContent(when);
+                                                                        predicateParent.addContent(andNode);
+                                                                }
+                                                                else if(predicateParent.getName().equals("and")){
+                                                                        // just add the when in the and node
+                                                                        predicateParent.addContent(when);
+                                                                }
+                                                        }
+                                                }
+
+                                        }
+                                }
+                                else{
+                                        // predicate is inside a when node (supposing there is only one when node)
+
+                                        // look for the predicate in the when conditions
+                                        List<?> whenPredicates = null;
+                                        try {
+                                                XPath path = new JDOMXPath(query);
+                                                whenPredicates = path.selectNodes(parent);
+                                        } catch (JaxenException e) {			
+                                                e.printStackTrace();
+                                        }
+
+                                        // discard elements inside do node
+                                        List<Element> conditionPredicates = new ArrayList<Element>();
+                                        for (Iterator<?> iterator2 = whenPredicates.iterator(); iterator2
+                                                        .hasNext();) {
+                                                Element conditionPredicate = (Element) iterator2.next();
+                                                Element conditionParent = conditionPredicate.getParentElement();
+                                                while(!conditionParent.getName().equals("do") &&
+                                                                !conditionParent.getName().equals("when")){
+                                                        conditionParent = conditionParent.getParentElement();
+                                                }
+                                                if(conditionParent.getName().equals("when")){
+                                                        conditionPredicates.add(conditionPredicate);
+                                                }
+                                        }
+
+                                        if(conditionPredicates.size() == 0){
+                                                // the predicate is not in the when conditions
+                                                // so we must look for it in the precondition
+                                                List<?> preconditionPredicates = null;
+                                                try {
+                                                        XPath path = new JDOMXPath(query);
+                                                        preconditionPredicates = path.selectNodes(action.getChild("precondition"));
+                                                } catch (JaxenException e) {			
+                                                        e.printStackTrace();
+                                                }
+                                                for (Iterator<?> iterator2 = preconditionPredicates
+                                                                .iterator(); iterator2.hasNext();) {
+                                                        Element precondPredicate = (Element) iterator2.next();
+                                                        List<?> conditions = buildWhenCondition(precondPredicate);
+
+                                                        if(conditions.size() == 0){
+                                                                // there is no need to create a when node
+                                                                // in this case, deny the precondition predicate directly in "do" node
+                                                                // this will be the only case to be dealed, since in PDDL
+                                                                // a "when" can't be inside another "when"
+                                                                Element not = new Element("not");
+                                                                not.addContent((Element)precondPredicate.clone());
+                                                                Element predicateParent = predicate.getParentElement();
+                                                                Element and = predicateParent.getChild("and");
+                                                                if(and == null){
+                                                                        // there is only one statement, so create an and node
+                                                                        Element andNode = new Element("and");
+                                                                        andNode.addContent(predicate.detach());
+                                                                        andNode.addContent(not);
+                                                                        predicateParent.addContent(andNode);
+                                                                }
+                                                                else if(predicateParent.getName().equals("and")){
+                                                                        // just add the not in the and node
+                                                                        and.addContent(not);
+                                                                }
+
+                                                        }
+                                                        // if the size of list conditions is > 0, it means that there are
+                                                        // disjunctions in precondition
+                                                        // this can't be translated to PDDL, since it doesn't supports
+                                                        // a "when" inside another one
+                                                        // therefore, nothing is done in this case
+                                                }
+                                        }
+                                        else{
+                                                // the predicate is in the when conditions
+                                                // so, deny it in the "do" node
+                                                for (Iterator<Element> iterator2 = conditionPredicates.iterator(); iterator2.hasNext();) {
+                                                        Element conditionPredicate = iterator2.next();
+                                                        //Element predicateParent = conditionPredicate.getParentElement();
+
+                                                        // get when node
+                                                        /*while(!predicateParent.getName().equals("when") && 
+                                                                        !predicateParent.getName().equals("do")){
+                                                                predicateParent = predicateParent.getParentElement();
+                                                        }*/
+                                                        //if(predicateParent.getName().equals("when")){
+                                                                // checks if the last parameter is the same; if so, do nothing
+                                                                Element lastParameter = (Element)predicate.getChildren().get(parameters.size()-1);
+                                                                Element lastPrecondParameter = (Element)conditionPredicate.getChildren().get(parameters.size()-1);
+                                                                if(!lastParameter.getAttributeValue("id").equals(lastPrecondParameter.getAttributeValue("id"))){
+                                                                        // deny the predicate in the "do" node of "when"										
+                                                                        Element not = new Element("not");
+                                                                        not.addContent((Element)conditionPredicate.clone());
+
+                                                                        Element and = parent.getChild("do").getChild("and");
+                                                                        if(and == null){
+                                                                                // create a and node
+                                                                                and = new Element("and");
+                                                                                and.addContent(predicate.detach());
+                                                                                and.addContent(not);
+                                                                                parent.getChild("do").addContent(and);
+                                                                        }
+                                                                        else{
+                                                                                and.addContent(not);
+                                                                        }
+                                                                }
+                                                        //}
+                                                }
+                                        }
                                 }
                             }
-                        }*/	                        
-                        
-                        //if(!inhibited){
+                        }
+                }
 
-			
-							//Check the type or the operator (action or process or event)
-							//Element action = (Element)xpddlNodes.getChild("action").clone();
-							Element action;
-							Element typenode = operator.getChild("type");
-							if (typenode == null){ //if there is not type definition then consider it as an action
-								//System.out.println("Operator's type empty. Setting it to 'action'");
-								typenode = new Element("type");
-								typenode.setText("action");
-								operator.addContent(typenode);
-							}
-							if (typenode.getText().trim().equals("action")){
-								action = (Element)xpddlNodes.getChild("action").clone();
-							}
-							else if (typenode.getText().trim().equals("process")){
-								action = (Element)xpddlNodes.getChild("process").clone();
-							}
-							else if (typenode.getText().trim().equals("event")){
-								action = (Element)xpddlNodes.getChild("event").clone();
-							}							
-							else{
-								action = (Element)xpddlNodes.getChild("action").clone();
-							}
-							
-							//set the name 
-                            action.setAttribute("name", operator.getChildText("name"));			
-                            
-                            
-                            
-                            //7.1 Parameters
-                             
-                            //7.1.2 declared parameters
-                            for (Iterator<?> iterator = operator.getChild("parameters").getChildren("parameter").iterator(); iterator.hasNext();) {
-                                    Element parameter = (Element) iterator.next();
-                                    Element parameterClass = null;
-                                    try {
-                                            XPath path = new JDOMXPath("project/elements/classes/*[@id='" + parameter.getChildText("type") + "']");
-                                            parameterClass = (Element)path.selectSingleNode(project.getDocument());
-                                    } catch (JaxenException e) {			
-                                            e.printStackTrace();
-                                    }
 
-                                    if(parameterClass != null){
-                                            Element actionParameter = new Element("parameter");
-                                            actionParameter.setAttribute("name", parameter.getChildText("name"));
-                                            actionParameter.setAttribute("type", parameterClass.getChildText("name"));
+                // 7.4 Deal with null values
+                // option 1: eliminate null values
+                // option 2: change null values for not(exists()) in preconditions and forall(not()) in postconditions
+                int option = 1;// initially, there is only option 1
 
-                                            action.getChild("parameters").addContent(actionParameter);
-                                    }
+                List<?> actionPreconditions = null;
+                try {
+                        // filter not parameterized boolean attributes
+                        XPath path = new JDOMXPath("precondition/descendant::predicate[parameter/@id='null']");
+                        actionPreconditions = path.selectNodes(action);
+                } catch (JaxenException e) {			
+                        e.printStackTrace();
+                }	
+
+                List<?> actionPostconditions = null;
+                try {
+                        // filter not parameterized boolean attributes
+                        XPath path = new JDOMXPath("effect/descendant::predicate[parameter/@id='null']");
+                        actionPostconditions = path.selectNodes(action);
+                } catch (JaxenException e) {			
+                        e.printStackTrace();
+                }			
+
+                switch(option){
+                case 1:{
+                    //Delete all predicates in precondition with null values
+                    for (Iterator<?> iterator = actionPreconditions.iterator(); iterator.hasNext();) {
+                        Element predicate = (Element) iterator.next();
+                        Element parent = predicate.getParentElement();
+                        if(parent.getName().equals("not")){
+                                predicate = parent;
+                                parent = predicate.getParentElement();
+                        }
+                        parent.removeContent(predicate);
+                        parent.removeContent(predicate);
+                    }
+
+                    //Delete all predicates in postcondition with null values				
+                    for (Iterator<?> iterator = actionPostconditions.iterator(); iterator.hasNext();) {
+                        Element predicate = (Element) iterator.next();
+                        Element parent = predicate.getParentElement();
+                        if(parent.getName().equals("not")){
+                                predicate = parent;
+                                parent = predicate.getParentElement();
+                        }
+                        parent.removeContent(predicate);
+                    }					
+
+                }break;
+                case 2:{
+                    //Replace all predicates with null values with not(exists(?x - <type>)<predicate>))
+                    for (Iterator<?> iterator = actionPreconditions.iterator(); iterator.hasNext();) {
+                        Element refPredicate = (Element) iterator.next();
+                        Element predicate = null;				
+                        try {
+                                XPath path = new JDOMXPath("predicates/predicate[@name='" + refPredicate.getAttributeValue("id") + "']");
+                                predicate = (Element)path.selectSingleNode(xpddlDomain);
+                        } catch (JaxenException e) {			
+                                e.printStackTrace();
+                        }
+                        if(predicate != null){
+                            Element predicateParameter = (Element)predicate.getChildren("parameter").get(predicate.getChildren("parameter").size()-1);
+                            // get the action node
+                            /*Element action = refPredicate;					
+                            while(!action.getName().equals("action")){						
+                                    action = action.getParentElement();
+                            }*/
+                            // create the parameter
+                            Element parameter = new Element("parameter");
+
+                            // defining the parameter name					
+                            //this is done because the parameter name may be lower than 3
+                            int length = predicateParameter.getAttributeValue("name").length();
+                            if(length > 3){
+                                    length = 3;
                             }
-
-                            //7.2 duration
-                            boolean isDurative = Boolean.parseBoolean(operator.getChild("timeConstraints").getAttributeValue("timed"));
-
-                            //check if there is any timing diagram for this operator
-                            Element timingDiagram = null;
+                            String noIndexParameterName = predicateParameter.getAttributeValue("name").substring(0,length).toLowerCase();
+                            List<?> result = null;
                             try {
-                                    XPath path = new JDOMXPath("project/diagrams/timingDiagrams/timingDiagram[action/@class='" +
-                                            operator.getParentElement().getParentElement().getAttributeValue("id") +
-                                            "' and action/@id='"+operator.getAttributeValue("id")+"']");
-                                    timingDiagram = (Element)path.selectSingleNode(project.getDocument());
-                            } catch (JaxenException e) {
-                                    e.printStackTrace();
-                            }
-
-                            if(isDurative){
-                                    Element duration = new Element("duration");
-                                    Element value = new Element("value");
-                                    String durationStr = operator.getChild("timeConstraints").getChildText("duration");
-                                    
-                                    if (durationStr.trim().equals("")){
-                                        //see if it can be found in the timing diagram
-                                        if (timingDiagram!=null){
-                                            durationStr = timingDiagram.getChild("frame").getChildText("duration").trim();
-                                        }
-                                    }
-
-                                    if(durationStr.trim().equals("")){
-                                            value.setAttribute("number", "0");
-                                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) WARNING: duration of durative-action \""+ operator.getChildText("name")+ "\" not specified.\n");
-                                            System.out.println("WARNING: duration of action \""+ operator.getChildText("name")+ "\" not specified.\n");
-                                    }
-                                    else{
-                                            try {
-                                                    Float.parseFloat(durationStr);
-                                                    value.setAttribute("number", durationStr);
-                                                    duration.addContent(value);
-                                            }
-                                            catch(Exception e){
-                                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) Warning: "+durationStr+ " is not a number at " +operator.getChildText("name")+".\n");
-                                                    System.out.println("This is not a number!\n");
-                                                    ExpressionTreeBuilder builder = new ExpressionTreeBuilder(durationStr);
-                                                    Element durationExpressionTree = builder.getExpressionTree();
-                                                    Element durationExpresion = buildCondition(durationExpressionTree, action, null, PRECONDITION);
-                                                    duration.addContent(durationExpresion);
-                                            }
-                                    }
-                                    action.addContent(duration);
-
-                                    action.setName("durative-action");
-                            }
-
-                            //7.2 Pre and post conditions
-
-                            // check whether the operator has constraints
-                            // if that is the case, translate only the constraints
-                            // otherwise, look for the action definition in state machine
-                            String constraintsExpression = operator.getChildText("constraints").trim();
-                            String precondition;
-                            String postcondition;
-                            
-                            Element annotatedConditions = null;
-                            
-
-                            if(!constraintsExpression.equals("")){
-                                    // precondition
-                                    precondition = constraintsExpression.substring(
-                                                    constraintsExpression.indexOf("pre:"), 
-                                                    constraintsExpression.indexOf("post:")).trim();
-
-                                    // take off "pre:"
-                                    precondition = precondition.substring(4, precondition.length()).trim();
-
-                                    // postcondition		
-                                    postcondition = constraintsExpression.substring(
-                                                    constraintsExpression.indexOf("post:"), 
-                                                    constraintsExpression.length()).trim();
-
-                                    // take off "post:"
-                                    postcondition = postcondition.substring(5, postcondition.length()).trim();				
-
-                            }
-                            else{
-                                    Element actionNode = OCLUtilities.buildConditions(operator);
-                                    //XMLUtilities.printXML(actionNode);
-                                    //System.out.println("---------------------------\n \n");
-
-                                    //7.2.1 Preconditions
-                                    List<?> preconditions = null;
-                                    try {
-                                            XPath path = new JDOMXPath("preconditions/conditions/condition");
-                                            preconditions = path.selectNodes(actionNode);
-                                    } catch (JaxenException e) {			
-                                            e.printStackTrace();
-                                    }
-                                    precondition = "";
-                                    if(preconditions.size() > 0){
-                                            for (Iterator<?> iterator = preconditions.iterator(); iterator.hasNext();) {
-                                                    Element condition = (Element) iterator.next();
-                                                    precondition += condition.getText();
-                                                    if(iterator.hasNext())
-                                                            precondition += " and ";
-                                            }
-                                    }
-
-                                    //7.3.2 Postconditions
-                                    List<?> postconditions = null;
-                                    try {
-                                            XPath path = new JDOMXPath("postconditions/conditions/condition");
-                                            postconditions = path.selectNodes(actionNode);
-                                    } catch (JaxenException e) {			
-                                            e.printStackTrace();
-                                    }
-                                    postcondition = "";
-                                    if(postconditions.size() > 0){
-                                            for (Iterator<?> iterator = postconditions.iterator(); iterator.hasNext();) {
-                                                    Element condition = (Element) iterator.next();
-                                                    postcondition += condition.getText();
-                                                    if(iterator.hasNext())
-                                                            postcondition += " and ";
-                                            }
-                                    }
-                                    
-                                    annotatedConditions = actionNode.getChild("annotatedoclexpressions");
-
-                            }
-
-
-                            if (precondition.indexOf("&#xd;") > -1){				
-                                    precondition.replaceAll("&#xd;", " "); // return carriage in xml
-                            }
-                            if(!precondition.trim().equals("")){
-                                    try{					
-                                            ExpressionTreeBuilder builder = new ExpressionTreeBuilder(precondition);
-                                            Element preconditionExpressionTree = builder.getExpressionTree();
-                                            Element xpddlPrecondition = buildCondition(preconditionExpressionTree, action, null, PRECONDITION);
-                                            action.getChild("precondition").addContent(xpddlPrecondition);
-                                            //XMLUtilities.printXML(preconditionExpressionTree);
-                                    }
-                                    catch(Exception e){
-                                            e.printStackTrace();
-                                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: error on action: \"" + action.getAttributeValue("name") + "\", with the precondition: \"" + precondition + "\"." +
-                                                            "\nInvalid or unsupported syntax.\n");
-                                            System.err.println("Error on action: \"" + action.getAttributeValue("name") + "\", with the precondition: \"" + precondition + "\"." +
-                                                            "\nInvalid or unsupported syntax.\n");
-                                    }
-                            }
-
-                            if (postcondition.indexOf("&#xd;") > -1){				
-                                    postcondition.replaceAll("&#xd;", " "); // return carriage in xml
-                            }
-
-                            if(!postcondition.trim().equals("")){
-                                    try{
-                                            ExpressionTreeBuilder builder = new ExpressionTreeBuilder(postcondition);
-                                            Element postconditionExpressionTree = builder.getExpressionTree();
-                                            Element effect = buildCondition(postconditionExpressionTree, action, null, POSTCONDITION);
-                                            action.getChild("effect").addContent(effect);
-                                            //XMLUtilities.printXML(postconditionExpressionTree);
-                                    }
-                                    catch(Exception e){
-                                            e.printStackTrace();
-                                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: error on action: \"" + action.getAttributeValue("name") + "\", with the postcondition: \"" + postcondition + "\"." +
-                                                            "\nInvalid or unsupported syntax.\n");
-                                            System.err.println("Error on action: \"" + action.getAttributeValue("name") + "\", with the postcondition: \"" + postcondition + "\"." +
-                                                            "\nInvalid or unsupported syntax.\n");
-                                    }
-                            }
-                            
-                            //TODO: check if the user provided pre and post conditions as annotation
-                            if(precondition.trim().equals("") && postcondition.trim().equals("")){
-                                ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!) WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
-                                                    "\" not defined.\n");
-                                System.out.println("WARNING: precondition and postcondition of action \"" + action.getAttributeValue("name") + 
-                                                    "\" not defined.\n");
-                            }
-
-                            
-                            // 7.3.3 Analyze preconditions and postconditions for additional statements in postcondition
-                            // get all predicates in effect with more than one parameter
-                            List<?> effectPredicates = null;
-                            try {
-                                    XPath path = new JDOMXPath("effect/descendant::predicate[count(*) > 1]");
-                                    effectPredicates = path.selectNodes(action);
+                                    // checks if there is already a parameter with that name
+                                    XPath path = new JDOMXPath("parameter[starts-with(@name,'" + noIndexParameterName + "')]");
+                                    result = path.selectNodes(action);
                             } catch (JaxenException e) {			
                                     e.printStackTrace();
                             }
-
-                            for (Iterator<?> iterator = effectPredicates.iterator(); iterator.hasNext();) {
-                                    Element predicate = (Element) iterator.next();
-                                   
-                                    
-                                    // if the predicate is denied or is a condition to a when node, do nothing
-                                    if(!predicate.getParentElement().getName().equals("not")){
-                                        
-                                        //If a parameter is beein included (incluing) to the predicate list the we should not c
-                                        // consider it for negating in the postcondition.
-                                        boolean isIncluding = false;
-                                        Element theLastParameter = ((Element)predicate.getChildren().get(predicate.getChildren().size()-1));                                        
-                                        if (theLastParameter.getAttribute("opn") != null && theLastParameter.getAttributeValue("opn").equals("including")){
-                                            isIncluding = true;
-                                            //remove the mark (at opn) that says the the parameter is been included
-                                            theLastParameter.removeAttribute("opn");
-                                        }
-                                        //XMLUtilities.printXML(predicate);
-                                        //If it is is not a including case, then we can proceed.
-                                        if (!isIncluding){
-
-                                            // build the query to find the same predicate with xpath
-                                            // only the last parameter must be different
-                                            String query = "descendant::predicate[@id='"+ predicate.getAttributeValue("id") +"'";
-                                            List<?> parameters = predicate.getChildren();
-                                            int index = 1;
-                                            for (Iterator<?> iterator2 = parameters.iterator(); iterator2.hasNext();) {
-                                                    // don't use the last parameter
-                                                    Element parameter = (Element) iterator2.next();
-                                                    if(index != parameters.size()){								
-                                                            query += " and *["+ index +"]/@id='"+ parameter.getAttributeValue("id") +"'";
-                                                            index++;
-                                                    }
-                                            }
-                                            query += "]";
-
-                                            // check whether the predicate is inside a when node
-                                            Element parent = predicate.getParentElement();
-                                            while(!parent.getName().equals("when") && !parent.getName().equals("effect")){
-                                                    parent = parent.getParentElement();
-                                            }                                            
-                                            //XMLUtilities.printXML(predicate);
-                                            //XMLUtilities.printXML(parent);
-                                            
-                                            if(parent.getName().equals("effect")){
-                                                    // the predicate isn't inside a when node
-
-                                                    // find the same predicate in precondition, with only the last parameter different
-                                                    // indicating that this value must be denied
-
-                                                    // look for the predicates in precondition
-                                                    List<?> precondPredicates = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath(query);
-                                                            precondPredicates = path.selectNodes(action.getChild("precondition"));
-                                                    } catch (JaxenException e) {			
-                                                            e.printStackTrace();
-                                                    }
-
-                                                    for (Iterator<?> iterator3 = precondPredicates.iterator(); iterator3.hasNext();) {
-                                                            Element precondPredicate = (Element) iterator3.next();
-
-                                                            // checks if the last parameter is the same; if so, do nothing
-                                                            Element lastParameter = (Element)predicate.getChildren().get(parameters.size()-1);
-                                                            Element lastPrecondParameter = (Element)precondPredicate.getChildren().get(parameters.size()-1);
-                                                            
-                                                            if(!lastParameter.getAttributeValue("id").equals(lastPrecondParameter.getAttributeValue("id"))){
-                                                                
-                                                                    // get the conditions for a when node in post condition
-                                                                    List<?> conditions = buildWhenCondition(precondPredicate);
-
-                                                                    if(conditions.size() == 0){
-                                                                            // there is no need to create a when node
-                                                                            // in this case, deny the precondition predicate directly in the effect node
-                                                                            Element not = new Element("not");
-                                                                            not.addContent((Element)precondPredicate.clone());
-                                                                            Element predicateParent = predicate.getParentElement();
-                                                                            if(predicateParent.getName().equals("effect")){
-                                                                                    // there is only one statement, so create an and node
-                                                                                    Element andNode = new Element("and");
-                                                                                    andNode.addContent(predicate.detach());
-                                                                                    andNode.addContent(not);
-                                                                                    predicateParent.addContent(andNode);
-                                                                            }
-                                                                            else if(predicateParent.getName().equals("and")){
-                                                                                    // just add the not in the and node
-                                                                                    predicateParent.addContent(not);
-                                                                            }
-                                                                            //XMLUtilities.printXML(predicateParent);
-
-                                                                    }
-                                                                    else{
-                                                                            // TODO look for a when with the same conditions
-                                                                            // only creates a when node if there is not already a when with the same conditions
-
-                                                                            Element when = new Element("when");
-                                                                            Element container;									
-
-                                                                            if(conditions.size() == 1){
-                                                                                    container = when;
-                                                                            }
-                                                                            else{// size > 1
-                                                                                    container = new Element("and");
-                                                                                    when.addContent(container);
-                                                                            }									
-
-                                                                            for (Iterator<?> iterator4 = conditions.iterator(); iterator4.hasNext();) {
-                                                                                    Element condition = (Element) iterator4.next();
-                                                                                    container.addContent(condition);										
-                                                                            }									
-
-                                                                            Element not = new Element("not");
-                                                                            not.addContent((Element)precondPredicate.clone());
-                                                                            Element doNode = new Element("do");
-                                                                            doNode.addContent(not);
-                                                                            when.addContent(doNode);
-
-                                                                            // add the when node in the effect
-                                                                            Element predicateParent = predicate.getParentElement();
-                                                                            if(predicateParent.getName().equals("effect")){
-                                                                                    // there is only one statement, so create an and node
-                                                                                    Element andNode = new Element("and");
-                                                                                    andNode.addContent(predicate.detach());
-                                                                                    andNode.addContent(when);
-                                                                                    predicateParent.addContent(andNode);
-                                                                            }
-                                                                            else if(predicateParent.getName().equals("and")){
-                                                                                    // just add the when in the and node
-                                                                                    predicateParent.addContent(when);
-                                                                            }
-                                                                    }
-                                                            }
-
-                                                    }
-                                            }
-                                            else{
-                                                    // predicate is inside a when node (supposing there is only one when node)
-
-                                                    // look for the predicate in the when conditions
-                                                    List<?> whenPredicates = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath(query);
-                                                            whenPredicates = path.selectNodes(parent);
-                                                    } catch (JaxenException e) {			
-                                                            e.printStackTrace();
-                                                    }
-
-                                                    // discard elements inside do node
-                                                    List<Element> conditionPredicates = new ArrayList<Element>();
-                                                    for (Iterator<?> iterator2 = whenPredicates.iterator(); iterator2
-                                                                    .hasNext();) {
-                                                            Element conditionPredicate = (Element) iterator2.next();
-                                                            Element conditionParent = conditionPredicate.getParentElement();
-                                                            while(!conditionParent.getName().equals("do") &&
-                                                                            !conditionParent.getName().equals("when")){
-                                                                    conditionParent = conditionParent.getParentElement();
-                                                            }
-                                                            if(conditionParent.getName().equals("when")){
-                                                                    conditionPredicates.add(conditionPredicate);
-                                                            }
-                                                    }
-
-                                                    if(conditionPredicates.size() == 0){
-                                                            // the predicate is not in the when conditions
-                                                            // so we must look for it in the precondition
-                                                            List<?> preconditionPredicates = null;
-                                                            try {
-                                                                    XPath path = new JDOMXPath(query);
-                                                                    preconditionPredicates = path.selectNodes(action.getChild("precondition"));
-                                                            } catch (JaxenException e) {			
-                                                                    e.printStackTrace();
-                                                            }
-                                                            for (Iterator<?> iterator2 = preconditionPredicates
-                                                                            .iterator(); iterator2.hasNext();) {
-                                                                    Element precondPredicate = (Element) iterator2.next();
-                                                                    List<?> conditions = buildWhenCondition(precondPredicate);
-
-                                                                    if(conditions.size() == 0){
-                                                                            // there is no need to create a when node
-                                                                            // in this case, deny the precondition predicate directly in "do" node
-                                                                            // this will be the only case to be dealed, since in PDDL
-                                                                            // a "when" can't be inside another "when"
-                                                                            Element not = new Element("not");
-                                                                            not.addContent((Element)precondPredicate.clone());
-                                                                            Element predicateParent = predicate.getParentElement();
-                                                                            Element and = predicateParent.getChild("and");
-                                                                            if(and == null){
-                                                                                    // there is only one statement, so create an and node
-                                                                                    Element andNode = new Element("and");
-                                                                                    andNode.addContent(predicate.detach());
-                                                                                    andNode.addContent(not);
-                                                                                    predicateParent.addContent(andNode);
-                                                                            }
-                                                                            else if(predicateParent.getName().equals("and")){
-                                                                                    // just add the not in the and node
-                                                                                    and.addContent(not);
-                                                                            }
-
-                                                                    }
-                                                                    // if the size of list conditions is > 0, it means that there are
-                                                                    // disjunctions in precondition
-                                                                    // this can't be translated to PDDL, since it doesn't supports
-                                                                    // a "when" inside another one
-                                                                    // therefore, nothing is done in this case
-                                                            }
-                                                    }
-                                                    else{
-                                                            // the predicate is in the when conditions
-                                                            // so, deny it in the "do" node
-                                                            for (Iterator<Element> iterator2 = conditionPredicates.iterator(); iterator2.hasNext();) {
-                                                                    Element conditionPredicate = iterator2.next();
-                                                                    //Element predicateParent = conditionPredicate.getParentElement();
-
-                                                                    // get when node
-                                                                    /*while(!predicateParent.getName().equals("when") && 
-                                                                                    !predicateParent.getName().equals("do")){
-                                                                            predicateParent = predicateParent.getParentElement();
-                                                                    }*/
-                                                                    //if(predicateParent.getName().equals("when")){
-                                                                            // checks if the last parameter is the same; if so, do nothing
-                                                                            Element lastParameter = (Element)predicate.getChildren().get(parameters.size()-1);
-                                                                            Element lastPrecondParameter = (Element)conditionPredicate.getChildren().get(parameters.size()-1);
-                                                                            if(!lastParameter.getAttributeValue("id").equals(lastPrecondParameter.getAttributeValue("id"))){
-                                                                                    // deny the predicate in the "do" node of "when"										
-                                                                                    Element not = new Element("not");
-                                                                                    not.addContent((Element)conditionPredicate.clone());
-
-                                                                                    Element and = parent.getChild("do").getChild("and");
-                                                                                    if(and == null){
-                                                                                            // create a and node
-                                                                                            and = new Element("and");
-                                                                                            and.addContent(predicate.detach());
-                                                                                            and.addContent(not);
-                                                                                            parent.getChild("do").addContent(and);
-                                                                                    }
-                                                                                    else{
-                                                                                            and.addContent(not);
-                                                                                    }
-                                                                            }
-                                                                    //}
-                                                            }
-                                                    }
-                                            }
-                                        }
-                                    }
-                            }
-
-
-
-    //                      7.4 Deal with null values
-                            // option 1: eliminate null values
-                            // option 2: change null values for not(exists()) in preconditions and forall(not()) in postconditions
-                            int option = 1;// initially, there is only option 1
-
-                            List<?> actionPreconditions = null;
-                            try {
-                                    // filter not parameterized boolean attributes
-                                    XPath path = new JDOMXPath("precondition/descendant::predicate[parameter/@id='null']");
-                                    actionPreconditions = path.selectNodes(action);
-                            } catch (JaxenException e) {			
-                                    e.printStackTrace();
-                            }	
-
-                            List<?> actionPostconditions = null;
-                            try {
-                                    // filter not parameterized boolean attributes
-                                    XPath path = new JDOMXPath("effect/descendant::predicate[parameter/@id='null']");
-                                    actionPostconditions = path.selectNodes(action);
-                            } catch (JaxenException e) {			
-                                    e.printStackTrace();
-                            }			
-
-                            switch(option){
-                            case 1:{
-                                    //Delete all predicates in precondition with null values
-                                    for (Iterator<?> iterator = actionPreconditions.iterator(); iterator.hasNext();) {
-                                            Element predicate = (Element) iterator.next();
-                                            Element parent = predicate.getParentElement();
-                                            if(parent.getName().equals("not")){
-                                                    predicate = parent;
-                                                    parent = predicate.getParentElement();
-                                            }
-                                            parent.removeContent(predicate);
-                                            parent.removeContent(predicate);
-                                    }
-
-                                    //Delete all predicates in postcondition with null values				
-                                    for (Iterator<?> iterator = actionPostconditions.iterator(); iterator.hasNext();) {
-                                            Element predicate = (Element) iterator.next();
-                                            Element parent = predicate.getParentElement();
-                                            if(parent.getName().equals("not")){
-                                                    predicate = parent;
-                                                    parent = predicate.getParentElement();
-                                            }
-                                            parent.removeContent(predicate);
-                                    }					
-
-
-                            }break;
-                            case 2:{
-                                    //Replace all predicates with null values with not(exists(?x - <type>)<predicate>))
-                                    for (Iterator<?> iterator = actionPreconditions.iterator(); iterator.hasNext();) {
-                                            Element refPredicate = (Element) iterator.next();
-                                            Element predicate = null;				
-                                            try {
-                                                    XPath path = new JDOMXPath("predicates/predicate[@name='" + refPredicate.getAttributeValue("id") + "']");
-                                                    predicate = (Element)path.selectSingleNode(xpddlDomain);
+                            if(result.size() > 0){						
+                                    boolean hasSameName = true;
+                                    String parameterName = "";
+                                    for(int i = result.size(); hasSameName; i++){
+                                            parameterName = noIndexParameterName + i;
+                                            Element sameNameParameter = null;
+                                            try {						
+                                                    XPath path = new JDOMXPath("parameter[@name='" + parameterName + "']");
+                                                    sameNameParameter = (Element)path.selectSingleNode(action);
                                             } catch (JaxenException e) {			
                                                     e.printStackTrace();
                                             }
-                                            if(predicate != null){
-                                                    Element predicateParameter = (Element)predicate.getChildren("parameter").get(predicate.getChildren("parameter").size()-1);
-                                                    // get the action node
-                                                    /*Element action = refPredicate;					
-                                                    while(!action.getName().equals("action")){						
-                                                            action = action.getParentElement();
-                                                    }*/
-                                                    // create the parameter
-                                                    Element parameter = new Element("parameter");
-
-                                                    // defining the parameter name					
-                                                    //this is done because the parameter name may be lower than 3
-                                                    int length = predicateParameter.getAttributeValue("name").length();
-                                                    if(length > 3){
-                                                            length = 3;
-                                                    }
-                                                    String noIndexParameterName = predicateParameter.getAttributeValue("name").substring(0,length).toLowerCase();
-                                                    List<?> result = null;
-                                                    try {
-                                                            // checks if there is already a parameter with that name
-                                                            XPath path = new JDOMXPath("parameter[starts-with(@name,'" + noIndexParameterName + "')]");
-                                                            result = path.selectNodes(action);
-                                                    } catch (JaxenException e) {			
-                                                            e.printStackTrace();
-                                                    }
-                                                    if(result.size() > 0){						
-                                                            boolean hasSameName = true;
-                                                            String parameterName = "";
-                                                            for(int i = result.size(); hasSameName; i++){
-                                                                    parameterName = noIndexParameterName + i;
-                                                                    Element sameNameParameter = null;
-                                                                    try {						
-                                                                            XPath path = new JDOMXPath("parameter[@name='" + parameterName + "']");
-                                                                            sameNameParameter = (Element)path.selectSingleNode(action);
-                                                                    } catch (JaxenException e) {			
-                                                                            e.printStackTrace();
-                                                                    }
-                                                                    if(sameNameParameter == null){
-                                                                            hasSameName = false;
-                                                                    }
-                                                            }
-                                                            parameter.setAttribute("name", parameterName);
-
-                                                    }
-                                                    else{
-                                                            parameter.setAttribute("name", noIndexParameterName);
-                                                    }
-                                                    // define the parameter type
-                                                    parameter.setAttribute("type", predicateParameter.getAttributeValue("type"));
-
-                                                    // removes the refPredicate from the precondition
-                                                    Element refPredicateParent = refPredicate.getParentElement();
-                                                    refPredicateParent.removeContent(refPredicate);
-                                                    // removes the null parameter
-                                                    refPredicate.removeContent(refPredicate.getChildren("parameter").size()-1);
-                                                    // creates a new reference parameter
-                                                    Element refParameter = new Element("parameter");
-                                                    refParameter.setAttribute("id", parameter.getAttributeValue("name"));
-                                                    // adds the new reference to the predicate
-                                                    refPredicate.addContent(refParameter);
-                                                    // adds the predicate to a such that node
-                                                    Element suchthat = new Element("suchthat");
-                                                    suchthat.addContent(refPredicate);
-                                                    // creates the exists node
-                                                    Element exists = new Element("exists");
-                                                    // adds the parameter and the suchthat node
-                                                    exists.addContent(parameter);
-                                                    exists.addContent(suchthat);
-                                                    // adds the exists node to a not node
-                                                    Element not = new Element("not");
-                                                    not.addContent(exists);
-                                                    // adds the not node to the condition level where the original predicate was
-                                                    refPredicateParent.addContent(not);
-                                            }
-
-                                    }
-    //				Replace all predicates with null values with forall((?x - <type>)(not(<predicate>)))
-                                    for (Iterator<?> iterator = actionPostconditions.iterator(); iterator.hasNext();) {
-                                            Element refPredicate = (Element) iterator.next();
-                                            Element refPredicateParent = refPredicate.getParentElement();
-                                            if(refPredicateParent.getName().equals("not")){
-                                                    // removes the predicate						
-                                                    Element parent = refPredicateParent.getParentElement();
-                                                    refPredicateParent.detach();
-
-                                                    // checks if a "and" node has now just 1 parameter
-                                                    // if so, remove it
-                                                    if(parent.getName().equals("and") && parent.getChildren().size() < 2){
-                                                            Element child = (Element)((Element)parent.getChildren().get(0)).detach();
-                                                            parent.getParentElement().addContent(child);
-                                                            parent.detach();
-                                                    }
-                                            }
-                                            else{
-                                                    Element predicate = null;				
-                                                    try {
-                                                            XPath path = new JDOMXPath("predicates/predicate[@name='" + refPredicate.getAttributeValue("id") + "']");
-                                                            predicate = (Element)path.selectSingleNode(xpddlDomain);
-                                                    } catch (JaxenException e) {			
-                                                            e.printStackTrace();
-                                                    }
-                                                    if(predicate != null){
-                                                            Element predicateParameter = (Element)predicate.getChildren("parameter").get(predicate.getChildren("parameter").size()-1);
-
-                                                            // create the parameter
-                                                            Element parameter = new Element("parameter");
-
-                                                            // defining the parameter name
-                                                            List<?> result = null;
-                                                            //this is done because the parameter name may be lower than 3
-                                                            int length = predicateParameter.getAttributeValue("name").length();
-                                                            if(length > 3){
-                                                                    length = 3;
-                                                            }
-                                                            String noIndexParameterName = predicateParameter.getAttributeValue("name").substring(0,length).toLowerCase();
-                                                            try {
-                                                                    // checks if there is already a parameter with that name
-                                                                    XPath path = new JDOMXPath("parameter[starts-with(@name,'" + noIndexParameterName + "')]");
-                                                                    result = path.selectNodes(action);
-                                                            } catch (JaxenException e) {			
-                                                                    e.printStackTrace();
-                                                            }
-                                                            if(result.size() > 0){						
-                                                                    boolean hasSameName = true;
-                                                                    String parameterName = "";
-                                                                    for(int i = result.size(); hasSameName; i++){
-                                                                            parameterName = noIndexParameterName + i;
-                                                                            Element sameNameParameter = null;
-                                                                            try {						
-                                                                                    XPath path = new JDOMXPath("parameter[@name='" + parameterName + "']");
-                                                                                    sameNameParameter = (Element)path.selectSingleNode(action);
-                                                                            } catch (JaxenException e) {			
-                                                                                    e.printStackTrace();
-                                                                            }
-                                                                            if(sameNameParameter == null){
-                                                                                    hasSameName = false;
-                                                                            }
-                                                                    }
-                                                                    parameter.setAttribute("name", parameterName);
-
-                                                            }
-                                                            else{
-                                                                    parameter.setAttribute("name", noIndexParameterName);
-                                                            }
-                                                            // define the parameter type
-                                                            parameter.setAttribute("type", predicateParameter.getAttributeValue("type"));
-
-                                                            // removes the refPredicate from the postcondition							
-                                                            refPredicateParent.removeContent(refPredicate);
-                                                            // removes the null parameter
-                                                            refPredicate.removeContent(refPredicate.getChildren("parameter").size()-1);
-                                                            // creates a new reference parameter
-                                                            Element refParameter = new Element("parameter");
-                                                            refParameter.setAttribute("id", parameter.getAttributeValue("name"));
-                                                            // adds the new reference to the predicate
-                                                            refPredicate.addContent(refParameter);
-                                                            // adds the predicate to a not node
-                                                            Element not = new Element("not");
-                                                            not.addContent(refPredicate);
-                                                            // creates the forall node
-                                                            Element forall = new Element("forall");
-                                                            // adds the parameter and the not node
-                                                            forall.addContent(parameter);
-                                                            forall.addContent(not);					
-                                                            // adds the forall node to the condition level where the original predicate was
-                                                            refPredicateParent.addContent(forall);
-                                                    }
+                                            if(sameNameParameter == null){
+                                                    hasSameName = false;
                                             }
                                     }
-                            }break;
+                                    parameter.setAttribute("name", parameterName);
+
                             }
+                            else{
+                                    parameter.setAttribute("name", noIndexParameterName);
+                            }
+                            // define the parameter type
+                            parameter.setAttribute("type", predicateParameter.getAttributeValue("type"));
 
-                            //7.5. Symplify operations
-                            simplifyOperations(action);
-                            
-                            
-                            //Tiago
-                            //7.6 Create list of annotated precondition 
-                            List<Element> annotatedPreXPDDLList = new ArrayList<Element>();
-                            List<Element> annotatedPostXPDDLList = new ArrayList<Element>();
-                            
-                            
-                            if (annotatedConditions!=null){
-                                for (Iterator<Element> it = annotatedConditions.getChildren().iterator(); it.hasNext();) {
-                                    Element conditions = it.next();
-                                    for (Iterator<Element> it1 = conditions.getChildren().iterator(); it1.hasNext();) {
-                                        Element annotatedCondition = it1.next();
-                                        if (!annotatedCondition.getChildText("condition").trim().equals("")){
-                                            
-                                            Element ann = new Element("condition");
-                                            ann.setAttribute("annotation", annotatedCondition.getChildText("annotation"));
+                            // removes the refPredicate from the precondition
+                            Element refPredicateParent = refPredicate.getParentElement();
+                            refPredicateParent.removeContent(refPredicate);
+                            // removes the null parameter
+                            refPredicate.removeContent(refPredicate.getChildren("parameter").size()-1);
+                            // creates a new reference parameter
+                            Element refParameter = new Element("parameter");
+                            refParameter.setAttribute("id", parameter.getAttributeValue("name"));
+                            // adds the new reference to the predicate
+                            refPredicate.addContent(refParameter);
+                            // adds the predicate to a such that node
+                            Element suchthat = new Element("suchthat");
+                            suchthat.addContent(refPredicate);
+                            // creates the exists node
+                            Element exists = new Element("exists");
+                            // adds the parameter and the suchthat node
+                            exists.addContent(parameter);
+                            exists.addContent(suchthat);
+                            // adds the exists node to a not node
+                            Element not = new Element("not");
+                            not.addContent(exists);
+                            // adds the not node to the condition level where the original predicate was
+                            refPredicateParent.addContent(not);
+                        }
 
-                                            if (annotatedCondition.getAttributeValue("type").equals("pre")){
-                                                String annprecondition = annotatedCondition.getChildText("condition").trim();
-                                                if (annprecondition.indexOf("&#xd;") > -1){				
-                                                        annprecondition.replaceAll("&#xd;", " "); // return carriage in xml
-                                                }
-                                                
-                                                ExpressionTreeBuilder builder = new ExpressionTreeBuilder(annprecondition);
-                                                Element annotatedconditionExpressionTree = builder.getExpressionTree();
-                                                //XMLUtilities.printXML(annotatedconditionExpressionTree);  
-                                                Element thecondition = buildCondition(annotatedconditionExpressionTree, action, null, PRECONDITION);
-                                                if (thecondition!=null){
-                                                    ann.addContent(thecondition);
-                                                    annotatedPreXPDDLList.add(ann);
-                                                    //XMLUtilities.printXML(thecondition);
-                                                }                                                
-                                                
-                                                
-                                            }
-                                            else if (annotatedCondition.getAttributeValue("type").equals("post")){
-                                                
-                                                String annpostcondition = annotatedCondition.getChildText("condition").trim();
-                                                if (annpostcondition.indexOf("&#xd;") > -1){				
-                                                        annpostcondition.replaceAll("&#xd;", " "); // return carriage in xml
-                                                }
-                                                ExpressionTreeBuilder builder = new ExpressionTreeBuilder(annpostcondition);
-                                                Element annotatedconditionExpressionTree = builder.getExpressionTree();
-                                                //XMLUtilities.printXML(annotatedconditionExpressionTree);
-                                                Element effect = buildCondition(annotatedconditionExpressionTree, action, null, POSTCONDITION);
-                                                if (effect!=null){
-                                                    ann.addContent(effect);
-                                                    annotatedPostXPDDLList.add(ann);
-                                                    //XMLUtilities.printXML(effect);
-                                                }
-                                                                                             
-                                            }
-                                            
-                                        }
-                                    }
+                    }
+                    // Replace all predicates with null values with forall((?x - <type>)(not(<predicate>)))
+                    for (Iterator<?> iterator = actionPostconditions.iterator(); iterator.hasNext();) {
+                        Element refPredicate = (Element) iterator.next();
+                        Element refPredicateParent = refPredicate.getParentElement();
+                        if(refPredicateParent.getName().equals("not")){
+                            // removes the predicate						
+                            Element parent = refPredicateParent.getParentElement();
+                            refPredicateParent.detach();
+
+                            // checks if a "and" node has now just 1 parameter
+                            // if so, remove it
+                            if(parent.getName().equals("and") && parent.getChildren().size() < 2){
+                                    Element child = (Element)((Element)parent.getChildren().get(0)).detach();
+                                    parent.getParentElement().addContent(child);
+                                    parent.detach();
+                            }
+                        }
+                        else{
+                            Element predicate = null;				
+                            try {
+                                    XPath path = new JDOMXPath("predicates/predicate[@name='" + refPredicate.getAttributeValue("id") + "']");
+                                    predicate = (Element)path.selectSingleNode(xpddlDomain);
+                            } catch (JaxenException e) {			
+                                    e.printStackTrace();
+                            }
+                            if(predicate != null){
+                                Element predicateParameter = (Element)predicate.getChildren("parameter").get(predicate.getChildren("parameter").size()-1);
+
+                                // create the parameter
+                                Element parameter = new Element("parameter");
+
+                                // defining the parameter name
+                                List<?> result = null;
+                                //this is done because the parameter name may be lower than 3
+                                int length = predicateParameter.getAttributeValue("name").length();
+                                if(length > 3){
+                                        length = 3;
                                 }
+                                String noIndexParameterName = predicateParameter.getAttributeValue("name").substring(0,length).toLowerCase();
+                                try {
+                                        // checks if there is already a parameter with that name
+                                        XPath path = new JDOMXPath("parameter[starts-with(@name,'" + noIndexParameterName + "')]");
+                                        result = path.selectNodes(action);
+                                } catch (JaxenException e) {			
+                                        e.printStackTrace();
+                                }
+                                if(result.size() > 0){						
+                                        boolean hasSameName = true;
+                                        String parameterName = "";
+                                        for(int i = result.size(); hasSameName; i++){
+                                                parameterName = noIndexParameterName + i;
+                                                Element sameNameParameter = null;
+                                                try {						
+                                                        XPath path = new JDOMXPath("parameter[@name='" + parameterName + "']");
+                                                        sameNameParameter = (Element)path.selectSingleNode(action);
+                                                } catch (JaxenException e) {			
+                                                        e.printStackTrace();
+                                                }
+                                                if(sameNameParameter == null){
+                                                        hasSameName = false;
+                                                }
+                                        }
+                                        parameter.setAttribute("name", parameterName);
+
+                                }
+                                else{
+                                        parameter.setAttribute("name", noIndexParameterName);
+                                }
+                                // define the parameter type
+                                parameter.setAttribute("type", predicateParameter.getAttributeValue("type"));
+
+                                // removes the refPredicate from the postcondition							
+                                refPredicateParent.removeContent(refPredicate);
+                                // removes the null parameter
+                                refPredicate.removeContent(refPredicate.getChildren("parameter").size()-1);
+                                // creates a new reference parameter
+                                Element refParameter = new Element("parameter");
+                                refParameter.setAttribute("id", parameter.getAttributeValue("name"));
+                                // adds the new reference to the predicate
+                                refPredicate.addContent(refParameter);
+                                // adds the predicate to a not node
+                                Element not = new Element("not");
+                                not.addContent(refPredicate);
+                                // creates the forall node
+                                Element forall = new Element("forall");
+                                // adds the parameter and the not node
+                                forall.addContent(parameter);
+                                forall.addContent(not);					
+                                // adds the forall node to the condition level where the original predicate was
+                                refPredicateParent.addContent(forall);
                             }
-                            
-                            //Tiago
-                            // 7.6 durative actions (preliminary version)
-                            if(isDurative){				
-                                    // set precondition node to condition
-                                    action.getChild("precondition").setName("condition");
+                        }
+                    }
+                }break;
+                }
 
-                                    //PRECONDITION
-                                    // add at start node in precondition
-                                    Element condition = action.getChild("condition");	
-                                    if(condition.getChildren().size() > 0){
-                                            
-                                            //XMLUtilities.printXML(condition);
-
-                                            if (timingDiagram!=null){
-                                                //check if it is the condition
-                                                setTimeIndexToConditions(timingDiagram, operator, condition);
-                                            }
-                                            else{
-                                                Element atStart = new Element("at-start");
-                                                atStart.addContent(((Element)condition.getChildren().get(0)).detach());
-                                                condition.addContent(atStart);                                                
-                                            }
-
-                                    }
-
-                                    //add timed pre-conditions (@end or at-end or at end)
-                                    for (Iterator<Element> it = annotatedPreXPDDLList.iterator(); it.hasNext();) {
-                                        Element element = it.next();
-                                        //XMLUtilities.printXML(element);
-                                                
-                                        String theannotation = element.getAttributeValue("annotation");
-                                        boolean canAddIt = false;
-                                        Element specificAnnotation = null;
-                                        if (theannotation.equals("@end") || theannotation.equals("at end") || theannotation.equals("at-end") ){                                        
-                                            specificAnnotation = new Element("at-end");
-                                            canAddIt = true;
-                                        }
-                                        else if (theannotation.equals("@overall") || theannotation.equals("@all") || theannotation.equals("over all") || theannotation.equals("over-all") ){
-                                            specificAnnotation = new Element("over-all");
-                                            canAddIt = true;
-                                        }
-                                        else if (theannotation.equals("@start") || theannotation.equals("at start") || theannotation.equals("at-start") ){
-                                            specificAnnotation = new Element("at-start");
-                                            canAddIt = true;
-                                        }                                            
-                                        if (canAddIt){
-                                            Element xppdcondition= (Element)element.getChildren().get(0);
-                                            specificAnnotation.addContent((Element)xppdcondition.clone());
-                                            
-                                            //In order to add the node the condition must either empty, or with an end 
-                                            // already, otherwise we have to create the 'and' node the insert the new condition
-                                            if (condition.getChildren().isEmpty()){
-                                                condition.addContent(specificAnnotation);                                                
-                                            }
-                                            else if ( ((Element)condition.getChildren().get(0)).getName().equals("and")) {
-                                                Element theAndNode = (Element)condition.getChildren().get(0);
-                                                theAndNode.addContent(specificAnnotation);
-                                            }else{
-                                                Element atAnd = new Element("and");
-                                                atAnd.addContent(((Element)condition.getChildren().get(0)).detach());
-                                                atAnd.addContent(specificAnnotation); 
-                                                condition.addContent(atAnd);
-                                                                                               
-                                            }    
-                                        }
-                                    
-                                    }
+                //7.5. Simplify operations
+                simplifyOperations(action);
+                
+                
+                //Tiago
+                //7.6 Create list of annotated precondition 
+                List<Element> annotatedPreXPDDLList = new ArrayList<Element>();
+                List<Element> annotatedPostXPDDLList = new ArrayList<Element>();
+                
+                
+                if (annotatedConditions!=null){
+                    for (Iterator<Element> it = annotatedConditions.getChildren().iterator(); it.hasNext();) {
+                        Element conditions = it.next();
+                        for (Iterator<Element> it1 = conditions.getChildren().iterator(); it1.hasNext();) {
+                            Element annotatedCondition = it1.next();
+                            if (!annotatedCondition.getChildText("condition").trim().equals("")){
                                 
-                                    
-                                    
+                                Element ann = new Element("condition");
+                                ann.setAttribute("annotation", annotatedCondition.getChildText("annotation"));
 
-                                    //EFFECT
-                                    //add at-end node in the effect
-                                    Element effect = action.getChild("effect");
-                                    if(effect.getChildren().size() > 0){
-                                            if (timingDiagram!=null){
-                                                //check if it is the effects
-                                                setTimeIndexToConditions(timingDiagram, operator, effect);
-                                            }
-                                            else{
-                                                Element atEnd = new Element("at-end");
-                                                atEnd.addContent(((Element)effect.getChildren().get(0)).detach());
-                                                effect.addContent(atEnd);
-                                            }
-                                            
+                                if (annotatedCondition.getAttributeValue("type").equals("pre")){
+                                    String annprecondition = annotatedCondition.getChildText("condition").trim();
+                                    if (annprecondition.indexOf("&#xd;") > -1){				
+                                            annprecondition.replaceAll("&#xd;", " "); // return carriage in xml
                                     }
                                     
-                                    //add timed pre-conditions (@start or at-start or at start)
-                                    for (Iterator<Element> it = annotatedPostXPDDLList.iterator(); it.hasNext();) {
-                                        Element element = it.next();
-                                        //XMLUtilities.printXML(element);
-                                                
-                                        String theannotation = element.getAttributeValue("annotation");
-                                        boolean canAddIt = false;
-                                        Element specificAnnotation = null;
-                                        if (theannotation.equals("@end") || theannotation.equals("at end") || theannotation.equals("at-end") ){                                        
-                                            specificAnnotation = new Element("at-end");
-                                            canAddIt = true;
-                                        }
-                                        //Overall is not allowed for effects
-                                        //else if (theannotation.equals("@overall") || theannotation.equals("over all") || theannotation.equals("over-all") ){
-                                        //    specificAnnotation = new Element("over-all");
-                                        //    canAddIt = true;
-                                        //}
-                                        else if (theannotation.equals("@start") || theannotation.equals("at start") || theannotation.equals("at-start") ){
-                                            specificAnnotation = new Element("at-start");
-                                            canAddIt = true;
-                                        }                                            
-                                        if (canAddIt){
-                                            Element xppdcondition= (Element)element.getChildren().get(0);
-                                            specificAnnotation.addContent((Element)xppdcondition.clone());
-                                            
-                                            //In order to add the node the condition must either empty, or with an end 
-                                            // already, otherwise we have to create the 'and' node the insert the new condition
-                                            if (effect.getChildren().isEmpty()){
-                                                effect.addContent(specificAnnotation);                                                
-                                            }
-                                            else if ( ((Element)effect.getChildren().get(0)).getName().equals("and")) {
-                                                Element theAndNode = (Element)effect.getChildren().get(0);
-                                                theAndNode.addContent(specificAnnotation);
-                                            }else{
-                                                Element atAnd = new Element("and");
-                                                atAnd.addContent(((Element)effect.getChildren().get(0)).detach());
-                                                atAnd.addContent(specificAnnotation);
-                                                effect.addContent(atAnd);                                                                                                
-                                            }    
-                                        }
+                                    ExpressionTreeBuilder builder = new ExpressionTreeBuilder(annprecondition);
+                                    Element annotatedconditionExpressionTree = builder.getExpressionTree();
+                                    //XMLUtilities.printXML(annotatedconditionExpressionTree);  
+                                    Element thecondition = buildCondition(annotatedconditionExpressionTree, action, null, PRECONDITION);
+                                    if (thecondition!=null){
+                                        ann.addContent(thecondition);
+                                        annotatedPreXPDDLList.add(ann);
+                                        //XMLUtilities.printXML(thecondition);
+                                    }                                                
                                     
-                                    } 
-
+                                    
+                                }
+                                else if (annotatedCondition.getAttributeValue("type").equals("post")){
+                                    
+                                    String annpostcondition = annotatedCondition.getChildText("condition").trim();
+                                    if (annpostcondition.indexOf("&#xd;") > -1){				
+                                            annpostcondition.replaceAll("&#xd;", " "); // return carriage in xml
+                                    }
+                                    ExpressionTreeBuilder builder = new ExpressionTreeBuilder(annpostcondition);
+                                    Element annotatedconditionExpressionTree = builder.getExpressionTree();
+                                    //XMLUtilities.printXML(annotatedconditionExpressionTree);
+                                    Element effect = buildCondition(annotatedconditionExpressionTree, action, null, POSTCONDITION);
+                                    if (effect!=null){
+                                        ann.addContent(effect);
+                                        annotatedPostXPDDLList.add(ann);
+                                        //XMLUtilities.printXML(effect);
+                                    }
+                                                                                 
+                                }
+                                
                             }
-                            
-                            //9 Look up for 'self' in the action's pre and post conditions
-                            List<Element> selfparcond = null;			
-                            try {
-                                    XPath path = new JDOMXPath("descendant::parameter[@id='self']");
-                                    selfparcond = path.selectNodes(action);
-                            } catch (JaxenException e) {			
-                                    e.printStackTrace();
+                        }
+                    }
+                }
+                
+                //Tiago
+                // 7.6 durative actions (preliminary version)
+                if(isDurative){				
+                        // set precondition node to condition
+                        action.getChild("precondition").setName("condition");
+
+                        //PRECONDITION
+                        // add at start node in precondition
+                        Element condition = action.getChild("condition");	
+                        if(condition.getChildren().size() > 0){
+                                
+                                //XMLUtilities.printXML(condition);
+
+                                if (timingDiagram!=null){
+                                    //check if it is the condition
+                                    setTimeIndexToConditions(timingDiagram, operator, condition);
+                                }
+                                else{
+                                    Element atStart = new Element("at-start");
+                                    atStart.addContent(((Element)condition.getChildren().get(0)).detach());
+                                    condition.addContent(atStart);                                                
+                                }
+
+                        }
+
+                        //add timed pre-conditions (@end or at-end or at end)
+                        for (Iterator<Element> it = annotatedPreXPDDLList.iterator(); it.hasNext();) {
+                            Element element = it.next();
+                            //XMLUtilities.printXML(element);
+                                    
+                            String theannotation = element.getAttributeValue("annotation");
+                            boolean canAddIt = false;
+                            Element specificAnnotation = null;
+                            if (theannotation.equals("@end") || theannotation.equals("at end") || theannotation.equals("at-end") ){                                        
+                                specificAnnotation = new Element("at-end");
+                                canAddIt = true;
                             }
-                            
-                            Element selfparameter = null;			
-                            try {
-                                    XPath path = new JDOMXPath("parameters/parameter[@name='self']");
-                                    selfparameter = (Element)path.selectSingleNode(action);
-                            } catch (JaxenException e) {			
-                                    e.printStackTrace();
+                            else if (theannotation.equals("@overall") || theannotation.equals("@all") || theannotation.equals("over all") || theannotation.equals("over-all") ){
+                                specificAnnotation = new Element("over-all");
+                                canAddIt = true;
                             }
-                            //If the parameter was not created already and the user used the keyword self in the conditions 
-                            // the we have to add the parameter
-                            if (selfparameter == null && selfparcond.size() > 0){
-                                selfparameter = new Element("parameter");
-                                selfparameter.setAttribute("name", "self");
-                                selfparameter.setAttribute("type",  operator.getParentElement().getParentElement().getChildText("name"));
-                                action.getChild("parameters").addContent(0, selfparameter);                                
+                            else if (theannotation.equals("@start") || theannotation.equals("at start") || theannotation.equals("at-start") ){
+                                specificAnnotation = new Element("at-start");
+                                canAddIt = true;
+                            }                                            
+                            if (canAddIt){
+                                Element xppdcondition= (Element)element.getChildren().get(0);
+                                specificAnnotation.addContent((Element)xppdcondition.clone());
+                                
+                                //In order to add the node the condition must either empty, or with an end 
+                                // already, otherwise we have to create the 'and' node the insert the new condition
+                                if (condition.getChildren().isEmpty()){
+                                    condition.addContent(specificAnnotation);                                                
+                                }
+                                else if ( ((Element)condition.getChildren().get(0)).getName().equals("and")) {
+                                    Element theAndNode = (Element)condition.getChildren().get(0);
+                                    theAndNode.addContent(specificAnnotation);
+                                }else{
+                                    Element atAnd = new Element("and");
+                                    atAnd.addContent(((Element)condition.getChildren().get(0)).detach());
+                                    atAnd.addContent(specificAnnotation); 
+                                    condition.addContent(atAnd);
+                                                                                   
+                                }    
                             }
-                                                        
-                            
-                            
-                            //XMLUtilities.printXML(action);
+                        
+                        }
+                    
+                        
+                        
+
+                        //EFFECT
+                        //add at-end node in the effect
+                        Element effect = action.getChild("effect");
+                        if(effect.getChildren().size() > 0){
+                                if (timingDiagram!=null){
+                                    //check if it is the effects
+                                    setTimeIndexToConditions(timingDiagram, operator, effect);
+                                }
+                                else{
+                                    Element atEnd = new Element("at-end");
+                                    atEnd.addContent(((Element)effect.getChildren().get(0)).detach());
+                                    effect.addContent(atEnd);
+                                }
+                                
+                        }
+                        
+                        //add timed pre-conditions (@start or at-start or at start)
+                        for (Iterator<Element> it = annotatedPostXPDDLList.iterator(); it.hasNext();) {
+                            Element element = it.next();
+                            //XMLUtilities.printXML(element);
+                                    
+                            String theannotation = element.getAttributeValue("annotation");
+                            boolean canAddIt = false;
+                            Element specificAnnotation = null;
+                            if (theannotation.equals("@end") || theannotation.equals("at end") || theannotation.equals("at-end") ){                                        
+                                specificAnnotation = new Element("at-end");
+                                canAddIt = true;
+                            }
+                            //Overall is not allowed for effects
+                            //else if (theannotation.equals("@overall") || theannotation.equals("over all") || theannotation.equals("over-all") ){
+                            //    specificAnnotation = new Element("over-all");
+                            //    canAddIt = true;
+                            //}
+                            else if (theannotation.equals("@start") || theannotation.equals("at start") || theannotation.equals("at-start") ){
+                                specificAnnotation = new Element("at-start");
+                                canAddIt = true;
+                            }                                            
+                            if (canAddIt){
+                                Element xppdcondition= (Element)element.getChildren().get(0);
+                                specificAnnotation.addContent((Element)xppdcondition.clone());
+                                
+                                //In order to add the node the condition must either empty, or with an end 
+                                // already, otherwise we have to create the 'and' node the insert the new condition
+                                if (effect.getChildren().isEmpty()){
+                                    effect.addContent(specificAnnotation);                                                
+                                }
+                                else if ( ((Element)effect.getChildren().get(0)).getName().equals("and")) {
+                                    Element theAndNode = (Element)effect.getChildren().get(0);
+                                    theAndNode.addContent(specificAnnotation);
+                                }else{
+                                    Element atAnd = new Element("and");
+                                    atAnd.addContent(((Element)effect.getChildren().get(0)).detach());
+                                    atAnd.addContent(specificAnnotation);
+                                    effect.addContent(atAnd);                                                                                                
+                                }    
+                            }
+                        
+                        } 
+
+                }
+                
+                //9 Look up for 'self' in the action's pre and post conditions
+                List<Element> selfparcond = null;			
+                try {
+                        XPath path = new JDOMXPath("descendant::parameter[@id='self']");
+                        selfparcond = path.selectNodes(action);
+                } catch (JaxenException e) {			
+                        e.printStackTrace();
+                }
+                
+                Element selfparameter = null;			
+                try {
+                        XPath path = new JDOMXPath("parameters/parameter[@name='self']");
+                        selfparameter = (Element)path.selectSingleNode(action);
+                } catch (JaxenException e) {			
+                        e.printStackTrace();
+                }
+                //If the parameter was not created already and the user used the keyword self in the conditions 
+                // the we have to add the parameter
+                if (selfparameter == null && selfparcond.size() > 0){
+                    selfparameter = new Element("parameter");
+                    selfparameter.setAttribute("name", "self");
+                    selfparameter.setAttribute("type",  operator.getParentElement().getParentElement().getChildText("name"));
+                    action.getChild("parameters").addContent(0, selfparameter);                                
+                }
+                                            
+                
+                
+                //XMLUtilities.printXML(action);
 
 
-                            xpddlDomain.getChild("actions").addContent(action);
-                        //}
-
+                xpddlDomain.getChild("actions").addContent(action);
+            //}
 		}
 
 		// 10. Put the requirements in the XPDDL
@@ -2091,7 +2112,7 @@ public class ToXPDDL {
 			}
 			else{
 				
-                                // check whether the node is an action parameter
+                // check whether the node is an action parameter
 				Element parameter = null;
 				try {
 					XPath path = new JDOMXPath("parameters/parameter[@name='" + data + "']");
@@ -2226,7 +2247,7 @@ public class ToXPDDL {
 								
 								if(constant == null){
 									// print error message
-                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: \""+ data +"\" is not a known expression.\n");
+                                    ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: \""+ data +"\" is not a known expression.\n");
                                     System.err.println("ERROR: \""+ data +"\" is not a known expression.\n");
 								}
 
@@ -2242,151 +2263,147 @@ public class ToXPDDL {
 			Element left = buildCondition((Element)expressionTreeRoot.getChildren().get(0), action, operation, conditionType);
 			Element right = buildCondition((Element)expressionTreeRoot.getChildren().get(1), action, operation, conditionType);
 			if (left!=null && right!=null){
-                            if(left.getName().equals("predicate") || right.getName().equals("predicate")){
-                                    // node is an incomplete predicate
-                                    node = (left.getName().equals("predicate")) ?left :right;
-                                    Element parameter = (!left.getName().equals("predicate")) ?left :right;
-                                    if(parameter.getName().equals("boolean")){
-                                            if(parameter.getAttributeValue("id").equals("false")){						
-                                                    Element predicate = node;
-                                                    node = new Element("not");
-                                                    node.addContent(predicate);
-                                            }
-                                    }
-                                    // non primitive attribute or association
-                                    else if(parameter.getName().equals("parameter") 
-                                                    && parameter.getChildren().size() > 0){
-                                            Element paramPredicate = (Element)parameter.getChild("predicate").detach();
-                                            if(node.getAttributeValue("id").equals(paramPredicate.getAttribute("id").getValue()) &&
-                                                            node.getChild("parameter").getAttribute("id").getValue().equals(
-                                                                            paramPredicate.getChild("parameter").getAttribute("id").getValue())){
-                                                    // the atribution is consistent:
-                                                    //a.y = a.y->including(x) => (a y x)
-                                                    
-                                                    node.addContent(parameter);
-
-                                                    // excluding
-                                                    if(parameter.getAttributeValue("opn").equals("excluding")){
-                                                            Element predicate = node;
-                                                            node = new Element("not");
-                                                            node.addContent(predicate);
-                                                    }
-
-                                                    // remove the mark
-                                                    //parameter.removeAttribute(parameter.getAttribute("opn"));
-
-                                                    //XMLUtilities.printXML(node);
-                                                    
-                                            }
-                                            else{
-                                                ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: attribute not handled");
-                                                System.err.println("Not handled attribution");
-                                            }
-
-                                    }
-                                    else{
-                                            node.addContent(parameter);	
-                                    }			
-                            }
-                            //Function
-                            else{
-                                    if(conditionType.equals(PRECONDITION)){
-                                            node = new Element("equals");
-
-                                            //PDDL 3.1
-                                            if (right.getName().equals("parameter")){
-                                                if (right.getAttributeValue("id").equals("null")){
-                                                    right.setName("value");
-                                                    right.removeAttribute("id");
-                                                    right.setAttribute("object", "undefined");
-                                                }
-                                            }
-                                            node.addContent(left);
-                                            node.addContent(right);
-                                    }
-                                    else if(conditionType.equals(POSTCONDITION)){
-
-                                            //check the case of increase, decrease, scale-up or scale-down
-                                            /*       =
-                                            *     /   \
-                                            *    A    op
-                                            *        /  \
-                                            *    	 A   ...		
-                                            * 
-                                            */
-
-                                            //check if right is an arithmetic operator
-                                            if(right.getName().equals("add") ||
-                                                            right.getName().equals("subtract") ||
-                                                            right.getName().equals("multiply") ||
-                                                            right.getName().equals("divide")){
-                                                    String expression = "function[@id='"+ left.getAttributeValue("id") +"'";
-                                                    for (Iterator<?> iter = left.getChildren().iterator(); iter.hasNext();) {
-                                                            Element parameterOrObject = (Element) iter.next(); //it can be a paramet
-                                                            expression += " and "+parameterOrObject.getName()+"/@id='"+ parameterOrObject.getAttributeValue("id") +"'";
-                                                    }						
-                                                    expression += "]";
-
-                            //System.out.println(expression);
-
-                                                    Element variable = null;
-                                                    try {
-                                                            XPath path = new JDOMXPath(expression);
-                                                            variable = (Element) path.selectSingleNode(right);
-                                                    } catch (JaxenException e) {
-                                                            e.printStackTrace();
-                                                    }
-                                                    if(variable == null){
-                                                            // not the case of increase, etc.
-                                                            node = new Element("assign");
-                                                            node.addContent(left);
-                                                            node.addContent(right);
-                                                    }
-                                                    else{
-                                                            // case of increase, etc.
-                                                            if(right.getName().equals("add"))
-                                                                    node = new Element("increase");
-                                                            else if(right.getName().equals("subtract"))
-                                                                    node = new Element("decrease");
-                                                            else if(right.getName().equals("multiply"))
-                                                                    node = new Element("scale-up");
-                                                            else if(right.getName().equals("divide"))
-                                                                    node = new Element("scale-down");
-
-                                                            node.addContent(left);
-                                                            right.removeContent(variable);
-                                                            Element rightChild = (Element)((Element)right.getChildren().get(0)).clone();
-                                                            node.addContent(rightChild);
-                                                    }
-                                            }
-                                            else{
-                                                    //case of A = B
-                                                    node = new Element("assign");
-
-						                            //PDDL 3.1
-						                            if (right.getName().equals("parameter")){
-						                                if (right.getAttributeValue("id").equals("null")){
-						                                    right.setName("value");
-						                                    right.removeAttribute("id");
-						                                    right.setAttribute("object", "undefined");
-						                                }
-						                            }
-						                            node.addContent(left);
-                                                    node.addContent(right);
-                                            }
-                                    }
-                            }
-                            
-                            if(data.equals("<>")){
-				Element not = new Element("not");
-				not.addContent(node);
-				node = not;
-                            }
-                            
-                            
-                            
+                if(left.getName().equals("predicate") || right.getName().equals("predicate")){
+                        // node is an incomplete predicate
+                        node = (left.getName().equals("predicate")) ?left :right;
+                        Element parameter = (!left.getName().equals("predicate")) ?left :right;
+                        if(parameter.getName().equals("boolean")){
+                                if(parameter.getAttributeValue("id").equals("false")){						
+                                        Element predicate = node;
+                                        node = new Element("not");
+                                        node.addContent(predicate);
+                                }
                         }
-			
+                        // non primitive attribute or association
+                        else if(parameter.getName().equals("parameter") 
+                                        && parameter.getChildren().size() > 0){
+                                Element paramPredicate = (Element)parameter.getChild("predicate").detach();
+                                if(node.getAttributeValue("id").equals(paramPredicate.getAttribute("id").getValue()) &&
+                                                node.getChild("parameter").getAttribute("id").getValue().equals(
+                                                                paramPredicate.getChild("parameter").getAttribute("id").getValue())){
+                                        // the assignment is consistent:
+                                        //a.y = a.y->including(x) => (a y x)
+                                        
+                                        node.addContent(parameter);
+
+                                        // excluding
+                                        if(parameter.getAttributeValue("opn").equals("excluding")){
+                                                Element predicate = node;
+                                                node = new Element("not");
+                                                node.addContent(predicate);
+                                        }
+
+                                        // remove the mark
+                                        //parameter.removeAttribute(parameter.getAttribute("opn"));
+
+                                        //XMLUtilities.printXML(node);
+                                        
+                                }
+                                else{
+                                    ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: attribute not handled");
+                                    System.err.println("Not handled attribution");
+                                }
+
+                        }
+                        else{
+                                node.addContent(parameter);	
+                        }			
+                }
+                //Function
+                else{
+                        if(conditionType.equals(PRECONDITION)){
+                                node = new Element("equals");
+
+                                //PDDL 3.1
+                                if (right.getName().equals("parameter")){
+                                    if (right.getAttributeValue("id").equals("null")){
+                                        right.setName("value");
+                                        right.removeAttribute("id");
+                                        right.setAttribute("object", "undefined");
+                                    }
+                                }
+                                node.addContent(left);
+                                node.addContent(right);
+                        }
+                        else if(conditionType.equals(POSTCONDITION)){
+
+                                //check the case of increase, decrease, scale-up or scale-down
+                                /*       =
+                                *     /   \
+                                *    A    op
+                                *        /  \
+                                *    	 A   ...		
+                                * 
+                                */
+
+                                //check if right is an arithmetic operator
+                                if(right.getName().equals("add") ||
+                                                right.getName().equals("subtract") ||
+                                                right.getName().equals("multiply") ||
+                                                right.getName().equals("divide")){
+                                        String expression = "function[@id='"+ left.getAttributeValue("id") +"'";
+                                        for (Iterator<?> iter = left.getChildren().iterator(); iter.hasNext();) {
+                                                Element parameterOrObject = (Element) iter.next(); //it can be a paramet
+                                                expression += " and "+parameterOrObject.getName()+"/@id='"+ parameterOrObject.getAttributeValue("id") +"'";
+                                        }						
+                                        expression += "]";
+
+                //System.out.println(expression);
+
+                                        Element variable = null;
+                                        try {
+                                                XPath path = new JDOMXPath(expression);
+                                                variable = (Element) path.selectSingleNode(right);
+                                        } catch (JaxenException e) {
+                                                e.printStackTrace();
+                                        }
+                                        if(variable == null){
+                                                // not the case of increase, etc.
+                                                node = new Element("assign");
+                                                node.addContent(left);
+                                                node.addContent(right);
+                                        }
+                                        else{
+                                                // case of increase, etc.
+                                                if(right.getName().equals("add"))
+                                                        node = new Element("increase");
+                                                else if(right.getName().equals("subtract"))
+                                                        node = new Element("decrease");
+                                                else if(right.getName().equals("multiply"))
+                                                        node = new Element("scale-up");
+                                                else if(right.getName().equals("divide"))
+                                                        node = new Element("scale-down");
+
+                                                node.addContent(left);
+                                                right.removeContent(variable);
+                                                Element rightChild = (Element)((Element)right.getChildren().get(0)).clone();
+                                                node.addContent(rightChild);
+                                        }
+                                }
+                                else{
+                                        //case of A = B
+                                        node = new Element("assign");
+
+			                            //PDDL 3.1
+			                            if (right.getName().equals("parameter")){
+			                                if (right.getAttributeValue("id").equals("null")){
+			                                    right.setName("value");
+			                                    right.removeAttribute("id");
+			                                    right.setAttribute("object", "undefined");
+			                                }
+			                            }
+			                            node.addContent(left);
+                                        node.addContent(right);
+                                }
+                        }
+                }
+                
+                if(data.equals("<>")){
+					Element not = new Element("not");
+					not.addContent(node);
+					node = not;
+                }
+            }
 		}
 		else if (data.equals(".")){
 			// the last node is a function or a predicate
@@ -2492,7 +2509,7 @@ public class ToXPDDL {
 					}					
 				}
 				else{
-                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: function or predicate \"" + lastNodeData + "\" not found in the domain.\n");
+                                    ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: function or predicate \"" + lastNodeData + "\" not found in the domain.\n");
                                     System.err.println("Error: function or predicate \"" + lastNodeData + "\" not found.\n");					
 				}
 			}
@@ -2762,8 +2779,8 @@ public class ToXPDDL {
 				node = new Element("suchthat");
 			}*/
 			else{
-                            ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: undentify element "+data+".\n");
-                            System.err.println(data);
+                ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: undentify element "+data+".\n");
+                System.err.println(data);
 			}
 			for (Iterator<?> iter = expressionTreeRoot.getChildren().iterator(); iter.hasNext();) {
 				Element child = (Element) iter.next();
@@ -2773,8 +2790,8 @@ public class ToXPDDL {
 					node.addContent(xpddlChild);					
 				}
 				else{
-                                    ItSIMPLE.getInstance().appendPDDLTranslationOutputPanelText("(!!) ERROR: error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data")+"\n");
-                                    System.err.println("Error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data"));
+                    ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!!) ERROR: error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data")+"\n");
+                    System.err.println("Error parsing " + conditionType + "\n Action: " + action.getAttributeValue("name") + ", Data: " + child.getAttributeValue("data"));
 				}
 			}
 			
@@ -2812,11 +2829,36 @@ public class ToXPDDL {
 		}
 	}
 	
+	
+	/**
+	 * Parse duration string to XPDDL
+	 * @param action
+	 * @param durationStr
+	 * @return
+	 */
+	private static Element parseActionDuration(Element operator, Element action, Element duration, String durationStr){
+		Element durationExpresion = null;
+		try {
+			Float.parseFloat(durationStr);
+			durationExpresion = new Element("value");
+			durationExpresion.setAttribute("number", durationStr);
+        }
+        catch(Exception e){
+            ItSIMPLE.getInstance().appendModelTranslationOutputPanelText("(!) Warning: "+durationStr+ " is not a number at " +operator.getChildText("name")+".\n");
+            System.out.println("This is not a number!\n");
+            ExpressionTreeBuilder builder = new ExpressionTreeBuilder(durationStr);
+            Element durationExpressionTree = builder.getExpressionTree();
+            durationExpresion = buildCondition(durationExpressionTree, action, null, PRECONDITION);
+        }
+		return durationExpresion;
+	}
+	
+	
 	public static Element XMLToXPDDLProblem(Element problem, String pddlVersion){
 		Element xpddlNodes = null;
 		xpddlProblem = null;
 		constraintsList.clear();
-								  //planningPloblem  domain				planningDomains     diagrans			project
+								  //planningPloblem  domain				planningDomains     diagrams			project
 		Element project = problem.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
 		//Element project = problem.getParentElement().getParentElement().getParentElement();
 		
@@ -2870,58 +2912,56 @@ public class ToXPDDL {
             List<?> tobjectDiagrams = problem.getChild("objectDiagrams").getChildren("objectDiagram");
 			for (Iterator<?> iter = tobjectDiagrams.iterator(); iter.hasNext();) {
 				Element objectDiagram = (Element) iter.next();
-                                List<?> objects = objectDiagram.getChild("objects").getChildren("object");
-                                for (Iterator<?> iter2 = objects.iterator(); iter2.hasNext();) {
-                                        Element object = (Element) iter2.next();
+                List<?> objects = objectDiagram.getChild("objects").getChildren("object");
+                for (Iterator<?> iter2 = objects.iterator(); iter2.hasNext();) {
+                    Element object = (Element) iter2.next();
 
-                                        //find the object in the domain
-
-                                        Element theDomainObject = null;
-                                        try {
-                                                XPath path = new JDOMXPath("object[@id='" + object.getAttributeValue("id") + "']");
-                                                theDomainObject = (Element)path.selectSingleNode(domainObjects);
-                                        } catch (JaxenException e) {
-                                                e.printStackTrace();
-                                        }
-                                        if(theDomainObject!=null){
-                                            //check if there is already an object with the same name in the xpddl
-                                            Element xpddlObject = null;
-                                            try {
-                                                    XPath path = new JDOMXPath("object[@name='" + theDomainObject.getChildText("name") + "']");
-                                                    xpddlObject = (Element)path.selectSingleNode(xpddlProblem.getChild("objects"));
-                                            } catch (JaxenException e) {
-                                                    e.printStackTrace();
-                                            }
-                                            //if there is not such object yet then create it
-                                            if(xpddlObject==null){
-                                                Element objectType = null;
-                                                try {
-                                                        XPath path = new JDOMXPath("elements/classes/class[@id='" + theDomainObject.getChildText("class") + "']");
-                                                        objectType = (Element)path.selectSingleNode(project);
-                                                } catch (JaxenException e) {
-                                                        e.printStackTrace();
-                                                }
-                                                if(objectType != null && !objectType.getChildText("stereotype").equals("utility")){
-                                                        //Element xpddlObject = new Element("object");
-                                                        xpddlObject = new Element("object");
-                                                        xpddlObject.setAttribute("name", theDomainObject.getChildText("name"));
-                                                        xpddlObject.setAttribute("type", objectType.getChildText("name"));
-                                                        xpddlProblem.getChild("objects").addContent(xpddlObject);
-                                                }
-
-                                            }
-
-                                        }
-
-                                }
+                    //find the object in the domain
+                    Element theDomainObject = null;
+                    try {
+                        XPath path = new JDOMXPath("object[@id='" + object.getAttributeValue("id") + "']");
+                        theDomainObject = (Element)path.selectSingleNode(domainObjects);
+                    } catch (JaxenException e) {
+                        e.printStackTrace();
+                    }
+                    if(theDomainObject!=null){
+                        //check if there is already an object with the same name in the xpddl
+                        Element xpddlObject = null;
+                        try {
+                            XPath path = new JDOMXPath("object[@name='" + theDomainObject.getChildText("name") + "']");
+                            xpddlObject = (Element)path.selectSingleNode(xpddlProblem.getChild("objects"));
+                        } catch (JaxenException e) {
+                            e.printStackTrace();
+                        }
+                        //if there is not such object yet then create it
+                        if(xpddlObject==null){
+                            Element objectType = null;
+                            try {
+                                XPath path = new JDOMXPath("elements/classes/class[@id='" + theDomainObject.getChildText("class") + "']");
+                                objectType = (Element)path.selectSingleNode(project);
+                            } catch (JaxenException e) {
+                                e.printStackTrace();
+                            }
+                            if(objectType != null && !objectType.getChildText("stereotype").equals("utility")){
+                                //Element xpddlObject = new Element("object");
+                                xpddlObject = new Element("object");
+                                xpddlObject.setAttribute("name", theDomainObject.getChildText("name"));
+                                xpddlObject.setAttribute("type", objectType.getChildText("name"));
+                                xpddlProblem.getChild("objects").addContent(xpddlObject);
+                            }
 
                         }
+
+                    }
+                }
+
+			}
 
 
 
 			// 3. Repository diagram			
 			Element repositoryDiagram = domain.getChild("repositoryDiagrams").getChild("repositoryDiagram");
-                        //since it is used just for reusability we do no considered it on the translation process
+            //since it is used just for reusability we do no considered it on the translation process
 			//parseObjectDiagram(repositoryDiagram, xpddlProblem.getChild("init"),pddlVersion);
 			
 			
@@ -3025,7 +3065,7 @@ public class ToXPDDL {
 									if (typeClass != null){									
 										Element always = new Element("always");
 										
-										//Primitives Booloean, Int, Float, String
+										//Primitives Boolean, Int, Float, String
 										if (typeClass.getChildText("type").equals("Primitive")){
 											
 											if (typeClass.getChildText("name").equals("Boolean")) {											
@@ -3538,12 +3578,12 @@ public class ToXPDDL {
 				
 			}*/
 
-                        List<String> metricExpressionMinimize = new ArrayList();
-                        List<String> metricExpressionMaximize = new ArrayList();
-                        List<String> metricWeightMinimize = new ArrayList();
-                        List<String> metricWeightMaximize = new ArrayList();
-                        List<Element> metrics = null;
-                        //This process selects only the expression and variable type of metric (actionCounter is not considered yet)
+            List<String> metricExpressionMinimize = new ArrayList();
+            List<String> metricExpressionMaximize = new ArrayList();
+            List<String> metricWeightMinimize = new ArrayList();
+            List<String> metricWeightMaximize = new ArrayList();
+            List<Element> metrics = null;
+            //This process selects only the expression and variable type of metric (actionCounter is not considered yet)
 			try {
 				XPath path = new JDOMXPath("metrics/qualityMetric[enabled='true' and (intention='minimize' or intention='maximize')]");
 				metrics = path.selectNodes(problem);
@@ -3780,7 +3820,7 @@ public class ToXPDDL {
 					} catch (JaxenException e) {			
 						e.printStackTrace();
 					}
-					//finding the objetcs
+					//finding the objects
 					Element sourceObject = null;
 					Element targetObject = null;					
 					try {
@@ -3795,7 +3835,7 @@ public class ToXPDDL {
 					}							
 					if(sourceObject != null && targetObject != null){						
 						if(!targetEnd.getChild("rolename").getChildText("value").trim().equals("")){
-                             if (!pddlVersion.equals(PDDL_3_1)){
+	                        if (!pddlVersion.equals(PDDL_3_1)){
 								 Element predicate = new Element("predicate");
 								 predicate.setAttribute("id", targetEnd.getChild("rolename").getChildText("value"));
 								 
@@ -3810,14 +3850,14 @@ public class ToXPDDL {
 								 // checks if it's a repository diagram first, because it doesn't have a sequence reference
 								 if(!objectDiagram.getName().equals("repositoryDiagram") &&
 										 objectDiagram.getChildText("sequenceReference").equals("init")){								 
-	                                     if(!isDuplicated(predicate, containerXPDDLNode)){
-	                                             containerXPDDLNode.addContent(predicate);
-	                                     }
+		                                 if(!isDuplicated(predicate, containerXPDDLNode)){
+		                                         containerXPDDLNode.addContent(predicate);
+		                                 }
 								 }
 								 else{
-	                                     containerXPDDLNode.addContent(predicate);
+		                                 containerXPDDLNode.addContent(predicate);
 								 }
-                             }
+	                        }
                             else{//if it is a pddl3.1 case
 
                                 boolean isMultipliticy1or01 = false;
@@ -3971,115 +4011,115 @@ public class ToXPDDL {
 								secondPredicate.addContent((Element)firstValue.clone());
 								
 								 if(!objectDiagram.getName().equals("repositoryDiagram") &&
-										 objectDiagram.getChildText("sequenceReference").equals("init")){
-                                                                     // look for the same predicate in the xpddl file
-                                                                     if(!isDuplicated(firstPredicate, containerXPDDLNode)){
-                                                                             containerXPDDLNode.addContent(firstPredicate);
-                                                                     }
-                                                                     if(!isDuplicated(secondPredicate, containerXPDDLNode)){
-                                                                             containerXPDDLNode.addContent(secondPredicate);
-                                                                     }
+									 objectDiagram.getChildText("sequenceReference").equals("init")){
+                                     // look for the same predicate in the xpddl file
+                                     if(!isDuplicated(firstPredicate, containerXPDDLNode)){
+                                             containerXPDDLNode.addContent(firstPredicate);
+                                     }
+                                     if(!isDuplicated(secondPredicate, containerXPDDLNode)){
+                                             containerXPDDLNode.addContent(secondPredicate);
+                                     }
 										
 								 }
 								 else{
-                                                                    containerXPDDLNode.addContent(firstPredicate);
-                                                                    containerXPDDLNode.addContent(secondPredicate);
+                                    containerXPDDLNode.addContent(firstPredicate);
+                                    containerXPDDLNode.addContent(secondPredicate);
 								 }
-                                                            }
-                                                            else{//pddl3.1 case
-                                                                boolean sourceisMultipliticy1or01 = false;
-                                                                boolean targetisMultipliticy1or01 = false;
-                                                                if (sourceEnd.getChild("multiplicity").getChildText("value").equals("1") || sourceEnd.getChild("multiplicity").getChildText("value").equals("0..1")){
-                                                                    sourceisMultipliticy1or01 = true;
-                                                                }
-                                                                if (targetEnd.getChild("multiplicity").getChildText("value").equals("1") || targetEnd.getChild("multiplicity").getChildText("value").equals("0..1")){
-                                                                    targetisMultipliticy1or01 = true;
-                                                                }
+                                }
+                                else{//pddl3.1 case
+                                    boolean sourceisMultipliticy1or01 = false;
+                                    boolean targetisMultipliticy1or01 = false;
+                                    if (sourceEnd.getChild("multiplicity").getChildText("value").equals("1") || sourceEnd.getChild("multiplicity").getChildText("value").equals("0..1")){
+                                        sourceisMultipliticy1or01 = true;
+                                    }
+                                    if (targetEnd.getChild("multiplicity").getChildText("value").equals("1") || targetEnd.getChild("multiplicity").getChildText("value").equals("0..1")){
+                                        targetisMultipliticy1or01 = true;
+                                    }
 
-                                                                if (targetisMultipliticy1or01 && sourceisMultipliticy1or01){
-                                                                    //first
-                                                                    Element firstEquals = new Element("equals");
-                                                                    Element firstPredFuc = new Element("function");
-                                                                    firstPredFuc.setAttribute("id", classAssociation.getChildText("name"));
+                                    if (targetisMultipliticy1or01 && sourceisMultipliticy1or01){
+                                        //first
+                                        Element firstEquals = new Element("equals");
+                                        Element firstPredFuc = new Element("function");
+                                        firstPredFuc.setAttribute("id", classAssociation.getChildText("name"));
 
-                                                                    Element firstValue = new Element("object");
-                                                                    firstValue.setAttribute("id", targetObject.getChildText("name"));
-                                                                    firstPredFuc.addContent(firstValue);
+                                        Element firstValue = new Element("object");
+                                        firstValue.setAttribute("id", targetObject.getChildText("name"));
+                                        firstPredFuc.addContent(firstValue);
 
-                                                                    firstEquals.addContent(firstPredFuc);
+                                        firstEquals.addContent(firstPredFuc);
 
-                                                                    Element fValue = new Element("value");
-                                                                    fValue.setAttribute("object", sourceObject.getChildText("name"));
-                                                                    firstEquals.addContent(fValue);
+                                        Element fValue = new Element("value");
+                                        fValue.setAttribute("object", sourceObject.getChildText("name"));
+                                        firstEquals.addContent(fValue);
 
-                                                                    //second
-                                                                    Element secondEquals = new Element("equals");
-                                                                    Element secondPredFuc = new Element("function");
-                                                                    secondPredFuc.setAttribute("id", classAssociation.getChildText("name"));
+                                        //second
+                                        Element secondEquals = new Element("equals");
+                                        Element secondPredFuc = new Element("function");
+                                        secondPredFuc.setAttribute("id", classAssociation.getChildText("name"));
 
-                                                                    Element firstSValue = new Element("object");
-                                                                    firstSValue.setAttribute("id", sourceObject.getChildText("name"));
-                                                                    secondPredFuc.addContent(firstSValue);
+                                        Element firstSValue = new Element("object");
+                                        firstSValue.setAttribute("id", sourceObject.getChildText("name"));
+                                        secondPredFuc.addContent(firstSValue);
 
-                                                                    secondEquals.addContent(secondPredFuc);
+                                        secondEquals.addContent(secondPredFuc);
 
-                                                                    Element sValue = new Element("value");
-                                                                    sValue.setAttribute("object", targetObject.getChildText("name"));
-                                                                    secondEquals.addContent(sValue);
-                                                                    if(!objectDiagram.getName().equals("repositoryDiagram") &&
-                                                                                     objectDiagram.getChildText("sequenceReference").equals("init")){
-                                                                         // look for the same predicate in the xpddl file
-                                                                         if(!isDuplicated(firstEquals, containerXPDDLNode)){
-                                                                                 containerXPDDLNode.addContent(firstEquals);
-                                                                         }
-                                                                         if(!isDuplicated(secondEquals, containerXPDDLNode)){
-                                                                                 containerXPDDLNode.addContent(secondEquals);
-                                                                         }
+                                        Element sValue = new Element("value");
+                                        sValue.setAttribute("object", targetObject.getChildText("name"));
+                                        secondEquals.addContent(sValue);
+                                        if(!objectDiagram.getName().equals("repositoryDiagram") &&
+                                                         objectDiagram.getChildText("sequenceReference").equals("init")){
+                                             // look for the same predicate in the xpddl file
+                                             if(!isDuplicated(firstEquals, containerXPDDLNode)){
+                                                     containerXPDDLNode.addContent(firstEquals);
+                                             }
+                                             if(!isDuplicated(secondEquals, containerXPDDLNode)){
+                                                     containerXPDDLNode.addContent(secondEquals);
+                                             }
 
-                                                                    }
-                                                                    else{
-                                                                        containerXPDDLNode.addContent(firstEquals);
-                                                                        containerXPDDLNode.addContent(secondEquals);
-                                                                    }
+                                        }
+                                        else{
+                                            containerXPDDLNode.addContent(firstEquals);
+                                            containerXPDDLNode.addContent(secondEquals);
+                                        }
 
-                                                                }else{//treat as predicate
-                                                                    Element firstPredicate = new Element("predicate");
-                                                                    firstPredicate.setAttribute("id", classAssociation.getChildText("name"));
+                                    }else{//treat as predicate
+                                        Element firstPredicate = new Element("predicate");
+                                        firstPredicate.setAttribute("id", classAssociation.getChildText("name"));
 
-                                                                    Element firstValue = new Element("object");
-                                                                    firstValue.setAttribute("id", targetObject.getChildText("name"));
-                                                                    firstPredicate.addContent(firstValue);
+                                        Element firstValue = new Element("object");
+                                        firstValue.setAttribute("id", targetObject.getChildText("name"));
+                                        firstPredicate.addContent(firstValue);
 
-                                                                    Element secondValue = new Element("object");
-                                                                    secondValue.setAttribute("id", sourceObject.getChildText("name"));
-                                                                    firstPredicate.addContent(secondValue);
+                                        Element secondValue = new Element("object");
+                                        secondValue.setAttribute("id", sourceObject.getChildText("name"));
+                                        firstPredicate.addContent(secondValue);
 
-                                                                    // create reverse flow predicate
-                                                                    Element secondPredicate = new Element("predicate");
-                                                                    secondPredicate.setAttribute("id", classAssociation.getChildText("name"));
-                                                                    secondPredicate.addContent((Element)secondValue.clone());
+                                        // create reverse flow predicate
+                                        Element secondPredicate = new Element("predicate");
+                                        secondPredicate.setAttribute("id", classAssociation.getChildText("name"));
+                                        secondPredicate.addContent((Element)secondValue.clone());
 
-                                                                    secondPredicate.addContent((Element)firstValue.clone());
+                                        secondPredicate.addContent((Element)firstValue.clone());
 
-                                                                     if(!objectDiagram.getName().equals("repositoryDiagram") &&
-                                                                                     objectDiagram.getChildText("sequenceReference").equals("init")){
-                                                                             // look for the same predicate in the xpddl file
-                                                                             if(!isDuplicated(firstPredicate, containerXPDDLNode)){
-                                                                                     containerXPDDLNode.addContent(firstPredicate);
-                                                                             }
-                                                                             if(!isDuplicated(secondPredicate, containerXPDDLNode)){
-                                                                                     containerXPDDLNode.addContent(secondPredicate);
-                                                                             }
+                                         if(!objectDiagram.getName().equals("repositoryDiagram") &&
+                                             objectDiagram.getChildText("sequenceReference").equals("init")){
+                                             // look for the same predicate in the xpddl file
+                                             if(!isDuplicated(firstPredicate, containerXPDDLNode)){
+                                                     containerXPDDLNode.addContent(firstPredicate);
+                                             }
+                                             if(!isDuplicated(secondPredicate, containerXPDDLNode)){
+                                                     containerXPDDLNode.addContent(secondPredicate);
+                                             }
 
-                                                                     }
-                                                                     else{
-                                                                                    containerXPDDLNode.addContent(firstPredicate);
-                                                                                    containerXPDDLNode.addContent(secondPredicate);
-                                                                     }
+                                         }
+                                         else{
+                                            containerXPDDLNode.addContent(firstPredicate);
+                                            containerXPDDLNode.addContent(secondPredicate);
+                                         }
 
-                                                                }
+                                    }
 
-                                                            }
+                                }
 							}
 							else{// 4.1.2.2 Single navigation: the order is set by the navigation
                                                             //if (!pddlVersion.equals(PDDL_3_1)){
@@ -4337,7 +4377,7 @@ public class ToXPDDL {
 				}
 			}
 
-                        //4.1.4 Contraints from Object diagrams (local constraints that will be added as conditions)
+                        //4.1.4 Constraints from Object diagrams (local constraints that will be added as conditions)
                         Element localConstraints = objectDiagram.getChild("constraints");
                         if (localConstraints != null && !localConstraints.getText().trim().equals("")){
                             String constraints = localConstraints.getText().trim();
@@ -4383,37 +4423,37 @@ public class ToXPDDL {
 						else{
 							xpddlProblem.getChild("goal").addContent(containerXPDDLNode);
 						}						
-                                    }
+                }
 
-                                    //Constraints or Timed literal
-                                    else if(!objectDiagram.getChildText("sequenceReference").equals("init")){
-                                        String seq = objectDiagram.getChildText("sequenceReference");
-                                        boolean isTimedLiteral = true;
-                                        try{
-                                            float x = Float.parseFloat(seq);
-                                        }catch(NumberFormatException nFE) {
-                                            //System.out.println("Not an Integer");
-                                            isTimedLiteral = false;
-                                        }
-                                        //timed inital literal
-                                        if (isTimedLiteral){
-                                            //XMLUtilities.printXML(containerXPDDLNode);
-                                            for (Iterator<?> iter = containerXPDDLNode.getChildren().iterator(); iter.hasNext();) {
-                                                Element theliteral = (Element) iter.next();
-                                                Element at = new Element("at");
-                                                Element literal = new Element("literal");
-                                                Element timespicifier = new Element("timespecifier");
-                                                timespicifier.setAttribute("number", seq);
-                                                at.addContent(literal);
-                                                at.addContent(timespicifier);
-                                                literal.addContent((Element)theliteral.clone());
-                                                //timedGroup.addContent(at);
-                                                xpddlProblem.getChild("init").addContent(at);
-                                            }
+                //Constraints or Timed literal
+                else if(!objectDiagram.getChildText("sequenceReference").equals("init")){
+                    String seq = objectDiagram.getChildText("sequenceReference");
+                    boolean isTimedLiteral = true;
+                    try{
+                        float x = Float.parseFloat(seq);
+                    }catch(NumberFormatException nFE) {
+                        //System.out.println("Not an Integer");
+                        isTimedLiteral = false;
+                    }
+                    //timed initial literal
+                    if (isTimedLiteral){
+                        //XMLUtilities.printXML(containerXPDDLNode);
+                        for (Iterator<?> iter = containerXPDDLNode.getChildren().iterator(); iter.hasNext();) {
+                            Element theliteral = (Element) iter.next();
+                            Element at = new Element("at");
+                            Element literal = new Element("literal");
+                            Element timespicifier = new Element("timespecifier");
+                            timespicifier.setAttribute("number", seq);
+                            at.addContent(literal);
+                            at.addContent(timespicifier);
+                            literal.addContent((Element)theliteral.clone());
+                            //timedGroup.addContent(at);
+                            xpddlProblem.getChild("init").addContent(at);
+                        }
 
-                                        }
-                                        //constraint
-                                        else{
+                    }
+                    //constraint
+                    else{
 
 						// add the values in sometime diagram in the problem constraints
 						Element constraint;

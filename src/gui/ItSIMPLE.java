@@ -27,11 +27,15 @@
 
 package src.gui;
 
+import alice.util.Sleep;
+
 import com.jgoodies.forms.factories.Borders.EmptyBorder;
 import edu.stanford.ejalbert.BrowserLauncher;
 import edu.stanford.ejalbert.exception.BrowserLaunchingInitializingException;
 import edu.stanford.ejalbert.exception.UnsupportedOperatingSystemException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,6 +76,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JEditorPane;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft_10;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 import org.jaxen.jdom.JDOMXPath;
@@ -83,6 +89,8 @@ import org.jfree.chart.ChartPanel;
 import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphLayoutCache;
 import org.jgraph.graph.GraphModel;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 //import database.DataBase;
 //import database.ImportFromDBDialog;
@@ -93,6 +101,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Font;
@@ -126,6 +135,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import org.jdom.input.SAXBuilder;
 import java.io.*;
+
 import javax.swing.BorderFactory;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
@@ -140,6 +150,8 @@ import src.languages.pddl.ToXPDDL;
 import src.languages.pddl.XPDDLToPDDL;
 import src.languages.pddl.XPDDLToUML;
 import src.languages.petrinets.toPNML;
+import src.languages.rmpl.ToXRMPL;
+import src.languages.rmpl.XRMPLtoRMPL;
 import src.languages.xml.XMLUtilities;
 import src.planning.ExecPlanner;
 import src.planning.PlanAnalyzer;
@@ -152,11 +164,14 @@ import src.sourceeditor.ItHilightedDocument;
 import src.util.database.DataBase;
 import src.util.download.Downloader;
 import src.util.filefilter.PDDLFileFilter;
+import src.util.filefilter.RMPLFileFilter;
 import src.util.filefilter.XMLFileFilter;
 import src.util.fileio.FileInput;
 import src.util.fileio.FileOutput;
 import src.util.update.VersionUpdater;
+import src.util.websocket.EmptyClient;
 import src.virtualprototyping.VirtualPrototypingBlender;
+
 
 
 
@@ -181,28 +196,28 @@ public class ItSIMPLE extends JFrame {
 	// main window
 	private JPanel mainPanel = null;
 	//private JTabbedPane mainTabbedPane = null;
-        private JPanel mainTabbedPane = null;
+    private JPanel mainTabbedPane = null;
 	private JToolBar toolBar = null;
 	// itSIMPLE menu bar
 	private JMenuBar itMenuBar = null;
-        //File
+    //File
 	private JMenu fileMenu = null;
 	private JMenu newMenu = null;
-        private JMenuItem newUMLMenuItem = null;
-        private JMenuItem newPDDLMenuItem = null;
+    private JMenuItem newUMLMenuItem = null;
+    private JMenuItem newPDDLMenuItem = null;
 	private JMenuItem openMenuItem = null;
-        private JMenu openRecentMenu = null;
+    private JMenu openRecentMenu = null;
 	private JMenuItem saveMenuItem = null;
 	private JMenuItem saveAsMenuItem = null;
 	private JMenuItem saveAllMenuItem = null;
-        private JMenu importMenu = null;
+    private JMenu importMenu = null;
 	//private JMenuItem exportToDataBaseMenuItem = null;
 	//private JMenuItem importFromDataBaseMenuItem = null;
-        private JMenuItem importModelingPatternMenuItem = null;
-        private JMenuItem importPDDLProjectMenuItem = null;
+    private JMenuItem importModelingPatternMenuItem = null;
+    private JMenuItem importPDDLProjectMenuItem = null;
 	private JMenuItem exitMenuItem = null;
 
-        //Settings
+    //Settings
 	private JMenu settingsMenu = null;
 	private JMenu appearanceMenu = null;
 	private JMenuItem windowsMenuItem = null;
@@ -211,20 +226,19 @@ public class ItSIMPLE extends JFrame {
 	private JMenuItem defaultMenuItem = null;
 	private JMenuItem plannersSettingsMenuItem = null;
 	
-        //Help
-        private JMenu helpMenu = null;
-        private JMenuItem aboutMenuItem = null;
-        private JMenuItem checkUpdatesMenuItem = null;
-        
-        //Perspective
-        private ButtonGroup perspectiveGroup = new ButtonGroup();
+    //Help
+    private JMenu helpMenu = null;
+    private JMenuItem aboutMenuItem = null;
+    private JMenuItem checkUpdatesMenuItem = null;
+    
+    //Perspective
+    private ButtonGroup perspectiveGroup = new ButtonGroup();
 	private JToggleButton modelingPerspectiveButton = null;	
 	private JToggleButton analysisPerspectiveButton = null;	
 	private JToggleButton planningPerspectiveButton = null;	
-	private JToggleButton pddlTranslationPerspectiveButton = null;	        
+	private JToggleButton modelTranslationPerspectiveButton = null;	        
         
-        
-        
+               
 
         //Diagrams
 	private JMenu newDiagramMenu = null;
@@ -233,11 +247,11 @@ public class ItSIMPLE extends JFrame {
 	private JMenu openAsDomainMenu = null;
 	private JMenu openAsProblemMenu = null;
 	private JMenu openAsPetriNetMenu = null;
-        private JMenu importDomainMenu = null;
-        private JMenu importProblemMenu = null;
+    private JMenu importDomainMenu = null;
+    private JMenu importProblemMenu = null;
 
-        //About box
-        private JDialog aboutBox;
+    //About box
+    private JDialog aboutBox;
 
 	// uml pane
 	private JSplitPane umlSplitPane = null;
@@ -253,18 +267,20 @@ public class ItSIMPLE extends JFrame {
 	// properties
 	private JPanel propertiesPanel = null;
 	private PropertiesTabbedPane propertiesPane = null;
-        private ItFramePanel propertiesFramePanel = null;
+    private ItFramePanel propertiesFramePanel = null;
 
 	// graph
 	private ItTabbedPane graphTabbedPane = null;
 	private JPanel graphPanel = null;
 
-        //Additional UML panel
-        private ItFramePanel additionalUMLFramePanel = null;
+    //Additional UML panel
+    private ItFramePanel additionalUMLFramePanel = null;
 
 
-	// pddl
-	private JSplitPane pddlSplitPane = null;
+	// Translation
+	private JSplitPane translationSplitPane = null;
+	private JTabbedPane translationModelTabbedPane = null;
+	//  PDDL
 	private JSplitPane pddlTextSplitPane = null;
 	private JPanel topPddlPanel = null;
 	private JPanel bottomPddlPanel = null;
@@ -272,25 +288,28 @@ public class ItSIMPLE extends JFrame {
 	private JScrollPane bottomPddlScrollPane = null;
 	private JTextPane domainPddlTextPane = null;
 	private JTextPane problemPddlTextPane = null;                      
-	private ButtonGroup pddlButtonsGroup = null;
+	private ButtonGroup languageButtonsGroup = null;
 	private JPanel pddlPanel = null;
 	private JToolBar domainPddlToolBar = null;
 	private JToolBar problemPddlToolBar = null;
+	//  RMPL
+	private ItFramePanel rmplPanel = null;
+	private JTextPane rmplTextPane = null; 
         
-        private JTextArea outputPddlTranslationEditorPane = null;
-        private JTree pddlTranslationTree = null;
-        private DefaultTreeModel pddlTranslationTreeModel = null;         
-        private JButton translateDomainProblemButton = null;
-        
-       
+    private JTextArea outputPddlTranslationEditorPane = null;
+    private JTree modelTranslationTree = null;
+    private DefaultTreeModel pddlTranslationTreeModel = null;         
+    private JButton translateDomainProblemButton = null;
+    
+   
 
-        //domain analysis 
-        private JPanel analysisPane = null;
-        private JSplitPane analysisSplitPane = null;
-        private JTextArea outputAnalysisEditorPane = null;
-        private JLabel analysisStatusBar = null;
+    //domain analysis 
+    private JPanel analysisPane = null;
+    private JSplitPane analysisSplitPane = null;
+    private JTextArea outputAnalysisEditorPane = null;
+    private JLabel analysisStatusBar = null;
 	private JTree projectAnalysisTree = null;
-        private DefaultTreeModel projectAnalysisTreeModel = null; 
+    private DefaultTreeModel projectAnalysisTreeModel = null; 
     
         
 	//petri net
@@ -800,7 +819,7 @@ public class ItSIMPLE extends JFrame {
                                 
                                 //if (xmlRoot.getName().equals("project")){
                                     //update pddl tree
-                                    updateNewProjectParallelTree(pddlTranslationTreeModel,pddlTranslationTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));                                
+                                    updateNewProjectParallelTree(pddlTranslationTreeModel,modelTranslationTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));                                
                                 //}
   
 			}
@@ -910,15 +929,14 @@ public class ItSIMPLE extends JFrame {
 	};
         
         /**
-         * Change for PDDL Translation Perspective
+         * Change for Translation Perspective
          */
-        private Action pddlTranslationPerspectiveAction = new AbstractAction("PDDL Translation"){
+        private Action pddlTranslationPerspectiveAction = new AbstractAction("Model Translation"){
 
 		public void actionPerformed(ActionEvent e) {
-                    System.out.println("PDDL");   
                     updateTreeChanges(pddlTranslationTreeModel);
                     CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                    cl.show(mainTabbedPane, "PDDL");
+                    cl.show(mainTabbedPane, "Translation");
 		}
 	};        
 
@@ -936,14 +954,14 @@ public class ItSIMPLE extends JFrame {
 		}
 	};
 
-        private Action pddlPerspectiveAction = new AbstractAction("PDDL"){
+        private Action translationPerspectiveAction = new AbstractAction("Translation"){
 		/**
 		 *
 		 */
 
 		public void actionPerformed(ActionEvent e) {
-                    System.out.println("PDDL");
-                    setModelingPerspective("PDDL");
+                    //System.out.println("PDDL");
+                    setModelingPerspective("Translation");
                     CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
                     cl.show(mainTabbedPane, "Modeling");
 		}
@@ -1705,7 +1723,119 @@ public class ItSIMPLE extends JFrame {
 			}
 		}
 	};
-                
+               
+	
+	
+	private Action saveRMPLModelToFile = new AbstractAction("Save to RMPL", new ImageIcon("resources/images/savePDDL.png")){
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 755442300480255147L;
+
+		public void actionPerformed(ActionEvent e) {
+                    
+			String lastOpenFolder = "";
+            Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+            if (lastOpenFolderElement != null){
+                    lastOpenFolder = lastOpenFolderElement.getText();
+            }
+                   
+			JFileChooser fc = new JFileChooser(lastOpenFolder);
+			fc.setDialogTitle("Save to RMPL");
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.setFileFilter(new RMPLFileFilter());
+
+
+			int returnVal = fc.showSaveDialog(ItSIMPLE.this);
+			if (returnVal == JFileChooser.APPROVE_OPTION){
+				File selectedFile = fc.getSelectedFile();
+				String path = selectedFile.getPath();
+				if (!path.toLowerCase().endsWith(".rmpl")){
+					path += ".rmpl";
+				}
+				try {
+					FileWriter file = new FileWriter(path);
+					file.write(rmplTextPane.getText());
+					file.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+                                
+                if (lastOpenFolderElement != null){
+                    //Holds the last open folder
+                    if (!lastOpenFolderElement.getText().equals(selectedFile.getParent())){
+                            lastOpenFolderElement.setText(selectedFile.getParent());
+                            XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+                    }
+                } 
+			}
+		}
+	};
+	
+	
+	/**
+	 * This action connect to the RMPL we editor and sends the resulting model via websocket
+	 */
+	private Action openRMPLWebEditor = new AbstractAction("Send to Web Editor", new ImageIcon("resources/images/details.png")){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+
+		public void actionPerformed(ActionEvent e) {
+			WebSocketClient client;
+			try {
+				
+				/*
+				Desktop.getDesktop().browse(new URI("http://bicycle.csail.mit.edu/rmpleditor/"));
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException ie) {
+				    //Handle exception
+				}*/
+				
+				client = new EmptyClient(new URI("ws://bicycle.csail.mit.edu:9029/itsimple"), new Draft_10());
+				appendModelTranslationOutputPanelText("Connecting to http://bicycle.csail.mit.edu/rmpleditor/ \n");
+		        client.connect();
+		        int timeout_counter = 0;
+		        while (!client.isOpen()) {
+					System.out.println("openning " +Integer.toString(timeout_counter));
+					timeout_counter += 1;
+				}
+		        if (client.isOpen()){ 
+		        	appendModelTranslationOutputPanelText("Sending RMPL model \n\n");
+			        System.out.println();
+			        JSONObject obj = new JSONObject();
+			        obj.put("command", "display_rmpl");
+			        obj.put("data", rmplTextPane.getText());
+			        String message = obj.toString();
+			        client.send(message);	
+			        appendModelTranslationOutputPanelText("Model data sent successfully. \n\n");
+		        }
+		        else{
+		        	appendModelTranslationOutputPanelText("Timeout: System could not connect to http://bicycle.csail.mit.edu/rmpleditor/ \n");
+		        }
+		        client.close();
+		        
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+			//catch (IOException e1) {
+				// TODO Auto-generated catch block
+			//	e1.printStackTrace();
+			//}
+
+			
+			
+
+		}
+	};
+	
 
 	private Action openDomainAsPDDL = new AbstractAction("PDDL Domain", new ImageIcon("resources/images/new.png")){
 		/**
@@ -4074,7 +4204,7 @@ public class ItSIMPLE extends JFrame {
 
                                 //if (xmlRoot.getName().equals("project")){
                                 //    //update pddl tree
-                                    updateNewProjectParallelTree(pddlTranslationTreeModel,pddlTranslationTree,doc, xmlRoot, (ItTreeNode)newProjectNode.clone());
+                                    updateNewProjectParallelTree(pddlTranslationTreeModel,modelTranslationTree,doc, xmlRoot, (ItTreeNode)newProjectNode.clone());
                                 //}
 			}
 		}
@@ -5182,29 +5312,29 @@ public class ItSIMPLE extends JFrame {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JPanel(new CardLayout());
 			mainTabbedPane.add(getUmlSplitPane(), "Modeling");
-                        mainTabbedPane.add(getAnalysisPane(), "Analysis");
+            mainTabbedPane.add(getAnalysisPane(), "Analysis");
 			//mainTabbedPane.add(getPetriSplitPane(), "Petri Net");
-			mainTabbedPane.add(getPddlSplitPane(), "PDDL");
-                        mainTabbedPane.add(getPlanSimPane(), "Planning");
-                        //mainTabbedPane.addChangeListener(new ChangeListener(){
-                        //		        public void stateChanged(ChangeEvent evt) {
-                        //		            switch(mainTabbedPane.getSelectedIndex()){
-                        //
-                            //		            case 1:{
-                            //		            }
-                            //		            break;
-                            //
-                            //		            case 2:{
-                            //		            }
-                            //		            break;
-                        //
-                        //		            }
-                        //		        }
-                        //		    });                        
-                        
+			mainTabbedPane.add(getTranslationSplitPane(), "Translation");
+            mainTabbedPane.add(getPlanSimPane(), "Planning");
+            //mainTabbedPane.addChangeListener(new ChangeListener(){
+            //		        public void stateChanged(ChangeEvent evt) {
+            //		            switch(mainTabbedPane.getSelectedIndex()){
+            //
+                //		            case 1:{
+                //		            }
+                //		            break;
+                //
+                //		            case 2:{
+                //		            }
+                //		            break;
+            //
+            //		            }
+            //		        }
+            //		    });                        
+            
 
-                        CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                        cl.show(mainTabbedPane, "UML");
+            CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
+            cl.show(mainTabbedPane, "UML");
 
 
 		}
@@ -5217,17 +5347,17 @@ public class ItSIMPLE extends JFrame {
 	 *
 	 * @return javax.swing.JSplitPane
 	 */
-	private JSplitPane getPddlSplitPane() {
-		if (pddlSplitPane == null) {
-			pddlSplitPane = new JSplitPane();
-			pddlSplitPane.setContinuousLayout(true);
-			pddlSplitPane.setOneTouchExpandable(true);
-			pddlSplitPane.setDividerSize(8);
-			//pddlSplitPane.setRightComponent(getPddlTextSplitPane());
-                        pddlSplitPane.setRightComponent(getTranslatedPddlPanel());
-			pddlSplitPane.setLeftComponent(getPddlPanel());
+	private JSplitPane getTranslationSplitPane() {
+		if (translationSplitPane == null) {
+			translationSplitPane = new JSplitPane();
+			translationSplitPane.setContinuousLayout(true);
+			translationSplitPane.setOneTouchExpandable(true);
+			translationSplitPane.setDividerSize(8);
+			//translationSplitPane.setRightComponent(getPddlTextSplitPane());
+            translationSplitPane.setRightComponent(getTranslatedModelPanel());
+			translationSplitPane.setLeftComponent(getTranslationSelactionPanel());
 		}
-		return pddlSplitPane;
+		return translationSplitPane;
 	}
 
 	/**
@@ -5284,8 +5414,8 @@ public class ItSIMPLE extends JFrame {
                 //TODO: in the future this is going to be just one panel.
                 // a tabbed panel won't be necessary any more
                 JTabbedPane analysisTabbedPane = new JTabbedPane();
-		analysisTabbedPane.setTabPlacement(JTabbedPane.TOP);
-		analysisTabbedPane.addTab("General", getAnalysisSplitPane());
+				analysisTabbedPane.setTabPlacement(JTabbedPane.TOP);
+				analysisTabbedPane.addTab("General", getAnalysisSplitPane());
                 analysisTabbedPane.addTab("Petri Net", getPetriSplitPane());
                 
                 //status bar for the analysis processes
@@ -5488,7 +5618,7 @@ public class ItSIMPLE extends JFrame {
                                                 //clean up reference of plans from database
                                                 cleanupPlanDatabaseReference();
 
-                                                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                                                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
                                                 Element problem = selectedNode.getData();
                                                 Element domainProject = problem.getDocument().getRootElement();
                                                 Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
@@ -5917,7 +6047,7 @@ public class ItSIMPLE extends JFrame {
                         setPlanEvaluationInfoPanelText("");
                         cleanupPlanDatabaseReference();
 
-			String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+			String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
 
 			// generate PDDL domain							// root element
 			Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
@@ -6002,7 +6132,7 @@ public class ItSIMPLE extends JFrame {
 			setPlanList(null);
 			setPlanInfoPanelText("");
                         setPlanEvaluationInfoPanelText("");
- 			String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+ 			String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
                         cleanupPlanDatabaseReference();
 
 			// generate PDDL domain							// root element
@@ -6116,8 +6246,8 @@ public class ItSIMPLE extends JFrame {
 
             if (problemElement != null){
                 
-                appendPDDLTranslationOutputPanelText(">> Translating problem '"+problemElement.getChildText("name") +"'...\n\n");
-                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();                
+                appendModelTranslationOutputPanelText(">> Translating problem '"+problemElement.getChildText("name") +"'...\n\n");
+                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();                
 
                 Element xpddlProblem = ToXPDDL.XMLToXPDDLProblem(problemElement, pddlVersion);
                 String problemText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlProblem, "  ");
@@ -6131,12 +6261,12 @@ public class ItSIMPLE extends JFrame {
                     ToXPDDL.adjustRequirements(xpddlDomain, xpddlProblem, pddlVersion);
                     String domainText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "  ");
                     domainPddlTextPane.setText(domainText);
-                    appendPDDLTranslationOutputPanelText("(!) INFO: extra requirements updated in the domain translation.'\n\n");
+                    appendModelTranslationOutputPanelText("(!) INFO: extra requirements updated in the domain translation.'\n\n");
                 }
                 
-                appendPDDLTranslationOutputPanelText(">> Problem '"+problemElement.getChildText("name") +"' translated!\n\n");
+                appendModelTranslationOutputPanelText(">> Problem '"+problemElement.getChildText("name") +"' translated!\n\n");
                 
-
+                
             }
  
         }
@@ -6150,20 +6280,41 @@ public class ItSIMPLE extends JFrame {
 
             if (domainElement != null){
                 
-                appendPDDLTranslationOutputPanelText(">> Translating domain '"+domainElement.getChildText("name") +"'...\n\n");
+                appendModelTranslationOutputPanelText(">> Translating domain '"+domainElement.getChildText("name") +"'...\n\n");
                 Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(
                                 domainElement.getParentElement().getParentElement().getParentElement(),
-                                pddlButtonsGroup.getSelection().getActionCommand(), null);
+                                languageButtonsGroup.getSelection().getActionCommand(), null);
                 String domainText = XPDDLToPDDL.parseXPDDLToPDDL(xpddlDomain, "  ");
                 //XMLUtilities.printXML(xpddlDomain);
                 domainPddlTextPane.setText(domainText);
                 //XMLUtilities.printXML(xpddlDomain);
                 
-                appendPDDLTranslationOutputPanelText(">> Domain '"+domainElement.getChildText("name") +"' translated!\n\n");
-
+                appendModelTranslationOutputPanelText(">> Domain '"+domainElement.getChildText("name") +"' translated!\n\n");
             }
  
         }
+        
+        
+        
+        /**
+         * This method translate the XML domain to PDDL and put it the domainPddlTextPane
+         * @param domainElement 
+         */
+        public void translateDomainProblemToRmpl(Element problemElement){            
+
+            if (problemElement != null){
+                
+                appendModelTranslationOutputPanelText(">> Translating problem '"+problemElement.getChildText("name") +"'...\n\n");
+                Element xrmpl = ToXRMPL.XMLToXRMPLModel(problemElement.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement(), problemElement);
+                String rmpl = XRMPLtoRMPL.parseXRMPLToRMPL(xrmpl, "");
+                //System.out.println(rmpl);
+                rmplTextPane.setText(rmpl);
+                
+                appendModelTranslationOutputPanelText(">> Problem '"+problemElement.getChildText("name") +"' translated!\n\n");
+            }
+ 
+        }
+       
         
         
         
@@ -6536,7 +6687,7 @@ public class ItSIMPLE extends JFrame {
             //just in case the pddl is empty or null;
             if (pddlDomain == null || pddlDomain.trim().equals("") || pddlProblem == null || pddlProblem.trim().equals("")){
 
-                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
                 // generate PDDL domain							// root element
                 Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
                 // generate PDDL problem
@@ -6824,7 +6975,7 @@ public class ItSIMPLE extends JFrame {
             }
             if (problems != null){
                 //ger xddldomain if it is null
-                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
                 if(xpddlDomain == null){
                     // generate PDDL domain							// root element
                     xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
@@ -6878,7 +7029,7 @@ public class ItSIMPLE extends JFrame {
                 e1.printStackTrace();
             }
             if (domains != null){
-                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
                 // generate PDDL domain							// root element
                 Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(project, pddlVersion, null);
 
@@ -6919,7 +7070,7 @@ public class ItSIMPLE extends JFrame {
             Element domainProject = problem.getDocument().getRootElement();
             Element domain = problem.getParentElement().getParentElement();
 
-            String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+            String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
 
             // generate PDDL domain
             Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
@@ -7034,7 +7185,7 @@ public class ItSIMPLE extends JFrame {
                 e1.printStackTrace();
             }
             if (domain != null){
-                String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();
+                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
                 
 
                 //solve all problems in the domain                                                                       
@@ -7094,7 +7245,7 @@ public class ItSIMPLE extends JFrame {
             Element domainProject = problem.getDocument().getRootElement();
             Element domain = problem.getDocument().getRootElement().getChild("pddldomains").getChild("pddldomain");
 
-            String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();                               
+            String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();                               
                         
             
             String problemPath = problem.getAttributeValue("file");
@@ -8510,7 +8661,7 @@ public class ItSIMPLE extends JFrame {
         /*
          * Append text to the pddl translation output text area
          */
-        public void appendPDDLTranslationOutputPanelText(String text){
+        public void appendModelTranslationOutputPanelText(String text){
             try {
                 outputPddlTranslationEditorPane.append(text);
                 outputPddlTranslationEditorPane.setCaretPosition(outputPddlTranslationEditorPane.getDocument().getLength());
@@ -8562,32 +8713,49 @@ public class ItSIMPLE extends JFrame {
         
         
         
-        private JPanel getTranslatedPddlPanel(){
-            JPanel anPanel = new JPanel(new BorderLayout());                          
+        private JPanel getTranslatedModelPanel(){
+            JPanel anPanel = new JPanel(new BorderLayout());
+            
+            translationModelTabbedPane = new JTabbedPane();
              
-             //TOP panel
+            // PDDL tab
             if (pddlTextSplitPane == null) {
-			pddlTextSplitPane = new JSplitPane();
-			pddlTextSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-
-			//Problem Panel
-			ItFramePanel problemPanel = new ItFramePanel(":: Problem", ItFramePanel.MINIMIZE_MAXIMIZE);
-			problemPanel.setContent(getBottomPddlPanel(), false);
-			problemPanel.setParentSplitPane(pddlTextSplitPane);
-			pddlTextSplitPane.setBottomComponent(problemPanel);
-
-			//Doamin Panel
-			ItFramePanel domainPanel = new ItFramePanel(":: Domain", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-			domainPanel.setContent(getTopPddlPanel(), false);
-			//domainPanel.setParentSplitPane(pddlTextSplitPane);
-			pddlTextSplitPane.setTopComponent(domainPanel);
-
-			pddlTextSplitPane.setDividerSize(3);
-			pddlTextSplitPane.setContinuousLayout(true);
-			pddlTextSplitPane.setDividerLocation((int)(screenSize.height*0.40));
-			pddlTextSplitPane.setResizeWeight(0.5);
+				pddlTextSplitPane = new JSplitPane();
+				pddlTextSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+	
+				//Problem Panel
+				ItFramePanel problemPanel = new ItFramePanel(":: Problem", ItFramePanel.MINIMIZE_MAXIMIZE);
+				problemPanel.setContent(getBottomPddlPanel(), false);
+				problemPanel.setParentSplitPane(pddlTextSplitPane);
+				pddlTextSplitPane.setBottomComponent(problemPanel);
+	
+				//Domain Panel
+				ItFramePanel domainPanel = new ItFramePanel(":: Domain", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+				domainPanel.setContent(getTopPddlPanel(), false);
+				//domainPanel.setParentSplitPane(pddlTextSplitPane);
+				pddlTextSplitPane.setTopComponent(domainPanel);
+	
+				pddlTextSplitPane.setDividerSize(3);
+				pddlTextSplitPane.setContinuousLayout(true);
+				pddlTextSplitPane.setDividerLocation((int)(screenSize.height*0.40));
+				pddlTextSplitPane.setResizeWeight(0.5);
             }                          
-            anPanel.add(pddlTextSplitPane, BorderLayout.CENTER);
+            //anPanel.add(pddlTextSplitPane, BorderLayout.CENTER);
+            //translationModelTabbedPane.addTab("PDDL", pddlTextSplitPane);
+            
+            // RMPL tab
+            if (rmplPanel == null){
+	            rmplPanel = new ItFramePanel(":: RMPL Model", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+	            rmplPanel.setContent(getRmplViewPanel(), false);
+            }
+            //translationModelTabbedPane.addTab("RMPL", rmplPanel);
+            
+            // Dummy panel
+            translationModelTabbedPane.addTab("Result",new ItFramePanel(":: Model", ItFramePanel.NO_MINIMIZE_MAXIMIZE));
+            
+            anPanel.add(translationModelTabbedPane, BorderLayout.CENTER);
+            
+
                                   
                      
              //BOTTOM
@@ -8634,38 +8802,44 @@ public class ItSIMPLE extends JFrame {
             ItTreeNode root = new ItTreeNode("Projects");
             root.setIcon(new ImageIcon("resources/images/projects.png"));
             pddlTranslationTreeModel = new DefaultTreeModel(root);
-            pddlTranslationTree = new JTree(pddlTranslationTreeModel);
-            pddlTranslationTree.setShowsRootHandles(true);
-            pddlTranslationTree.setCellRenderer(new ItTreeCellRenderer());
-            pddlTranslationTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-            pddlTranslationTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-                    public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
-                            ItTreeNode selectedNode = (ItTreeNode)pddlTranslationTree.getLastSelectedPathComponent();
-                            //if(selectedNode != null && selectedNode.getLevel() == 3){
-
-                            //}
-                            //else{
-
-                            //}
-                    }
+            modelTranslationTree = new JTree(pddlTranslationTreeModel);
+            modelTranslationTree.setShowsRootHandles(true);
+            modelTranslationTree.setCellRenderer(new ItTreeCellRenderer());
+            modelTranslationTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+            modelTranslationTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+	            public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
+		            ItTreeNode selectedNode = (ItTreeNode)modelTranslationTree.getLastSelectedPathComponent();
+		            //if(selectedNode != null && selectedNode.getLevel() == 3){
+		
+		            //}
+		            //else{
+		
+		            //}
+	            }
             });
 
             // create a main pane for putting the tree inside
             JPanel mainTreePanel = new JPanel(new BorderLayout());
-            mainTreePanel.add(new JScrollPane(pddlTranslationTree), BorderLayout.CENTER);
+            mainTreePanel.add(new JScrollPane(modelTranslationTree), BorderLayout.CENTER);
             
             //Translate button
             translateDomainProblemButton = new JButton("Translate", new ImageIcon("resources/images/play.png"));
             //solveProblemButton.setEnabled(false);
             translateDomainProblemButton.setActionCommand("translate");
             translateDomainProblemButton.addActionListener(new ActionListener(){
-                    public void actionPerformed(ActionEvent e) {  
-                        ItTreeNode selectedNode = (ItTreeNode)pddlTranslationTree.getLastSelectedPathComponent();
-                        if(selectedNode != null){
-                            if (selectedNode.getLevel() == 2 && selectedNode.getData().getName().equals("domain")){
+                public void actionPerformed(ActionEvent e) {  
+                    ItTreeNode selectedNode = (ItTreeNode)modelTranslationTree.getLastSelectedPathComponent();
+                    if(selectedNode != null){
+                    	
+                    	//Check what language has been selected
+                    	String language = languageButtonsGroup.getSelection().getActionCommand();
+                    	
+                    	//PDDL language selected
+                    	if (language.equals(ToXPDDL.PDDL_2_1) || language.equals(ToXPDDL.PDDL_2_2) || 
+                    			language.equals(ToXPDDL.PDDL_3_0) || language.equals(ToXPDDL.PDDL_3_1)){
+                    		if (selectedNode.getLevel() == 2 && selectedNode.getData().getName().equals("domain")){
                                 Element domain = selectedNode.getData();
-                                translateDomainToPddl(domain);
-                                
+                                translateDomainToPddl(domain);  
                             }
                             else if (selectedNode.getLevel() == 3 && selectedNode.getData().getName().equals("problem")){
                                 Element problem = selectedNode.getData();
@@ -8674,8 +8848,27 @@ public class ItSIMPLE extends JFrame {
                             else{
                                 JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>Please chose a domain or problem node (from a UML project)<br> in the Domain/Problem Selection tree.</html>");
                             }
-                        }                        
-                    }
+                    		// show PDDL tab
+                    		translationModelTabbedPane.removeAll();
+                    		translationModelTabbedPane.addTab("PDDL", pddlTextSplitPane);
+                    		
+                    	}
+                    	//RMPL language selected
+                    	else if (language.equals(ToXRMPL.RMPL_1_0)){
+                    		if (selectedNode.getLevel() == 3 && selectedNode.getData().getName().equals("problem")){
+                    			Element problem = selectedNode.getData();
+                    			translateDomainProblemToRmpl(problem);
+                    		}
+                    		else{
+                                JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>Please chose a problem node (from a UML project)<br> in the Domain/Problem Selection tree.</html>");
+                                rmplTextPane.setText("");
+                            }
+                    		// show RMPL tab
+                    		translationModelTabbedPane.removeAll();
+                    		translationModelTabbedPane.addTab("RMPL", rmplPanel);   		
+                    	}
+                    }                        
+                }
 
             });
             mainTreePanel.add(translateDomainProblemButton, BorderLayout.SOUTH);
@@ -8689,13 +8882,13 @@ public class ItSIMPLE extends JFrame {
             
             
             
-            //BOTTOM panels (pddl version settings)
-            ItFramePanel pddlSettingFramePanel = new ItFramePanel(":: PDDL Version Settings", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
+            //BOTTOM panels (Language options)
+            ItFramePanel pddlSettingFramePanel = new ItFramePanel(":: Language Selection", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
             //pddlSettingPanel.setPreferredSize(new Dimension(screenSize.width/4 - 20, screenSize.height));
             
             JPanel bottonPanel = new JPanel(new BorderLayout());
             bottonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            bottonPanel.add(getPddlVersionSettingsPanel(), BorderLayout.CENTER);
+            bottonPanel.add(getLanguageVersionSettingsPanel(), BorderLayout.CENTER);
            
             pddlSettingFramePanel.setContent(bottonPanel, false); 
             anPanel.add(pddlSettingFramePanel, BorderLayout.SOUTH);
@@ -8819,7 +9012,7 @@ public class ItSIMPLE extends JFrame {
                                    appendAnalysisOutputPanelText(">> Calling TorchLight System... \n");
                                    analysisStatusBar.setText("Status: Running Tourchlight ...");
 
-                                   String pddlVersion = pddlButtonsGroup.getSelection().getActionCommand();                                
+                                   String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();                                
                                    
                                    //Call TorchLight
                                    TorchLightAnalyzer.getTorchLightAnalysis(selectedNode,pddlVersion);
@@ -8940,6 +9133,39 @@ public class ItSIMPLE extends JFrame {
 		}
 		return bottomPddlPanel;
 	}
+	
+	
+	/**
+	 * This method initializes bottomPddlPanel
+	 *
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getRmplViewPanel() {
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		
+		JScrollPane rmplScrollPane = new JScrollPane();
+		ItHilightedDocument rmplDocument = new ItHilightedDocument();
+		rmplDocument.setHighlightStyle(ItHilightedDocument.PDDL_STYLE);
+		rmplTextPane = new JTextPane(rmplDocument);
+		rmplTextPane.setFont(new Font("Courier", 0, 12));
+		rmplTextPane.setBackground(Color.WHITE);
+        rmplScrollPane.setViewportView(rmplTextPane);
+		mainPanel.add(rmplScrollPane, BorderLayout.CENTER);
+
+
+		JToolBar rmplToolBar = new JToolBar();
+		rmplToolBar.setRollover(true);
+		JButton save = new JButton(saveRMPLModelToFile);
+		rmplToolBar.add(save);
+		JButton viewWebRMPLEditor = new JButton(openRMPLWebEditor);
+		viewWebRMPLEditor.setToolTipText("<html>This will send the model to the RMPL editor<br> at http://bicycle.csail.mit.edu/rmpleditor/. <br>" +
+				"You need to have this link open with your preferable browser (e.g., Chrome, Firefox).</html>");
+		rmplToolBar.add(viewWebRMPLEditor);
+		
+		mainPanel.add(rmplToolBar, BorderLayout.NORTH);
+		return mainPanel;
+	}
+	
 
 	/**
 	 * This method initializes bottomPetriPanel
@@ -9141,10 +9367,10 @@ public class ItSIMPLE extends JFrame {
                         
                         toolBar.addSeparator();
                         //toolBar.add(pddlTranslationPerspectiveAction).setToolTipText("UML to PDDL translation perspective");
-                        pddlTranslationPerspectiveButton = new JToggleButton(pddlTranslationPerspectiveAction);
-                        pddlTranslationPerspectiveButton.setToolTipText("UML to PDDL translation");
-                        perspectiveGroup.add(pddlTranslationPerspectiveButton);                                                
-                        toolBar.add(pddlTranslationPerspectiveButton);                        
+                        modelTranslationPerspectiveButton = new JToggleButton(pddlTranslationPerspectiveAction);
+                        modelTranslationPerspectiveButton.setToolTipText("UML to other model languages (e.g. PDDL)");
+                        perspectiveGroup.add(modelTranslationPerspectiveButton);                                                
+                        toolBar.add(modelTranslationPerspectiveButton);                        
                         
                         
                        //toolBar.addSeparator();
@@ -9164,15 +9390,19 @@ public class ItSIMPLE extends JFrame {
          * This method creates the panel containing the pddl version selection component
          * @return 
          */
-        private JPanel getPddlVersionSettingsPanel(){
+        private JPanel getLanguageVersionSettingsPanel(){
             
             JPanel settingsPanel = new JPanel();
 
+            //PDDL
             JRadioButton pddl21 = new JRadioButton("PDDL 2.1");
             JRadioButton pddl22 = new JRadioButton("PDDL 2.2");
             JRadioButton pddl30 = new JRadioButton("PDDL 3.0", true);
             JRadioButton pddl31 = new JRadioButton("PDDL 3.1");
-
+            //RMPL
+            JRadioButton rmpl10 = new JRadioButton("RMPL");
+            
+            //PDDL
             pddl21.setOpaque(false);
             pddl21.setActionCommand(ToXPDDL.PDDL_2_1);
             pddl22.setOpaque(false);
@@ -9181,13 +9411,18 @@ public class ItSIMPLE extends JFrame {
             pddl30.setActionCommand(ToXPDDL.PDDL_3_0);
             pddl31.setOpaque(false);
             pddl31.setActionCommand(ToXPDDL.PDDL_3_1);
+            //RMPL
+            rmpl10.setOpaque(false);
+            rmpl10.setActionCommand(ToXRMPL.RMPL_1_0);
+            
 
-            pddlButtonsGroup = new ButtonGroup();
-            pddlButtonsGroup.add(pddl21);
-            pddlButtonsGroup.add(pddl22);
-            pddlButtonsGroup.add(pddl30);
-            pddlButtonsGroup.add(pddl31);
-            pddlButtonsGroup.setSelected(pddl21.getModel(), true);
+            languageButtonsGroup = new ButtonGroup();
+            languageButtonsGroup.add(pddl21);
+            languageButtonsGroup.add(pddl22);
+            languageButtonsGroup.add(pddl30);
+            languageButtonsGroup.add(pddl31);
+            languageButtonsGroup.add(rmpl10);
+            languageButtonsGroup.setSelected(pddl21.getModel(), true);
 
 
             settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
@@ -9196,6 +9431,7 @@ public class ItSIMPLE extends JFrame {
             settingsPanel.add(pddl22);
             settingsPanel.add(pddl30);
             settingsPanel.add(pddl31);
+            settingsPanel.add(rmpl10);
                         
             return settingsPanel;
             
@@ -9258,7 +9494,7 @@ public class ItSIMPLE extends JFrame {
 	/**
 	 * @return Returns the pddlPanel.
 	 */
-	private JPanel getPddlPanel() {
+	private JPanel getTranslationSelactionPanel() {
 		if (pddlPanel == null) {
 			pddlPanel = new JPanel(new BorderLayout());
 			pddlPanel.setPreferredSize(new Dimension(screenSize.width/4 - 20, screenSize.height));
@@ -9876,7 +10112,7 @@ public class ItSIMPLE extends JFrame {
 		            break;
 
 		            case 2:{// plan sim
-		            	selectedtab = "PDDL";
+		            	selectedtab = "Translation";
 		            }
 		            break;
 
@@ -10598,7 +10834,7 @@ public class ItSIMPLE extends JFrame {
          * @return
          */
         public String getSelectedPDDLversion(){
-                return pddlButtonsGroup.getSelection().getActionCommand();
+                return languageButtonsGroup.getSelection().getActionCommand();
         }
 
         public JTextPane getDomainPDDLTextPane(){

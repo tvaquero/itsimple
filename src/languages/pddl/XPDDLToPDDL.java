@@ -185,27 +185,32 @@ public class XPDDLToPDDL {
 			
 			// 8.1.3 Precondition node	
 			String precondition = identation + " :precondition \n";
-                        String preconditionContent = "";
-                        if(xpddlNode.getChild("precondition").getChildren().size() > 0){
+            String preconditionContent = "";
+            if(xpddlNode.getChild("precondition").getChildren().size() > 0){
 
-                                Element preconditionChild = (Element)xpddlNode.getChild("precondition").getChildren().get(0);
-                                preconditionContent = parseXPDDLToPDDL(preconditionChild, identation + "   ");
-                                //precondition += parseXPDDLToPDDL(preconditionChild, identation + "   ");
-                        }
-                        //Check if the precondition is empty
-                        if (!preconditionContent.trim().equals("")){                            
-                            pddl += precondition + preconditionContent + "\n" ;
-                        }
-                        //pddl += precondition + "\n" ;
+                    Element preconditionChild = (Element)xpddlNode.getChild("precondition").getChildren().get(0);
+                    preconditionContent = parseXPDDLToPDDL(preconditionChild, identation + "   ");
+                    //precondition += parseXPDDLToPDDL(preconditionChild, identation + "   ");
+            }
+            //Check if precondition is empty
+            //pddl += precondition + "\n" ;
+            if (!preconditionContent.trim().equals("")){                            
+                pddl += precondition + preconditionContent + "\n" ;
+            }
 
 			//8.1.4 Effect node
 			String effect = identation + " :effect\n";
+			String effectContent = "";
 			if(xpddlNode.getChild("effect").getChildren().size() > 0){
 				Element effectChild = (Element)xpddlNode.getChild("effect").getChildren().get(0);
-				effect += parseXPDDLToPDDL(effectChild, identation + "   ");
-			}			
-			pddl += effect + "\n";
-						
+				effectContent += parseXPDDLToPDDL(effectChild, identation + "   ");
+			}
+			//Check if effect is empty
+			//pddl += effect + "\n";
+			if (!effectContent.trim().equals("")){
+				pddl += effect + effectContent + "\n";
+			}
+				
 			//close action
 			pddl += identation + ")\n\n";
 
@@ -235,26 +240,31 @@ public class XPDDLToPDDL {
 			
 			// 8.2.4 Condition node	
 			String condition = identation + " :condition \n";
-                        String conditionContent = "";
+            String conditionContent = "";
 			if(xpddlNode.getChild("condition").getChildren().size() > 0){
 				Element conditionChild = (Element)xpddlNode.getChild("condition").getChildren().get(0);
                                 conditionContent = parseXPDDLToPDDL(conditionChild, identation + "   ");
 				//condition += parseXPDDLToPDDL(conditionChild, identation + "   ");
 			}
-                        //Check if the precondition is empty
-			if (!conditionContent.trim().equals("")){
-                            pddl += condition + conditionContent + "\n" ;
-                        }
+            //Check if precondition is empty
 			//pddl += condition + "\n" ;
+			if (!conditionContent.trim().equals("")){
+                pddl += condition + conditionContent + "\n" ;
+            }
 
 
 			//8.1.4 Effect node
 			String effect = identation + " :effect\n";
+			String effectContent = "";
 			if(xpddlNode.getChild("effect").getChildren().size() > 0){
 				Element effectChild = (Element)xpddlNode.getChild("effect").getChildren().get(0);
-				effect += parseXPDDLToPDDL(effectChild, identation + "   ");
-			}			
-			pddl += effect + "\n";
+				effectContent += parseXPDDLToPDDL(effectChild, identation + "   ");
+			}
+			//Check if effect is empty
+			//pddl += effect + "\n";
+			if (!effectContent.trim().equals("")){
+				pddl += effect + effectContent +"\n";
+			}
 						
 			//close action
 			pddl += identation + ")\n\n";
@@ -305,7 +315,7 @@ public class XPDDLToPDDL {
 		}
 		
 		//10.3 Predicate node 
-                //else if(xpddlNode.getName().equals("predicate") || xpddlNode.getName().equals("function")){
+        //else if(xpddlNode.getName().equals("predicate") || xpddlNode.getName().equals("function")){
 		else if(xpddlNode.getName().equals("predicate")){
 			if(xpddlNode.getAttribute("id") == null){
 				// complete predicate
@@ -437,7 +447,7 @@ public class XPDDLToPDDL {
 			pddl += ")";			
 		}
 		
-		// 10.7 gt node
+		// 10.7 lt node
 		else if(xpddlNode.getName().equals("lt")){
 			pddl = identation + "(< ";
 			pddl += parseXPDDLToPDDL((Element)xpddlNode.getChildren().get(0), "") + " ";
@@ -746,7 +756,7 @@ public class XPDDLToPDDL {
 		
 		else{
 			if(!xpddlNode.getName().equals("name")){
-				//System.out.println("##############################\nNot dealed node: " + xpddlNode.getName());
+				//System.out.println("##############################\nCan't handle node: " + xpddlNode.getName());
 			}
 		}			
 		
