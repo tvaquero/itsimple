@@ -555,36 +555,36 @@ public class ItSIMPLE extends JFrame {
 
 				if (project != null){
                                     
-                                        //System.out.println(project.getName());
-                                        
-                                        //UML project
-                                        if (project.getName().equals("project")){
-                                            if (filePath.indexOf("*itSIMPLE*") < 0){
+                //System.out.println(project.getName());
+                
+                //UML project
+                if (project.getName().equals("project")){
+                    if (filePath.indexOf("*itSIMPLE*") < 0){
 
 						Element tempId = project.getChild("generalInformation").getChild("id");
 						project.getChild("generalInformation").removeChild("id");
 						XMLUtilities.writeToFile(filePath, project.getDocument());
 						project.getChild("generalInformation").addContent(tempId);
-                                            }
-                                            //otherwise it is a new project
-                                            else{
-                                                    saveAsAction.actionPerformed(null);
-                                            }
-                                        }
-                                        //PDDL project
-                                        else if (project.getName().equals("pddlproject")){
-                                            Element selected = lastselected.getData();
-                                            //XMLUtilities.printXML(selected);
-                                            if (selected.getName().equals("pddlproject")){
-                                                savepddlprojectNode(selected,filePath);                                                 
-                                            }
-                                            else if (selected.getName().equals("pddldomain")){
-                                                savepddldomainNode(selected,filePath);                                                   
-                                            }
-                                            else if (selected.getName().equals("pddlproblem")){
-                                                savepddlproblemNode(selected);
-                                            }
-                                        }
+	                    }
+	                    //otherwise it is a new project
+		                else{
+		                        saveAsAction.actionPerformed(null);
+		                }
+	                }
+	                //PDDL project
+	                else if (project.getName().equals("pddlproject")){
+	                    Element selected = lastselected.getData();
+	                    //XMLUtilities.printXML(selected);
+	                    if (selected.getName().equals("pddlproject")){
+	                        savepddlprojectNode(selected,filePath);                                                 
+	                    }
+	                    else if (selected.getName().equals("pddldomain")){
+	                        savepddldomainNode(selected,filePath);                                                   
+	                    }
+	                    else if (selected.getName().equals("pddlproblem")){
+	                        savepddlproblemNode(selected);
+	                    }
+	                }
  
 				}
 			}
@@ -698,8 +698,8 @@ public class ItSIMPLE extends JFrame {
 			for (int i = 0; i<treeRoot.getChildCount(); i++){
 				ItTreeNode currentNode = (ItTreeNode)treeRoot.getChildAt(i);
                                 
-                                //XMLUtilities.printXML(currentNode.getData());
-                                //XMLUtilities.printXML(currentNode.getReference());
+                //XMLUtilities.printXML(currentNode.getData());
+                //XMLUtilities.printXML(currentNode.getReference());
                                 
 				String filePath = currentNode.getReference().getChildText("filePath");
 				Element project = currentNode.getData();
@@ -707,43 +707,43 @@ public class ItSIMPLE extends JFrame {
 				Element tempId = project.getChild("generalInformation").getChild("id");
 				project.getChild("generalInformation").removeChild("id");
                                 
-                                //UML projects
-                                if (project.getName().equals("project")){
-                                    //Save iProject.xml file
-                                    XMLUtilities.writeToFile(filePath, project.getDocument());
-                                }
-                                
-                                //PDDL projects
-                                else if (project.getName().equals("pddlproject")){
-                                    
-                                    //Domain: save all domains that have been changed
-                                    Element domainNode = project.getChild("pddldomains");
-                                    for (Iterator<Element> it = domainNode.getChildren().iterator(); it.hasNext();) {
-                                        Element element = it.next();
-                                        savepddldomainNode(element,filePath);                                                                                 
-                                    }
-                                                                                                                                                                                
-                                    //Problems: Check and save each modified problem instance
-                                    Element instancesNode = project.getChild("problemInstances");
-                                    for (Iterator<Element> it = instancesNode.getChildren().iterator(); it.hasNext();) {
-                                        Element element = it.next();
-                                        savepddlproblemNode(element);                                                                            
-                                    }
-                                                                        
-                                    //Clean problems instances
-                                    Element projectclone = (Element)project.clone();
-                                    projectclone.getChild("problemInstances").removeChildren("pddlproblem");
-                                    String iprojectcontent = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> \n" + XMLUtilities.toString(projectclone);
-                                    
-                                    //Save iProject.xml file
-                                    try {
-                                        FileWriter file = new FileWriter(filePath);
-                                        file.write(iprojectcontent);
-                                        file.close();
-                                    } catch (IOException e1) {
-                                            e1.printStackTrace();
-                                    }                                    
-                                }
+                //UML projects
+                if (project.getName().equals("project")){
+                    //Save iProject.xml file
+                    XMLUtilities.writeToFile(filePath, project.getDocument());
+                }
+                
+                //PDDL projects
+                else if (project.getName().equals("pddlproject")){
+                    
+                    //Domain: save all domains that have been changed
+                    Element domainNode = project.getChild("pddldomains");
+                    for (Iterator<Element> it = domainNode.getChildren().iterator(); it.hasNext();) {
+                        Element element = it.next();
+                        savepddldomainNode(element,filePath);                                                                                 
+                    }
+                                                                                                                                                                
+                    //Problems: Check and save each modified problem instance
+                    Element instancesNode = project.getChild("problemInstances");
+                    for (Iterator<Element> it = instancesNode.getChildren().iterator(); it.hasNext();) {
+                        Element element = it.next();
+                        savepddlproblemNode(element);                                                                            
+                    }
+                                                        
+                    //Clean problems instances
+                    Element projectclone = (Element)project.clone();
+                    projectclone.getChild("problemInstances").removeChildren("pddlproblem");
+                    String iprojectcontent = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> \n" + XMLUtilities.toString(projectclone);
+                    
+                    //Save iProject.xml file
+                    try {
+                        FileWriter file = new FileWriter(filePath);
+                        file.write(iprojectcontent);
+                        file.close();
+                    } catch (IOException e1) {
+                            e1.printStackTrace();
+                    }                                    
+                }
                                 
 				project.getChild("generalInformation").addContent(tempId);
 			}
@@ -1575,7 +1575,7 @@ public class ItSIMPLE extends JFrame {
 			else{
 				tabTitle += " - " + project.getData().getChildText("name");
 			}
-
+			graphTabbedPane.setPropertiesPane(propertiesPane);
 			graphTabbedPane.openTab(diagram.getData(), diagram.getData().getAttributeValue("id"),
 					tabTitle, diagram.getData().getName(), project.getData(), commonData, project.getReference(),"UML");
 
@@ -4805,9 +4805,10 @@ public class ItSIMPLE extends JFrame {
          * @param title
          */
         public void setPropertiesPanelTitle(String title){
-            propertiesFramePanel.setTitle(title);
+            //propertiesFramePanel.setTitle(title);
+        	//TODO: set the title of the docker
         }
-        //TODO: set the title of the docker
+        
 
 	/**
 	 * This method initializes tree
@@ -4950,36 +4951,7 @@ public class ItSIMPLE extends JFrame {
 		return graphTabbedPane;
 	}
 
-	/**
-	 * This method initializes jScrollPane
-	 *
-	 * @return javax.swing.JScrollPane
-	 */
-	private ItFramePanel getTreeFramePanel() {
-		if (treeFramePanel == null) {
-			treeFramePanel = new ItFramePanel(":: Project Explorer", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-			treeFramePanel.setContent(getProjectsTree(), true);
-			treeFramePanel.setPreferredSize(new Dimension(50,screenSize.height/2 - 50));
-		}
-		return treeFramePanel;
-	}
 
-
-	/**
-	 * This method initializes graphPanel
-	 *
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getGraphPanel() {
-		if (graphPanel == null) {
-			graphPanel = new JPanel();
-			graphPanel.setLayout(new BorderLayout());
-			ItFramePanel diagramsPanel = new ItFramePanel(":: Diagrams", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-			diagramsPanel.setContent(getGraphTabbedPane(), false);
-			graphPanel.add(diagramsPanel, BorderLayout.CENTER);
-		}
-		return graphPanel;
-	}
 
 	public static Element getIconsPathElement(){
 		return itSettings.getChild("generalSettings").getChild("graphics").getChild("iconsPath");
@@ -5317,6 +5289,7 @@ public class ItSIMPLE extends JFrame {
 	        perspectives.setPerspective("welcomePerspectiveReset", welcomePerspective);
 	        */
 
+			//xxx
 		 
 			
 			//CGrid grid = new CGrid(control);
@@ -5396,12 +5369,6 @@ public class ItSIMPLE extends JFrame {
 			plannavigationDock = new DefaultSingleCDockable("Plan_Navigation", new ImageIcon("resources/images/property-icon.png"), "Plan_Navigation", plan_navigation_panel); 
 			//grid.add(2, 0, 0.08, 0.9, plannavigationDock);
 			
-			
-			
-			
-			//xxx
-			
-			
 			//content.deploy(grid);
 						
 			setPerspective("Modeling");
@@ -5413,8 +5380,6 @@ public class ItSIMPLE extends JFrame {
             mainTabbedPane.add(getAnalysisPane(), "Analysis");
 			//mainTabbedPane.add(getPetriSplitPane(), "Petri Net");
 			mainTabbedPane.add(getTranslationSplitPane(), "Translation");
-
-			
 			//mainTabbedPane.add(getPlanSimPane(), "Planning");
 			
            
