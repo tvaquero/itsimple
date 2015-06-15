@@ -5350,7 +5350,7 @@ public class ItSIMPLE extends JFrame {
 			JPanel translation_result_panel = new JPanel(new BorderLayout());
 			translation_result_panel.setOpaque(true);
 			translation_result_panel.add(getTranslatedModelPanel(), BorderLayout.CENTER); //content
-			translationresultDock = new DefaultSingleCDockable("Translation_Results", new ImageIcon("resources/images/property-icon.png"), "PDDL Results", translation_result_panel);
+			translationresultDock = new DefaultSingleCDockable("Translation_Results", new ImageIcon("resources/images/property-icon.png"), "Results", translation_result_panel);
 		
 			JPanel translation_console_panel = new JPanel(new BorderLayout());
 			translation_console_panel.setOpaque(true);
@@ -9088,7 +9088,7 @@ public class ItSIMPLE extends JFrame {
         getPDDLViewPanel();
         getRMPLViewPanel();
         // Dummy panel
-        translationModelTabbedPane.addTab("Result", new JPanel());
+        translationModelTabbedPane.addTab("Model", new JPanel());
         
         anPanel.add(translationModelTabbedPane, BorderLayout.CENTER);
         
@@ -9693,7 +9693,8 @@ public class ItSIMPLE extends JFrame {
             JRadioButton pddl30 = new JRadioButton("PDDL 3.0", true);
             JRadioButton pddl31 = new JRadioButton("PDDL 3.1");
             //RMPL
-            JRadioButton rmpl10 = new JRadioButton("RMPL");
+            //TODO: Add RMPL when it is ready
+            //JRadioButton rmpl10 = new JRadioButton("RMPL");
             
             //PDDL
             pddl21.setOpaque(false);
@@ -9705,8 +9706,8 @@ public class ItSIMPLE extends JFrame {
             pddl31.setOpaque(false);
             pddl31.setActionCommand(ToXPDDL.PDDL_3_1);
             //RMPL
-            rmpl10.setOpaque(false);
-            rmpl10.setActionCommand(ToXRMPL.RMPL_1_0);
+            //rmpl10.setOpaque(false);
+            //rmpl10.setActionCommand(ToXRMPL.RMPL_1_0);
             
 
             languageButtonsGroup = new ButtonGroup();
@@ -9714,7 +9715,7 @@ public class ItSIMPLE extends JFrame {
             languageButtonsGroup.add(pddl22);
             languageButtonsGroup.add(pddl30);
             languageButtonsGroup.add(pddl31);
-            languageButtonsGroup.add(rmpl10);
+            //languageButtonsGroup.add(rmpl10);
             languageButtonsGroup.setSelected(pddl21.getModel(), true);
 
 
@@ -9724,7 +9725,7 @@ public class ItSIMPLE extends JFrame {
             settingsPanel.add(pddl22);
             settingsPanel.add(pddl30);
             settingsPanel.add(pddl31);
-            settingsPanel.add(rmpl10);
+            //settingsPanel.add(rmpl10);
                         
             return settingsPanel;
             
