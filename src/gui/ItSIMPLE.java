@@ -5568,7 +5568,7 @@ public class ItSIMPLE extends JFrame {
                     Element problem = selectedNode.getData();
                     Element domainProject = problem.getDocument().getRootElement();
                     Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
-                    XMLUtilities.printXML(xpddlDomain);
+                    //XMLUtilities.printXML(xpddlDomain);
 
 					//fill the combo box with the existing available planners
 					plannersComboBox.removeAllItems();
@@ -5993,57 +5993,57 @@ public class ItSIMPLE extends JFrame {
 
 						planAnalysisFramePanel.setTitle(":: Plan Analysis - Problem: "+ selectedNode.getUserObject());
 
-                                                solveProblemButton.setEnabled(true);
+                        solveProblemButton.setEnabled(true);
 						setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(true);
 						importPlanButton.setEnabled(true);
 						planListModel.clear();
 						xmlPlan = null;
 
-                                                //clean up reference of plans from database
-                                                cleanupPlanDatabaseReference();
+                        //clean up reference of plans from database
+                        cleanupPlanDatabaseReference();
 
-                                                String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
-                                                Element problem = selectedNode.getData();
-                                                Element domainProject = problem.getDocument().getRootElement();
-                                                Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
-                                                XMLUtilities.printXML(xpddlDomain);
+                        String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();
+                        Element problem = selectedNode.getData();
+                        Element domainProject = problem.getDocument().getRootElement();
+                        Element xpddlDomain = ToXPDDL.XMLToXPDDLDomain(domainProject, pddlVersion, null);
+                        //XMLUtilities.printXML(xpddlDomain);
 
 						//fill the combo box with the existing available planners
 						plannersComboBox.removeAllItems();
-                                                plannersList.clear();
-                                                plannerSuggestion.initialPlannerSelection(xpddlDomain, itPlanners);
+                        plannersList.clear();
+                        plannerSuggestion.initialPlannerSelection(xpddlDomain, itPlanners);
 
-                                                //List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+                        //List<?> planners = itPlanners.getChild("planners").getChildren("planner");
 
-                                                plannersComboBox.addItem("-- Supported Planners --");
-                                                plannersList.add(null);
+                        plannersComboBox.addItem("-- Supported Planners --");
+                        plannersList.add(null);
 
-                                                // Supported Planners
-                                                fillPlannersComboBox(plannerSuggestion.getSuggestedPlanners());
-                                                plannersComboBox.addItem("All Supported Planners");
-                                                plannersList.add("allSupportedPlanners");
+                        // Supported Planners
+                        fillPlannersComboBox(plannerSuggestion.getSuggestedPlanners());
+                        plannersComboBox.addItem("All Supported Planners");
+                        plannersList.add("allSupportedPlanners");
 
-                                                plannersComboBox.addItem(null);
-                                                plannersList.add(null);
+                        plannersComboBox.addItem(null);
+                        plannersList.add(null);
 
-                                                plannersComboBox.addItem("-- Discarded Planners --");
-                                                plannersList.add(null);
+                        plannersComboBox.addItem("-- Discarded Planners --");
+                        plannersList.add(null);
 
-                                                // Discarded Planners
-                                                fillPlannersComboBox(plannerSuggestion.getDiscardedPlanners());
+                        // Discarded Planners
+                        fillPlannersComboBox(plannerSuggestion.getDiscardedPlanners());
 
-                                                plannersComboBox.addItem(null);
-                                                plannersList.add(null);
+                        plannersComboBox.addItem(null);
+                        plannersList.add(null);
 
-                                                plannersComboBox.addItem("All Planners");
-                                                plannersList.add("allPlanners");
+                        plannersComboBox.addItem("All Planners");
+                        plannersList.add("allPlanners");
 
-                                                //This item specify/represent the planners that are seceyed/enable for run all
-                                                plannersComboBox.addItem("My Favorite Planners");
-                                                plannersList.add("myFavoritePlanners");
-                                                //plannersComboBox.addItem("All Selected Planners");
-                                                //plannersList.add("allSelectedPlanners");
+                        //This item specify/represent the planners that are seceyed/enable for run all
+                        plannersComboBox.addItem("My Favorite Planners");
+                        plannersList.add("myFavoritePlanners");
+                        //plannersComboBox.addItem("All Selected Planners");
+                        //plannersList.add("allSelectedPlanners");
 
 						CheckBoxNode variablesPlanTreeRoot = (CheckBoxNode)variablesPlanTreeModel.getRoot();
 
