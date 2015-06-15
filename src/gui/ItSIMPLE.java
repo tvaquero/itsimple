@@ -1,7 +1,11 @@
 /***
 * itSIMPLE: Integrated Tool Software Interface for Modeling PLanning Environments
 *
-* Copyright (C) 2007-2013 University of Sao Paulo, University of Toronto
+* Copyright (C) 2007-2015 
+* 		University of Sao Paulo (USP) 
+* 		University of Toronto (UofT)
+* 		Massachusetts Institute of Technology (MIT)
+* 		California Institute of Technology (Caltech)
 *
 *
 * This is the main file of itSIMPLE.
@@ -20,7 +24,7 @@
 * You should have received a copy of the GNU General Public License
 * along with itSIMPLE.  If not, see <http://www.gnu.org/licenses/>.
 *
-* Authors:	Tiago S. Vaquero,
+* Authors:	Tiago Vaquero,
 *			Victor Romero,
 *           Matheus Haddad.
 **/
@@ -206,7 +210,7 @@ public class ItSIMPLE extends JFrame {
 	// main window
 	private JPanel mainPanel = null;
 	//private JTabbedPane mainTabbedPane = null;
-    private JPanel mainTabbedPane = null;
+    private JPanel mainDockingPanel = null;
 	private JToolBar toolBar = null;
 	// itSIMPLE menu bar
 	private JMenuBar itMenuBar = null;
@@ -263,6 +267,14 @@ public class ItSIMPLE extends JFrame {
 	SingleCDockable plananalysisDock = null;
 	SingleCDockable consoleDock = null;
 	SingleCDockable plannavigationDock = null;
+	// Translation perspective 
+	SingleCDockable domainproblemSelectionDock = null;
+	SingleCDockable languagesDock = null;
+	SingleCDockable translationresultDock = null;
+	SingleCDockable translationconsoleDock = null;
+	// Analysis perspective
+	SingleCDockable generalanalysisDock = null;
+	SingleCDockable petrinetanalysisDock = null;
         
                
 
@@ -281,25 +293,21 @@ public class ItSIMPLE extends JFrame {
 
 
 	//Main tree
-	private ItFramePanel treeFramePanel = null;
 	private ItTree projectsTree = null;
 	private ItTreeNode treeRoot;
 	private JPopupMenu treePopupMenu = null;
 
 	// properties
 	private PropertiesTabbedPane propertiesPane = null;
-    private ItFramePanel propertiesFramePanel = null;
 
 	// graph
-	private ItTabbedPane graphTabbedPane = null;
-	private JPanel graphPanel = null;
+	private ItTabbedPane diagramTabbedPane = null;
 
     //Additional UML panel
     private ItFramePanel additionalUMLFramePanel = null;
 
 
 	// Translation
-	private JSplitPane translationSplitPane = null;
 	private JTabbedPane translationModelTabbedPane = null;
 	//  PDDL
 	private JSplitPane pddlTextSplitPane = null;
@@ -314,25 +322,21 @@ public class ItSIMPLE extends JFrame {
 	private JToolBar domainPddlToolBar = null;
 	private JToolBar problemPddlToolBar = null;
 	//  RMPL
-	private ItFramePanel rmplPanel = null;
+	private JPanel rmplPanel = null;
 	private JTextPane rmplTextPane = null; 
         
     private JTextArea outputPddlTranslationEditorPane = null;
     private JTree modelTranslationTree = null;
     private DefaultTreeModel pddlTranslationTreeModel = null;         
     private JButton translateDomainProblemButton = null;
-    
-   
+      
 
     //domain analysis 
-    private JPanel analysisPane = null;
     private JSplitPane analysisSplitPane = null;
     private JTextArea outputAnalysisEditorPane = null;
-    private JLabel analysisStatusBar = null;
 	private JTree projectAnalysisTree = null;
     private DefaultTreeModel projectAnalysisTreeModel = null; 
     
-        
 	//petri net
 	private JSplitPane petriSplitPane = null;
 	private JSplitPane petriEditorSplitPane = null;
@@ -357,11 +361,6 @@ public class ItSIMPLE extends JFrame {
 	private JEditorPane petriInfoEditorPane = null;
 
 	// plan simulation
-	private JPanel planSimPane = null;
-	private JSplitPane planSimSplitPane = null;
-	private JSplitPane planDetailsSplitPane = null;
-	private JSplitPane planInfoSplitPane = null;
-	private JSplitPane planVisualizationPane = null;
 	private ItFramePanel planTreeFramePanel = null;
 	private JTree problemsPlanTree = null;
 	private DefaultTreeModel problemsPlanTreeModel = null;
@@ -374,7 +373,6 @@ public class ItSIMPLE extends JFrame {
     private JButton skipPlannerProblemButton = null;
     private JButton runAllPlannersButton = null;
 	private JButton setPlannerButton = null;
-	private ItFramePanel planListFramePanel = null;
 	private JList planList = null;
 	private DefaultListModel planListModel = null;
 	private JButton addPlanActionButton = null;
@@ -386,10 +384,9 @@ public class ItSIMPLE extends JFrame {
 	private JButton quickEvaluateButton = null;
     private JButton fullEvaluationButton = null;
 	private ItFramePanel planAnalysisFramePanel = null;
-	private JLabel planSimStatusBar = null;
-    private JProgressBar simProgressBar = null;
+	private JLabel statusBar = null;
+    private JProgressBar progressBar = null;
     private JLabel simTimeSpent = null;
-	private ItFramePanel planInfoFramePanel = null;
 	private JEditorPane planInfoEditorPane = null;
     private JEditorPane planEvaluationInfoEditorPane = null;
 	private JTextArea outputEditorPane = null;
@@ -830,17 +827,16 @@ public class ItSIMPLE extends JFrame {
 				// update petri net panels
 				updatePetriNetPanels();
 
-
 				// update plan simulation problem tree
-                                updateNewProjectParallelTree(problemsPlanTreeModel,problemsPlanTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));                                       
-                                
-                                //update analysis tree
-                                updateNewProjectParallelTree(projectAnalysisTreeModel,projectAnalysisTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));
-                                
-                                //if (xmlRoot.getName().equals("project")){
-                                    //update pddl tree
-                                    updateNewProjectParallelTree(pddlTranslationTreeModel,modelTranslationTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));                                
-                                //}
+                updateNewProjectParallelTree(problemsPlanTreeModel,problemsPlanTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));                                       
+                
+                //update analysis tree
+                updateNewProjectParallelTree(projectAnalysisTreeModel,projectAnalysisTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));
+                
+                //if (xmlRoot.getName().equals("project")){
+                    //update pddl tree
+                    updateNewProjectParallelTree(pddlTranslationTreeModel,modelTranslationTree, doc, xmlRoot, new ItTreeNode(xmlRoot.getChildText("name"), xmlRoot, null, null));                                
+                //}
   
 			}
 
@@ -857,11 +853,6 @@ public class ItSIMPLE extends JFrame {
 				saveMenuItem.setEnabled(false);
 				saveAsMenuItem.setEnabled(false);
 			}
-
-                        
-
-
-
 		}
 	};
 
@@ -877,12 +868,12 @@ public class ItSIMPLE extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			//JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>Yeap, it would be nice to have it!!<br> We are working on that. It is coming soon. </html>");
-                        //San Pedro
-                        NewPDDLProjectDialog pddlProjectDialog = new NewPDDLProjectDialog(ItSIMPLE.getItSIMPLEFrame(), true);
-                        pddlProjectDialog.setVisible(true);
-                        //pddlProjectDialog.setLocationRelativeTo(ItSIMPLE.getItSIMPLEFrame());
-                        if (pddlProjectDialog.isCanOpen())
-                            openProjectFromPath(pddlProjectDialog.getPDDLProjectFilePath());
+            //San Pedro
+            NewPDDLProjectDialog pddlProjectDialog = new NewPDDLProjectDialog(ItSIMPLE.getItSIMPLEFrame(), true);
+            pddlProjectDialog.setVisible(true);
+            //pddlProjectDialog.setLocationRelativeTo(ItSIMPLE.getItSIMPLEFrame());
+            if (pddlProjectDialog.isCanOpen())
+                openProjectFromPath(pddlProjectDialog.getPDDLProjectFilePath());
 		}
 	};
                 
@@ -891,12 +882,12 @@ public class ItSIMPLE extends JFrame {
 		public void actionPerformed(ActionEvent e){
 			//final ImportModelingPattern dialog = new ImportModelingPattern(ItSIMPLE.this,false);
 			//dialog.setVisible(true);
-                       //San Pedro
-                    ImportPDDLProjectDialog importPddlProjectDialog = new ImportPDDLProjectDialog(ItSIMPLE.getItSIMPLEFrame(), true);
-                    importPddlProjectDialog.setVisible(true);
-                    //importPddlProjectDialog.setLocationRelativeTo(ItSIMPLE.getItSIMPLEFrame());
-                    if (importPddlProjectDialog.isCanOpen())
-                        openProjectFromPath(importPddlProjectDialog.getPDDLProjectFilePath());
+            //San Pedro
+            ImportPDDLProjectDialog importPddlProjectDialog = new ImportPDDLProjectDialog(ItSIMPLE.getItSIMPLEFrame(), true);
+            importPddlProjectDialog.setVisible(true);
+            //importPddlProjectDialog.setLocationRelativeTo(ItSIMPLE.getItSIMPLEFrame());
+            if (importPddlProjectDialog.isCanOpen())
+                openProjectFromPath(importPddlProjectDialog.getPDDLProjectFilePath());
 		}
 	};
 
@@ -910,11 +901,9 @@ public class ItSIMPLE extends JFrame {
         private Action modelingAction = new AbstractAction("Modeling"){
 
 		public void actionPerformed(ActionEvent e) {
-                    System.out.println("Modeling Perspective");
+                    //System.out.println("Modeling Perspective");
                     //setModelingPerspective("UML");
-                    CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
                     setPerspective("Modeling");
-                    cl.show(mainTabbedPane, "Modeling");  
                     
 
 		}
@@ -928,11 +917,10 @@ public class ItSIMPLE extends JFrame {
         private Action analysisAction = new AbstractAction("Analysis"){
 
 		public void actionPerformed(ActionEvent e) {
-                    System.out.println("Analysis Perspective");
-                    updatePetriNetPanels();
-                    updateTreeChanges(projectAnalysisTreeModel);
-                    CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                    cl.show(mainTabbedPane, "Analysis");                  
+            //System.out.println("Analysis Perspective");
+            updatePetriNetPanels();
+            updateTreeChanges(projectAnalysisTreeModel);
+            setPerspective("Analysis");            
 
 		}
 	};
@@ -943,56 +931,38 @@ public class ItSIMPLE extends JFrame {
         private Action planningAction = new AbstractAction("Planning"){
 
 		public void actionPerformed(ActionEvent e) {
-                System.out.println("Planning Perspective");
-                updatePlanSimTrees();
-                CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                
-                setPerspective("Planning");
-                //cl.show(mainTabbedPane, "Planning");
-                cl.show(mainTabbedPane, "Modeling");
+            //System.out.println("Planning Perspective");
+            updatePlanSimTrees();
+            setPerspective("Planning");
 		}
 	};
         
-        /**
-         * Change for Translation Perspective
-         */
-        private Action pddlTranslationPerspectiveAction = new AbstractAction("Model Translation"){
+    /**
+     * Change for Translation Perspective
+     */
+    private Action translationPerspectiveAction = new AbstractAction("Model Translation"){
 
 		public void actionPerformed(ActionEvent e) {
-                    updateTreeChanges(pddlTranslationTreeModel);
-                    CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                    cl.show(mainTabbedPane, "Translation");
+			//System.out.println("Translation Perspective");
+			//setModelingPerspective("Translation");
+	        updateTreeChanges(pddlTranslationTreeModel);
+	        setPerspective("Translation");
 		}
 	};        
 
         
-        private Action umlPerspectiveAction = new AbstractAction("UML"){
+    private Action umlPerspectiveAction = new AbstractAction("UML"){
 		/**
 		 *
 		 */
 
 		public void actionPerformed(ActionEvent e) {
-                    System.out.println("UML");
-                    setModelingPerspective("UML");
-                    CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                    setPerspective("Modeling");
-                    cl.show(mainTabbedPane, "Modeling");
+            System.out.println("UML");
+            setModelingPerspective("UML");
+            setPerspective("Modeling");
 		}
 	};
 
-        private Action translationPerspectiveAction = new AbstractAction("Translation"){
-		/**
-		 *
-		 */
-
-		public void actionPerformed(ActionEvent e) {
-                    //System.out.println("PDDL");
-                    setModelingPerspective("Translation");
-                    CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                    cl.show(mainTabbedPane, "Modeling");
-		}
-
-	};
 
      /**
       * Set selected perspective, hidding and showing panels (UML, PDDL)
@@ -1279,7 +1249,7 @@ public class ItSIMPLE extends JFrame {
 				e2.printStackTrace();
 			}
 			if (deletingDiagram != null){
-				graphTabbedPane.closeTab(deletingDiagram.getParent().indexOf(deletingDiagram));
+				diagramTabbedPane.closeTab(deletingDiagram.getParent().indexOf(deletingDiagram));
 			}
 
 
@@ -1323,7 +1293,7 @@ public class ItSIMPLE extends JFrame {
 
 			for (int i = 0; i < result.size(); i++){
 				Element openTab = (Element)result.get(i);
-				graphTabbedPane.closeTab(openTab.getParent().indexOf(openTab));
+				diagramTabbedPane.closeTab(openTab.getParent().indexOf(openTab));
 			}
 
 
@@ -1381,7 +1351,7 @@ public class ItSIMPLE extends JFrame {
 
 			for (int i = 0; i < result.size(); i++){
 				Element openTab = (Element)result.get(i);
-				graphTabbedPane.closeTab(openTab.getParent().indexOf(openTab));
+				diagramTabbedPane.closeTab(openTab.getParent().indexOf(openTab));
 			}
 			//									problem		planningProblems
 			Element planningProblems = problem.getData().getParentElement();
@@ -1507,7 +1477,7 @@ public class ItSIMPLE extends JFrame {
                             //XMLUtilities.printXML(problem.getData());
                             //System.out.print(tabpath);                        
                             if (result!=null){
-                                graphTabbedPane.closeTab(result.getParent().indexOf(result));
+                                diagramTabbedPane.closeTab(result.getParent().indexOf(result));
                             }
 
                             //remove node from tree
@@ -1575,8 +1545,8 @@ public class ItSIMPLE extends JFrame {
 			else{
 				tabTitle += " - " + project.getData().getChildText("name");
 			}
-			graphTabbedPane.setPropertiesPane(propertiesPane);
-			graphTabbedPane.openTab(diagram.getData(), diagram.getData().getAttributeValue("id"),
+			diagramTabbedPane.setPropertiesPane(propertiesPane);
+			diagramTabbedPane.openTab(diagram.getData(), diagram.getData().getAttributeValue("id"),
 					tabTitle, diagram.getData().getName(), project.getData(), commonData, project.getReference(),"UML");
 
 		}
@@ -1636,7 +1606,7 @@ public class ItSIMPLE extends JFrame {
 
 				for (int i = 0; i < result.size(); i++){
 					Element openTab = (Element)result.get(i);
-					graphTabbedPane.closeTab(openTab.getParent().indexOf(openTab));
+					diagramTabbedPane.closeTab(openTab.getParent().indexOf(openTab));
 				}
 
 				// update Petri Net panels
@@ -1878,7 +1848,7 @@ public class ItSIMPLE extends JFrame {
 
 				String tabTitle = domain.getData().getChildText("name") + "(PDDL) - " + project.getData().getChildText("name");
 
-				graphTabbedPane.openTab(domain.getData(), domain.getData().getAttributeValue("id"),
+				diagramTabbedPane.openTab(domain.getData(), domain.getData().getAttributeValue("id"),
 						tabTitle, domain.getData().getName(), project.getData(), commonData, project.getReference(),"PDDL");
 			}
 
@@ -1899,7 +1869,7 @@ public class ItSIMPLE extends JFrame {
 
 				String tabTitle = problem.getData().getChildText("name") + "(PDDL) - " + project.getData().getChildText("name");
 
-				graphTabbedPane.openTab(problem.getData(), problem.getData().getAttributeValue("id"),
+				diagramTabbedPane.openTab(problem.getData(), problem.getData().getAttributeValue("id"),
 						tabTitle, problem.getData().getName(), project.getData(), commonData, project.getReference(),"PDDL");
 			}
 		}
@@ -1925,7 +1895,7 @@ public class ItSIMPLE extends JFrame {
 				diagramList.add(stateMachine.getData());
 				Element extendedNet = toPNML.modularPNMLToExtendedPTNet(toPNML.stateMachinesListToModularPNML(diagramList, project.getData()));
 
-				graphTabbedPane.openTab(extendedNet, stateMachine.getData().getAttributeValue("id"),
+				diagramTabbedPane.openTab(extendedNet, stateMachine.getData().getAttributeValue("id"),
 						tabTitle, extendedNet.getName(), project.getData(), commonData, project.getReference(),"PetriNet");
 			}
 		}
@@ -1996,7 +1966,7 @@ public class ItSIMPLE extends JFrame {
 
                     String tabTitle = pddlnode.getData().getChildText("name") + "(PDDL) - " + project.getData().getChildText("name");
 
-                    graphTabbedPane.openPDDLTab(pddlnode.getData(), id, tabTitle, project.getData(), project.getReference(), theFile);
+                    diagramTabbedPane.openPDDLTab(pddlnode.getData(), id, tabTitle, project.getData(), project.getReference(), theFile);
                     //graphTabbedPane.openTab(problem.getData(), problem.getData().getAttributeValue("id"),
                     //                tabTitle, problem.getData().getName(), project.getData(), commonData, project.getReference(),"PDDL");
                     
@@ -2462,7 +2432,7 @@ public class ItSIMPLE extends JFrame {
                                 public void run() {
                                     ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
                                     Element problem = selectedNode.getData();
-                                    RationaleAnalyzer.reuseExistingRationales(xmlPlan, problem, Integer.toString(currentDBPlanID), planSimStatusBar);
+                                    RationaleAnalyzer.reuseExistingRationales(xmlPlan, problem, Integer.toString(currentDBPlanID), statusBar);
                                     checkExistingRationaleButton.setText("Reuse Existing Rationales");
                                     checkExistingRationaleButton.setActionCommand("reuse");
                                 }
@@ -4873,29 +4843,27 @@ public class ItSIMPLE extends JFrame {
 						TreePath path = projectsTree.getPathForLocation(e.getX(), e.getY());
 						if (path != null && projectsTree.getLastSelectedPathComponent() != projectsTree.getModel().getRoot()){
 							ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
-                                                        String projectType = selectedNode.getData().getDocument().getRootElement().getName();
+                            String projectType = selectedNode.getData().getDocument().getRootElement().getName();
 
-                                                        //check if this is a UML project
-                                                        if (projectType.equals("project")){
-                                                            //Diagrams
-                                                            if (selectedNode.getLevel() == 2){
-                                                                    if (!selectedNode.getData().getName().equals("problem") &&
-                                                                                    !selectedNode.getData().getName().equals("domain")) {
-                                                                            openDiagramAction.actionPerformed(null);
-                                                                    }
-                                                            }
-                                                            //Planning Problems
-                                                            else if (selectedNode.getData().getName().equals("objectDiagram") ||
-                                                                            selectedNode.getData().getName().equals("repositoryDiagram")){
-                                                                    openDiagramAction.actionPerformed(null);
-                                                            }
-                                                        }
-                                                        //check if this is a PDDL project
-                                                        else if (projectType.equals("pddlproject")){
-                                                            //open pddl text for edit
-
-                                                        }
-
+                            //check if this is a UML project
+                            if (projectType.equals("project")){
+                                //Diagrams
+                                if (selectedNode.getLevel() == 2){
+                                        if (!selectedNode.getData().getName().equals("problem") &&
+                                                        !selectedNode.getData().getName().equals("domain")) {
+                                                openDiagramAction.actionPerformed(null);
+                                        }
+                                }
+                                //Planning Problems
+                                else if (selectedNode.getData().getName().equals("objectDiagram") ||
+                                                selectedNode.getData().getName().equals("repositoryDiagram")){
+                                        openDiagramAction.actionPerformed(null);
+                                }
+                            }
+                            //check if this is a PDDL project
+                            else if (projectType.equals("pddlproject")){
+                                //open pddl text for edit
+                            }
 						}
 					}
 				}
@@ -4945,10 +4913,10 @@ public class ItSIMPLE extends JFrame {
 	 * @return javax.swing.JTabbedPane
 	 */
 	public ItTabbedPane getGraphTabbedPane() {
-		if (graphTabbedPane == null) {
-			graphTabbedPane = new ItTabbedPane();
+		if (diagramTabbedPane == null) {
+			diagramTabbedPane = new ItTabbedPane();
 		}
-		return graphTabbedPane;
+		return diagramTabbedPane;
 	}
 
 
@@ -5213,10 +5181,10 @@ public class ItSIMPLE extends JFrame {
 	 * @return javax.swing.ItTabbedPane
 	 */
 	private ItTabbedPane getDiagramPane() {
-		if (graphTabbedPane == null) {
-			graphTabbedPane = new ItTabbedPane();
+		if (diagramTabbedPane == null) {
+			diagramTabbedPane = new ItTabbedPane();
 		}
-		return graphTabbedPane;
+		return diagramTabbedPane;
 	}
 	
 	
@@ -5254,9 +5222,9 @@ public class ItSIMPLE extends JFrame {
 	}
 
 
-	private JPanel getMainTabbedPane() {
-		if (mainTabbedPane == null) {
-			mainTabbedPane = new JPanel(new CardLayout());
+	private JPanel getMainDockingPanel() {
+		if (mainDockingPanel == null) {
+			mainDockingPanel = new JPanel(new BorderLayout());
 			
 			
 			
@@ -5289,8 +5257,7 @@ public class ItSIMPLE extends JFrame {
 	        perspectives.setPerspective("welcomePerspectiveReset", welcomePerspective);
 	        */
 
-			//xxx
-		 
+	 
 			
 			//CGrid grid = new CGrid(control);
 			dockingcontent = dockingcontrol.getContentArea();
@@ -5336,8 +5303,6 @@ public class ItSIMPLE extends JFrame {
 			
 			
 			
-			
-			
 			// PLANNING perspective
 			JPanel problem_selection_panel = new JPanel(new BorderLayout());
 			problem_selection_panel.setOpaque(true);
@@ -5368,30 +5333,52 @@ public class ItSIMPLE extends JFrame {
 			plan_navigation_panel.add(getPlanNavigationPanel(), BorderLayout.CENTER);
 			plannavigationDock = new DefaultSingleCDockable("Plan_Navigation", new ImageIcon("resources/images/property-icon.png"), "Plan_Navigation", plan_navigation_panel); 
 			//grid.add(2, 0, 0.08, 0.9, plannavigationDock);
-			
-			//content.deploy(grid);
-						
-			setPerspective("Modeling");
+					
 			
 			
-			
-			mainTabbedPane.add(contentPane, "Modeling");
-			
-            mainTabbedPane.add(getAnalysisPane(), "Analysis");
-			//mainTabbedPane.add(getPetriSplitPane(), "Petri Net");
-			mainTabbedPane.add(getTranslationSplitPane(), "Translation");
-			//mainTabbedPane.add(getPlanSimPane(), "Planning");
-			
-           
-            
-            
-            
-            CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-            cl.show(mainTabbedPane, "UML"); 
+			//TRANSLATION perspective
+			JPanel domainproblem_selection_panel = new JPanel(new BorderLayout());
+			domainproblem_selection_panel.setOpaque(true);
+			domainproblem_selection_panel.add(getTranslationProjectSelectionPanel(), BorderLayout.CENTER); //content
+			domainproblemSelectionDock = new DefaultSingleCDockable("DomainProblem_Selection", new ImageIcon("resources/images/project-structure-icon.png"), "Domain/Problem Selection" , domainproblem_selection_panel);
 
+			JPanel languages_panel = new JPanel(new BorderLayout());
+			languages_panel.setOpaque(true);
+			languages_panel.add(getLanguageVersionSettingsPanel(), BorderLayout.CENTER); //content
+			languagesDock = new DefaultSingleCDockable("LanguageSelection", new ImageIcon("resources/images/property-icon.png"), "Language Selection", languages_panel); 
+	
+			JPanel translation_result_panel = new JPanel(new BorderLayout());
+			translation_result_panel.setOpaque(true);
+			translation_result_panel.add(getTranslatedModelPanel(), BorderLayout.CENTER); //content
+			translationresultDock = new DefaultSingleCDockable("Translation_Results", new ImageIcon("resources/images/property-icon.png"), "PDDL Results", translation_result_panel);
+		
+			JPanel translation_console_panel = new JPanel(new BorderLayout());
+			translation_console_panel.setOpaque(true);
+			translation_console_panel.add(getTranslationConsolePanel(), BorderLayout.CENTER); //content
+			translationconsoleDock = new DefaultSingleCDockable("Translation_Console", new ImageIcon("resources/images/property-icon.png"), "Translation Console", translation_console_panel); 
+
+			
+			// ANALYSIS perspective
+			//TODO: this needs a better organization of the docks and panels
+			JPanel general_analysis_panel = new JPanel(new BorderLayout());
+			general_analysis_panel.setOpaque(true);
+			general_analysis_panel.add(getAnalysisSplitPane(), BorderLayout.CENTER); //content
+			generalanalysisDock = new DefaultSingleCDockable("General_Analysis", new ImageIcon("resources/images/project-structure-icon.png"), "General Analysis" , general_analysis_panel);
+
+			JPanel petrinets_analaysis_panel = new JPanel(new BorderLayout());
+			petrinets_analaysis_panel.setOpaque(true);
+			petrinets_analaysis_panel.add(getPetriSplitPane(), BorderLayout.CENTER); //content
+			petrinetanalysisDock = new DefaultSingleCDockable("PetriNet_Analysis", new ImageIcon("resources/images/property-icon.png"), "PetriNet Analysis", petrinets_analaysis_panel); 
+			
+			//xxx
+			//content.deploy(grid);
+			
+			setPerspective("Modeling");
+						
+			mainDockingPanel.add(contentPane, BorderLayout.CENTER);
 
 		}
-		return mainTabbedPane;
+		return mainDockingPanel;
 	}
 	
 	
@@ -5408,22 +5395,32 @@ public class ItSIMPLE extends JFrame {
 		dockinggrid = new CGrid(dockingcontrol);
 
 		if (perspective.equals("Modeling")){	
-			
 			dockinggrid.add(0, 0, 0.1, 0.5,  projectexplorerDock);
 			dockinggrid.add(0, 0.5, 0.1, 0.5, propertiesDock);
 			dockinggrid.add(1, 0, 0.82, 0.9, diagramDock);
 			dockinggrid.add(0.7, 1, 0.9, 0.1, modelInfoDock);
 			dockinggrid.add(2, 0, 0.08, 0.9, additionalmodelDock);
-			dockingcontent.deploy(dockinggrid);
-	     
+			dockingcontent.deploy(dockinggrid);     
 		}
 		else if (perspective.equals("Planning")){        
-			dockinggrid.add(0, 0, 0.1, 0.5,  problemSelectionDock);
+			dockinggrid.add(0, 0, 0.1, 0.5, problemSelectionDock);
 			dockinggrid.add(0, 0.5, 0.1, 0.5, planDock);
 			dockinggrid.add(1, 0, 0.82, 0.9, plananalysisDock);
 			dockinggrid.add(0.7, 1, 0.9, 0.1, consoleDock);
 			dockinggrid.add(2, 0, 0.08, 0.9, plannavigationDock);
 			dockingcontent.deploy(dockinggrid);
+		}
+		else if (perspective.equals("Translation")){
+			dockinggrid.add(0, 0, 0.1, 0.5, domainproblemSelectionDock);
+			dockinggrid.add(0, 0.5, 0.1, 0.5, languagesDock);
+			dockinggrid.add(1, 0, 0.82, 0.9, translationresultDock);
+			dockinggrid.add(0.7, 1, 0.9, 0.1, translationconsoleDock);
+			dockingcontent.deploy(dockinggrid);		
+		}
+		else if (perspective.equals("Analysis")){
+			dockinggrid.add(0, 0, 1, 1, petrinetanalysisDock);
+			dockinggrid.add(0, 0, 1, 1, generalanalysisDock);
+			dockingcontent.deploy(dockinggrid);		
 		}
 		
 	}
@@ -5431,27 +5428,6 @@ public class ItSIMPLE extends JFrame {
 	
 	
 	
-	
-	
-
-
-	/**
-	 * This method initializes pddlSplitPane
-	 *
-	 * @return javax.swing.JSplitPane
-	 */
-	private JSplitPane getTranslationSplitPane() {
-		if (translationSplitPane == null) {
-			translationSplitPane = new JSplitPane();
-			translationSplitPane.setContinuousLayout(true);
-			translationSplitPane.setOneTouchExpandable(true);
-			translationSplitPane.setDividerSize(8);
-			//translationSplitPane.setRightComponent(getPddlTextSplitPane());
-            translationSplitPane.setRightComponent(getTranslatedModelPanel());
-			translationSplitPane.setLeftComponent(getTranslationSelactionPanel());
-		}
-		return translationSplitPane;
-	}
 
 	/**
 	 * This method initializes petriSplitPane
@@ -5470,86 +5446,51 @@ public class ItSIMPLE extends JFrame {
 		return petriSplitPane;
 	}
         
-        /**
-         * This method instantiate the analysisSlipPane
-         * @return 
-         */
-        private JSplitPane getAnalysisSplitPane(){
+    /**
+     * This method instantiate the analysisSlipPane
+     * @return 
+     */
+    private JSplitPane getAnalysisSplitPane(){
 		if (analysisSplitPane == null) {
 			analysisSplitPane = new JSplitPane();
 			analysisSplitPane.setContinuousLayout(true);
 			analysisSplitPane.setOneTouchExpandable(true);
 			analysisSplitPane.setDividerSize(8);
-                        
-                        analysisSplitPane.setLeftComponent(getProjectAnalysisSelectionPane());
-                        analysisSplitPane.setRightComponent(getAnalysisMainContentPane());
-                        
-                        
+             
+	        analysisSplitPane.setLeftComponent(getProjectAnalysisSelectionPane());
+	        analysisSplitPane.setRightComponent(getAnalysisMainContentPane());            
 		}
 		return analysisSplitPane;            
 
-        }
+    }
         
         
         
         
         
-        /**
-         * This method creates the panel for all analysis functionalities
-         * @return 
-         */        
-        private JPanel getAnalysisPane(){
-            
-            if(analysisPane == null){
-                analysisPane = new JPanel(new BorderLayout());
-                
-                //tabbed panel for distinct analysis context
-                //TODO: in the future this is going to be just one panel.
-                // a tabbed panel won't be necessary any more
-                JTabbedPane analysisTabbedPane = new JTabbedPane();
-				analysisTabbedPane.setTabPlacement(JTabbedPane.TOP);
-				analysisTabbedPane.addTab("General", getAnalysisSplitPane());
-                analysisTabbedPane.addTab("Petri Net", getPetriSplitPane());
-                
-                //status bar for the analysis processes
-                analysisStatusBar = new JLabel("Status:");
-                analysisStatusBar.setHorizontalAlignment(SwingConstants.RIGHT);
-                JPanel bottomPlanSimPane = new JPanel(new BorderLayout());
-                bottomPlanSimPane.add(analysisStatusBar, BorderLayout.CENTER);
-                             
-                
-                //analysisPane.add(getAnalysisSplitPane(), BorderLayout.CENTER);
-                analysisPane.add(analysisTabbedPane, BorderLayout.CENTER);
-                analysisPane.add(bottomPlanSimPane, BorderLayout.SOUTH);
-                
-  
-            }            
-            
-            return analysisPane;
-        }
-
+    
         
         
         
    private JPanel getStatusBar(){
-	   planSimStatusBar = new JLabel("Status:");
-       planSimStatusBar.setHorizontalAlignment(SwingConstants.RIGHT);
+	   statusBar = new JLabel("Status:");
+       statusBar.setHorizontalAlignment(SwingConstants.RIGHT);
        //planSimPane.add(planSimStatusBar, BorderLayout.SOUTH);
 
 
-       simProgressBar = new JProgressBar(0,100);
-       simProgressBar.setValue(0);
-       simProgressBar.setStringPainted(true);
-       simProgressBar.setPreferredSize(new java.awt.Dimension(200,18));
-       simProgressBar.setVisible(false);
+       progressBar = new JProgressBar(0,100);
+       progressBar.setValue(0);
+       progressBar.setStringPainted(true);
+       progressBar.setPreferredSize(new java.awt.Dimension(200,18));
+       progressBar.setVisible(false);
 
        simTimeSpent = new JLabel("");
        JPanel timeCtrlPlanSimPane = new JPanel(new BorderLayout());
-       timeCtrlPlanSimPane.add(simProgressBar, BorderLayout.CENTER);
+       timeCtrlPlanSimPane.add(progressBar, BorderLayout.CENTER);
        timeCtrlPlanSimPane.add(simTimeSpent, BorderLayout.WEST);
 
        JPanel bottomPlanSimPane = new JPanel(new BorderLayout());
-       bottomPlanSimPane.add(planSimStatusBar, BorderLayout.CENTER);
+       bottomPlanSimPane.add(statusBar, BorderLayout.CENTER);
        //bottomPlanSimPane.add(simProgressBar, BorderLayout.EAST);
        bottomPlanSimPane.add(timeCtrlPlanSimPane, BorderLayout.EAST);
        return bottomPlanSimPane;
@@ -5932,7 +5873,7 @@ public class ItSIMPLE extends JFrame {
 
                                         
 
-                                        planSimStatusBar.setText("Status: Planning process stopped.");
+                                        statusBar.setText("Status: Planning process stopped.");
                                         outputEditorPane.append(">> Planning process stopped.");
 
                                         // changes the button action command
@@ -6372,7 +6313,7 @@ public class ItSIMPLE extends JFrame {
 
                                             
 
-                                            planSimStatusBar.setText("Status: Planning process stopped.");
+                                            statusBar.setText("Status: Planning process stopped.");
                                             outputEditorPane.append(">> Planning process stopped.");
 
                                             // changes the button action command
@@ -6917,7 +6858,7 @@ public class ItSIMPLE extends JFrame {
                     String comparisonReport = PlanAnalyzer.generateFullPlannersComparisonReport(solveResult);
 
                     appendOutputPanelText(" (!) Experiment done! \n");
-                    planSimStatusBar.setText("Status: Experiment done!");
+                    statusBar.setText("Status: Experiment done!");
 
                     //Save Comparison Report file
                     saveFile("resources/report/Report.html", comparisonReport);
@@ -7244,11 +7185,11 @@ public class ItSIMPLE extends JFrame {
 
                     timeout = timeout*1000; // seconds to milliseconds
                     if (timeout > 0){
-                        simProgressBar.setVisible(true);
-                        simProgressBar.setValue(0);
+                        progressBar.setVisible(true);
+                        progressBar.setValue(0);
                         String barmax = Long.toString(timeout/1000);
-                        simProgressBar.setMaximum(Integer.parseInt(barmax));
-                        simProgressBar.setString("0 of "+ barmax +" (s)");
+                        progressBar.setMaximum(Integer.parseInt(barmax));
+                        progressBar.setString("0 of "+ barmax +" (s)");
 
                         //System.out.println(barmax);
 
@@ -7266,11 +7207,11 @@ public class ItSIMPLE extends JFrame {
                             //timespentStr = Long.toString((System.currentTimeMillis() - start)/1000);
                             timespentStr = Long.toString((timespent)/1000);
                             int barvalue = Integer.parseInt(timespentStr);
-                            simProgressBar.setValue(barvalue);
-                            String percentage = df.format(simProgressBar.getPercentComplete()*100);
-                            simProgressBar.setString(timespentStr + " of "+ barmax +" (s) - (" + percentage + "%)");
+                            progressBar.setValue(barvalue);
+                            String percentage = df.format(progressBar.getPercentComplete()*100);
+                            progressBar.setString(timespentStr + " of "+ barmax +" (s) - (" + percentage + "%)");
                             //simProgressBar.setToolTipText(timespentStr + " of "+ barmax +" (s)");
-                            simProgressBar.repaint();
+                            progressBar.repaint();
                         }
 
                        
@@ -7867,11 +7808,11 @@ public class ItSIMPLE extends JFrame {
 
                     timeout = timeout*1000; // seconds to milliseconds
                     if (timeout > 0){
-                        simProgressBar.setVisible(true);
-                        simProgressBar.setValue(0);
+                        progressBar.setVisible(true);
+                        progressBar.setValue(0);
                         String barmax = Long.toString(timeout/1000);
-                        simProgressBar.setMaximum(Integer.parseInt(barmax));
-                        simProgressBar.setString("0 of "+ barmax +" (s)");
+                        progressBar.setMaximum(Integer.parseInt(barmax));
+                        progressBar.setString("0 of "+ barmax +" (s)");
 
                         //System.out.println(barmax);
 
@@ -7889,11 +7830,11 @@ public class ItSIMPLE extends JFrame {
                             //timespentStr = Long.toString((System.currentTimeMillis() - start)/1000);
                             timespentStr = Long.toString((timespent)/1000);
                             int barvalue = Integer.parseInt(timespentStr);
-                            simProgressBar.setValue(barvalue);
-                            String percentage = df.format(simProgressBar.getPercentComplete()*100);
-                            simProgressBar.setString(timespentStr + " of "+ barmax +" (s) - (" + percentage + "%)");
+                            progressBar.setValue(barvalue);
+                            String percentage = df.format(progressBar.getPercentComplete()*100);
+                            progressBar.setString(timespentStr + " of "+ barmax +" (s) - (" + percentage + "%)");
                             //simProgressBar.setToolTipText(timespentStr + " of "+ barmax +" (s)");
-                            simProgressBar.repaint();
+                            progressBar.repaint();
                         }
 
                        
@@ -8523,7 +8464,7 @@ public class ItSIMPLE extends JFrame {
             openPlanReportDataButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    planSimStatusBar.setText("Status: Opening File...");
+                    statusBar.setText("Status: Opening File...");
                     appendOutputPanelText(">> Opening File... \n");
                     //Open report data
                     Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
@@ -8567,7 +8508,7 @@ public class ItSIMPLE extends JFrame {
 
                     }
                     else{
-                        planSimStatusBar.setText("Status:");
+                        statusBar.setText("Status:");
                         appendOutputPanelText(">> Canceled \n");
                     }
 
@@ -8596,7 +8537,7 @@ public class ItSIMPLE extends JFrame {
                         public void run() {
                             appendOutputPanelText(">> Project comparison report requested. Processing... \n");
 
-                            planSimStatusBar.setText("Status: Reading files ...");
+                            statusBar.setText("Status: Reading files ...");
                             appendOutputPanelText(">> Reading files ... \n");
 
                             //base project file
@@ -9139,14 +9080,26 @@ public class ItSIMPLE extends JFrame {
 		}
 	}
         
+   
+    private JPanel getTranslatedModelPanel(){
+        JPanel anPanel = new JPanel(new BorderLayout());
+        
+        translationModelTabbedPane = new JTabbedPane();
+        getPDDLViewPanel();
+        getRMPLViewPanel();
+        // Dummy panel
+        translationModelTabbedPane.addTab("Result", new JPanel());
+        
+        anPanel.add(translationModelTabbedPane, BorderLayout.CENTER);
+        
+        return anPanel;
+    }
         
         
-        private JPanel getTranslatedModelPanel(){
-            JPanel anPanel = new JPanel(new BorderLayout());
-            
-            translationModelTabbedPane = new JTabbedPane();
-             
-            // PDDL tab
+        private JPanel getPDDLViewPanel(){
+        	
+        	pddlPanel = new JPanel(new BorderLayout());
+        	// PDDL tab
             if (pddlTextSplitPane == null) {
 				pddlTextSplitPane = new JSplitPane();
 				pddlTextSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -9167,32 +9120,17 @@ public class ItSIMPLE extends JFrame {
 				pddlTextSplitPane.setContinuousLayout(true);
 				pddlTextSplitPane.setDividerLocation((int)(screenSize.height*0.40));
 				pddlTextSplitPane.setResizeWeight(0.5);
-            }                          
-            //anPanel.add(pddlTextSplitPane, BorderLayout.CENTER);
-            //translationModelTabbedPane.addTab("PDDL", pddlTextSplitPane);
-            
-            // RMPL tab
-            if (rmplPanel == null){
-	            rmplPanel = new ItFramePanel(":: RMPL Model", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-	            rmplPanel.setContent(getRmplViewPanel(), false);
             }
-            //translationModelTabbedPane.addTab("RMPL", rmplPanel);
             
-            // Dummy panel
-            translationModelTabbedPane.addTab("Result",new ItFramePanel(":: Model", ItFramePanel.NO_MINIMIZE_MAXIMIZE));
+            pddlPanel.add(pddlTextSplitPane, BorderLayout.CENTER);
             
-            anPanel.add(translationModelTabbedPane, BorderLayout.CENTER);
-            
-
-                                  
-                     
-             //BOTTOM
-             //Console output
-            ItFramePanel outputPanel = new ItFramePanel(":: Output console", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-            outputPanel.setPreferredSize(new Dimension(screenSize.width/4 - 20, 120));
-            //Results output
-            //Content of the FramePanel            
-            JPanel resultsPanel = new JPanel(new BorderLayout());
+            return pddlPanel;
+        	
+        }
+        
+        
+        private JPanel getTranslationConsolePanel(){
+        	JPanel resultsPanel = new JPanel(new BorderLayout());
             outputPddlTranslationEditorPane = new JTextArea();
             //analysisInfoEditorPane.setContentType("text/html");
             outputPddlTranslationEditorPane.setEditable(false);
@@ -9202,31 +9140,15 @@ public class ItSIMPLE extends JFrame {
             outputPddlTranslationEditorPane.setBackground(Color.WHITE);              
             resultsPanel.add(new JScrollPane(outputPddlTranslationEditorPane), BorderLayout.CENTER);
             
-            outputPanel.setContent(resultsPanel, false);
-   
-            anPanel.add(outputPanel, BorderLayout.SOUTH);
-            
-           
-            
-            return anPanel;
-
+            return resultsPanel;
         }
+        
+       
 	
         
-        
-        /**
-         * Creates the project selection panel in the main analysis panel
-         * @return 
-         */
-        private JPanel getProjectPDDLSelectionPane() {
-            
-            JPanel anPanel = new JPanel(new BorderLayout());
-            
-            //TOP panel Domain/problem selection
-            ItFramePanel projectSelPanel = new ItFramePanel(":: Domain/Problem Selection", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-            projectSelPanel.setPreferredSize(new Dimension(screenSize.width/4 - 20, screenSize.height));
-            
-            //Instanciate project selection tree
+        private JPanel getTranslationProjectSelectionPanel(){
+        	
+        	  //Instanciate project selection tree
             ItTreeNode root = new ItTreeNode("Projects");
             root.setIcon(new ImageIcon("resources/images/projects.png"));
             pddlTranslationTreeModel = new DefaultTreeModel(root);
@@ -9278,7 +9200,7 @@ public class ItSIMPLE extends JFrame {
                             }
                     		// show PDDL tab
                     		translationModelTabbedPane.removeAll();
-                    		translationModelTabbedPane.addTab("PDDL", pddlTextSplitPane);
+                    		translationModelTabbedPane.addTab("PDDL", pddlPanel);
                     		
                     	}
                     	//RMPL language selected
@@ -9293,7 +9215,7 @@ public class ItSIMPLE extends JFrame {
                             }
                     		// show RMPL tab
                     		translationModelTabbedPane.removeAll();
-                    		translationModelTabbedPane.addTab("RMPL", rmplPanel);   		
+                    		translationModelTabbedPane.addTab("RMPL", rmplPanel);		
                     	}
                     }                        
                 }
@@ -9302,28 +9224,12 @@ public class ItSIMPLE extends JFrame {
             mainTreePanel.add(translateDomainProblemButton, BorderLayout.SOUTH);
             
             
-            projectSelPanel.setContent(mainTreePanel, false);            
-            //projectSelPanel.setParentSplitPane(petriEditorSplitPane);
-                                   
-            
-            anPanel.add(projectSelPanel, BorderLayout.CENTER);
-            
-            
-            
-            //BOTTOM panels (Language options)
-            ItFramePanel pddlSettingFramePanel = new ItFramePanel(":: Language Selection", ItFramePanel.NO_MINIMIZE_MAXIMIZE);
-            //pddlSettingPanel.setPreferredSize(new Dimension(screenSize.width/4 - 20, screenSize.height));
-            
-            JPanel bottonPanel = new JPanel(new BorderLayout());
-            bottonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            bottonPanel.add(getLanguageVersionSettingsPanel(), BorderLayout.CENTER);
-           
-            pddlSettingFramePanel.setContent(bottonPanel, false); 
-            anPanel.add(pddlSettingFramePanel, BorderLayout.SOUTH);
-            
-            
-            return anPanel;                        
+            return mainTreePanel;
         }
+        
+        
+        
+ 
         
 
 	/**
@@ -9438,7 +9344,7 @@ public class ItSIMPLE extends JFrame {
                                if (selectedNode.getData() != null && selectedNode.getData().getName().indexOf("problem") != -1){
                                    appendAnalysisOutputPanelText("(!) Know more about TorchLight at http://www.loria.fr/~hoffmanj/ \n");
                                    appendAnalysisOutputPanelText(">> Calling TorchLight System... \n");
-                                   analysisStatusBar.setText("Status: Running Tourchlight ...");
+                                   statusBar.setText("Status: Running Tourchlight ...");
 
                                    String pddlVersion = languageButtonsGroup.getSelection().getActionCommand();                                
                                    
@@ -9447,7 +9353,7 @@ public class ItSIMPLE extends JFrame {
 
                                    appendAnalysisOutputPanelText(">> TorchLight analysis done!'\n");
                                    appendAnalysisOutputPanelText(" \n");
-                                   analysisStatusBar.setText("Status: Tourchlight analysis done!");                                   
+                                   statusBar.setText("Status: Tourchlight analysis done!");                                   
                                }
                                else{
                                    JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>Please chose a problem node at the 'Project Selection' tree. </html>");
@@ -9568,8 +9474,8 @@ public class ItSIMPLE extends JFrame {
 	 *
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getRmplViewPanel() {
-		JPanel mainPanel = new JPanel(new BorderLayout());
+	private JPanel getRMPLViewPanel() {
+		rmplPanel = new JPanel(new BorderLayout());
 		
 		JScrollPane rmplScrollPane = new JScrollPane();
 		ItHilightedDocument rmplDocument = new ItHilightedDocument();
@@ -9578,7 +9484,7 @@ public class ItSIMPLE extends JFrame {
 		rmplTextPane.setFont(new Font("Courier", 0, 12));
 		rmplTextPane.setBackground(Color.WHITE);
         rmplScrollPane.setViewportView(rmplTextPane);
-		mainPanel.add(rmplScrollPane, BorderLayout.CENTER);
+        rmplPanel.add(rmplScrollPane, BorderLayout.CENTER);
 
 
 		JToolBar rmplToolBar = new JToolBar();
@@ -9590,8 +9496,8 @@ public class ItSIMPLE extends JFrame {
 				"You need to have this link open with your preferable browser (e.g., Chrome, Firefox).</html>");
 		rmplToolBar.add(viewWebRMPLEditor);
 		
-		mainPanel.add(rmplToolBar, BorderLayout.NORTH);
-		return mainPanel;
+		rmplPanel.add(rmplToolBar, BorderLayout.NORTH);
+		return rmplPanel;
 	}
 	
 
@@ -9704,7 +9610,7 @@ public class ItSIMPLE extends JFrame {
 		if (mainPanel == null) {
 			mainPanel = new JPanel(new BorderLayout());
 			mainPanel.add(getToolBar(), BorderLayout.NORTH);
-			mainPanel.add(getMainTabbedPane(), BorderLayout.CENTER);
+			mainPanel.add(getMainDockingPanel(), BorderLayout.CENTER);
 			mainPanel.add(getStatusBar(), BorderLayout.SOUTH);
 		}
 		return mainPanel;
@@ -9754,7 +9660,7 @@ public class ItSIMPLE extends JFrame {
                         
                         toolBar.addSeparator();
                         //toolBar.add(pddlTranslationPerspectiveAction).setToolTipText("UML to PDDL translation perspective");
-                        modelTranslationPerspectiveButton = new JToggleButton(pddlTranslationPerspectiveAction);
+                        modelTranslationPerspectiveButton = new JToggleButton(translationPerspectiveAction);
                         modelTranslationPerspectiveButton.setToolTipText("UML to other model languages (e.g. PDDL)");
                         perspectiveGroup.add(modelTranslationPerspectiveButton);                                                
                         toolBar.add(modelTranslationPerspectiveButton);                        
@@ -9878,20 +9784,7 @@ public class ItSIMPLE extends JFrame {
 		return projectPetriContainer;
 	}
 
-	/**
-	 * @return Returns the pddlPanel.
-	 */
-	private JPanel getTranslationSelactionPanel() {
-		if (pddlPanel == null) {
-			pddlPanel = new JPanel(new BorderLayout());
-			pddlPanel.setPreferredSize(new Dimension(screenSize.width/4 - 20, screenSize.height));
-			
-                        pddlPanel.add(getProjectPDDLSelectionPane(), BorderLayout.CENTER);			
-		}
-
-		return pddlPanel;
-	}
-
+	
 	/**
 	 * @return Returns the petriPanel.
 	 */
@@ -10089,11 +9982,11 @@ public class ItSIMPLE extends JFrame {
 				Element currentStateClone = (Element)currentState.clone();
 				problemNode.getData().getChild("objectDiagrams").addContent(currentStateClone);
 
-				graphTabbedPane.openEditStateTab(currentStateClone, domainNode.getData(), projectNode.getData());
+				diagramTabbedPane.openEditStateTab(currentStateClone, domainNode.getData(), projectNode.getData());
 
 				//mainTabbedPane.setSelectedIndex(0);
-                                CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                                cl.show(mainTabbedPane, "UML");
+                                CardLayout cl = (CardLayout)(mainDockingPanel.getLayout());
+                                cl.show(mainDockingPanel, "UML");
 			}
 		});
 		movieMakerToolBar.add(editStateButton);
@@ -10231,7 +10124,7 @@ public class ItSIMPLE extends JFrame {
                             }
                             checkExistingRationaleButton.setActionCommand("reuse");
                             checkExistingRationaleButton.setText("Reuse Existing Rationales");
-                            planSimStatusBar.setText("Status: Reasoning process stopped.");
+                            statusBar.setText("Status: Reasoning process stopped.");
 
                         }
 
@@ -10510,12 +10403,12 @@ public class ItSIMPLE extends JFrame {
 
 		            }
 
-                CardLayout cl = (CardLayout)(mainTabbedPane.getLayout());
-                cl.show(mainTabbedPane, selectedtab);
+                CardLayout cl = (CardLayout)(mainDockingPanel.getLayout());
+                cl.show(mainDockingPanel, selectedtab);
 	}
 
 	public void closeEditStateTab(){
-		graphTabbedPane.closeEditStateTab();
+		diagramTabbedPane.closeEditStateTab();
 	}
 
 	/**
@@ -11002,9 +10895,9 @@ public class ItSIMPLE extends JFrame {
      * This method hides the simProgress bar and set 0 to 100 values
      */
     public void hideSimProgressBar(){
-        simProgressBar.setVisible(false);
-        simProgressBar.setValue(0);
-        simProgressBar.setMaximum(100);
+        progressBar.setVisible(false);
+        progressBar.setValue(0);
+        progressBar.setMaximum(100);
     }
 
 
@@ -11150,7 +11043,7 @@ public class ItSIMPLE extends JFrame {
 	}
 
 	public ItTabbedPane getItGraphTabbedPane(){
-		return graphTabbedPane;
+		return diagramTabbedPane;
 	}
 
 	public JEditorPane getInfoEditorPane(){
@@ -11184,7 +11077,7 @@ public class ItSIMPLE extends JFrame {
 	 * @return the planSimStatusBar
 	 */
 	public JLabel getPlanSimStatusBar() {
-		return planSimStatusBar;
+		return statusBar;
 	}
 
 
