@@ -383,7 +383,6 @@ public class ItSIMPLE extends JFrame {
 	private JButton checkPlanValidityButton = null;
 	private JButton quickEvaluateButton = null;
     private JButton fullEvaluationButton = null;
-	private ItFramePanel planAnalysisFramePanel = null;
 	private JLabel statusBar = null;
     private JProgressBar progressBar = null;
     private JLabel simTimeSpent = null;
@@ -531,7 +530,7 @@ public class ItSIMPLE extends JFrame {
 				isRoot = true;
 			}
                         
-                        ItTreeNode lastselected = (ItTreeNode)projectsTree.getLastSelectedPathComponent();                     
+            ItTreeNode lastselected = (ItTreeNode)projectsTree.getLastSelectedPathComponent();                     
 
 			if (treeRoot.getChildCount() > 0){
 				if (treeRoot.getChildCount() == 1){
@@ -893,28 +892,28 @@ public class ItSIMPLE extends JFrame {
 
 
         
-        /**
-         * Change for Modeling Perspective
-         */        
-        //private ImageIcon analysisIcon = new ImageIcon("resources/images/saveAll.png");
+    /**
+     * Change for Modeling Perspective
+     */        
+    //private ImageIcon analysisIcon = new ImageIcon("resources/images/saveAll.png");
 	//private Action petriAnalysisAction = new AbstractAction("Analysis", analysisIcon){
-        private Action modelingAction = new AbstractAction("Modeling"){
+    private Action modelingAction = new AbstractAction("Modeling"){
 
 		public void actionPerformed(ActionEvent e) {
-                    //System.out.println("Modeling Perspective");
-                    //setModelingPerspective("UML");
-                    setPerspective("Modeling");
+            //System.out.println("Modeling Perspective");
+            //setModelingPerspective("UML");
+            setPerspective("Modeling");
                     
 
 		}
 	};
 
-        /**
-         * Change for Analysis Perspective
-         */
-        //private ImageIcon analysisIcon = new ImageIcon("resources/images/saveAll.png");
+    /**
+     * Change for Analysis Perspective
+     */
+    //private ImageIcon analysisIcon = new ImageIcon("resources/images/saveAll.png");
 	//private Action analysisAction = new AbstractAction("Analysis", analysisIcon){
-        private Action analysisAction = new AbstractAction("Analysis"){
+    private Action analysisAction = new AbstractAction("Analysis"){
 
 		public void actionPerformed(ActionEvent e) {
             //System.out.println("Analysis Perspective");
@@ -925,10 +924,10 @@ public class ItSIMPLE extends JFrame {
 		}
 	};
 
-        /**
-         * Change for Planning Perspective
-         */
-        private Action planningAction = new AbstractAction("Planning"){
+	/**
+	 * Change for Planning Perspective
+	 */
+	private Action planningAction = new AbstractAction("Planning"){
 
 		public void actionPerformed(ActionEvent e) {
             //System.out.println("Planning Perspective");
@@ -965,7 +964,7 @@ public class ItSIMPLE extends JFrame {
 
 
      /**
-      * Set selected perspective, hidding and showing panels (UML, PDDL)
+      * Set selected perspective, hiding and showing panels (UML, PDDL)
       * @param input
       */
     public void setModelingPerspective(String input){
@@ -1061,13 +1060,13 @@ public class ItSIMPLE extends JFrame {
 			projectsTree.buildDomainNode(domain, selectedNode);
 
 			// update problems plan tree
-                        updateNewDomainProjectParallelTree(problemsPlanTreeModel, domain, selectedNode);
-                        
-                        // update analysis tree
-                        updateNewDomainProjectParallelTree(projectAnalysisTreeModel, domain, selectedNode);
-                        
-                        // update pddl tree
-                        updateNewDomainProjectParallelTree(pddlTranslationTreeModel, domain, selectedNode);
+            updateNewDomainProjectParallelTree(problemsPlanTreeModel, domain, selectedNode);
+            
+            // update analysis tree
+            updateNewDomainProjectParallelTree(projectAnalysisTreeModel, domain, selectedNode);
+            
+            // update pddl tree
+            updateNewDomainProjectParallelTree(pddlTranslationTreeModel, domain, selectedNode);
                                                 
 		}
 	};
@@ -1093,13 +1092,13 @@ public class ItSIMPLE extends JFrame {
 			projectsTree.buildProblemNode(problem, selectedNode);
 
 			// update problems plan tree                        
-                        updateNewProblemProjectParallelTree(problemsPlanTreeModel, problem, selectedNode, (ItTreeNode)selectedNode.getParent());
-                        
-                        // update analysis tree
-                        updateNewProblemProjectParallelTree(projectAnalysisTreeModel, problem, selectedNode, (ItTreeNode)selectedNode.getParent());			
-                        
-                        // update pddl tree
-                        updateNewProblemProjectParallelTree(pddlTranslationTreeModel, problem, selectedNode, (ItTreeNode)selectedNode.getParent());			
+            updateNewProblemProjectParallelTree(problemsPlanTreeModel, problem, selectedNode, (ItTreeNode)selectedNode.getParent());
+            
+            // update analysis tree
+            updateNewProblemProjectParallelTree(projectAnalysisTreeModel, problem, selectedNode, (ItTreeNode)selectedNode.getParent());			
+            
+            // update pddl tree
+            updateNewProblemProjectParallelTree(pddlTranslationTreeModel, problem, selectedNode, (ItTreeNode)selectedNode.getParent());			
 		
                         
 		}
@@ -1117,91 +1116,87 @@ public class ItSIMPLE extends JFrame {
 	};
 
 
-        private Action duplicateAction = new AbstractAction("Duplicate"){
-		/**
-		 *
-		 */
-		//private static final long serialVersionUID = -5894081679981634741L;
+    private Action duplicateAction = new AbstractAction("Duplicate"){
+	/**
+	 *
+	 */
+	//private static final long serialVersionUID = -5894081679981634741L;
 
 		public void actionPerformed(ActionEvent e) {
 
-                        // uml tree
+            // uml tree
 			ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
 			ItTreeNode project = null;
 			if (selectedNode.getLevel() == 2 && selectedNode.getData().getName().equals("domain")) {
-                            //duplicating a domain
-                            project = (ItTreeNode)selectedNode.getParent();
-                            Element originalDomain = selectedNode.getData();
+            //duplicating a domain
+            project = (ItTreeNode)selectedNode.getParent();
+            Element originalDomain = selectedNode.getData();
 
-                            //Element domainRef = (Element)commonData.getChild("definedNodes").getChild("elements").getChild("structure").getChild("domain");
-                            Element domain = (Element)originalDomain.clone();
-                            domain.setAttribute("id",String.valueOf(XMLUtilities.getId(originalDomain.getParentElement())));
+            //Element domainRef = (Element)commonData.getChild("definedNodes").getChild("elements").getChild("structure").getChild("domain");
+            Element domain = (Element)originalDomain.clone();
+            domain.setAttribute("id",String.valueOf(XMLUtilities.getId(originalDomain.getParentElement())));
 
-                            domain.getChild("name").setText(domain.getChildText("name") + " - Copy "+ domain.getAttributeValue("id") + "");
-                            originalDomain.getParentElement().addContent(domain);
-                            projectsTree.buildDomainNode(domain, project);
+            domain.getChild("name").setText(domain.getChildText("name") + " - Copy "+ domain.getAttributeValue("id") + "");
+            originalDomain.getParentElement().addContent(domain);
+            projectsTree.buildDomainNode(domain, project);
 
-                            
-                            // update problems plan tree
-                            updateNewDomainProjectParallelTree(problemsPlanTreeModel, domain, project);
-                            
-                            //update analysis tree
-                            updateNewDomainProjectParallelTree(projectAnalysisTreeModel, domain, project);
+            
+            // update problems plan tree
+            updateNewDomainProjectParallelTree(problemsPlanTreeModel, domain, project);
+            
+            //update analysis tree
+            updateNewDomainProjectParallelTree(projectAnalysisTreeModel, domain, project);
 
-                            //update pddl tree
-                            updateNewDomainProjectParallelTree(pddlTranslationTreeModel, domain, project);
-                            
-                            
-                            /*
-                            ItTreeNode problemsTreeProjectNode = (ItTreeNode)
-                                    ((ItTreeNode)problemsPlanTreeModel.getRoot()).getChildAt(treeRoot.getIndex(project));
+            //update pddl tree
+            updateNewDomainProjectParallelTree(pddlTranslationTreeModel, domain, project);
+            
+            
+            /*
+            ItTreeNode problemsTreeProjectNode = (ItTreeNode)
+                    ((ItTreeNode)problemsPlanTreeModel.getRoot()).getChildAt(treeRoot.getIndex(project));
 
-                            ItTreeNode problemsTreeDomainNode = new ItTreeNode(domain.getChildText("name"), domain, null, null);
-                            problemsTreeDomainNode.setIcon(new ImageIcon("resources/images/domain.png"));
+            ItTreeNode problemsTreeDomainNode = new ItTreeNode(domain.getChildText("name"), domain, null, null);
+            problemsTreeDomainNode.setIcon(new ImageIcon("resources/images/domain.png"));
 
-                            problemsPlanTreeModel.insertNodeInto(
-                                            problemsTreeDomainNode, problemsTreeProjectNode, problemsTreeProjectNode.getChildCount());
+            problemsPlanTreeModel.insertNodeInto(
+                            problemsTreeDomainNode, problemsTreeProjectNode, problemsTreeProjectNode.getChildCount());
 
-                            List<?> problems = domain.getChild("planningProblems").getChildren("problem");
-                            for (Iterator<?> iterator = problems.iterator(); iterator.hasNext();) {
-                                    Element problem = (Element) iterator.next();
-                                    ItTreeNode planProblemNode = new ItTreeNode(problem.getChildText("name"), problem, null, null);
-                                    planProblemNode.setIcon(new ImageIcon("resources/images/planningProblem.png"));
-                                    problemsPlanTreeModel.insertNodeInto(
-                                                    planProblemNode, problemsTreeDomainNode, problemsTreeDomainNode.getChildCount());
-                            }
-                             *
-                             */
+            List<?> problems = domain.getChild("planningProblems").getChildren("problem");
+            for (Iterator<?> iterator = problems.iterator(); iterator.hasNext();) {
+                    Element problem = (Element) iterator.next();
+                    ItTreeNode planProblemNode = new ItTreeNode(problem.getChildText("name"), problem, null, null);
+                    planProblemNode.setIcon(new ImageIcon("resources/images/planningProblem.png"));
+                    problemsPlanTreeModel.insertNodeInto(
+                                    planProblemNode, problemsTreeDomainNode, problemsTreeDomainNode.getChildCount());
+            }
+             *
+             */
 
 
 			}
 			else if (selectedNode.getLevel() == 3 && selectedNode.getData().getName().equals("problem")) {
-                            //duplicating a problem
-                            project = (ItTreeNode)selectedNode.getParent().getParent();
+                //duplicating a problem
+                project = (ItTreeNode)selectedNode.getParent().getParent();
 
-                            Element originalProblem = selectedNode.getData();
-                            Element problem = (Element)originalProblem.clone();
-                            //Element problem = (Element)commonData.getChild("definedNodes")
-                            //        .getChild("elements").getChild("structure").getChild("problem").clone();
+                Element originalProblem = selectedNode.getData();
+                Element problem = (Element)originalProblem.clone();
+                //Element problem = (Element)commonData.getChild("definedNodes")
+                //        .getChild("elements").getChild("structure").getChild("problem").clone();
 
-                            problem.setAttribute("id", String.valueOf(XMLUtilities.getId(originalProblem.getParentElement())));
-                            problem.getChild("name").setText(problem.getChildText("name") + " - Copy " + problem.getAttributeValue("id"));
-                            originalProblem.getParentElement().addContent(problem);
-                            projectsTree.buildProblemNode(problem, (ItTreeNode)selectedNode.getParent());
+                problem.setAttribute("id", String.valueOf(XMLUtilities.getId(originalProblem.getParentElement())));
+                problem.getChild("name").setText(problem.getChildText("name") + " - Copy " + problem.getAttributeValue("id"));
+                originalProblem.getParentElement().addContent(problem);
+                projectsTree.buildProblemNode(problem, (ItTreeNode)selectedNode.getParent());
 
-                            // update problems plan tree
-                            updateDuplicateProblemProjectParallelTree(problemsPlanTreeModel, problem, selectedNode, project);
-                            
-                            //update analysis tree
-                            updateDuplicateProblemProjectParallelTree(projectAnalysisTreeModel, problem, selectedNode, project);
+                // update problems plan tree
+                updateDuplicateProblemProjectParallelTree(problemsPlanTreeModel, problem, selectedNode, project);
+                
+                //update analysis tree
+                updateDuplicateProblemProjectParallelTree(projectAnalysisTreeModel, problem, selectedNode, project);
 
-                            //update pddl tree
-                            updateDuplicateProblemProjectParallelTree(pddlTranslationTreeModel, problem, selectedNode, project);                                                        
-                             
-
+                //update pddl tree
+                updateDuplicateProblemProjectParallelTree(pddlTranslationTreeModel, problem, selectedNode, project);                                                        
 			}
-
-
 		}
 	};
 
@@ -1251,9 +1246,6 @@ public class ItSIMPLE extends JFrame {
 			if (deletingDiagram != null){
 				diagramTabbedPane.closeTab(deletingDiagram.getParent().indexOf(deletingDiagram));
 			}
-
-
-
 
 
 			Element parent = diagram.getData().getParentElement();
@@ -1307,13 +1299,13 @@ public class ItSIMPLE extends JFrame {
 				model.removeNodeFromParent(domain);
 
 				// update problems plan tree
-                                updateDeleteDomainProjectParallelTree(problemsPlanTreeModel, domain, project);
-                                
-                                // update analysis tree
-                                updateDeleteDomainProjectParallelTree(projectAnalysisTreeModel, domain, project);
+                updateDeleteDomainProjectParallelTree(problemsPlanTreeModel, domain, project);
+                
+                // update analysis tree
+                updateDeleteDomainProjectParallelTree(projectAnalysisTreeModel, domain, project);
 
-                                // update pddl tree
-                                updateDeleteDomainProjectParallelTree(pddlTranslationTreeModel, domain, project);
+                // update pddl tree
+                updateDeleteDomainProjectParallelTree(pddlTranslationTreeModel, domain, project);
                                                                 
 			}
 
@@ -1364,13 +1356,13 @@ public class ItSIMPLE extends JFrame {
 				model.removeNodeFromParent(problem);
 
 				// update problems plan tree
-                                updateDeleteProblemProjectParallelTree(problemsPlanTreeModel, domain, problem, project);
-                                
-                                // update analysis tree
-                                updateDeleteProblemProjectParallelTree(projectAnalysisTreeModel, domain, problem, project);
+                updateDeleteProblemProjectParallelTree(problemsPlanTreeModel, domain, problem, project);
+                
+                // update analysis tree
+                updateDeleteProblemProjectParallelTree(projectAnalysisTreeModel, domain, problem, project);
 
-                                // update pddl tree
-                                updateDeleteProblemProjectParallelTree(pddlTranslationTreeModel, domain, problem, project);
+                // update pddl tree
+                updateDeleteProblemProjectParallelTree(pddlTranslationTreeModel, domain, problem, project);
                                 				
 			}
 
@@ -1390,9 +1382,9 @@ public class ItSIMPLE extends JFrame {
 			Element projectHeader = project.getReference();
 			Element openTabs = ItTabbedPane.getOpenTabs();
                         
-                        //TODO: do it for PDDL domain files
+            //TODO: do it for PDDL domain files
 
-                        /*
+            /*
 			// close all open object diagrams from this problem
 			List<?> result = null;
 			try {
@@ -1429,8 +1421,8 @@ public class ItSIMPLE extends JFrame {
                                 updateDeleteDomainProjectParallelTree(pddlTranslationTreeModel, domain, project);
                                                                 
 			}
-                         * 
-                         */
+             * 
+             */
 
 		}
 	};
@@ -1449,45 +1441,44 @@ public class ItSIMPLE extends JFrame {
 			ItTreeNode problem = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
 			ItTreeNode problemInstances = (ItTreeNode)problem.getParent();
 			ItTreeNode project = (ItTreeNode)problemInstances.getParent();
-                        Element planningProblems = problemInstances.getData();
-                        
-                        DefaultTreeModel treeModel = (DefaultTreeModel)projectsTree.getModel();
-                       
-                        String filename = problem.getData().getAttributeValue("file");
-                                                
-                        File file = new File(filename);
-                        boolean success = file.delete();
-                        if (success){            
-                            
-                            //close tabs
-                            Element openTabs = ItTabbedPane.getOpenTabs();
-                            //XMLUtilities.printXML(openTabs);
-                            String diagramType = problem.getData().getName();
-                            Element projectHeader = project.getReference();                            
-                            Element result = null;
-                            String tabpath = "openTab[@projectID='" + projectHeader.getAttributeValue("id") +
-                                    "' and @diagramID='" + problem.getData().getAttributeValue("filename") +
-                                    "' and type='" + diagramType + "']";
-                            try {
-                                    XPath path = new JDOMXPath(tabpath);
-                                    result = (Element)path.selectSingleNode(openTabs);
-                            } catch (JaxenException e2) {
-                                    e2.printStackTrace();
-                            }
-                            //XMLUtilities.printXML(problem.getData());
-                            //System.out.print(tabpath);                        
-                            if (result!=null){
-                                diagramTabbedPane.closeTab(result.getParent().indexOf(result));
-                            }
+            Element planningProblems = problemInstances.getData();
+            
+            DefaultTreeModel treeModel = (DefaultTreeModel)projectsTree.getModel();
+           
+            String filename = problem.getData().getAttributeValue("file");
+                                    
+            File file = new File(filename);
+            boolean success = file.delete();
+            if (success){            
+                
+                //close tabs
+                Element openTabs = ItTabbedPane.getOpenTabs();
+                //XMLUtilities.printXML(openTabs);
+                String diagramType = problem.getData().getName();
+                Element projectHeader = project.getReference();                            
+                Element result = null;
+                String tabpath = "openTab[@projectID='" + projectHeader.getAttributeValue("id") +
+                        "' and @diagramID='" + problem.getData().getAttributeValue("filename") +
+                        "' and type='" + diagramType + "']";
+                try {
+                        XPath path = new JDOMXPath(tabpath);
+                        result = (Element)path.selectSingleNode(openTabs);
+                } catch (JaxenException e2) {
+                        e2.printStackTrace();
+                }
+                //XMLUtilities.printXML(problem.getData());
+                //System.out.print(tabpath);                        
+                if (result!=null){
+                    diagramTabbedPane.closeTab(result.getParent().indexOf(result));
+                }
 
-                            //remove node from tree
-                            treeModel.removeNodeFromParent(problem);
-                            planningProblems.removeContent(problem.getData());
-                            projectsTree.setSelectionPath(new TreePath(project.getPath()));
-                        }else{
-                            JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>System was unable to delete the file. Please check file permission. </html>");
-                        }                        
-
+                //remove node from tree
+                treeModel.removeNodeFromParent(problem);
+                planningProblems.removeContent(problem.getData());
+                projectsTree.setSelectionPath(new TreePath(project.getPath()));
+            }else{
+                JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>System was unable to delete the file. Please check file permission. </html>");
+            }                        
 		}
 	};
         
@@ -1501,8 +1492,8 @@ public class ItSIMPLE extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
                     
-                    NewPDDLProblemDialog pddlProblemDialog = new NewPDDLProblemDialog(ItSIMPLE.getItSIMPLEFrame(), true, projectsTree);
-                    pddlProblemDialog.setVisible(true);
+            NewPDDLProblemDialog pddlProblemDialog = new NewPDDLProblemDialog(ItSIMPLE.getItSIMPLEFrame(), true, projectsTree);
+            pddlProblemDialog.setVisible(true);
                                             
 
 		}
@@ -1612,14 +1603,14 @@ public class ItSIMPLE extends JFrame {
 				// update Petri Net panels
 				updatePetriNetPanels();
 			
-                                //Close the projects in the plan simulation problem tree
-                                updateCloseProjectParallelTree(problemsPlanTreeModel, index);
-                                
-                                //Close the projects in the analysis tree
-                                updateCloseProjectParallelTree(projectAnalysisTreeModel, index);
+                //Close the projects in the plan simulation problem tree
+                updateCloseProjectParallelTree(problemsPlanTreeModel, index);
+                
+                //Close the projects in the analysis tree
+                updateCloseProjectParallelTree(projectAnalysisTreeModel, index);
 
-                                
-                                updateCloseProjectParallelTree(pddlTranslationTreeModel, index);
+                
+                updateCloseProjectParallelTree(pddlTranslationTreeModel, index);
 
 			}
 
@@ -1634,11 +1625,11 @@ public class ItSIMPLE extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
                     
-                        String lastOpenFolder = "";
-                        Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
-                        if (lastOpenFolderElement != null){
-                                lastOpenFolder = lastOpenFolderElement.getText();
-                        }
+            String lastOpenFolder = "";
+            Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+            if (lastOpenFolderElement != null){
+                    lastOpenFolder = lastOpenFolderElement.getText();
+            }
                     
                     
 			JFileChooser fc = new JFileChooser(lastOpenFolder);
@@ -1662,13 +1653,13 @@ public class ItSIMPLE extends JFrame {
 					e1.printStackTrace();
 				}
                                 
-                                if (lastOpenFolderElement != null){
-                                    //Holds the last open folder
-                                    if (!lastOpenFolderElement.getText().equals(selectedFile.getParent())){
-                                            lastOpenFolderElement.setText(selectedFile.getParent());
-                                            XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
-                                    }
-                                }
+                if (lastOpenFolderElement != null){
+                    //Holds the last open folder
+                    if (!lastOpenFolderElement.getText().equals(selectedFile.getParent())){
+                            lastOpenFolderElement.setText(selectedFile.getParent());
+                            XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+                    }
+                }
 			}
 		}
 	};
@@ -1682,10 +1673,10 @@ public class ItSIMPLE extends JFrame {
 		public void actionPerformed(ActionEvent e) {
                     
 			String lastOpenFolder = "";
-                        Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
-                        if (lastOpenFolderElement != null){
-                                lastOpenFolder = lastOpenFolderElement.getText();
-                        }
+            Element lastOpenFolderElement = itSettings.getChild("generalSettings").getChild("lastOpenFolder");
+            if (lastOpenFolderElement != null){
+                    lastOpenFolder = lastOpenFolderElement.getText();
+            }
                     
                     
 			JFileChooser fc = new JFileChooser(lastOpenFolder);
@@ -1709,13 +1700,13 @@ public class ItSIMPLE extends JFrame {
 					e1.printStackTrace();
 				}
                                 
-                                if (lastOpenFolderElement != null){
-                                    //Holds the last open folder
-                                    if (!lastOpenFolderElement.getText().equals(selectedFile.getParent())){
-                                            lastOpenFolderElement.setText(selectedFile.getParent());
-                                            XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
-                                    }
-                                } 
+                if (lastOpenFolderElement != null){
+                    //Holds the last open folder
+                    if (!lastOpenFolderElement.getText().equals(selectedFile.getParent())){
+                            lastOpenFolderElement.setText(selectedFile.getParent());
+                            XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+                    }
+                } 
 			}
 		}
 	};
@@ -1920,7 +1911,7 @@ public class ItSIMPLE extends JFrame {
 
 				petriDiagramGraph.setProject(selectedPetriNetProject);
 				petriDiagramGraph.setDiagram(ptNET);
-                                petriDiagramGraph.setBackground(Color.WHITE);
+                petriDiagramGraph.setBackground(Color.WHITE);
 
 				petriDiagramGraph.setVisible(false);
 				petriDiagramGraph.buildDiagram();
@@ -1944,24 +1935,24 @@ public class ItSIMPLE extends JFrame {
                     File theFile = null;
                     String id = "";
                     if (pddlnode.getLevel() == 3) {
-                            project = (ItTreeNode)pddlnode.getParent().getParent();
-                            path = pddlnode.getData().getAttributeValue("file");
-                            theFile = new File(path);
-                            //id is the filename
-                            id = pddlnode.getData().getAttributeValue("filename");
+                        project = (ItTreeNode)pddlnode.getParent().getParent();
+                        path = pddlnode.getData().getAttributeValue("file");
+                        theFile = new File(path);
+                        //id is the filename
+                        id = pddlnode.getData().getAttributeValue("filename");
                     }
                     else if (pddlnode.getLevel() == 2){
-                            project = (ItTreeNode)pddlnode.getParent();
-                            
-                            String tpath = project.getReference().getChildText("filePath");
-                            File theitProjectFile = new File(tpath);
-                            tpath = tpath.replaceFirst(theitProjectFile.getName(), "");
-                            path = tpath + pddlnode.getData().getChildText("name");                            
-                            theFile = new File(path);
-                            //id is the filename
-                            id = pddlnode.getData().getChildText("name");
-                            //System.out.println(path);
-                            //XMLUtilities.printXML(project.getReference());
+                        project = (ItTreeNode)pddlnode.getParent();
+                        
+                        String tpath = project.getReference().getChildText("filePath");
+                        File theitProjectFile = new File(tpath);
+                        tpath = tpath.replaceFirst(theitProjectFile.getName(), "");
+                        path = tpath + pddlnode.getData().getChildText("name");                            
+                        theFile = new File(path);
+                        //id is the filename
+                        id = pddlnode.getData().getChildText("name");
+                        //System.out.println(path);
+                        //XMLUtilities.printXML(project.getReference());
                     }
 
                     String tabTitle = pddlnode.getData().getChildText("name") + "(PDDL) - " + project.getData().getChildText("name");
@@ -2028,22 +2019,21 @@ public class ItSIMPLE extends JFrame {
                                         // fill out xml data with values to draw the charts and draw it.
 					new Thread(){
 						public void run() {
+                            //fill out the analysis xml data
+                            PlanSimulator.buildPlanAnalysisDataset(analysis, xmlPlan, problem);
 
-                                                    //fill out the analysis xml data
-                                                    PlanSimulator.buildPlanAnalysisDataset(analysis, xmlPlan, problem);
+                            //Prepare HTML version of the analysis (incluiding charts).
+                            //String html = PlanSimulator.createHTMLPlanAnalysis(analysis, xmlPlan, problem);
+                            //System.out.println(html);
 
-                                                    //Prepare HTML version of the analysis (incluiding charts).
-                                                    //String html = PlanSimulator.createHTMLPlanAnalysis(analysis, xmlPlan, problem);
-                                                    //System.out.println(html);
-
-                                                    //draw the charts in the iterface
-                                                    List<ChartPanel> chartPanels = PlanSimulator.drawCharts(analysis, problem);
-                                                    chartsPanel.removeAll();
-                                                    for (Iterator<ChartPanel> iter = chartPanels.iterator(); iter.hasNext();) {
-                                                            ChartPanel chartPanel = iter.next();
-                                                            chartsPanel.add(chartPanel);
-                                                    }
-                                                    chartsPanel.revalidate();
+                            //draw the charts in the iterface
+                            List<ChartPanel> chartPanels = PlanSimulator.drawCharts(analysis, problem);
+                            chartsPanel.removeAll();
+                            for (Iterator<ChartPanel> iter = chartPanels.iterator(); iter.hasNext();) {
+                                    ChartPanel chartPanel = iter.next();
+                                    chartsPanel.add(chartPanel);
+                            }
+                            chartsPanel.revalidate();
 						}
 					}.start();
 
@@ -2081,15 +2071,15 @@ public class ItSIMPLE extends JFrame {
 					e1.printStackTrace();
 				}
 				setPlanList(xmlPlan);
-                                //setPlanInfoPanelText(generateHTMLReport(xmlPlan));
-                                //setPlanInfoPanelText(PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan));
-                                showHTMLReport(xmlPlan);
-                                appendOutputPanelText(">> Plan importerd successfully. Check the generated Results. \n");
+                //setPlanInfoPanelText(generateHTMLReport(xmlPlan));
+                //setPlanInfoPanelText(PlanAnalyzer.generateHTMLSinglePlanReport(xmlPlan));
+                showHTMLReport(xmlPlan);
+                appendOutputPanelText(">> Plan importerd successfully. Check the generated Results. \n");
 
-                                //clean up reference of plans from database
-                                cleanupPlanDatabaseReference();
+                //clean up reference of plans from database
+                cleanupPlanDatabaseReference();
 
-                                //save lst open folder
+                //save lst open folder
 				if (lastOpenFolderElement != null){
 					//Holds the last open folder
 					if (!lastOpenFolderElement.getText().equals(file.getParent())){
@@ -2178,15 +2168,15 @@ public class ItSIMPLE extends JFrame {
 				Element action = (Element)actions.get(selected);
 				action.detach();
 			}
-                        Element validity = xmlPlan.getChild("validity");
-                        if (validity!=null){
-                            if (!validity.getAttributeValue("isValid").equals("")){
-                                validity.setAttribute("isValid", "");
-                                validity.setText("");
-                                showHTMLReport(xmlPlan);
-                            }
-                            
-                        }
+            Element validity = xmlPlan.getChild("validity");
+            if (validity!=null){
+                if (!validity.getAttributeValue("isValid").equals("")){
+                    validity.setAttribute("isValid", "");
+                    validity.setText("");
+                    showHTMLReport(xmlPlan);
+                }
+                
+            }
 
 			setPlanList(xmlPlan);
 		}
@@ -2230,10 +2220,10 @@ public class ItSIMPLE extends JFrame {
                 if (xmlPlan.getName().equals("xmlPlan")){
                     new Thread(){
                         @Override
-                            public void run() {
-                                PlanValidator.checkPlanValidityWithVAL(xmlPlan);
-                                showHTMLReport(xmlPlan);
-                            }
+                        public void run() {
+                            PlanValidator.checkPlanValidityWithVAL(xmlPlan);
+                            showHTMLReport(xmlPlan);
+                        }
                     }.start();
                 }
 
@@ -2268,72 +2258,62 @@ public class ItSIMPLE extends JFrame {
 			int returnVal = fc.showOpenDialog(ItSIMPLE.this);
 			if (returnVal == JFileChooser.APPROVE_OPTION){
 
-                                File[] files = fc.getSelectedFiles();
-                                //File file = fc.getSelectedFile();
+				File[] files = fc.getSelectedFiles();
+                //File file = fc.getSelectedFile();
 
-                                for (int i = 0; i < files.length; i++) {
-                                    File file = files[i];
+                for (int i = 0; i < files.length; i++) {
+                    File file = files[i];
 
-                                    //String problemFile = "/home/tiago/Desktop/LogisticTwoPackages.pddl";
-                                    String problemFile = file.getPath();
+                    //String problemFile = "/home/tiago/Desktop/LogisticTwoPackages.pddl";
+                    String problemFile = file.getPath();
 
-                                    // get selected node from the projects tree
-                                    ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
+                    // get selected node from the projects tree
+                    ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
 
-                                    //parse pddl to xpddl
-                                    Element xpddlProblem = PDDLToXPDDL.parsePDDLproblemToXPDDL(problemFile);
+                    //parse pddl to xpddl
+                    Element xpddlProblem = PDDLToXPDDL.parsePDDLproblemToXPDDL(problemFile);
 
-                                    //parse xpddl to internal uml model
-                                    Element problem = XPDDLToUML.parseXPDDLProbemToUML(xpddlProblem, selectedNode.getData());
+                    //parse xpddl to internal uml model
+                    Element problem = XPDDLToUML.parseXPDDLProbemToUML(xpddlProblem, selectedNode.getData());
 
-                                    selectedNode.getData().getChild("planningProblems").addContent(problem);
-                                    projectsTree.buildProblemNode(problem, selectedNode);
+                    selectedNode.getData().getChild("planningProblems").addContent(problem);
+                    projectsTree.buildProblemNode(problem, selectedNode);
 
-                                    // problems plan tree
-                                    ItTreeNode problemsTreeProject = (ItTreeNode)((ItTreeNode)problemsPlanTreeModel.getRoot())
-                                                                                                            .getChildAt(treeRoot.getIndex(selectedNode.getParent()));
+                    // problems plan tree
+                    ItTreeNode problemsTreeProject = (ItTreeNode)((ItTreeNode)problemsPlanTreeModel.getRoot())
+                                                                                            .getChildAt(treeRoot.getIndex(selectedNode.getParent()));
 
-                                    ItTreeNode problemsTreeDomain = null;
-                                    // look for the domain in problems plan tree
-                                    for(int ii = 0; ii < problemsTreeProject.getChildCount(); ii++){
-                                            ItTreeNode child = (ItTreeNode)problemsTreeProject.getChildAt(ii);
-                                            if(child.getData() == selectedNode.getData()){
-                                                    problemsTreeDomain = child;
-                                                    break;
-                                            }
-                                    }
+                    ItTreeNode problemsTreeDomain = null;
+                    // look for the domain in problems plan tree
+                    for(int ii = 0; ii < problemsTreeProject.getChildCount(); ii++){
+                            ItTreeNode child = (ItTreeNode)problemsTreeProject.getChildAt(ii);
+                            if(child.getData() == selectedNode.getData()){
+                                    problemsTreeDomain = child;
+                                    break;
+                            }
+                    }
 
-                                    if(problemsTreeDomain != null){
-                                            ItTreeNode problemsTreeProblem =
-                                                    new ItTreeNode(problem.getChildText("name"), problem, null, null);
+                    if(problemsTreeDomain != null){
+                        ItTreeNode problemsTreeProblem =
+                                new ItTreeNode(problem.getChildText("name"), problem, null, null);
 
-                                            problemsTreeProblem.setIcon(new ImageIcon("resources/images/planningProblem.png"));
+                        problemsTreeProblem.setIcon(new ImageIcon("resources/images/planningProblem.png"));
 
-                                            problemsPlanTreeModel.insertNodeInto(
-                                                            problemsTreeProblem, problemsTreeDomain, problemsTreeDomain.getChildCount());
-                                    }
-
-
-
-                                    if (lastOpenFolderElement != null){
-                                            //Holds the last open folder
-                                            if (!lastOpenFolderElement.getText().equals(file.getParent())){
-                                                    lastOpenFolderElement.setText(file.getParent());
-                                                    XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
-                                            }
-                                    }
+                        problemsPlanTreeModel.insertNodeInto(
+                                        problemsTreeProblem, problemsTreeDomain, problemsTreeDomain.getChildCount());
+                    }
 
 
-                                }
 
-
+                    if (lastOpenFolderElement != null){
+                        //Holds the last open folder
+                        if (!lastOpenFolderElement.getText().equals(file.getParent())){
+                                lastOpenFolderElement.setText(file.getParent());
+                                XMLUtilities.writeToFile("resources/settings/itSettings.xml", itSettings.getDocument());
+                        }
+                    }
+                }	
 			} 
-
-
-
-
-
-
 		}
 	};
 
@@ -2348,20 +2328,20 @@ public class ItSIMPLE extends JFrame {
 	};
         
 
-        private Action importModelingPatternAction = new AbstractAction("Import Modeling Pattern", new ImageIcon("resources/images/virtualprototype.png")){
+    private Action importModelingPatternAction = new AbstractAction("Import Modeling Pattern", new ImageIcon("resources/images/virtualprototype.png")){
 
 		public void actionPerformed(ActionEvent e){
-                    //check if there is a uml project selected. If not show message
-                    ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
-                    if (projectsTree.getSelectionCount() > 0 && selectedNode.getData() != null && selectedNode.getData().getName().equals("project")){
-                        Element project = selectedNode.getData();
-                       
-                        final ImportModelingPattern dialog = new ImportModelingPattern(ItSIMPLE.this,true,project);
-                        dialog.setVisible(true);
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>Please select a UML project node (in the Project Explorer panel) <br> where you want to import a modeling pattern. </html>");
-                    }                    
+            //check if there is a uml project selected. If not show message
+            ItTreeNode selectedNode = (ItTreeNode)projectsTree.getLastSelectedPathComponent();
+            if (projectsTree.getSelectionCount() > 0 && selectedNode.getData() != null && selectedNode.getData().getName().equals("project")){
+                Element project = selectedNode.getData();
+               
+                final ImportModelingPattern dialog = new ImportModelingPattern(ItSIMPLE.this,true,project);
+                dialog.setVisible(true);
+            }
+            else{
+                JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>Please select a UML project node (in the Project Explorer panel) <br> where you want to import a modeling pattern. </html>");
+            }                    
 		}
 	};
         
@@ -2369,87 +2349,81 @@ public class ItSIMPLE extends JFrame {
 
 
 	/**
-         * This action opens the dialog for editing plan evaluation
-         */
-        private Action changePlanEvaluationAction = new AbstractAction("Edit Evaluation", new ImageIcon("resources/images/edit.png")){
-		/**
-		 *
-		 */
+     * This action opens the dialog for editing plan evaluation
+     */
+    private Action changePlanEvaluationAction = new AbstractAction("Edit Evaluation", new ImageIcon("resources/images/edit.png")){
+	/**
+	 *
+	 */
 		public void actionPerformed(ActionEvent e){
 			final PlanEvaluationEditDialog dialog = new PlanEvaluationEditDialog(ItSIMPLE.this, xmlPlan);
 			dialog.setVisible(true);
-                        if (xmlPlan != null){
-                            //String evaluationhtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, xmlPlan.getChild("metrics"));
-                            String evaluationhtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
-                            setPlanEvaluationInfoPanelText(evaluationhtml);
-                            //System.out.println(evaluationhtml);
-                        }
+            if (xmlPlan != null){
+                //String evaluationhtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, xmlPlan.getChild("metrics"));
+                String evaluationhtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+                setPlanEvaluationInfoPanelText(evaluationhtml);
+                //System.out.println(evaluationhtml);
+            }
 		}
 	};
 
-        /**
-         * This action opens the dialog for editing plan evaluation
-         */
-        private Action insertPlanEvaluationRationaleAction = new AbstractAction("Edit Evaluation", new ImageIcon("resources/images/edit.png")){
+    /**
+     * This action opens the dialog for editing plan evaluation
+     */
+    private Action insertPlanEvaluationRationaleAction = new AbstractAction("Edit Evaluation", new ImageIcon("resources/images/edit.png")){
 		/**
 		 *
 		 */
 		public void actionPerformed(ActionEvent e){
 			final PlanEvaluationRationalesEditDialog dialog = new PlanEvaluationRationalesEditDialog(ItSIMPLE.this, xmlPlan);
 			dialog.setVisible(true);
-                        if (xmlPlan != null){
-                            //String evaluationhtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, xmlPlan.getChild("metrics"));
-                            String evaluationhtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
-                            setPlanEvaluationInfoPanelText(evaluationhtml);
-                            //System.out.println(evaluationhtml);
-                        }
+            if (xmlPlan != null){
+                //String evaluationhtml = PlanAnalyzer.generatePlanMetricsSummary(xmlPlan, xmlPlan.getChild("metrics"));
+                String evaluationhtml = PlanAnalyzer.generatePlanMetricsEvaluationSummary(xmlPlan);
+                setPlanEvaluationInfoPanelText(evaluationhtml);
+                //System.out.println(evaluationhtml);
+            }
 		}
 	};
         
         
         
-        private Action reuseRationalesAction = new AbstractAction("Reuse Rationales", new ImageIcon("resources/images/edit.png")){
+    private Action reuseRationalesAction = new AbstractAction("Reuse Rationales", new ImageIcon("resources/images/edit.png")){
 		/**
 		 *
 		 */
 		public void actionPerformed(ActionEvent e){
+                   
+            ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+            if(selectedNode != null){
+                Element node = selectedNode.getData();
+                String type ="";
+                //check if it is a projects node
+                if (node == null){
+                    type = "projects";
+                }else{
+                    type = node.getName();
+                }
+                
+                if (type.equals("problem") && xmlPlan != null){
                     
-                    
-                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-                    if(selectedNode != null){
-                        Element node = selectedNode.getData();
-                        String type ="";
-                        //check if it is a projects node
-                        if (node == null){
-                            type = "projects";
-                        }else{
-                            type = node.getName();
+                    reuserationaleThread = new Thread(){
+                        public void run() {
+                            ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+                            Element problem = selectedNode.getData();
+                            RationaleAnalyzer.reuseExistingRationales(xmlPlan, problem, Integer.toString(currentDBPlanID), statusBar);
+                            checkExistingRationaleButton.setText("Reuse Existing Rationales");
+                            checkExistingRationaleButton.setActionCommand("reuse");
                         }
-                        
-                        if (type.equals("problem") && xmlPlan != null){
-                            
-                            reuserationaleThread = new Thread(){
-                                public void run() {
-                                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-                                    Element problem = selectedNode.getData();
-                                    RationaleAnalyzer.reuseExistingRationales(xmlPlan, problem, Integer.toString(currentDBPlanID), statusBar);
-                                    checkExistingRationaleButton.setText("Reuse Existing Rationales");
-                                    checkExistingRationaleButton.setActionCommand("reuse");
-                                }
-                            };
-                            reuserationaleThread.start();
+                    };
+                    reuserationaleThread.start();
 
 
 
-                        }else{
-                            JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>In order to reuse existing rationale, it is required <br>to select the corresponding planning problem. </html>");
-                        }
-                        
-                        
-                        
-                        
-                    }
-			
+                }else{
+                    JOptionPane.showMessageDialog(ItSIMPLE.this,"<html>In order to reuse existing rationale, it is required <br>to select the corresponding planning problem. </html>");
+                }   
+            }
 		}
 	};
 
@@ -2468,127 +2442,127 @@ public class ItSIMPLE extends JFrame {
                 @SuppressWarnings("empty-statement")
 		public void actionPerformed(ActionEvent e){
 
-                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-                    if(selectedNode != null){
+            ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+            if(selectedNode != null){
 
-                        //clean up the result table first
-                        resultPlanTableModel.getDataVector().removeAllElements();
-                        resultPlanTable.repaint();
+                //clean up the result table first
+                resultPlanTableModel.getDataVector().removeAllElements();
+                resultPlanTable.repaint();
 
-                        Element node = selectedNode.getData();
-                        String type ="";
-                        //check if it is a projects node
-                        if (node == null){
-                            type = "projects";
+                Element node = selectedNode.getData();
+                String type ="";
+                //check if it is a projects node
+                if (node == null){
+                    type = "projects";
+                }
+                else{
+                    type = node.getName();
+                }
+
+
+
+                DataBase eSelectType = new DataBase();
+                eSelectType.setColumnList("id, project, domain, problem, plannername, plannerversion,  nactions, cost, quality"); //please, don't use *
+                eSelectType.setTableName("plan");
+                String whereclause = "";
+
+                String project = "";
+                String domain = "";
+                String problem = "";
+
+                switch(selectedNode.getLevel()){
+                    case 0: //Projects
+                        //System.out.println("Search within Projects");
+
+                        whereclause = null;
+
+                        break;
+                    case 1: //Project
+                        //System.out.println("Search within a specific Project");
+                        //project = node.getDocument().getRootElement().getChildText("name");
+                        project = node.getChildText("name");
+
+                        whereclause = "project = '"+project+"'";
+
+
+                        break;
+                    case 2: //Domain
+                        //System.out.println("Search within a specific Domain");
+                        project = node.getDocument().getRootElement().getChildText("name");
+                        domain = node.getChildText("name");
+
+                        whereclause = "project = '"+project+"' AND  domain='"+domain+"'";
+
+                        break;
+                    case 3: //Problem
+                        //System.out.println("Search within a specific Problem");
+                        project = node.getDocument().getRootElement().getChildText("name");
+                        domain = node.getParentElement().getParentElement().getChildText("name");
+                        problem = node.getChildText("name");
+
+                        whereclause = "project = '"+project+"' AND  domain='"+domain+"' AND  problem='"+problem+"'";
+                        break;
+                }
+
+                //check if the user wants to filter the search
+                if (planFilterPanel.isVisible()){
+                    String filter = planfilterTextPane.getText().replace("\n", " ").trim();
+                    if (!filter.equals("")){
+                        if (whereclause!=null){
+                            whereclause += " AND " + filter;
+                        }else{
+                            whereclause = filter;
                         }
-                        else{
-                            type = node.getName();
+                    }                            
+                }
+
+                //Do select in the database
+                eSelectType.setWhereClause(whereclause);
+                eSelectType.setOrderClause("id"); //order by clause, null if not applicable
+                //eSelectType.setGroupClause(null); //group by clause, null if not applicable
+                //eSelectType.setHavingClause(null); //having clause, null if not applicable
+                //eSelectType.addToParametersList(name);
+                eSelectType.Select();
+
+
+                //Get results and show them
+                ResultSet rs = eSelectType.getRs();
+                try {
+                    int counter = 1;
+                    while (rs.next()) {                              
+                        Vector<String> rowData = new Vector<String>();
+
+                        rowData.add(rs.getString("id"));
+                        //rowData.add(String.valueOf(counter));
+                        rowData.add(rs.getString("project"));
+                        rowData.add(rs.getString("domain"));
+                        rowData.add(rs.getString("problem"));
+                        rowData.add(rs.getString("plannername"));
+                        //rowData.add(rs.getString("plannername") + " - "+ rs.getString("plannerversion"));
+                        rowData.add(rs.getString("nactions"));
+                        rowData.add(rs.getString("cost"));
+                        String quality = rs.getString("quality").trim();
+                        //format quality '0.00'
+                        if (!quality.equals("")){
+                            double thequality = Double.parseDouble(quality);
+                            DecimalFormat theformat = new DecimalFormat("0.00");
+                            quality = theformat.format(thequality);
                         }
+                        rowData.add(quality);
 
-
-
-                        DataBase eSelectType = new DataBase();
-                        eSelectType.setColumnList("id, project, domain, problem, plannername, plannerversion,  nactions, cost, quality"); //please, don't use *
-                        eSelectType.setTableName("plan");
-                        String whereclause = "";
-
-                        String project = "";
-                        String domain = "";
-                        String problem = "";
-
-                        switch(selectedNode.getLevel()){
-                            case 0: //Projects
-                                //System.out.println("Search within Projects");
-
-                                whereclause = null;
-
-                                break;
-                            case 1: //Project
-                                //System.out.println("Search within a specific Project");
-                                //project = node.getDocument().getRootElement().getChildText("name");
-                                project = node.getChildText("name");
-
-                                whereclause = "project = '"+project+"'";
-
-
-                                break;
-                            case 2: //Domain
-                                //System.out.println("Search within a specific Domain");
-                                project = node.getDocument().getRootElement().getChildText("name");
-                                domain = node.getChildText("name");
-
-                                whereclause = "project = '"+project+"' AND  domain='"+domain+"'";
-
-                                break;
-                            case 3: //Problem
-                                //System.out.println("Search within a specific Problem");
-                                project = node.getDocument().getRootElement().getChildText("name");
-                                domain = node.getParentElement().getParentElement().getChildText("name");
-                                problem = node.getChildText("name");
-
-                                whereclause = "project = '"+project+"' AND  domain='"+domain+"' AND  problem='"+problem+"'";
-                                break;
-                        }
-
-                        //check if the user wants to filter the search
-                        if (planFilterPanel.isVisible()){
-                            String filter = planfilterTextPane.getText().replace("\n", " ").trim();
-                            if (!filter.equals("")){
-                                if (whereclause!=null){
-                                    whereclause += " AND " + filter;
-                                }else{
-                                    whereclause = filter;
-                                }
-                            }                            
-                        }
-
-                        //Do select in the database
-                        eSelectType.setWhereClause(whereclause);
-                        eSelectType.setOrderClause("id"); //order by clause, null if not applicable
-                        //eSelectType.setGroupClause(null); //group by clause, null if not applicable
-                        //eSelectType.setHavingClause(null); //having clause, null if not applicable
-                        //eSelectType.addToParametersList(name);
-                        eSelectType.Select();
-
-
-                        //Get results and show them
-                        ResultSet rs = eSelectType.getRs();
-                        try {
-                            int counter = 1;
-                            while (rs.next()) {                              
-                                Vector<String> rowData = new Vector<String>();
-
-                                rowData.add(rs.getString("id"));
-                                //rowData.add(String.valueOf(counter));
-                                rowData.add(rs.getString("project"));
-                                rowData.add(rs.getString("domain"));
-                                rowData.add(rs.getString("problem"));
-                                rowData.add(rs.getString("plannername"));
-                                //rowData.add(rs.getString("plannername") + " - "+ rs.getString("plannerversion"));
-                                rowData.add(rs.getString("nactions"));
-                                rowData.add(rs.getString("cost"));
-                                String quality = rs.getString("quality").trim();
-                                //format quality '0.00'
-                                if (!quality.equals("")){
-                                    double thequality = Double.parseDouble(quality);
-                                    DecimalFormat theformat = new DecimalFormat("0.00");
-                                    quality = theformat.format(thequality);
-                                }
-                                rowData.add(quality);
-
-                                resultPlanTableModel.addRow(rowData);
-                                counter++;
-
-                            }
-
-                        } catch (SQLException se) {;
-                          se.printStackTrace();
-                          //System.exit(1);
-                        }
-
-                        eSelectType.Close();
+                        resultPlanTableModel.addRow(rowData);
+                        counter++;
 
                     }
+
+                } catch (SQLException se) {;
+                  se.printStackTrace();
+                  //System.exit(1);
+                }
+
+                eSelectType.Close();
+
+            }
 
 		}
 	};
@@ -2602,206 +2576,206 @@ public class ItSIMPLE extends JFrame {
 		 *
 		 */
 		public void actionPerformed(ActionEvent e){
-                        if (xmlPlan != null){
+            if (xmlPlan != null){
 
 
-                            //Insert plan into the database
+                //Insert plan into the database
 
-                            Element thePlan = (Element)xmlPlan.clone();
-                            //Rationales - cleanup rationales to store in the database
-                            Element rationales = thePlan.getChild("evaluation").getChild("rationales");
-                            rationales.removeContent();
-                            String xmlPlanStr = XMLUtilities.toString(thePlan);
-                            xmlPlanStr = xmlPlanStr.replace("'", "''");
-                            //The XML plan (clean up ' char - database need)
-                            //String xmlPlanStr = XMLUtilities.toString(xmlPlan);
-                            //xmlPlanStr = xmlPlanStr.replaceAll("'", "");
+                Element thePlan = (Element)xmlPlan.clone();
+                //Rationales - cleanup rationales to store in the database
+                Element rationales = thePlan.getChild("evaluation").getChild("rationales");
+                rationales.removeContent();
+                String xmlPlanStr = XMLUtilities.toString(thePlan);
+                xmlPlanStr = xmlPlanStr.replace("'", "''");
+                //The XML plan (clean up ' char - database need)
+                //String xmlPlanStr = XMLUtilities.toString(xmlPlan);
+                //xmlPlanStr = xmlPlanStr.replaceAll("'", "");
 
-                            //projec, domain and problem names/identifiers
-                            String project = xmlPlan.getChildText("project").replace("'", "''");
-                            String domain = xmlPlan.getChildText("domain").replace("'", "''");
-                            String problem = xmlPlan.getChildText("problem").replace("'", "''");
+                //projec, domain and problem names/identifiers
+                String project = xmlPlan.getChildText("project").replace("'", "''");
+                String domain = xmlPlan.getChildText("domain").replace("'", "''");
+                String problem = xmlPlan.getChildText("problem").replace("'", "''");
 
-                            //planner name/identifier
-                            String plannername = "";
-                            String plannerversion = "";
-                            Element planner = xmlPlan.getChild("planner");
-                            if (planner != null && !planner.getAttributeValue("id").equals("")){
-                                plannername = planner.getChildText("name");
-                                plannerversion = planner.getChildText("version");
-                            }
+                //planner name/identifier
+                String plannername = "";
+                String plannerversion = "";
+                Element planner = xmlPlan.getChild("planner");
+                if (planner != null && !planner.getAttributeValue("id").equals("")){
+                    plannername = planner.getChildText("name");
+                    plannerversion = planner.getChildText("version");
+                }
 
-                            //number of actions in the plan
-                            String nactions = String.valueOf(xmlPlan.getChild("plan").getChildren().size());
+                //number of actions in the plan
+                String nactions = String.valueOf(xmlPlan.getChild("plan").getChildren().size());
 
-                            //plan cost based on the metrics.
-                            double overallCostAward = 0;
-                            Element metrics = xmlPlan.getChild("metrics");
-                            if(metrics!=null){
-                                overallCostAward = PlanAnalyzer.evaluateCostAward(metrics);
-                            }
+                //plan cost based on the metrics.
+                double overallCostAward = 0;
+                Element metrics = xmlPlan.getChild("metrics");
+                if(metrics!=null){
+                    overallCostAward = PlanAnalyzer.evaluateCostAward(metrics);
+                }
 
-                            //quality of the plan
-                            String quality = "";
-                            Element evaluation =  xmlPlan.getChild("evaluation");
-                            if (evaluation != null){
-                                quality = evaluation.getAttributeValue("value");
-                            }
-
-
-                            //Insert plan into the database
-                            DataBase insertType = new DataBase();
-                            insertType.setTableName("plan");
-                            insertType.setColumnList("xmlplan, project, domain, problem, plannername, plannerversion, nactions, cost, quality"); // please, don't use ()
-                            insertType.setValueList("'"+ xmlPlanStr+"', '"+project+"', '"+domain+"', '"+problem+"', '"+plannername+"', '"+plannerversion+"', "+nactions+", "+Double.toString(overallCostAward)+", "+quality); // please, don't use ()
-                            //updateType.setParametersList(list);
-                            insertType.retrieveLastID(true);
-                            insertType.Insert();
-
-                            //Get genereted keys
-                            //ResultSet rs = updateType.getRs();
-                            //System.out.println("Last inserted ID: " + updateType.getLastInsertID());
-                            currentDBPlanID = insertType.getLastInsertID();
-                            isPlanFromDB = true;
-                            
-                            //DataBase insertType = new DataBase();
-                            DataBase updateType = new DataBase();
-                            
-                            rationales = xmlPlan.getChild("evaluation").getChild("rationales");
-
-                            for (Iterator<Element> it = rationales.getChildren().iterator(); it.hasNext();) {
-                                Element rationale = it.next();
-
-                                String rationaleID = rationale.getAttributeValue("id").trim();
-                                String targetPlanID = rationale.getAttributeValue("targetplanid").trim();
-                                String relationalID = rationale.getAttributeValue("relationalid").trim();
-                                String relationalEnabled = rationale.getAttributeValue("enabled").trim().toUpperCase();
+                //quality of the plan
+                String quality = "";
+                Element evaluation =  xmlPlan.getChild("evaluation");
+                if (evaluation != null){
+                    quality = evaluation.getAttributeValue("value");
+                }
 
 
-                                //1. Insert rationale into the database if it has been inserted
-                                if (rationaleID.equals("")){
+                //Insert plan into the database
+                DataBase insertType = new DataBase();
+                insertType.setTableName("plan");
+                insertType.setColumnList("xmlplan, project, domain, problem, plannername, plannerversion, nactions, cost, quality"); // please, don't use ()
+                insertType.setValueList("'"+ xmlPlanStr+"', '"+project+"', '"+domain+"', '"+problem+"', '"+plannername+"', '"+plannerversion+"', "+nactions+", "+Double.toString(overallCostAward)+", "+quality); // please, don't use ()
+                //updateType.setParametersList(list);
+                insertType.retrieveLastID(true);
+                insertType.Insert();
 
-                                    Element theRationale = (Element)rationale.clone();
-                                    theRationale.setAttribute("targetplanid","");
-                                    theRationale.setAttribute("relationalid","");
-                                    theRationale.setAttribute("enabled", "true");
-                                    theRationale.getChild("comments").removeContent();
-                                    
-                                    String xmlRationaleStr = XMLUtilities.toString(theRationale).replace("'", "''");
-                                    String rationaleName = rationale.getChildText("name").replace("'", "''");
-                                    String rationaleDescription = rationale.getChildText("description").replace("'", "''");
-                                    String rationaleRule = rationale.getChildText("rule").replace("'", "''");
-                                    String rationaleQualityImpact = rationale.getChild("impact").getAttributeValue("quality");
-                                    String rationaleRange = rationale.getChild("abstractionlevel").getAttributeValue("range");
-                                    String rationaleValidity = rationale.getChild("validity").getAttributeValue("isValid").trim().toUpperCase();
-                                    if (rationaleValidity.equals("")){
-                                        rationaleValidity = "NULL";
-                                    }
+                //Get genereted keys
+                //ResultSet rs = updateType.getRs();
+                //System.out.println("Last inserted ID: " + updateType.getLastInsertID());
+                currentDBPlanID = insertType.getLastInsertID();
+                isPlanFromDB = true;
+                
+                //DataBase insertType = new DataBase();
+                DataBase updateType = new DataBase();
+                
+                rationales = xmlPlan.getChild("evaluation").getChild("rationales");
 
-                                    insertType.setTableName("rationale");
-                                    insertType.setColumnList("xmlrationale, name, description, rule, abstractionlevel, project, domain, problem, planid, validity, qualityimpact"); // please, don't use ()
-                                    insertType.setValueList("'"+ xmlRationaleStr+"', '"+rationaleName+"', '"+rationaleDescription+"', '"+rationaleRule+"', '"+rationaleRange+"', '"+project+"', '"+domain+"', '"+problem+"', "+currentDBPlanID+", "+rationaleValidity+", '"+rationaleQualityImpact+"'"); // please, don't use ()
-                                    //updateType.setParametersList(list);
-                                    insertType.retrieveLastID(true);
-                                    insertType.Insert();
+                for (Iterator<Element> it = rationales.getChildren().iterator(); it.hasNext();) {
+                    Element rationale = it.next();
 
-                                    //set rationale id
-                                    rationaleID = Integer.toString(insertType.getLastInsertID());
-                                    rationale.setAttribute("id", rationaleID);
-
-                                    //set target plan id
-                                    targetPlanID = Integer.toString(currentDBPlanID);
-                                    rationale.setAttribute("targetplanid", targetPlanID);
-
-                                    System.out.println("Rationale created - "+ rationaleID);
-                                }
-                                
-                                
-                                //2.  if target plan is not already defined, set for the current plan
-                                // this can happen when a plan is removed and another plan has the rationale applied to it
-                                // then this plan will assume the rationale's reference
-                                if (targetPlanID.equals("") && !rationaleID.equals("")){
-
-                                    //update rationale                                    
-                                    updateType.setTableName("rationale");
-                                    updateType.setUpdateValueList("planid="+currentDBPlanID+", project='"+project+"', domain='"+domain+"', problem='"+problem+"'");
-                                    updateType.setWhereClause("id = " + rationaleID); //allways use WHERE
-                                    updateType.Update();
-                                    
-                                    targetPlanID = Integer.toString(currentDBPlanID);
-                                    rationale.setAttribute("targetplanid", targetPlanID);
-
-                                    //set target plan id
-                                    System.out.println("Unlinked rationale updated - "+ rationaleID);
-                                }
-
-                                //3. Insert record into relational table rationale_pla
-                                if (relationalID.equals("")){
-
-                                    //comments
-                                    String comment = XMLUtilities.toString(rationale.getChild("comments"));
-                                    
-                                    insertType.setTableName("rationale_plan");
-                                    insertType.setColumnList("rationaleid, planid, comment, enabled");
-                                    insertType.setValueList(rationaleID+", "+Integer.toString(currentDBPlanID)+", '"+comment+"', "+relationalEnabled); // please, don't use ()
-                                    //updateType.setParametersList(list);
-                                    insertType.retrieveLastID(true);
-                                    insertType.Insert();
-
-                                    relationalID = Integer.toString(insertType.getLastInsertID());
-                                    rationale.setAttribute("relationalid", relationalID);                                    
-                                }
-
-                                //4. Update if it was modified (i.e., it has a child node called 'modified')
-                                Element modified = rationale.getChild("modified");
-                                if (modified!=null && !rationaleID.equals("")){
-
-                                    Element theRationale = (Element)rationale.clone();
-                                    theRationale.setAttribute("id", "");
-                                    theRationale.setAttribute("targetplanid", "");
-                                    theRationale.setAttribute("relationalid", "");
-                                    theRationale.setAttribute("enabled", "true");
-                                    theRationale.getChild("comments").removeContent();
-                                    theRationale.removeContent(theRationale.getChild("modified"));
-                                    if(theRationale.getChild("instruction")!=null){
-                                        theRationale.removeContent(theRationale.getChild("instruction"));
-                                    }
-
-                                    String xmlRationaleStr = XMLUtilities.toString(theRationale).replace("'", "''");
-                                    String rationaleName = rationale.getChildText("name").replace("'", "''");
-                                    String rationaleDescription = rationale.getChildText("description").replace("'", "''");
-                                    String rationaleRule = rationale.getChildText("rule").replace("'", "''");
-                                    String rationaleQualityImpact = rationale.getChild("impact").getAttributeValue("quality");
-                                    String rationaleRange = rationale.getChild("abstractionlevel").getAttributeValue("range");
-                                    String rationaleValidity = rationale.getChild("validity").getAttributeValue("isValid").trim().toUpperCase();
-                                    if (rationaleValidity.equals("")){
-                                        rationaleValidity = "NULL";
-                                    }
-
-                                    updateType.setTableName("rationale");
-                                    updateType.setUpdateValueList("xmlrationale = '"+xmlRationaleStr+"', name = '" + rationaleName + "', description = '" + rationaleDescription +
-                                            "', rule = '" + rationaleRule + "', abstractionlevel = '" + rationaleRange+"', validity = "+rationaleValidity+ ", qualityimpact = '"+rationaleQualityImpact+"'");
-                                    updateType.setWhereClause("id = " + rationaleID); //allways use WHERE
-                                    updateType.Update();
-
-                                    rationale.removeContent(modified);
-
-                                    System.out.println("Modified rationale updated - "+ rationaleID);
-
-                                }
-
-                            }
-
-                            updateType.Close();
-                            insertType.Close();
-
-                            appendOutputPanelText(">> Plan (id "+currentDBPlanID+") inserted successfully. \n");
+                    String rationaleID = rationale.getAttributeValue("id").trim();
+                    String targetPlanID = rationale.getAttributeValue("targetplanid").trim();
+                    String relationalID = rationale.getAttributeValue("relationalid").trim();
+                    String relationalEnabled = rationale.getAttributeValue("enabled").trim().toUpperCase();
 
 
-                            //System.out.println("Last inserted ID: " + updateType.getLastInsertID());
-                            // eInsert template end
+                    //1. Insert rationale into the database if it has been inserted
+                    if (rationaleID.equals("")){
 
+                        Element theRationale = (Element)rationale.clone();
+                        theRationale.setAttribute("targetplanid","");
+                        theRationale.setAttribute("relationalid","");
+                        theRationale.setAttribute("enabled", "true");
+                        theRationale.getChild("comments").removeContent();
+                        
+                        String xmlRationaleStr = XMLUtilities.toString(theRationale).replace("'", "''");
+                        String rationaleName = rationale.getChildText("name").replace("'", "''");
+                        String rationaleDescription = rationale.getChildText("description").replace("'", "''");
+                        String rationaleRule = rationale.getChildText("rule").replace("'", "''");
+                        String rationaleQualityImpact = rationale.getChild("impact").getAttributeValue("quality");
+                        String rationaleRange = rationale.getChild("abstractionlevel").getAttributeValue("range");
+                        String rationaleValidity = rationale.getChild("validity").getAttributeValue("isValid").trim().toUpperCase();
+                        if (rationaleValidity.equals("")){
+                            rationaleValidity = "NULL";
                         }
+
+                        insertType.setTableName("rationale");
+                        insertType.setColumnList("xmlrationale, name, description, rule, abstractionlevel, project, domain, problem, planid, validity, qualityimpact"); // please, don't use ()
+                        insertType.setValueList("'"+ xmlRationaleStr+"', '"+rationaleName+"', '"+rationaleDescription+"', '"+rationaleRule+"', '"+rationaleRange+"', '"+project+"', '"+domain+"', '"+problem+"', "+currentDBPlanID+", "+rationaleValidity+", '"+rationaleQualityImpact+"'"); // please, don't use ()
+                        //updateType.setParametersList(list);
+                        insertType.retrieveLastID(true);
+                        insertType.Insert();
+
+                        //set rationale id
+                        rationaleID = Integer.toString(insertType.getLastInsertID());
+                        rationale.setAttribute("id", rationaleID);
+
+                        //set target plan id
+                        targetPlanID = Integer.toString(currentDBPlanID);
+                        rationale.setAttribute("targetplanid", targetPlanID);
+
+                        System.out.println("Rationale created - "+ rationaleID);
+                    }
+                    
+                    
+                    //2.  if target plan is not already defined, set for the current plan
+                    // this can happen when a plan is removed and another plan has the rationale applied to it
+                    // then this plan will assume the rationale's reference
+                    if (targetPlanID.equals("") && !rationaleID.equals("")){
+
+                        //update rationale                                    
+                        updateType.setTableName("rationale");
+                        updateType.setUpdateValueList("planid="+currentDBPlanID+", project='"+project+"', domain='"+domain+"', problem='"+problem+"'");
+                        updateType.setWhereClause("id = " + rationaleID); //allways use WHERE
+                        updateType.Update();
+                        
+                        targetPlanID = Integer.toString(currentDBPlanID);
+                        rationale.setAttribute("targetplanid", targetPlanID);
+
+                        //set target plan id
+                        System.out.println("Unlinked rationale updated - "+ rationaleID);
+                    }
+
+                    //3. Insert record into relational table rationale_pla
+                    if (relationalID.equals("")){
+
+                        //comments
+                        String comment = XMLUtilities.toString(rationale.getChild("comments"));
+                        
+                        insertType.setTableName("rationale_plan");
+                        insertType.setColumnList("rationaleid, planid, comment, enabled");
+                        insertType.setValueList(rationaleID+", "+Integer.toString(currentDBPlanID)+", '"+comment+"', "+relationalEnabled); // please, don't use ()
+                        //updateType.setParametersList(list);
+                        insertType.retrieveLastID(true);
+                        insertType.Insert();
+
+                        relationalID = Integer.toString(insertType.getLastInsertID());
+                        rationale.setAttribute("relationalid", relationalID);                                    
+                    }
+
+                    //4. Update if it was modified (i.e., it has a child node called 'modified')
+                    Element modified = rationale.getChild("modified");
+                    if (modified!=null && !rationaleID.equals("")){
+
+                        Element theRationale = (Element)rationale.clone();
+                        theRationale.setAttribute("id", "");
+                        theRationale.setAttribute("targetplanid", "");
+                        theRationale.setAttribute("relationalid", "");
+                        theRationale.setAttribute("enabled", "true");
+                        theRationale.getChild("comments").removeContent();
+                        theRationale.removeContent(theRationale.getChild("modified"));
+                        if(theRationale.getChild("instruction")!=null){
+                            theRationale.removeContent(theRationale.getChild("instruction"));
+                        }
+
+                        String xmlRationaleStr = XMLUtilities.toString(theRationale).replace("'", "''");
+                        String rationaleName = rationale.getChildText("name").replace("'", "''");
+                        String rationaleDescription = rationale.getChildText("description").replace("'", "''");
+                        String rationaleRule = rationale.getChildText("rule").replace("'", "''");
+                        String rationaleQualityImpact = rationale.getChild("impact").getAttributeValue("quality");
+                        String rationaleRange = rationale.getChild("abstractionlevel").getAttributeValue("range");
+                        String rationaleValidity = rationale.getChild("validity").getAttributeValue("isValid").trim().toUpperCase();
+                        if (rationaleValidity.equals("")){
+                            rationaleValidity = "NULL";
+                        }
+
+                        updateType.setTableName("rationale");
+                        updateType.setUpdateValueList("xmlrationale = '"+xmlRationaleStr+"', name = '" + rationaleName + "', description = '" + rationaleDescription +
+                                "', rule = '" + rationaleRule + "', abstractionlevel = '" + rationaleRange+"', validity = "+rationaleValidity+ ", qualityimpact = '"+rationaleQualityImpact+"'");
+                        updateType.setWhereClause("id = " + rationaleID); //allways use WHERE
+                        updateType.Update();
+
+                        rationale.removeContent(modified);
+
+                        System.out.println("Modified rationale updated - "+ rationaleID);
+
+                    }
+
+                }
+
+                updateType.Close();
+                insertType.Close();
+
+                appendOutputPanelText(">> Plan (id "+currentDBPlanID+") inserted successfully. \n");
+
+
+                //System.out.println("Last inserted ID: " + updateType.getLastInsertID());
+                // eInsert template end
+
+            }
 		}
 	};
 
@@ -2815,200 +2789,200 @@ public class ItSIMPLE extends JFrame {
 		 */
 		public void actionPerformed(ActionEvent e){
 
-                    ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
-                    if(selectedNode != null){
+        	ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
+            if(selectedNode != null){
 
-                        int row = resultPlanTable.getSelectedRow();
-                        if (row > -1){
+                int row = resultPlanTable.getSelectedRow();
+                if (row > -1){
 
-                            String planID = (String) resultPlanTableModel.getValueAt(row, 0);
+                    String planID = (String) resultPlanTableModel.getValueAt(row, 0);
 
-                            Element node = selectedNode.getData();
-                            //String type ="";
-                            //check if it is a projects node
-                            //if (node == null){
-                            //    type = "projects";
-                            //}
-                            //else{
-                            //    type = node.getName();
-                            //}
-
-
-                            DataBase eSelectType = new DataBase();
-                            eSelectType.setColumnList("xmlplan"); //please, don't use *
-                            eSelectType.setTableName("plan");
-                            String whereclause = "id = "+ planID;
-
-                            //Do select in the database
-                            eSelectType.setWhereClause(whereclause);
-                            //eSelectType.setWhereClause("name = ?"); //where clause, null if not applicable
-                            //eSelectType.setOrderClause(null); //order by clause, null if not applicable
-                            //eSelectType.setGroupClause(null); //group by clause, null if not applicable
-                            //eSelectType.setHavingClause(null); //having clause, null if not applicable
-                            //eSelectType.addToParametersList(name);
-                            eSelectType.Select();
+                    Element node = selectedNode.getData();
+                    //String type ="";
+                    //check if it is a projects node
+                    //if (node == null){
+                    //    type = "projects";
+                    //}
+                    //else{
+                    //    type = node.getName();
+                    //}
 
 
-                            Element thePlan = null;
+                    DataBase eSelectType = new DataBase();
+                    eSelectType.setColumnList("xmlplan"); //please, don't use *
+                    eSelectType.setTableName("plan");
+                    String whereclause = "id = "+ planID;
 
-                            //Get result and show it
-                            ResultSet rs = eSelectType.getRs();
+                    //Do select in the database
+                    eSelectType.setWhereClause(whereclause);
+                    //eSelectType.setWhereClause("name = ?"); //where clause, null if not applicable
+                    //eSelectType.setOrderClause(null); //order by clause, null if not applicable
+                    //eSelectType.setGroupClause(null); //group by clause, null if not applicable
+                    //eSelectType.setHavingClause(null); //having clause, null if not applicable
+                    //eSelectType.addToParametersList(name);
+                    eSelectType.Select();
 
+
+                    Element thePlan = null;
+
+                    //Get result and show it
+                    ResultSet rs = eSelectType.getRs();
+
+                    try {
+                        while (rs.next()) {
+                            String xmlplanString = rs.getString("xmlplan");
+
+                            //convert xml string to a xml element
+                            SAXBuilder builder = new SAXBuilder();
+                            Reader in = new StringReader(xmlplanString);
+                            Document doc = null;
                             try {
-                                while (rs.next()) {
-                                    String xmlplanString = rs.getString("xmlplan");
-
-                                    //convert xml string to a xml element
-                                    SAXBuilder builder = new SAXBuilder();
-                                    Reader in = new StringReader(xmlplanString);
-                                    Document doc = null;
-                                    try {
-                                        doc = builder.build(in);
-                                        thePlan = doc.getRootElement();
-                                    } catch (JDOMException ex) {
-                                        Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                        thePlan = null;
-                                    } catch (IOException ex) {
-                                        Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                        thePlan = null;
-                                    }
-
-                                   // XMLUtilities.printXML(thePlan);
-
-                                }
-                            } catch (SQLException se) {
-                              se.printStackTrace();
-                              //System.exit(1);
+                                doc = builder.build(in);
+                                thePlan = doc.getRootElement();
+                            } catch (JDOMException ex) {
+                                Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                thePlan = null;
+                            } catch (IOException ex) {
+                                Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                thePlan = null;
                             }
-                            if (thePlan != null){
-                                xmlPlan = thePlan;
+
+                           // XMLUtilities.printXML(thePlan);
+
+                        }
+                    } catch (SQLException se) {
+                      se.printStackTrace();
+                      //System.exit(1);
+                    }
+                    if (thePlan != null){
+                        xmlPlan = thePlan;
 
 
-                                //Gathering Rationales
-                                Element rationales = xmlPlan.getChild("evaluation").getChild("rationales");
-                                //get rationales registered for this plan
-                                //DataBase eSelectTypeRationale = new DataBase();
-                                eSelectType.setColumnList("rationale.id, rationale.xmlrationale, rationale.planid, rationale_plan.id, rationale_plan.enabled, rationale_plan.comment"); //please, don't use *
-                                eSelectType.setTableName("rationale, rationale_plan");
-                                whereclause = "rationale_plan.planid = "+ planID + " AND rationale.id = rationale_plan.rationaleid";
-                                //eSelectType.setColumnList("id, xmlrationale"); //please, don't use *
-                                //eSelectType.setTableName("rationale");
-                                //whereclause = "planid = "+ planID;
-                                //Do select in the database
-                                eSelectType.setWhereClause(whereclause);
-                                eSelectType.setOrderClause("rationale.id"); //order by clause, null if not applicable
-                                //eSelectType.setOrderClause("id"); //order by clause, null if not applicable
-                                eSelectType.Select();
-                                Element theRationale = null;
+                        //Gathering Rationales
+                        Element rationales = xmlPlan.getChild("evaluation").getChild("rationales");
+                        //get rationales registered for this plan
+                        //DataBase eSelectTypeRationale = new DataBase();
+                        eSelectType.setColumnList("rationale.id, rationale.xmlrationale, rationale.planid, rationale_plan.id, rationale_plan.enabled, rationale_plan.comment"); //please, don't use *
+                        eSelectType.setTableName("rationale, rationale_plan");
+                        whereclause = "rationale_plan.planid = "+ planID + " AND rationale.id = rationale_plan.rationaleid";
+                        //eSelectType.setColumnList("id, xmlrationale"); //please, don't use *
+                        //eSelectType.setTableName("rationale");
+                        //whereclause = "planid = "+ planID;
+                        //Do select in the database
+                        eSelectType.setWhereClause(whereclause);
+                        eSelectType.setOrderClause("rationale.id"); //order by clause, null if not applicable
+                        //eSelectType.setOrderClause("id"); //order by clause, null if not applicable
+                        eSelectType.Select();
+                        Element theRationale = null;
 
-                                //Get result and show it
-                                rs = eSelectType.getRs();
+                        //Get result and show it
+                        rs = eSelectType.getRs();
 
+                        try {
+                            while (rs.next()) {
+                                //String rationaleID = rs.getString("id");
+                                String rationaleID = rs.getString(1);
+                                String xmlRationaleString = rs.getString("xmlrationale");
+                                String targetPlanID = rs.getString("planid");
+                                String relationalID = rs.getString(4);
+                                String relationalEnabled = rs.getString(5);
+                                String relationalComment = rs.getString(6);
+                                if(relationalEnabled.trim().equals("t")){
+                                    relationalEnabled = "true";
+                                }else if(relationalEnabled.trim().equals("f")){
+                                    relationalEnabled = "false";
+                                }
+
+                                //convert xml string to a xml element
+                                SAXBuilder builder = new SAXBuilder();
+                                Reader in = new StringReader(xmlRationaleString);
+                                Document doc = null;
                                 try {
-                                    while (rs.next()) {
-                                        //String rationaleID = rs.getString("id");
-                                        String rationaleID = rs.getString(1);
-                                        String xmlRationaleString = rs.getString("xmlrationale");
-                                        String targetPlanID = rs.getString("planid");
-                                        String relationalID = rs.getString(4);
-                                        String relationalEnabled = rs.getString(5);
-                                        String relationalComment = rs.getString(6);
-                                        if(relationalEnabled.trim().equals("t")){
-                                            relationalEnabled = "true";
-                                        }else if(relationalEnabled.trim().equals("f")){
-                                            relationalEnabled = "false";
-                                        }
+                                    doc = builder.build(in);
+                                    theRationale = doc.getRootElement();
+                                } catch (JDOMException ex) {
+                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 
-                                        //convert xml string to a xml element
-                                        SAXBuilder builder = new SAXBuilder();
-                                        Reader in = new StringReader(xmlRationaleString);
-                                        Document doc = null;
+                                if (theRationale != null){
+                                    theRationale.setAttribute("id",rationaleID);                                            
+                                    theRationale.setAttribute("relationalid",relationalID);
+                                    if (targetPlanID!=null){theRationale.setAttribute("targetplanid",targetPlanID);}
+                                    theRationale.setAttribute("enabled",relationalEnabled.trim().toLowerCase());
+
+                                    Element comments = theRationale.getChild("comments");
+
+                                    //add comments
+                                    if(relationalComment!=null && !relationalComment.trim().equals("")){
+                                        Element currentComments = null;
+                                        SAXBuilder commentBuilder = new SAXBuilder();
+                                        Reader commentIn = new StringReader(relationalComment);
+                                        Document commentDoc = null;
                                         try {
-                                            doc = builder.build(in);
-                                            theRationale = doc.getRootElement();
+                                            commentDoc = commentBuilder.build(commentIn);
+                                            currentComments = commentDoc.getRootElement();
                                         } catch (JDOMException ex) {
                                             Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
                                         } catch (IOException ex) {
                                             Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
                                         }
-
-                                        if (theRationale != null){
-                                            theRationale.setAttribute("id",rationaleID);                                            
-                                            theRationale.setAttribute("relationalid",relationalID);
-                                            if (targetPlanID!=null){theRationale.setAttribute("targetplanid",targetPlanID);}
-                                            theRationale.setAttribute("enabled",relationalEnabled.trim().toLowerCase());
-
-                                            Element comments = theRationale.getChild("comments");
-
-                                            //add comments
-                                            if(relationalComment!=null && !relationalComment.trim().equals("")){
-                                                Element currentComments = null;
-                                                SAXBuilder commentBuilder = new SAXBuilder();
-                                                Reader commentIn = new StringReader(relationalComment);
-                                                Document commentDoc = null;
-                                                try {
-                                                    commentDoc = commentBuilder.build(commentIn);
-                                                    currentComments = commentDoc.getRootElement();
-                                                } catch (JDOMException ex) {
-                                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                                } catch (IOException ex) {
-                                                    Logger.getLogger(ItSIMPLE.class.getName()).log(Level.SEVERE, null, ex);
-                                                }
-                                                if (currentComments!=null){
-                                                    for (Iterator<Element> it = currentComments.getChildren().iterator(); it.hasNext();) {
-                                                        Element currentComment = it.next();
-                                                        comments.addContent((Element)currentComment.clone());
-                                                    }
-                                                }
+                                        if (currentComments!=null){
+                                            for (Iterator<Element> it = currentComments.getChildren().iterator(); it.hasNext();) {
+                                                Element currentComment = it.next();
+                                                comments.addContent((Element)currentComment.clone());
                                             }
-
-                                            rationales.addContent((Element)theRationale.clone());
-                                        }                                        
-                                        //XMLUtilities.printXML(theRationale);
-
+                                        }
                                     }
-                                } catch (SQLException se) {
-                                  se.printStackTrace();
-                                  //System.exit(1);
-                                }
 
-
-                                //XMLUtilities.printXML(thePlan);
-
-                                //show the plan
-                                setPlanList(xmlPlan);
-                                showHTMLReport(xmlPlan);
-                                appendOutputPanelText(">> Plan (id "+planID+") loaded successfully from database. Check the generated Results. \n");
-
-                                currentDBPlanID = Integer.parseInt(planID);
-                                isPlanFromDB = true;
-
-
-                                //Prolog Experiment
-                                //String pslplan = PlanAnalyzer.generatePslPlanProlog(xmlPlan,Integer.toString(currentDBPlanID));
-                                //System.out.println(pslplan);
-                                //System.out.println("");
-
+                                    rationales.addContent((Element)theRationale.clone());
+                                }                                        
+                                //XMLUtilities.printXML(theRationale);
 
                             }
-                            
-
-                            eSelectType.Close();
-
-
+                        } catch (SQLException se) {
+                          se.printStackTrace();
+                          //System.exit(1);
                         }
-                        
+
+
+                        //XMLUtilities.printXML(thePlan);
+
+                        //show the plan
+                        setPlanList(xmlPlan);
+                        showHTMLReport(xmlPlan);
+                        appendOutputPanelText(">> Plan (id "+planID+") loaded successfully from database. Check the generated Results. \n");
+
+                        currentDBPlanID = Integer.parseInt(planID);
+                        isPlanFromDB = true;
+
+
+                        //Prolog Experiment
+                        //String pslplan = PlanAnalyzer.generatePslPlanProlog(xmlPlan,Integer.toString(currentDBPlanID));
+                        //System.out.println(pslplan);
+                        //System.out.println("");
+
 
                     }
+                    
+
+                    eSelectType.Close();
+
+
+                }
+                
+
+            }
 
 		}
 	};
 
 
-        /**
-         * This action deletes the current plan from the database
-         */
-        private Action deletePlanFromDatabaseAction = new AbstractAction("Delete", new ImageIcon("resources/images/deleteplanfromdatabase.png")){
+    /**
+     * This action deletes the current plan from the database
+     */
+    private Action deletePlanFromDatabaseAction = new AbstractAction("Delete", new ImageIcon("resources/images/deleteplanfromdatabase.png")){
 		/**
 		 *
 		 */
@@ -5552,8 +5526,6 @@ public class ItSIMPLE extends JFrame {
 				ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
 				if(selectedNode != null && selectedNode.getLevel() == 3){
 
-					//planAnalysisFramePanel.setTitle(":: Plan Analysis - Problem: "+ selectedNode.getUserObject());
-
                     solveProblemButton.setEnabled(true);
 					setPlannerButton.setEnabled(true);
 					addPlanActionButton.setEnabled(true);
@@ -5700,9 +5672,8 @@ public class ItSIMPLE extends JFrame {
 				}
 				else{
 					//clear the depending areas
-					planAnalysisFramePanel.setTitle(":: Plan Analysis");
 					//setPlannerButton.setEnabled(false);
-                                            setPlannerButton.setEnabled(true);
+                    setPlannerButton.setEnabled(true);
 					addPlanActionButton.setEnabled(false);
 					importPlanButton.setEnabled(false);
 					planListModel.clear();
@@ -5991,8 +5962,6 @@ public class ItSIMPLE extends JFrame {
 					ItTreeNode selectedNode = (ItTreeNode)problemsPlanTree.getLastSelectedPathComponent();
 					if(selectedNode != null && selectedNode.getLevel() == 3){
 
-						planAnalysisFramePanel.setTitle(":: Plan Analysis - Problem: "+ selectedNode.getUserObject());
-
                         solveProblemButton.setEnabled(true);
 						setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(true);
@@ -6139,32 +6108,31 @@ public class ItSIMPLE extends JFrame {
 					}
 					else{
 						//clear the depending areas
-						planAnalysisFramePanel.setTitle(":: Plan Analysis");
 						//setPlannerButton.setEnabled(false);
-                                                setPlannerButton.setEnabled(true);
+                        setPlannerButton.setEnabled(true);
 						addPlanActionButton.setEnabled(false);
 						importPlanButton.setEnabled(false);
 						planListModel.clear();
 						xmlPlan = null;
 
-                                                //clean up reference of plans from database
-                                                cleanupPlanDatabaseReference();
+                        //clean up reference of plans from database
+                        cleanupPlanDatabaseReference();
 
-                                                //fill the combo box with all planners
+                        //fill the combo box with all planners
 						plannersComboBox.removeAllItems();
-                                                plannersList.clear();
+                        plannersList.clear();
 
-                                                List<?> planners = itPlanners.getChild("planners").getChildren("planner");
-                                                fillPlannersComboBox(planners);
+                        List<?> planners = itPlanners.getChild("planners").getChildren("planner");
+                        fillPlannersComboBox(planners);
 
-                                                plannersComboBox.addItem("All Planners");
-                                                plannersList.add("allPlanners");
+                        plannersComboBox.addItem("All Planners");
+                        plannersList.add("allPlanners");
 
-                                                //This item specify/represent the planners that are seceyed/enable for run all
-                                                plannersComboBox.addItem("My Favorite Planners");
-                                                plannersList.add("myFavoritePlanners");
-                                                //plannersComboBox.addItem("All Selected Planners");
-                                                //plannersList.add("allSelectedPlanners");
+                        //This item specify/represent the planners that are seceyed/enable for run all
+                        plannersComboBox.addItem("My Favorite Planners");
+                        plannersList.add("myFavoritePlanners");
+                        //plannersComboBox.addItem("All Selected Planners");
+                        //plannersList.add("allSelectedPlanners");
 
 						//clear the variables tree, whether necessary
 						CheckBoxNode variablesPlanTreeRoot = (CheckBoxNode)variablesPlanTreeModel.getRoot();
@@ -9694,7 +9662,7 @@ public class ItSIMPLE extends JFrame {
             JRadioButton pddl31 = new JRadioButton("PDDL 3.1");
             //RMPL
             //TODO: Add RMPL when it is ready
-            //JRadioButton rmpl10 = new JRadioButton("RMPL");
+            JRadioButton rmpl10 = new JRadioButton("RMPL");
             
             //PDDL
             pddl21.setOpaque(false);
@@ -9706,8 +9674,8 @@ public class ItSIMPLE extends JFrame {
             pddl31.setOpaque(false);
             pddl31.setActionCommand(ToXPDDL.PDDL_3_1);
             //RMPL
-            //rmpl10.setOpaque(false);
-            //rmpl10.setActionCommand(ToXRMPL.RMPL_1_0);
+            rmpl10.setOpaque(false);
+            rmpl10.setActionCommand(ToXRMPL.RMPL_1_0);
             
 
             languageButtonsGroup = new ButtonGroup();
@@ -9898,7 +9866,7 @@ public class ItSIMPLE extends JFrame {
 
 		// zoom in
 		//JButton zoomInButton = new JButton("Zoom In",new ImageIcon("resources/images/zoomIN.png"));
-                JButton zoomInButton = new JButton(new ImageIcon("resources/images/zoomIN.png"));
+        JButton zoomInButton = new JButton(new ImageIcon("resources/images/zoomIN.png"));
 		zoomInButton.setToolTipText("Zoom In");
 		zoomInButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9920,7 +9888,7 @@ public class ItSIMPLE extends JFrame {
 
 		// zoom out
 		//JButton zoomOutButton = new JButton("Zoom Out",new ImageIcon("resources/images/zoomOUT.png"));
-                JButton zoomOutButton = new JButton(new ImageIcon("resources/images/zoomOUT.png"));
+        JButton zoomOutButton = new JButton(new ImageIcon("resources/images/zoomOUT.png"));
 		zoomOutButton.setToolTipText("Zoom Out");
 		zoomOutButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
