@@ -672,6 +672,7 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
 				TableColumn column = parametersValuesTable.getColumnModel().getColumn(parametersValuesTableModel.getColumnCount()-1);
 				String parameterType = typeClass.getChildText("name");
 				
+				
 				if (parameterType.equals("Boolean")){
 					ItComboBox value = new ItComboBox();
 					value.addItem("");
@@ -700,22 +701,62 @@ public class EditDialog extends JDialog implements KeyListener, ItemListener,Tab
                     // if it's not a Boolean, Int, Float or String then its class is in this project
 					ItComboBox value = new ItComboBox();	
 					value.addItem("");
-					//			attributes		object		objects			objectDiagram		objectDiagrams		problem							
-					Element domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
-                    //in case this is a snapshot we need to reach the domain going up
-                    if (domain.getName().equals("problem")){
-                        domain = domain.getParentElement().getParentElement();
-                    }
-
-					List<?> result = null;			
-					try {					
-						XPath path = new JDOMXPath("elements/objects/object[class='"
-								+typeClass.getAttributeValue("id")+"']");
-						result = path.selectNodes(domain);
-						
-					} catch (JaxenException e2) {			
-						e2.printStackTrace();
+					Element domain;
+					if(data.getParentElement().getParentElement().getParentElement().getParentElement().getName().equals("repositoryDiagram")){
+						//				attributes			object			objects			repositoryDiagram	repositoryDiagrams		domain
+						domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
+					}else{
+						//				attributes			object				objects			objectDiagram		objectDiagrams		problem			planningProblems	domain
+						domain = data.getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement();
 					}
+					
+					List<?> result = null;								
+					
+					//typeClass can be either a class or a enumeration
+                    //if it is a class
+					if (typeClass.getName().equals("class")){
+                        //Get all descendent classes of typeClass
+                        List<?> descendents = XMLUtilities.getClassDescendents(typeClass);
+
+                        //create the queries for xpath
+                        String descendentsQuery = "";
+
+                        for (Iterator<?> iter = descendents.iterator(); iter.hasNext();) {
+                            Element descendent = (Element) iter.next();
+                            String each = "";
+                            each = "class='" + descendent.getAttributeValue("id") + "'";
+                            if (iter.hasNext()){
+                                each = each + " or ";
+                            }
+                            descendentsQuery = descendentsQuery + each;
+                        }
+                        if (descendentsQuery.equals(""))
+                            descendentsQuery = "class='" + typeClass.getAttributeValue("id") + "'";			
+                        else
+                            descendentsQuery = descendentsQuery + " or class='" + typeClass.getAttributeValue("id") + "'";
+
+
+                        try {					
+                            XPath path = new JDOMXPath("elements/objects/object["
+                                    +descendentsQuery+"]");
+                            result = path.selectNodes(domain);
+
+                        } catch (JaxenException e2) {			
+                            e2.printStackTrace();
+                        }
+
+                    }
+                    //if it is a enumeration
+                    else if(typeClass.getName().equals("enumeration")){
+                        try {					
+                            XPath path = new JDOMXPath("project/elements/classes/enumeration[@id='"+typeClass.getAttributeValue("id")+"']/literals/literal");
+                            result = path.selectNodes(domain.getDocument());
+
+                        } catch (JaxenException e2) {			
+                            e2.printStackTrace();
+                        }
+
+                    }
 
 					if (result != null){
 						Iterator<?> objects = result.iterator();

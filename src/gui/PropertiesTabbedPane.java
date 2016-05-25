@@ -4064,7 +4064,7 @@ implements KeyListener, ItemListener, TableModelListener, MouseListener {
 	};
         
     private Action openAttributeParameterValues = 
-		new AbstractAction("Save to PDDL", new ImageIcon("resources/images/savePDDL.png")){
+		new AbstractAction("Parameters", new ImageIcon("resources/images/edit.png")){
 
 		private static final long serialVersionUID = 3621108625062530508L;
 
